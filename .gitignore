@@ -1,1 +1,6 @@
 .Rproj.user
+.Rbuildignore
+.Rhistory
+itsdm.Rproj
+.idea/
+*/.DS_Store
