@@ -146,7 +146,10 @@ worldclim2 <- function(var = "tmin",
 
         ## Read imgs as stars and clip
         clip_imgs <- read_stars(imgs)
-        bry <- st_as_sf(bry) %>% st_make_valid()
+        bry <- st_as_sf(bry)
+        if(!st_is_valid(bry)) {
+            stop('Not valid boundary.')
+        }
         clip_imgs <- st_crop(clip_imgs, bry)
 
         ## Save out

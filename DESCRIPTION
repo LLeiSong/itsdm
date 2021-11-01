@@ -12,7 +12,8 @@ Depends:
     stars,
     raster,
     dplyr, 
-    purrr
+    purrr,
+    isotree
 Imports:
     rgdal,
     rgeos

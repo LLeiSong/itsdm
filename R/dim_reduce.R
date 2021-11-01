@@ -63,7 +63,9 @@ dim_reduce <- function(img_stack = NULL,
 
     # Subset images and make object
     img_reduced <- raster::subset(img_stack, row.names(ps_cor))
-    if (if_stars) img_reduced <- st_as_stars(img_reduced)
+    if (if_stars) {
+        img_reduced <- st_as_stars(img_reduced)
+        names(img_reduced) <- 'reduced_image'}
     img_reduced <- list(img_reduced = img_reduced,
                         cors_original = cors,
                         cors_reduced = ps_cor)
