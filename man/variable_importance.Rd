@@ -9,7 +9,7 @@ variable_importance(
   var_occ,
   var_occ_test = NULL,
   variables,
-  permution_cv = 5,
+  shap_nsim = 100,
   visualize = FALSE,
   seed = 10
 )
@@ -24,11 +24,11 @@ include values of environmental variables at occurrence locations.}
 include values of environmental variables at occurrence locations of testing.
 If NULL, no test will be used. The default is NULL.}
 
-\item{permution_cv}{(integer) The time to run permutation method.
-The default is 5.}
-
 \item{visualize}{(logical) if TRUE, plot the response curves.
 The default is FALSE.}
+
+\item{permution_cv}{(integer) The time to run permutation method.
+The default is 5.}
 }
 \value{
 variable_importance.

@@ -41,14 +41,6 @@ isotree_po <- function(
   occ_test = NULL, # sf, sp, or data.frame with x and y
   occ_crs = 4326,
   variables, # rasterstack or stars. if stars, must have dimension band
-
-
-  occ_type = 'po', # po or pa
-  label_column = NULL, # label column, which must be in names(occ) if not NULL
-  eval_method = "po", # po or pa or both.
-  presence_convertion = 'logistic', # linear, logistic, cloglog
-
-
   # Isotree-related inputs
   ntrees = 100L, # number of trees
   sample_size = NA, # sample size
@@ -201,7 +193,8 @@ isotree_po <- function(
     vimp <- variable_importance(
       model = isotree_mod,
       var_occ = occ_mat %>% st_drop_geometry(),
-      var_occ_test = occ_test_mat %>% st_drop_geometry())
+      var_occ_test = occ_test_mat %>% st_drop_geometry(),
+      variables = variables)
   }
 
   # Make evaluation using presence-only
@@ -216,6 +209,8 @@ isotree_po <- function(
     st_xy2sfc(as_points = T) %>% st_as_sf() %>%
     sample_n(nrow(pts_occ)) %>% select(geometry)
   occ_bg_pred <- st_extract(x = var_pred, at = pts_bg_occ)
+  var_occ_bg <- st_extract(x = split(variables, 'band'),
+                           at = pts_bg_occ)
   rm(stars_mask, pts_bg_occ)
 
   ### Do the same to test if has any
@@ -230,6 +225,8 @@ isotree_po <- function(
       st_xy2sfc(as_points = T) %>% st_as_sf() %>%
       sample_n(nrow(pts_occ_test)) %>% select(geometry)
     occ_test_bg_pred <- st_extract(x = var_pred, at = pts_bg_occ_test)
+    var_occ_test_bg <- st_extract(x = split(variables, 'band'),
+                                  at = pts_bg_occ_test)
     rm(stars_mask, pts_bg_occ_test)
   }
 
@@ -256,7 +253,8 @@ isotree_po <- function(
               eval_test = occ_test_eval,
               prediction = var_pred,
               marginal_responses = marginal_responses,
-              independent_responses = independent_responses)
+              independent_responses = independent_responses,
+              variable_importance = variable_importance)
   class(out) <- append("isotree_presence_only", class(out))
 
   # Return

@@ -76,7 +76,7 @@ marginal_response <- function(model,
 
   # Visualize
   if (visualize) {
-    communicate(responses)
+    yell(responses)
     plot(responses)
   }
 

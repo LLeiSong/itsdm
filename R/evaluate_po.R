@@ -87,7 +87,7 @@ evaluate_po <- function(model,
 
   # Visualize
   if (visualize) {
-    communicate(out)
+    yell(out)
     plot(out)
   }
 

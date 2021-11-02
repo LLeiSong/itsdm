@@ -9,10 +9,6 @@ isotree_po(
   occ_test = NULL,
   occ_crs = 4326,
   variables,
-  occ_type = "po",
-  label_column = NULL,
-  eval_method = "po",
-  presence_convertion = "logistic",
   ntrees = 100L,
   sample_size = NA,
   sample_rate = NA,
@@ -35,10 +31,6 @@ If NULL, no test will be used. The default is NULL.}
 \item{variables}{(RasterStack) the stack of environmental variables.
 This argument is required.}
 
-\item{eval_method}{(character) Method for evaluation.
-Should be one of "po" (present-only) and "pa" (present-absence).
-The default is po.}
-
 \item{ntrees}{(integer) the number of trees for the forest.
 The default is 100.}
 
@@ -53,6 +45,10 @@ The default is NULL.}
 
 \item{simple}{(logical) if TRUE, make the evaluation a simple data.frame;
 if FALSE, make the evaluation a full list. The default is FALSE.}
+
+\item{eval_method}{(character) Method for evaluation.
+Should be one of "po" (present-only) and "pa" (present-absence).
+The default is po.}
 
 \item{ExtensionLevel}{(integer) ExtensionLevel for isolation forest,
 it must be smaller than the dimension of environmental variables.
