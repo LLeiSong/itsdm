@@ -23,7 +23,9 @@
 #' var_occ = var_occ, variables = env_vars)
 variable_importance <- function(model,
                                 var_occ,
+                                var_occ_bg, # Background points
                                 var_occ_test = NULL, # independent test
+                                var_occ_test_bg = NULL,
                                 variables,
                                 permution_cv = 5,
                                 visualize = FALSE,
@@ -55,17 +57,33 @@ variable_importance <- function(model,
   rm(samples, variables)
 
   # Original prediction
-  ## Not stretch to 0 to 1.
+  ## Predict
   full_pred_occ <- 1 - predict(model, var_occ)
+  full_pred_occ_bg <- 1 - predict(model, var_occ_bg)
   full_pred_occ_test <- 1 - predict(model, var_occ_test)
+  full_pred_occ_test_bg <- 1 - predict(model, var_occ_test_bg)
   full_pred_var <- 1 - predict(model, vars)
+
+  ## Stretch to 0 to 1.
   full_pred_occ <- .stretch(x = full_pred_var,
                             new_values = full_pred_occ)
+  full_pred_occ_bg <- .stretch(x = full_pred_var,
+                               new_values = full_pred_occ_bg)
   full_pred_occ_test <- .stretch(x = full_pred_var,
                                  new_values = full_pred_occ_test)
+  full_pred_occ_test_bg <- .stretch(x = full_pred_var,
+                                    new_values = full_pred_occ_test_bg)
   full_pred_var <- .stretch(x = full_pred_var)
+
+  ## AUC background and ratio
   full_auc_train <- .auc_ratio(full_pred_occ, full_pred_var)
   full_auc_test <- .auc_ratio(full_pred_occ_test, full_pred_var)
+  full_auc_pa_train <- rocit(score = c(full_pred_occ, full_pred_occ_bg),
+                             class = c(rep(1, length(full_pred_occ)),
+                                       rep(0, length(full_pred_occ_bg))))$AUC
+  full_auc_pa_test <- rocit(score = c(full_pred_occ_test, full_pred_occ_test_bg),
+                            class = c(rep(1, length(full_pred_occ_test)),
+                                      rep(0, length(full_pred_occ_test_bg))))$AUC
 
   # Process
   out <- do.call(rbind, lapply(bands, function(nm){
@@ -105,12 +123,22 @@ variable_importance <- function(model,
 
     ## Prediction
     this_occ_pred <- 1 - predict(this_model, this_var_occ)
+    this_occ_bg_pred <- 1 - predict(this_model,
+                                    var_occ_bg %>% select(nm))
     this_occ_test_pred <- 1 - predict(this_model, this_var_occ_test)
+    this_occ_test_bg_pred <- 1 - predict(this_model,
+                                         var_occ_test_bg %>% select(nm))
     this_vars_pred <- 1 - predict(this_model, this_vars)
+
+    # Stretch
     this_occ_pred <- .stretch(x = this_vars_pred,
                               new_values = this_occ_pred)
+    this_occ_bg_pred <- .stretch(x = this_vars_pred,
+                              new_values = this_occ_bg_pred)
     this_occ_test_pred <- .stretch(x = this_vars_pred,
                                    new_values = this_occ_test_pred)
+    this_occ_test_bg_pred <- .stretch(x = this_vars_pred,
+                                   new_values = this_occ_test_bg_pred)
     this_vars_pred <- .stretch(this_vars_pred)
 
     ## Calculate metrics
@@ -120,6 +148,12 @@ variable_importance <- function(model,
                        use = 'complete.obs')
     auc_only_train <- .auc_ratio(this_occ_pred, this_vars_pred)
     auc_only_test <- .auc_ratio(this_occ_test_pred, this_vars_pred)
+    auc_only_pa_train <- rocit(score = c(this_occ_pred, this_occ_bg_pred),
+                               class = c(rep(1, length(this_occ_pred)),
+                                         rep(0, length(this_occ_bg_pred))))$AUC
+    auc_only_pa_test <- rocit(score = c(this_occ_test_pred, this_occ_test_bg_pred),
+                              class = c(rep(1, length(this_occ_test_pred)),
+                                        rep(0, length(this_occ_test_bg_pred))))$AUC
 
     # Model with variables except the chosen one
     ## Subset dataset
@@ -159,12 +193,22 @@ variable_importance <- function(model,
 
     ## Prediction
     except_occ_pred <- 1 - predict(except_model, except_var_occ)
+    except_occ_bg_pred <- 1 - predict(except_model,
+                                      var_occ_bg %>% select(all_of(nms)))
     except_occ_test_pred <- 1 - predict(except_model, except_var_occ_test)
+    except_occ_test_bg_pred <- 1 - predict(except_model,
+                                      var_occ_test_bg %>% select(all_of(nms)))
     except_vars_pred <- 1 - predict(except_model, except_vars)
+
+    ## Stretch
     except_occ_pred <- .stretch(x = except_vars_pred,
                                 new_values = except_occ_pred)
+    except_occ_bg_pred <- .stretch(x = except_vars_pred,
+                                   new_values = except_occ_bg_pred)
     except_occ_test_pred <- .stretch(x = except_vars_pred,
                                      new_values = except_occ_test_pred)
+    except_occ_test_bg_pred <- .stretch(x = except_vars_pred,
+                                        new_values = except_occ_test_bg_pred)
     except_vars_pred <- .stretch(except_vars_pred)
 
     ## Calculate metrics
@@ -174,6 +218,12 @@ variable_importance <- function(model,
                           use = 'complete.obs')
     auc_except_train <- .auc_ratio(except_occ_pred, except_vars_pred)
     auc_except_test <- .auc_ratio(except_occ_test_pred, except_vars_pred)
+    auc_except_pa_train <- rocit(score = c(except_occ_pred, except_occ_bg_pred),
+                               class = c(rep(1, length(except_occ_pred)),
+                                         rep(0, length(except_occ_bg_pred))))$AUC
+    auc_except_pa_test <- rocit(score = c(except_occ_test_pred, except_occ_test_bg_pred),
+                              class = c(rep(1, length(except_occ_test_pred)),
+                                        rep(0, length(except_occ_test_bg_pred))))$AUC
 
     # Model with variables with permuted data
     r_permuted <- do.call(
@@ -183,12 +233,17 @@ variable_importance <- function(model,
       permuted_var_occ <- var_occ %>% select(-nm) %>%
         mutate(!!nm := sample(var_occ %>% pull(nm), nrow(var_occ)))
       set.seed(12 + cv_n)
+      permuted_var_occ_bg <- var_occ_bg %>% select(-nm) %>%
+        mutate(!!nm := sample(var_occ_bg %>% pull(nm), nrow(var_occ_bg)))
+      set.seed(13 + cv_n)
       permuted_var_occ_test <- var_occ_test %>% select(-nm) %>%
         mutate(!!nm := sample(var_occ_test %>% pull(nm), nrow(var_occ_test)))
-      permuted_vars <- vars
-      # set.seed(13 + cv_n)
-      # permuted_vars <- vars %>% select(-nm) %>%
-      #   mutate(!!nm := sample(vars %>% pull(nm), nrow(vars)))
+      set.seed(14 + cv_n)
+      permuted_var_occ_test_bg <- var_occ_test_bg %>% select(-nm) %>%
+        mutate(!!nm := sample(var_occ_test_bg %>% pull(nm), nrow(var_occ_test_bg)))
+      set.seed(15 + cv_n)
+      permuted_vars <- vars %>% select(-nm) %>%
+        mutate(!!nm := sample(vars %>% pull(nm), nrow(vars)))
 
       ## Fit model
       permuted_model <- isolation.forest(
@@ -220,12 +275,20 @@ variable_importance <- function(model,
 
       ## Prediction
       permuted_occ_pred <- 1 - predict(permuted_model, permuted_var_occ)
+      permuted_occ_bg_pred <- 1 - predict(permuted_model, permuted_var_occ_bg)
       permuted_occ_test_pred <- 1 - predict(permuted_model, permuted_var_occ_test)
+      permuted_occ_test_bg_pred <- 1 - predict(permuted_model, permuted_var_occ_test_bg)
       permuted_vars_pred <- 1 - predict(permuted_model, permuted_vars)
+
+      ## Stretch
       permuted_occ_pred <- .stretch(x = permuted_vars_pred,
                                     new_values = permuted_occ_pred)
+      permuted_occ_bg_pred <- .stretch(x = permuted_vars_pred,
+                                       new_values = permuted_occ_bg_pred)
       permuted_occ_test_pred <- .stretch(x = permuted_vars_pred,
                                          new_values = permuted_occ_test_pred)
+      permuted_occ_test_bg_pred <- .stretch(x = permuted_vars_pred,
+                                            new_values = permuted_occ_test_bg_pred)
       permuted_vars_pred <- .stretch(permuted_vars_pred)
 
       ## Calculate metrics
@@ -235,16 +298,23 @@ variable_importance <- function(model,
                              use = 'complete.obs')
       auc_permuted_train <- .auc_ratio(permuted_occ_pred, permuted_vars_pred)
       auc_permuted_test <- .auc_ratio(permuted_occ_test_pred, permuted_vars_pred)
+      auc_permuted_pa_train <- rocit(score = c(permuted_occ_pred, permuted_occ_bg_pred),
+                                   class = c(rep(1, length(permuted_occ_pred)),
+                                             rep(0, length(permuted_occ_bg_pred))))$AUC
+      auc_permuted_pa_test <- rocit(score = c(permuted_occ_test_pred, permuted_occ_test_bg_pred),
+                                  class = c(rep(1, length(permuted_occ_test_pred)),
+                                            rep(0, length(permuted_occ_test_bg_pred))))$AUC
 
       # Clean up
-      rm(permuted_var_occ, permuted_var_occ_test, permuted_vars,
-         permuted_model, permuted_occ_pred, permuted_occ_test_pred,
-         permuted_vars_pred)
+      rm(permuted_var_occ, permuted_model, permuted_occ_pred, permuted_occ_bg_pred,
+         permuted_occ_test_pred, permuted_occ_test_bg_pred, permuted_vars_pred)
       tibble(cv = cv_n,
              cor_train = 1 - r_permuted_train,
              cor_test = 1 - r_permuted_test,
-             auc_train = auc_permuted_train,
-             auc_test = auc_permuted_test)
+             auc_ratio_train = auc_permuted_train,
+             auc_ratio_test = auc_permuted_test,
+             auc_train = auc_permuted_pa_train,
+             auc_test = auc_permuted_pa_test)
     }))
 
     # Get confident interval of permutation result
@@ -252,7 +322,9 @@ variable_importance <- function(model,
     r_mean_train <- mean(r_permuted$cor_train)
     r_mean_test <- mean(r_permuted$cor_test)
 
-    ## AUC ratio
+    ## AUC
+    ar_mean_train <- mean(r_permuted$auc_ratio_train)
+    ar_mean_test <- mean(r_permuted$auc_ratio_test)
     a_mean_train <- mean(r_permuted$auc_train)
     a_mean_test <- mean(r_permuted$auc_test)
 
@@ -262,19 +334,27 @@ variable_importance <- function(model,
        except_model, except_occ_pred, except_occ_test_pred, r_permuted)
 
     # Output
-    tibble(variable = rep(nm, 12),
-           metrics = c(rep('Pearson correlation', 6), rep('AUC ratio', 6)),
-           method = rep(c('Only', 'Except', 'Permutation'), 4),
-           usage = rep(c(rep('Train', 3), rep('Test', 3)), 2),
+    tibble(variable = rep(nm, 18),
+           metrics = c(rep('Pearson correlation', 6), rep('AUC ratio', 6),
+                       rep('AUC', 6)),
+           method = rep(c('Only', 'Except', 'Permutation'), 6),
+           usage = rep(c(rep('Train', 3), rep('Test', 3)), 3),
            value = c(r_only_train, r_except_train, r_mean_train,
                      r_only_test, r_except_test, r_mean_test,
-                     max(full_auc_train - auc_only_train, 0),
-                     max(full_auc_train - auc_except_train, 0),
-                     max(full_auc_train - a_mean_train, 0),
-                     max(full_auc_test - auc_only_test, 0),
-                     max(full_auc_test - auc_except_test, 0),
-                     max(full_auc_test - a_mean_test, 0)))
+                     full_auc_train - auc_only_train,
+                     full_auc_train - auc_except_train,
+                     full_auc_train - ar_mean_train,
+                     full_auc_test - auc_only_test,
+                     full_auc_test - auc_except_test,
+                     full_auc_test - ar_mean_test,
+                     full_auc_pa_train - auc_only_pa_train,
+                     full_auc_pa_train - auc_except_pa_train,
+                     full_auc_pa_train - a_mean_train,
+                     full_auc_pa_test - auc_only_pa_test,
+                     full_auc_pa_test - auc_except_pa_test,
+                     full_auc_pa_test - a_mean_test))
   }))
+
 
   class(out) <- append("variable_importance", class(out))
 
