@@ -219,7 +219,8 @@ variable_importance <- function(model,
                        pred_wrapper = pfun)
 
   # Output
-  out <- list(pearson_correlation =
+  out <- list(variables = bands,
+              pearson_correlation =
                 var_each %>%
                 filter(metrics == 'pearson_correlation') %>%
                 select(-metrics),
