@@ -14,21 +14,22 @@
 #' The default is 5.
 #' @param visualize (logical) if TRUE, plot the response curves.
 #' The default is FALSE.
-#' @return variable_importance.
-#' @import dplyr
-#' @import stars
+#' @return variable_analysis
+#' @importFrom dplyr select tibble filter sample_n
+#' @importFrom sf st_as_sf st_drop_geometry
+#' @importFrom stars st_as_stars st_xy2sfc st_get_dimension_values
 #' @importFrom fastshap explain
 #' @export
 #' @examples
-#' variable_importance(model = isotree_po,
+#' variable_analysis(model = isotree_po,
 #' var_occ = var_occ, variables = env_vars)
-variable_importance <- function(model,
-                                var_occ,
-                                var_occ_test = NULL, # Independent test
-                                variables,
-                                shap_nsim = 100,
-                                visualize = FALSE,
-                                seed = 10) {
+variable_analysis <- function(model,
+                              var_occ,
+                              var_occ_test = NULL, # Independent test
+                              variables,
+                              shap_nsim = 100,
+                              visualize = FALSE,
+                              seed = 10) {
   # Check inputs
   checkmate::assert_data_frame(var_occ)
   checkmate::assert_data_frame(var_occ_test)
@@ -234,11 +235,11 @@ variable_importance <- function(model,
               SHAP = list(train = shap_train,
                           test = shap_test))
 
-  class(out) <- append("variable_importance", class(out))
+  class(out) <- append("variable_analysis", class(out))
 
   # Visualize
   if (visualize) {
-    yell(out)
+    print(out)
     plot(out)
   }
 
@@ -246,4 +247,4 @@ variable_importance <- function(model,
   return(out)
 }
 
-# variable_importance end
+# variable_analysis end

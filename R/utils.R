@@ -1,5 +1,8 @@
 # A few internal functions used in this package
-# Resolution of stars
+# Calculate the mean of absolute values in a vector
+.abs_mean <- function(v) mean(abs(v))
+
+# Get spatial resolution of stars
 .res_stars <- function(s){
   x <- abs(st_dimensions(s)$x$delta)
   y <- abs(st_dimensions(s)$y$delta)
@@ -7,7 +10,7 @@
        y = y)
 }
 
-# ROC_ratio
+# Get ROC_ratio
 .roc_ratio <- function(occ, full) {
   roc_r <- lapply(seq(0, 1, 0.01), function(t){
     ratio_test <- sum(occ >= t) / length(occ)
@@ -18,7 +21,7 @@
   do.call(rbind, roc_r)
 }
 
-# AUC_ratio
+# Approximately calculate AUC_ratio
 .auc_ratio <- function(occ, full) {
   roc_r <- .roc_ratio(occ, full)
   roc_r <- roc_r %>% arrange(cell)
@@ -35,7 +38,7 @@
   max <- max(val)
   (val - min) / (max - min)
 }
-# Logistic transfer
+# Logistic transfer function
 .logistic <- function(orig_values,
                       beta = 0.5,
                       alpha = 0.05) {

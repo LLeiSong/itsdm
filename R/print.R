@@ -1,15 +1,17 @@
 #' @title Print summary information from variable importance object.
 #' @description Display the most general and informative characteristics of
 #' a variable importance object.
-#' @param x An object to be messaged.
+#' @param x (variable_analysis) A variable importance object to be messaged.
+#' It could be the return of function `variable_analysis`.
 #' @param ... Not used.
 #' @importFrom dplyr filter pull
 #' @importFrom stringr str_pad
 #' @return The same object that was passed as input.
 #' @export
 #' @examples
-#' print(variable_importance)
-print.variable_importance <- function(x, ...){
+#' print(variable_analysis)
+#'
+print.variable_analysis <- function(x, ...){
   cat('Relative variable importance\n')
   cat(paste0(c(rep('=', 35), '\n'), collapse = ''))
   cat('Methods: Jackknife test and SHAP\n')
@@ -128,7 +130,6 @@ print.variable_importance <- function(x, ...){
   ## Subset
   cat('SHAP (mean(|Shapley value|))\n')
   shap_x <- x$SHAP
-  .abs_mean <- function(v) mean(abs(v))
   shap_x_train <- shap_x$train %>%
     summarise(across(all_of(names(.)), .abs_mean))
   shap_x_train <- t(
@@ -169,19 +170,54 @@ print.variable_importance <- function(x, ...){
                paste(rep('#', round(val / val_max * 45)), collapse = ''),
                sprintf(' %s\n', round(val, 3))))
   }))
+
+  invisible(return(x))
 }
 
+#' @title Print summary information from presence-only evaluation object.
+#' @description Display the most general and informative characteristics of
+#' a presence-only evaluation object.
+#' @param x (evaluation_po) A presence-only evaluation object to be messaged.
+#' It could be the return of function `evaluate_po`.
+#' @param ... Not used.
+#' @importFrom stringr str_pad
+#' @return The same object that was passed as input.
 #' @export
-print.marginal_response <- function(x, ...){
-
-}
-
-#' @export
-print.independent_response <- function(x, ...){
-
-}
-
-#' @export
+#' @examples
+#' print(evaluation_po)
+#'
 print.evaluation_po <- function(x, ...){
+  # CVI
+  cvi25 <- x$cvi$`cvi with 0.25`
+  cvi05 <- x$cvi$`cvi with 0.5`
+  cvi75 <- x$cvi$`cvi with 0.75`
 
+  # CBI with 100 moving windows
+  cbi <- x$boyce$Spearman.cor
+
+  # AUC_ratio
+  auc_r <- x$roc_ratio$auc_ratio
+
+  # AUC_bg
+  auc_bg <- x$roc_background$auc_background
+
+  # print
+  cat('Presence-only evaluation\n')
+  cat(paste0(str_pad('CVI with 0.25 threshold:', 30, side = 'right', pad = ' '),
+             sprintf('%.3f\n', cvi25)))
+  cat(paste0(str_pad('CVI with 0.5 threshold:', 30, side = 'right', pad = ' '),
+             sprintf('%.3f\n', cvi05)))
+  cat(paste0(str_pad('CVI with 0.75 threshold:', 30, side = 'right', pad = ' '),
+             sprintf('%.3f\n', cvi75)))
+  cat(paste0(str_pad('CBI:', 30, side = 'right', pad = ' '),
+             sprintf('%.3f\n', cbi)))
+  cat(paste0(str_pad('AUC (ratio)',
+                     30, side = 'right', pad = ' '),
+             sprintf('%.3f\n', auc_r)))
+  cat(paste0(str_pad('AUC (Presence-background)',
+                     30, side = 'right', pad = ' '),
+             sprintf('%.3f\n', auc_bg)))
+
+  # return
+  invisible(return(x))
 }

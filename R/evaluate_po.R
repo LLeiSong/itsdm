@@ -18,8 +18,7 @@
 #' @param visualize (logical) If TRUE, print message and plot the curves.
 #' The default is FALSE.
 #' @return (evaluation_po) a list of evaluations
-#' @import stars
-#' @import dplyr
+#' @importFrom dplyr arrange tibble
 #' @importFrom ecospat ecospat.boyce
 #' @importFrom ROCit rocit ciAUC
 #' @export
@@ -36,8 +35,8 @@ evaluate_po <- function(model,
 
   # CVIs
   ## CVI 0.25
-  avi_test <- sum(occ_pred >= 0.25)/length(occ_pred)
-  avi_all <- sum(var_pred >= 0.25)/length(var_pred)
+  avi_test <- sum(occ_pred >= 0.25) / length(occ_pred)
+  avi_all <- sum(var_pred >= 0.25) / length(var_pred)
   cvi25 <- avi_test - avi_all
 
   ## CVI 0.5
@@ -87,7 +86,7 @@ evaluate_po <- function(model,
 
   # Visualize
   if (visualize) {
-    yell(out)
+    print(out)
     plot(out)
   }
 

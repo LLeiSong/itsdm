@@ -6,7 +6,6 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of itsdm is to ...
 
 ## Installation
 

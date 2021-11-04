@@ -16,8 +16,8 @@
 #' @return a list of data.frame of response and variable values.
 #' The response values correspond to suitability of this single variable.
 #' @importFrom isotree isolation.forest
-#' @import dplyr
-#' @import stars
+#' @importFrom dplyr select slice
+#' @importFrom stars st_as_stars
 #' @export
 #' @examples
 #' independent_response(model = mod$model, variables = env_vars)
@@ -97,7 +97,6 @@ independent_response <- function(model,
 
   # Visualize
   if (visualize) {
-    yell(responses)
     plot(responses)
   }
 

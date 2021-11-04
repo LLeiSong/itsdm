@@ -13,7 +13,16 @@ Depends:
     raster,
     dplyr, 
     purrr,
-    isotree
+    ggplot2,
+    isotree,
+    outliertree,
+    fastshap,
+    isotree,
+    ecospat, 
+    stringr, 
+    ROCit, 
+    ncdf4, 
+    checkmate
 Imports:
     rgdal,
     rgeos
