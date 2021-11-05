@@ -24,7 +24,7 @@ The default value is 1000.}
 The default is FALSE.}
 }
 \value{
-a list of data.frame of response and variable values.
+(MarginalResponse) a list of data.frame of response and variable values.
 The response values correspond to suitability of this single variable.
 }
 \description{

@@ -17,7 +17,7 @@
 #' @param var_pred (vector) the vector contains predicted values of the whole area.
 #' @param visualize (logical) If TRUE, print message and plot the curves.
 #' The default is FALSE.
-#' @return (evaluation_po) a list of evaluations
+#' @return (POEvaluation) a list of evaluations
 #' @importFrom dplyr arrange tibble
 #' @importFrom ecospat ecospat.boyce
 #' @importFrom ROCit rocit ciAUC
@@ -82,11 +82,10 @@ evaluate_po <- function(model,
                                `auc_ratio` = auc_r),
               roc_background = list(`roc_background` = roc_b,
                                     `auc_background` = auc_b))
-  class(out) <- append("evaluation_po", class(out))
+  class(out) <- append("POEvaluation", class(out))
 
   # Visualize
   if (visualize) {
-    print(out)
     plot(out)
   }
 

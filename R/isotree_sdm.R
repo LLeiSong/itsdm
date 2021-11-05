@@ -27,7 +27,7 @@
   #' The default is TRUE.
 #' @param visualize (logical) if TRUE, generate the essential figures related to
 #' the model. The default is FALSE.
-#' @return (isotree_presence_only) a list of model, occ var_train, pred_train,
+#' @return (POIsotree) a list of model, occ var_train, pred_train,
 #' pred_test,  prediction, responses, eval_train, and eval_test.
 #' @import checkmate
 #' @importFrom dplyr select slice mutate sample_n
@@ -69,26 +69,22 @@ isotree_po <- function(
   checkmate::assert_multi_class(
     occ_crs, c('numeric', 'crs',
                 null.ok = T))
-  checkmate::assert_choice(occ_type, c('po', 'pa'))
-  checkmate::assert_character(label_column, null.ok = T)
   checkmate::assert_multi_class(
     variables, c('RasterStack', 'RasterLayer', 'stars'))
-  checkmate::assert_choice(eval_method, c('po', 'pa', 'both'))
   checkmate::assert_int(ntrees)
-  checkmate::assert_integer(
+  checkmate::assert_int(
     sample_size, lower = 2,
     upper = nrow(occ), na.ok = T)
   checkmate::assert_number(
-    sample_size, lower = 0,
+    sample_rate, lower = 0,
     upper = 1, null.ok = T)
   if (is(variables, 'RasterStack')) dim_max <- nlayers(variables)
   if (is(variables, 'RasterLayer')) dim_max <- 1
   if (is(variables, 'stars')) {
-    dim_max <- length(st_get_dimension_values(var_stars, 'band'))}
-  checkmate::assert_integer(
+    dim_max <- length(st_get_dimension_values(variables, 'band'))}
+  checkmate::assert_int(
     ndim, lower = 0,
     upper = dim_max - 1, na.ok = T)
-  checkmate::assert_int(seed)
   checkmate::assert_logical(response)
   checkmate::assert_logical(check_variable)
   checkmate::assert_logical(visualize)
@@ -101,12 +97,6 @@ isotree_po <- function(
   if (is(occ_test, 'data.frame')) {
     if(!all(c("x", "y") %in% colnames(occ_test))){
       stop("There must be x and y column in occ_test.")}}
-  if (!is.null(label_column) &
-      !(label_column %in% colnames(occ))){
-    stop('No label_column found in occ.')}
-  if (!is.null(label_column) &
-      !(label_column %in% colnames(occ_test))){
-    stop('No label_column found in occ_test.')}
   if (!is.na(sample_size) & !is.na(sample_rate)){
     stop('Only set sample_size or sample_rate.')
   } else if (is.na(sample_size) & is.na(sample_rate)) {
@@ -250,14 +240,14 @@ isotree_po <- function(
               pts_occ_test = pts_occ_test,
               var_train = occ_mat,
               pred_train = occ_pred,
-              eval_train = occ_eval,
+              eval_train = eval_train,
               pred_test = occ_test_pred,
-              eval_test = occ_test_eval,
+              eval_test = eval_test,
               prediction = var_pred,
               marginal_responses = marginal_responses,
               independent_responses = independent_responses,
-              variable_importance = variable_importance)
-  class(out) <- append("isotree_presence_only", class(out))
+              variable_importance = vimp)
+  class(out) <- append("POIsotree", class(out))
 
   # Return
   out

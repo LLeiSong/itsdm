@@ -37,7 +37,7 @@ The default value is 4326, which is the geographic coordinate system.}
 \item{ntrees}{(integer) The number of trees for the isolation forest.
 The default is 100.}
 
-\item{sample_size}{(integer) A number for sampling size in \verb{[0, nrow(occ)]}.
+\item{sample_size}{(integer) A number for sampling size in \verb{[2, nrow(occ)]}.
 The default is NULL.}
 
 \item{sample_rate}{(numeric) A rate for sampling size in \link{0, 1}.
@@ -60,7 +60,7 @@ the model. The default is FALSE.}
 The default is TRUE.}
 }
 \value{
-(isotree_presence_only) a list of model, occ var_train, pred_train,
+(POIsotree) a list of model, occ var_train, pred_train,
 pred_test,  prediction, responses, eval_train, and eval_test.
 }
 \description{

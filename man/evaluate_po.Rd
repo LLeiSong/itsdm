@@ -20,7 +20,7 @@ of background points.}
 The default is FALSE.}
 }
 \value{
-(evaluation_po) a list of evaluations
+(POEvaluation) a list of evaluations
 }
 \description{
 This function will calculate Contrast Validation Index (CVI),

@@ -1,7 +1,7 @@
 #' @title Print summary information from variable importance object.
 #' @description Display the most general and informative characteristics of
 #' a variable importance object.
-#' @param x (variable_analysis) A variable importance object to be messaged.
+#' @param x (VariableAnalysis) A variable importance object to be messaged.
 #' It could be the return of function `variable_analysis`.
 #' @param ... Not used.
 #' @importFrom dplyr filter pull
@@ -11,7 +11,7 @@
 #' @examples
 #' print(variable_analysis)
 #'
-print.variable_analysis <- function(x, ...){
+print.VariableAnalysis <- function(x, ...){
   cat('Relative variable importance\n')
   cat(paste0(c(rep('=', 35), '\n'), collapse = ''))
   cat('Methods: Jackknife test and SHAP\n')
@@ -177,7 +177,7 @@ print.variable_analysis <- function(x, ...){
 #' @title Print summary information from presence-only evaluation object.
 #' @description Display the most general and informative characteristics of
 #' a presence-only evaluation object.
-#' @param x (evaluation_po) A presence-only evaluation object to be messaged.
+#' @param x (POEvaluation) A presence-only evaluation object to be messaged.
 #' It could be the return of function `evaluate_po`.
 #' @param ... Not used.
 #' @importFrom stringr str_pad
@@ -186,7 +186,7 @@ print.variable_analysis <- function(x, ...){
 #' @examples
 #' print(evaluation_po)
 #'
-print.evaluation_po <- function(x, ...){
+print.POEvaluation <- function(x, ...){
   # CVI
   cvi25 <- x$cvi$`cvi with 0.25`
   cvi05 <- x$cvi$`cvi with 0.5`
@@ -220,4 +220,34 @@ print.evaluation_po <- function(x, ...){
 
   # return
   invisible(return(x))
+}
+
+#' @title Print summary information from ReducedImageStack object.
+#' @description Display the most general and informative characteristics of
+#' a ReducedImageStack object.
+#' @param x (ReducedImageStack) A ReducedImageStack object to be messaged.
+#' It could be the return of function `dim_reduce`.
+#' @param ... Not used.
+#' @importFrom stars st_get_dimension_values
+#' @return The same object that was passed as input.
+#' @export
+#' @examples
+#' print(img_reduced)
+#'
+
+print.ReducedImageStack <- function(x, ...) {
+  cat('Dimension reduction\n')
+  cat(sprintf('Correlation threshold: %s\n', x$threshold))
+  cat(sprintf(
+    'Original variables: %s\n',
+    paste0(names(x$cors_original$mean), collapse = ', ')))
+  cat(sprintf(
+    'Variables after dimension reduction: %s\n',
+    paste0(st_get_dimension_values(x$img_reduced, 'band'), collapse = ', ')))
+  cat(paste0(paste(rep('=', 80), collapse = ''), "\n"))
+  cat('Reduced correlations:\n')
+  print(x$cors_reduced)
+
+  # Return
+  invisible(x)
 }

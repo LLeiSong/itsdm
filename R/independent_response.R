@@ -13,7 +13,7 @@
 #' @details The curves show how each environmental variable independently
 #' affects the modeling prediction. The curves show how the predicted result
 #' only using this variable changes as it is varied.
-#' @return a list of data.frame of response and variable values.
+#' @return (IndependentResponse) a list of data.frame of response and variable values.
 #' The response values correspond to suitability of this single variable.
 #' @importFrom isotree isolation.forest
 #' @importFrom dplyr select slice
@@ -93,7 +93,7 @@ independent_response <- function(model,
       setNames(c("y", "x"))
   })
   names(responses) <- bands
-  class(responses) <- append("independent_response", class(responses))
+  class(responses) <- append("IndependentResponse", class(responses))
 
   # Visualize
   if (visualize) {

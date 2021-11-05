@@ -18,7 +18,7 @@
 #' sample value. The curves might be hard to interpret if there are strongly correlated
 #' variables. The users could use `dim_reduce` function to remove the strong correlation
 #' from original environmental variable stack.
-#' @return a list of data.frame of response and variable values.
+#' @return (MarginalResponse) a list of data.frame of response and variable values.
 #' The response values correspond to suitability of this single variable.
 #' @importFrom dplyr select slice as_tibble pull
 #' @importFrom stars st_as_stars
@@ -72,7 +72,7 @@ marginal_response <- function(model,
       setNames(c("y", "x"))
   })
   names(responses) <- bands
-  class(responses) <- append("marginal_response", class(responses))
+  class(responses) <- append("MarginalResponse", class(responses))
 
   # Visualize
   if (visualize) {

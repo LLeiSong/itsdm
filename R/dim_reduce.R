@@ -7,10 +7,11 @@
 #' @param samples (sf or sp) The samples to reduce dimension.
 #' If NULL, the whole rasterstack would be used. The default is NULL.
 #' @return ReducedImageStack.
+#' @import checkmate
 #' @importFrom sf st_as_sf
 #' @importFrom raster stack layerStats mask rasterize subset
 #' @importFrom stars st_as_stars
-#' @importFrom dplyr between
+#' @importFrom dplyr between select
 #' @importFrom purrr is_empty
 #' @export
 #' @examples
@@ -18,6 +19,7 @@
 #' dim_reduce(worldclim)
 dim_reduce <- function(img_stack = NULL,
                        threshold = 0.5,
+                       preferred_vars = NULL,
                        samples = NULL) {
     # Check inputs
     stopifnot(is.numeric(threshold) & between(threshold, 0, 1))
@@ -31,6 +33,7 @@ dim_reduce <- function(img_stack = NULL,
             stop("Only support sf or sp.")
         }
     }
+    checkmate::assert_vector(preferred_vars, null.ok = T)
 
     # Convert to raster to calculate correlations
     if_stars <- is(img_stack, 'stars')
@@ -42,6 +45,13 @@ dim_reduce <- function(img_stack = NULL,
         }
     }
 
+    # Check preferred variables are all in image stack
+    if (is.null(preferred_vars)) preferred_vars <- names(img_stack)
+    if (!all(preferred_vars %in% names(img_stack))) {
+        stop('Some of preferred_vars are not in image stack.')
+    }
+
+    # Extract samples if set any
     if (!is.null(samples)){
         samples <- st_as_sf(samples)
         samples <- rasterize(samples, img_stack[[1]], 1)
@@ -51,14 +61,17 @@ dim_reduce <- function(img_stack = NULL,
     # Calculate correlations
     stat <- "pearson" # Just use pearson because it is standardized.
     cors <- layerStats(img_stack, stat, na.rm = T)
-    cors <- data.frame(cors[[1]])
-    ps_cor <- cors
-    for (i in 1:ncol(ps_cor)){
-        if(i > ncol(ps_cor)){
-            break}
+    ps_cor <- data.frame(cors[[1]])
+    ids <- which(names(ps_cor) %in% preferred_vars)
+    ids <- c(ids, setdiff(1:nrow(ps_cor), ids))
+    ps_cor <- ps_cor[ids, ids]
+    i <- 1
+    while (TRUE) {
+        if(i > ncol(ps_cor)) break
         row_index <- which(abs(ps_cor[, i]) > threshold &
-                               abs(ps_cor[, i]) < 1)
+                               abs(ps_cor[, i]) < 0.9999)
         if(!is_empty(row_index)) ps_cor <- ps_cor[-row_index, -row_index]
+        i <- i + 1
     }
 
     # Subset images and make object
@@ -66,14 +79,14 @@ dim_reduce <- function(img_stack = NULL,
     if (if_stars) {
         img_reduced <- st_as_stars(img_reduced)
         names(img_reduced) <- 'reduced_image'}
-    img_reduced <- list(img_reduced = img_reduced,
+    img_reduced <- list(threshold = threshold,
+                        img_reduced = img_reduced,
                         cors_original = cors,
                         cors_reduced = ps_cor)
     class(img_reduced) <- 'ReducedImageStack'
+
     # Print and return
-    cat('Reduced correlations:\n')
-    print(img_reduced$cors_reduced)
-    invisible(img_reduced)
+    img_reduced
 }
 
 # dim_reduce end

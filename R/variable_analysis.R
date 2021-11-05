@@ -14,7 +14,9 @@
 #' The default is 5.
 #' @param visualize (logical) if TRUE, plot the response curves.
 #' The default is FALSE.
-#' @return variable_analysis
+#' @return (VariableAnalysis) a list of variable importance analysis according
+#' to different metrics including jackknife of Pearson correlation and AUC_ratio,
+#' and SHAP test.
 #' @importFrom dplyr select tibble filter sample_n
 #' @importFrom sf st_as_sf st_drop_geometry
 #' @importFrom stars st_as_stars st_xy2sfc st_get_dimension_values
@@ -235,11 +237,10 @@ variable_analysis <- function(model,
               SHAP = list(train = shap_train,
                           test = shap_test))
 
-  class(out) <- append("variable_analysis", class(out))
+  class(out) <- append("VariableAnalysis", class(out))
 
   # Visualize
   if (visualize) {
-    print(out)
     plot(out)
   }
 

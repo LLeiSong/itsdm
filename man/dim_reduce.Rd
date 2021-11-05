@@ -4,7 +4,12 @@
 \alias{dim_reduce}
 \title{A function to remove auto-correlation between raster layers.}
 \usage{
-dim_reduce(img_stack = NULL, threshold = 0.5, samples = NULL)
+dim_reduce(
+  img_stack = NULL,
+  threshold = 0.5,
+  preferred_vars = NULL,
+  samples = NULL
+)
 }
 \arguments{
 \item{img_stack}{(Stars or RasterStack) The image stack to work on.}

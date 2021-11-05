@@ -3,7 +3,7 @@
                             smooth_span = 0.3){
   # Check inputs
   checkmate::assert_multi_class(
-    response_list, c('marginal_response', 'independent_response'))
+    response_list, c('MarginalResponse', 'IndependentResponse'))
   checkmate::assert_number(smooth_span)
 
   # Convert list to tibble
@@ -45,7 +45,7 @@
 
 #' @title Function to plot marginal response curves.
 #' @description Plot marginal response curves using ggplot2.
-#' @param x (marginal_response) The marginal response curve object to plot.
+#' @param x (MarginalResponse) The marginal response curve object to plot.
 #' It could be the return of function `marginal_response`.
 #' @param smooth_span (numeric) The span value for smooth fit in ggplot2.
 #' When it is 0, no smooth applied. The default is 0.3.
@@ -56,13 +56,13 @@
 #' @examples
 #' plot(marginal_responses)
 #'
-plot.marginal_response <- function(x, smooth_span = 0.3, ...){
+plot.MarginalResponse <- function(x, smooth_span = 0.3, ...){
   .plot_responses(x, smooth_span)
 }
 
 #' @title Function to plot independent response curves.
 #' @description Plot independent response curves using ggplot2.
-#' @param x (independent_response) The independent response curve object to plot.
+#' @param x (IndependentResponse) The independent response curve object to plot.
 #' It could be the return of function `independent_response`.
 #' @param smooth_span (numeric) The span value for smooth fit in ggplot2.
 #' When it is 0, no smooth applied. The default is 0.3.
@@ -73,13 +73,13 @@ plot.marginal_response <- function(x, smooth_span = 0.3, ...){
 #' @examples
 #' plot(independent_responses)
 #'
-plot.independent_response <- function(x, smooth_span = 0.3, ...){
+plot.IndependentResponse <- function(x, smooth_span = 0.3, ...){
   .plot_responses(x, smooth_span)
 }
 
 #' @title Function to plot variable importance.
 #' @description Display informative and detailed figures of variable importance.
-#' @param x (variable_analysis) The variable importance object to plot.
+#' @param x (VariableAnalysis) The variable importance object to plot.
 #' It could be the return of function `variable_analysis`.
 #' @param ... Not used.
 #' @return a patchwork of ggplot figure of variable importance
@@ -90,7 +90,7 @@ plot.independent_response <- function(x, smooth_span = 0.3, ...){
 #' @examples
 #' plot(variable_analysis)
 #'
-plot.variable_analysis <- function(x, ...) {
+plot.VariableAnalysis <- function(x, ...) {
   # Pearson correlation
   cor_x <- x$pearson_correlation
 
@@ -251,7 +251,7 @@ plot.variable_analysis <- function(x, ...) {
 
   # SHAP
   ## Training
-  shap_x_train <- shap_x$train %>%
+  shap_x_train <- x$SHAP$train %>%
     summarise(across(all_of(names(.)), .abs_mean))
   shap_x_train <- apply(shap_x_train, 1,
           function(x) sort(x)) %>%
@@ -273,7 +273,7 @@ plot.variable_analysis <- function(x, ...) {
     coord_flip()
 
   ## Test
-  shap_x_test <- shap_x$test %>%
+  shap_x_test <- x$SHAP$test %>%
     summarise(across(all_of(names(.)), .abs_mean))
   shap_x_test <- apply(shap_x_test, 1,
                         function(x) sort(x)) %>%
@@ -303,7 +303,7 @@ plot.variable_analysis <- function(x, ...) {
 #' @title Function to plot presence-only evaluation.
 #' @description Display informative and detailed figures of continuous Boyce
 #' index and AUC curves.
-#' @param x (evaluation_po) The presence-only evaluation object to plot.
+#' @param x (POEvaluation) The presence-only evaluation object to plot.
 #' It could be the return of function `evaluate_po`.
 #' @param ... Not used.
 #' @return a patchwork of ggplot figure of AUC_ratio, AUC_background and CBI.
@@ -313,7 +313,7 @@ plot.variable_analysis <- function(x, ...) {
 #' @examples
 #' plot(evaluation_po)
 #'
-plot.evaluation_po <- function(x, ...) {
+plot.POEvaluation <- function(x, ...) {
   cex.axis <- 1
   cex.lab <- 1
   # ROC ratio
