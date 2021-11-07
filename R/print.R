@@ -251,3 +251,57 @@ print.ReducedImageStack <- function(x, ...) {
   # Return
   invisible(x)
 }
+
+#' @title Print summary information from PAConversion object.
+#' @description Display the most general and informative characteristics of
+#' a PAConversion object.
+#' @param x (PAConversion) A PAConversion object to be messaged.
+#' It could be the return of function `convert_to_pa`.
+#' @param ... Not used.
+#' @return The same object that was passed as input.
+#' @export
+#' @examples
+#' print(pa_covert)
+#'
+print.PAConversion <- function(x, ...) {
+  # threshold
+  if (x$pa_conversion$conversion_method == 'threshold') {
+    cat('Threshold conversion\n')
+    cat(sprintf('cutoff = %s\n', x$pa_conversion$beta))
+    cat(sprintf('species prevalence = %s\n', x$pa_conversion$species_prevalence))
+  # logistic
+  } else if (x$pa_conversion$conversion_method == 'logistic') {
+    cat('Logistic conversion\n')
+    cat(sprintf('beta = %s\n', x$pa_conversion$beta))
+    cat(sprintf('alpha = %s\n', x$pa_conversion$alpha))
+    cat(sprintf('species prevalence = %s\n', x$pa_conversion$species_prevalence))
+  # linear
+  } else if (x$pa_conversion$conversion_method == 'linear') {
+    cat('Linear conversion\n')
+    cat(sprintf('slope = %s\n', x$pa_conversion$a))
+    cat(sprintf('intercept = %s\n', x$pa_conversion$b))
+    cat(sprintf('species prevalence = %s\n', x$pa_conversion$species_prevalence))
+  }
+
+  # return
+  invisible(x)
+}
+
+#' @title Print summary information from PAConversion object.
+#' @description Display the most general and informative characteristics of
+#' a PAConversion object.
+#' @param x (EnvironmentalOutlier) A EnvironmentalOutlier object to be messaged.
+#' It could be the return of function `suspicious_env_outliers`.
+#' @param ... Not used.
+#' @import outliertree
+#' @return The same object that was passed as input.
+#' @export
+#' @examples
+#' print(suspicious_outliers)
+#'
+print.EnvironmentalOutlier <- function(x, ...) {
+  print(x$outlier_details)
+
+  # Return
+  invisible(x)
+}

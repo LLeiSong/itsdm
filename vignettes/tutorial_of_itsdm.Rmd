@@ -1,0 +1,136 @@
+---
+title: "Tutorial of itsdm"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{tutorial_of_itsdm}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = F
+)
+```
+
+```{r setup}
+library(itsdm)
+library(tmap, quietly = T)
+library(tibble, quietly = T)
+library(virtualspecies, quietly = T)
+library(rnaturalearth, quietly = T)
+
+# Get Africa continent
+af <- ne_countries(
+  continent = 'africa', returnclass = 'sf') %>% 
+  filter(admin != 'Madagascar') # remove Madagascar
+
+# Union countries to continent
+af_bry <- st_buffer(af, 0.1) %>%
+  st_union() %>% 
+  st_as_sf() %>% 
+  rename(geometry = x) %>% 
+  st_make_valid()
+  
+bios <- worldclim2(var = 'bio', bry = af_bry, nm_mark = 'africa')
+bios_reduce <- dim_reduce(bios, threshold = 0.7, 
+                          preferred_vars = c('bio1', 'bio12', 'bio5'))
+
+bios_sub <- bios %>% slice('band', c(1, 5, 12, 15))
+bios_sub <- stack(as(split(bios_sub), 'Spatial'))
+# Formatting of the response functions
+my.parameters <- formatFunctions(
+  bio1 = c(fun = 'dnorm', mean = 25, sd = 5),
+  bio5 = c(fun = 'dnorm', mean = 35, sd = 5),
+  bio12 = c(fun = 'dnorm', mean = 1000, sd = 500),
+  bio15 = c(fun = 'dnorm', mean = 100, sd = 50))
+
+# Generation of the virtual species
+my.species <- generateSpFromFun(
+  raster.stack = bios_sub,
+  parameters = my.parameters)
+
+# Conversion to presence-absence
+my.species <- convertToPA(
+  my.species,
+  beta = 0.7)
+plotResponse(my.species)
+
+# Sampling
+set.seed(10)
+po.points <- sampleOccurrences(
+  my.species,
+  n = 2000,
+  type = "presence only")
+po_df <- po.points$sample.points %>% 
+  select(x, y) %>% 
+  mutate(id = row_number())
+
+# Check outliers
+occ_outliers <- suspicious_env_outliers(
+  po_df, variables = variables,
+  z_outlier = 6)
+occ_outliers; plot(occ_outliers)
+plot(occ_outliers, overlay_raster = variables %>% slice('band', 6))
+# Remove outliers if necessary
+
+# Get occs
+set.seed(11)
+occ_df <- po_df %>% sample_frac(0.7)
+occ_test_df <- anti_join(po_df, occ_df, by = 'id')
+occ_df <- occ_df %>% select(-id)
+occ_test_df <- occ_test_df %>% select(-id)
+
+occ_sf <- occ_df %>% st_as_sf(coords = c('x', 'y'), crs = 4326)
+occ_test_sf <- occ_test_df %>% st_as_sf(coords = c('x', 'y'), crs = 4326)
+
+occ_sp <- as_Spatial(occ_sf)
+occ_test_sp <- as_Spatial(occ_test_sf)
+
+# Do modeling
+variables <- bios %>% slice('band', c(1, 5, 6, 12, 13, 15))
+it_sdm <- isotree_po(occ = occ_df, 
+                     occ_test = occ_test_df, 
+                     variables = variables,
+                     sample_rate = 0.8,
+                     ndim = 2)
+plot(it_sdm$marginal_responses, target_var = 'bio1')
+plot(it_sdm$independent_responses, target_var = c('bio1', 'bio12', 'bio15'))
+plot(it_sdm$variable_dependence)
+plot(it_sdm$variable_importance)
+
+## Seems done. Everthing seems fine.
+# Conver to presence-absence map
+pa_map <- convert_to_pa(it_sdm$prediction,
+                        method = "logistic",
+                        beta = 0.5, 
+                        alpha = -.05)
+pa_map; plot(pa_map)
+
+## Analyze variable contribution for interested observations.
+## For example, outliers.
+var_dependence <- variable_dependence(
+  it_sdm$model, 
+  it_sdm$var_train %>% st_drop_geometry())
+plot(var_dependence)
+plot(var_dependence, target_var = c('bio1', 'bio12', 'bio15'))
+plot(var_dependence, target_var = c('bio1', 'bio12', 'bio15'),
+     related_var = 'bio13')
+plot(var_dependence, target_var = c('bio1', 'bio12', 'bio15'),
+     related_var = 'bio13', smooth_span = 0)
+
+var_contrib <- variable_contrib(
+  it_sdm$model, 
+  it_sdm$var_train %>% st_drop_geometry(),
+  it_sdm$var_test %>% st_drop_geometry())
+plot(var_contrib)
+
+var_contrib <- variable_contrib(
+  it_sdm$model, 
+  it_sdm$var_train %>% st_drop_geometry(),
+  it_sdm$var_test %>% st_drop_geometry() %>% slice(1:12))
+plot(var_contrib, plot_each_obs = T)
+plot(var_contrib)
+```

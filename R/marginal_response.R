@@ -1,7 +1,7 @@
-#' A function to calculate marginal responses of each variables.
+#' @title A function to calculate marginal responses of each variables.
 #' @description This function allows you to calculate the marginal responses of
 #' each variables within the model.
-#' @param model (isolation_forest) The fitted SDM model.
+#' @param model Any predictive model. In this package, it could be isolation_forest.
 #' In this package, it is isolation_forest.
 #' @param var_occ (data.frame, tibble) the data.frame style table that
 #' include values of environmental variables at occurrence locations.

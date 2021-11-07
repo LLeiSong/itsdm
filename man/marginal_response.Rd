@@ -7,7 +7,7 @@
 marginal_response(model, var_occ, variables, si = 1000, visualize = FALSE)
 }
 \arguments{
-\item{model}{(isolation_forest) The fitted SDM model.
+\item{model}{Any predictive model. In this package, it could be isolation_forest.
 In this package, it is isolation_forest.}
 
 \item{var_occ}{(data.frame, tibble) the data.frame style table that

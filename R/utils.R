@@ -48,6 +48,7 @@
 # Function to get min and max values of a single band stars
 .min_value <- function(x) min(x[[1]], na.rm = T)
 .max_value <- function(x) max(x[[1]], na.rm = T)
+.mean_value <- function(x) mean(x[[1]], na.rm = T)
 
 # Linear stretch of single-band stars
 .stars_stretch <- function(x, # stars
@@ -126,4 +127,105 @@
   x_strech[x_strech > maxv] <- maxv
 
   x_strech
+}
+
+# Predict_wrapper for SHAP
+.pfun_shap <- function(X.model, newdata) {
+  pred <- 1 - predict(X.model, newdata)
+  .stretch(pred)}
+
+# Functions related to convert_to_pa
+# Calculate quantile of stars
+.quantile_stars <- function(x, # stars with one band
+                            ...,
+                            na.rm = TRUE) {
+  v <- try(as.vector(x[[1]]))
+  return(quantile(v, ..., na.rm = na.rm))
+}
+
+# Functions to find linear conversion
+# Reference: https://github.com/Farewe/virtualspecies/blob/master/R/convertToPA.R
+# Get line coefficients from two points
+.abcoefs = function(x1, y1, x2, y2) {
+  list(b = y1 - x1 * (y1 - y2) / (x1 - x2),
+       a = (y1 - y2) / (x1 - x2))
+}
+
+# Function for a line with intercept (b) and slope (a)
+.lab = function(x, b, a) a * x + b
+
+.quick_bernoulli_trial <- function(suitability,
+                                   seed = 1,
+                                   ...) {
+  # Raster of same dimensions than the  probability raster
+  random_numbers <- suitability
+  # Generate random numbers between 0 and 1 from uniform distribution
+  set.seed(seed)
+  random_numbers <- random_numbers %>%
+    mutate(prediction = runif(ncell(suitability), 0, 1))
+  # Attribute presence or absence on the basis of whether the random number
+  # is above or below the probability of occurrence
+  suitability > random_numbers
+}
+
+.find_linear_conversion = function(suitability,
+                                   target_prevalence,
+                                   seed = 1) {
+  suit_max <- .max_value(suitability)
+  suit_mean <- .mean_value(suitability)
+  suit_min <- .min_value(suitability)
+
+  xs <- c(suit_min, suit_max)
+  ys <- c(0, 1)
+
+  # Only include (0, 0) case if suitability >= 0
+  if (suit_min >= 0) {
+    xs <- c(0, xs)
+    ys <- c(0, ys)
+  }
+
+  AB <- .abcoefs(suit_mean,
+                target_prevalence,
+                xs,
+                ys)
+
+  ymn <- .lab(suit_min, AB$a, AB$b)
+  ymx <- .lab(suit_max, AB$a, AB$b)
+
+  # Round to avoid very small floating point calculation errors
+  ymn <- round(ymn, 6)
+  ymx <- round(ymx, 6)
+
+  I <- min(which(ymn >= 0 & ymx <= 1)) # Find first one that works
+
+  # Calculate the resulting prevalence:
+  new_suit <- AB$a[I] * suitability + AB$b[I]
+  distr <- .quick_bernoulli_trial(new_suit, seed = seed)
+  prev <- .mean_value(distr)
+
+  return(list(a = AB$a[I],
+              b = AB$b[I],
+              prevalence = prev,
+              prob_of_occurrence = new_suit,
+              distribution = distr))
+}
+
+# Linear transfer
+.linear_convert <- function(x, coefs) {
+  x <- x * coefs[1] + coefs[2]
+  if(.min_value(x) < 0 | .max_value(x) > 1) {
+    if(.min_value(x) < 0 & .max_value(x) > 1) {
+      message(paste0('The linear transformation resulted in probability values ',
+      'below 0 and above 1, so these were respectively truncated to 0 and 1.\n'))
+    } else if(.min_value(x) < 0) {
+      message(paste0('The linear transformation resulted in probability values',
+                     ' below 0 so these were truncated to 0\n'))
+    } else {
+      message(paste0('The linear transformation resulted in probability values',
+                     ' above 1 so these were truncated to 1\n'))
+    }
+  }
+  x[x < 0] <- 0
+  x[x > 1] <- 1
+  return(x)
 }

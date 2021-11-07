@@ -100,7 +100,7 @@ isotree_po <- function(
   if (!is.na(sample_size) & !is.na(sample_rate)){
     stop('Only set sample_size or sample_rate.')
   } else if (is.na(sample_size) & is.na(sample_rate)) {
-    message('No sample_size or sample_rate set. Use full sample.')
+    warning('No sample_size or sample_rate set. Use full sample.')
     sample_rate <- 1
   }
 
@@ -179,7 +179,13 @@ isotree_po <- function(
       model = isotree_mod,
       var_occ = occ_mat %>% st_drop_geometry(),
       variables = variables)
-  } else {responses <- NULL}
+    variable_dependences <- variable_dependence(
+      model = isotree_mod,
+      var_occ = occ_mat %>% st_drop_geometry())
+  } else {
+    marginal_responses <- NULL
+    independent_responses <- NULL
+    variable_dependences <- NULL}
 
   if (check_variable) {
     vimp <- variable_analysis(
@@ -187,6 +193,8 @@ isotree_po <- function(
       var_occ = occ_mat %>% st_drop_geometry(),
       var_occ_test = occ_test_mat %>% st_drop_geometry(),
       variables = variables)
+  } else {
+    vimp <- NULL
   }
 
   # Make evaluation using presence-only
@@ -241,11 +249,13 @@ isotree_po <- function(
               var_train = occ_mat,
               pred_train = occ_pred,
               eval_train = eval_train,
+              var_test = occ_test_mat,
               pred_test = occ_test_pred,
               eval_test = eval_test,
               prediction = var_pred,
               marginal_responses = marginal_responses,
               independent_responses = independent_responses,
+              variable_dependence = variable_dependences,
               variable_importance = vimp)
   class(out) <- append("POIsotree", class(out))
 

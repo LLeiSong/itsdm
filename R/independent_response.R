@@ -1,6 +1,7 @@
-#' A function to calculate independent responses of each variables.
+#' @title A function to calculate independent responses of each variables.
 #' @description This function allows you to calculate the independent responses
 #' of each variables within the model.
+#' @param model (isolation_forest) The fitted SDM model.
 #' @param var_occ (data.frame, tibble) the data.frame style table that
 #' include values of environmental variables at occurrence locations.
 #' @param variables (RasterStack, RasterLayer or stars)

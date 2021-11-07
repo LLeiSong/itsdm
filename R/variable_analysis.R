@@ -10,10 +10,12 @@
 #' @param var_occ_test (data.frame, tibble) The data.frame style table that
 #' include values of environmental variables at occurrence locations of testing.
 #' If NULL, no test will be used. The default is NULL.
-#' @param permution_cv (integer) The time to run permutation method.
-#' The default is 5.
+#' @param variables (RasterStack or stars) The stack of environmental variables.
+#' @param shap_nsim (integer) The number of Monte Carlo repetitions in SHAP
+#' method to use for estimating each Shapley value.
 #' @param visualize (logical) if TRUE, plot the response curves.
 #' The default is FALSE.
+#' @param seed (integer) The seed for any random progress. The default is 10.
 #' @return (VariableAnalysis) a list of variable importance analysis according
 #' to different metrics including jackknife of Pearson correlation and AUC_ratio,
 #' and SHAP test.
@@ -39,6 +41,7 @@ variable_analysis <- function(model,
     variables, c('RasterStack', 'RasterLayer', 'stars'))
   checkmate::assert_int(shap_nsim)
   checkmate::assert_logical(visualize)
+  checkmate::assert_int(seed)
   bands <- st_get_dimension_values(variables, 'band')
   stopifnot(all(bands %in% colnames(var_occ)))
 
@@ -209,17 +212,13 @@ variable_analysis <- function(model,
   # ALTERNATIVE: SHAP method that use Shapley values according to game theory.
 
   # SHAP feature importance
-  pfun <- function(X.model, newdata) {
-    pred <- 1 - predict(X.model, newdata)
-    .stretch(pred)}
-
   set.seed(seed)
   shap_train <- explain(model, X = var_occ, nsim = shap_nsim,
-                        pred_wrapper = pfun)
+                        pred_wrapper = .pfun_shap)
   set.seed(seed)
   shap_test <- explain(model, X = var_occ, nsim = shap_nsim,
                        newdata = var_occ_test,
-                       pred_wrapper = pfun)
+                       pred_wrapper = .pfun_shap)
 
   # Output
   out <- list(variables = bands,

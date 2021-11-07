@@ -4,11 +4,14 @@
 \alias{plot.MarginalResponse}
 \title{Function to plot marginal response curves.}
 \usage{
-\method{plot}{MarginalResponse}(x, smooth_span = 0.3, ...)
+\method{plot}{MarginalResponse}(x, target_var = NA, smooth_span = 0.3, ...)
 }
 \arguments{
 \item{x}{(MarginalResponse) The marginal response curve object to plot.
 It could be the return of function \code{marginal_response}.}
+
+\item{target_var}{(vector of character) The target variable to plot. It could be
+NA. If it is NA, all variables will be plotted.}
 
 \item{smooth_span}{(numeric) The span value for smooth fit in ggplot2.
 When it is 0, no smooth applied. The default is 0.3.}

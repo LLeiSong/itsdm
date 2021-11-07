@@ -7,6 +7,8 @@
 independent_response(model, var_occ, variables, si = 1000, visualize = FALSE)
 }
 \arguments{
+\item{model}{(isolation_forest) The fitted SDM model.}
+
 \item{var_occ}{(data.frame, tibble) the data.frame style table that
 include values of environmental variables at occurrence locations.}
 
