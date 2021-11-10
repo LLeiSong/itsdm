@@ -9,6 +9,7 @@ suspicious_env_outliers(
   occ_crs = 4326,
   variables,
   rm_outliers = FALSE,
+  seed = 10,
   ...
 )
 }

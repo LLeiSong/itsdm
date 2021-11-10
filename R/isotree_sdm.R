@@ -91,10 +91,11 @@ isotree_po <- function(
 
   # Check inputs - level 2
   ## Check related columns
-  if (is(occ, 'data.frame')) {
+  if (is(occ, 'data.frame') & (!is(occ, 'sf')) & (!is(occ, 'Spatial'))) {
     if(!all(c("x", "y") %in% colnames(occ))){
       stop("There must be x and y column in occ.")}}
-  if (is(occ_test, 'data.frame')) {
+  if (is(occ_test, 'data.frame') & (!is(occ_test, 'sf')) &
+      (!is(occ_test, 'Spatial'))) {
     if(!all(c("x", "y") %in% colnames(occ_test))){
       stop("There must be x and y column in occ_test.")}}
   if (!is.na(sample_size) & !is.na(sample_rate)){
@@ -110,7 +111,8 @@ isotree_po <- function(
     variables <- st_as_stars(variabels)
   }
   # Occurrence
-  if (is(occ, 'data.frame')) {
+  if (is(occ, 'data.frame') & (!is(occ, 'sf')) &
+      (!is(occ, 'Spatial'))) {
     pts_occ <- occ %>%
       st_as_sf(coords = c('x', 'y'), crs = occ_crs)
   } else {
@@ -120,7 +122,8 @@ isotree_po <- function(
     pts_occ <- st_transform(pts_occ, st_crs(variables))
   }
   if(!is.null(occ_test)) {
-    if (is(occ_test, 'data.frame')) {
+    if (is(occ_test, 'data.frame') & (!is(occ_test, 'sf')) &
+        (!is(occ_test, 'Spatial'))) {
       pts_occ_test <- occ_test %>%
         st_as_sf(coords = c('x', 'y'), crs = occ_crs)
     } else{
@@ -256,7 +259,7 @@ isotree_po <- function(
               marginal_responses = marginal_responses,
               independent_responses = independent_responses,
               variable_dependence = variable_dependences,
-              variable_importance = vimp)
+              variable_analysis = vimp)
   class(out) <- append("POIsotree", class(out))
 
   # Return

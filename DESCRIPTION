@@ -7,31 +7,32 @@ Maintainer: Lei Song <lsong@clarku.edu>
 Description: This is a package to do Species distribution modeling with isolation forest and variations such as SCiForest and EIF.
 License: MIT + file LICENSE
 Depends: 
-    sf, 
+    sf,
     glue,
     stars,
     raster,
-    dplyr, 
+    dplyr,
     purrr,
     ggplot2,
     isotree,
     outliertree,
     fastshap,
     isotree,
-    ecospat, 
-    stringr, 
-    ROCit, 
-    ncdf4, 
-    checkmate
+    ecospat,
+    stringr,
+    ROCit,
+    ncdf4,
+    checkmate,
+    R (>= 3.5.0)
 Imports:
     rgdal,
     rgeos
 Suggests: 
     kableExtra,
     knitr, 
-    prettydoc,
     rmarkdown
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 VignetteBuilder: knitr
+LazyData: true

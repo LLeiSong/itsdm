@@ -243,6 +243,9 @@ plot.VariableContribution <- function(x,
                  shapley_value = unlist(shapley_values[n, ])) %>%
         arrange(-abs(shapley_value)) %>% slice(1:num_features)
     })); row.names(values_cont) <- NULL
+    values_cont <- values_cont %>%
+      mutate(num_obs = factor(
+        num_obs, levels = paste0('Obs No.', 1:nrow(shapley_values))))
 
     # Plot
     ggplot(values_cont,
@@ -263,7 +266,7 @@ plot.VariableContribution <- function(x,
   } else {
     # Convert data
     values_cont <- do.call(rbind, lapply(1:nrow(shapley_values), function(n) {
-      data.frame(variable = names(vals),
+      data.frame(variable = names(shapley_values),
                  shapley_value = unlist(shapley_values[n, ]))
     })); row.names(values_cont) <- NULL
 
@@ -315,9 +318,12 @@ plot.VariableAnalysis <- function(x, ...) {
                  method = c('full', 'Only'),
                  usage = rep('Train', 2),
                  value = c(1, 0))) %>%
-    mutate( variable = factor(
+    mutate(variable = factor(
       variable,
-      levels = c('', var_order_train)))
+      levels = c('', var_order_train)),
+      method = factor(
+        method,
+        levels = c('full', 'Only', 'Without')))
 
   ## Plot
   g_cor_train <- ggplot(cor_x_train,
@@ -354,7 +360,10 @@ plot.VariableAnalysis <- function(x, ...) {
                  value = c(1, 0))) %>%
     mutate(variable = factor(
       variable,
-      levels = c('', var_order_test)))
+      levels = c('', var_order_test)),
+      method = factor(
+        method,
+        levels = c('full', 'Only', 'Without')))
   ## Plot
   g_cor_test <- ggplot(cor_x_test) +
     geom_bar(aes(x = variable,
@@ -392,9 +401,12 @@ plot.VariableAnalysis <- function(x, ...) {
                  method = c('full', 'Only'),
                  usage = rep('Train', 2),
                  value = c(full_auc_r$full_auc_train, 0))) %>%
-    mutate( variable = factor(
+    mutate(variable = factor(
       variable,
-      levels = c('', var_order_train)))
+      levels = c('', var_order_train)),
+      method = factor(
+        method,
+        levels = c('full', 'Only', 'Without')))
 
   ## Plot
   g_auc_train <- ggplot(auc_r_train,
@@ -431,9 +443,12 @@ plot.VariableAnalysis <- function(x, ...) {
                  method = c('full', 'Only'),
                  usage = rep('Test', 2),
                  value = c(full_auc_r$full_auc_test, 0))) %>%
-    mutate( variable = factor(
+    mutate(variable = factor(
       variable,
-      levels = c('', var_order_test)))
+      levels = c('', var_order_test)),
+      method = factor(
+        method,
+        levels = c('full', 'Only', 'Without')))
 
   ## Plot
   g_auc_test <- ggplot(auc_r_test,

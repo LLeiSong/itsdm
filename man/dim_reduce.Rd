@@ -17,6 +17,13 @@ dim_reduce(
 \item{threshold}{(numeric) The number of the threshold to reduce.
 The default is 0.5.}
 
+\item{preferred_vars}{(vector of character) The preferred variables in order
+in dimension reduction. The preferred variables will move to the beginning
+before the reduction. So make sure they are placed in order. Furthermore,
+setting preferred_vars does not guarantee they can survive, for example, one
+preferred variable that is placed later has strong correlation with former
+preferred variable.}
+
 \item{samples}{(sf or sp) The samples to reduce dimension.
 If NULL, the whole rasterstack would be used. The default is NULL.}
 }

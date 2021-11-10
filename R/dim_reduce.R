@@ -4,6 +4,12 @@
 #' @param img_stack (Stars or RasterStack) The image stack to work on.
 #' @param threshold (numeric) The number of the threshold to reduce.
 #' The default is 0.5.
+#' @param preferred_vars (vector of character) The preferred variables in order
+#' in dimension reduction. The preferred variables will move to the beginning
+#' before the reduction. So make sure they are placed in order. Furthermore,
+#' setting preferred_vars does not guarantee they can survive, for example, one
+#' preferred variable that is placed later has strong correlation with former
+#' preferred variable.
 #' @param samples (sf or sp) The samples to reduce dimension.
 #' If NULL, the whole rasterstack would be used. The default is NULL.
 #' @return ReducedImageStack.
@@ -62,7 +68,7 @@ dim_reduce <- function(img_stack = NULL,
     stat <- "pearson" # Just use pearson because it is standardized.
     cors <- layerStats(img_stack, stat, na.rm = T)
     ps_cor <- data.frame(cors[[1]])
-    ids <- which(names(ps_cor) %in% preferred_vars)
+    ids <- match(preferred_vars, names(ps_cor))
     ids <- c(ids, setdiff(1:nrow(ps_cor), ids))
     ps_cor <- ps_cor[ids, ids]
     i <- 1

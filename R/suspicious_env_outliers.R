@@ -25,13 +25,15 @@ suspicious_env_outliers <- function(occ,
                                     occ_crs = 4326,
                                     variables,
                                     rm_outliers = FALSE,
+                                    seed = 10,
                                     ...) {
   # Check inputs
   checkmate::assert_multi_class(
     occ, c('data.frame', 'sf',
            'SpatialPointsDataFrame',
            null.ok = F))
-  if (is(occ, 'data.frame')) {
+  if (is(occ, 'data.frame') & (!is(occ, 'sf')) &
+      (!is(occ, 'Spatial'))) {
     if(!all(c("x", "y") %in% colnames(occ))){
       stop("There must be x and y column in occ.")}}
   checkmate::assert_multi_class(
@@ -43,7 +45,8 @@ suspicious_env_outliers <- function(occ,
     variables <- st_as_stars(variabels)
   }
   # Occurrence
-  if (is(occ, 'data.frame')) {
+  if (is(occ, 'data.frame') & (!is(occ, 'sf')) &
+      (!is(occ, 'Spatial'))) {
     pts_occ <- occ %>%
       st_as_sf(coords = c('x', 'y'), crs = occ_crs)
   } else {
@@ -58,6 +61,7 @@ suspicious_env_outliers <- function(occ,
     st_as_sf() %>% st_drop_geometry()
 
   # Detect suspicious environmental outliers
+  set.seed(seed)
   outliers_model <- outlier.tree(
     var_occ,
     ...,

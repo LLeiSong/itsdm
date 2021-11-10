@@ -29,7 +29,7 @@
 #' var_occ = var_occ, variables = env_vars)
 variable_analysis <- function(model,
                               var_occ,
-                              var_occ_test = NULL, # Independent test
+                              var_occ_test, # Independent test
                               variables,
                               shap_nsim = 100,
                               visualize = FALSE,

@@ -171,7 +171,7 @@ print.VariableAnalysis <- function(x, ...){
                sprintf(' %s\n', round(val, 3))))
   }))
 
-  invisible(return(x))
+  invisible(x)
 }
 
 #' @title Print summary information from presence-only evaluation object.
@@ -238,15 +238,19 @@ print.POEvaluation <- function(x, ...){
 print.ReducedImageStack <- function(x, ...) {
   cat('Dimension reduction\n')
   cat(sprintf('Correlation threshold: %s\n', x$threshold))
-  cat(sprintf(
+  msg <- sprintf(
     'Original variables: %s\n',
-    paste0(names(x$cors_original$mean), collapse = ', ')))
-  cat(sprintf(
+    paste0(names(x$cors_original$mean), collapse = ', '))
+  msg <- paste(strwrap(msg, width = 80), collapse = '\n')
+  cat(paste0(msg, "\n"))
+  msg <- sprintf(
     'Variables after dimension reduction: %s\n',
-    paste0(st_get_dimension_values(x$img_reduced, 'band'), collapse = ', ')))
+    paste0(st_get_dimension_values(x$img_reduced, 'band'), collapse = ', '))
+  msg <- paste(strwrap(msg, width = 80), collapse = '\n')
+  cat(paste0(msg, "\n"))
   cat(paste0(paste(rep('=', 80), collapse = ''), "\n"))
   cat('Reduced correlations:\n')
-  print(x$cors_reduced)
+  print(round(x$cors_reduced, 2))
 
   # Return
   invisible(x)

@@ -7,7 +7,7 @@
 variable_analysis(
   model,
   var_occ,
-  var_occ_test = NULL,
+  var_occ_test,
   variables,
   shap_nsim = 100,
   visualize = FALSE,
