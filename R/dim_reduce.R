@@ -1,6 +1,7 @@
-#' A function to remove auto-correlation between raster layers.
+#' A function to remove auto-correlation between numeric raster layers.
 #' @description This function allows you to reduce dimensions of raster layers
-#' based on pearson correlation and a user-defined threshold.
+#' based on pearson correlation and a user-defined threshold. NOTE that it only
+#' works on numeric variables, does not work on categorical variables.
 #' @param img_stack (Stars or RasterStack) The image stack to work on.
 #' @param threshold (numeric) The number of the threshold to reduce.
 #' The default is 0.5.

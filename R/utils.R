@@ -229,3 +229,17 @@
   x[x > 1] <- 1
   return(x)
 }
+
+# kruskal.test between RasterStack and RasterLayer
+## Return the p values
+.kruskal.test.raster <- function(rst_stack,
+                                 cat_rst){
+  # Convert data
+  cats <- getValues(cat_rst)
+  cors <- sapply(1:nlayers(rst_stack), function(n) {
+    vals <- getValues(subset(rst_stack, n))
+    # Calculate
+    kruskal.test(x = vals, g = cats, na.action = 'na.omit')[['p.value']]
+  })
+  data.frame(cors) %>% setNames(names(cat_rst))
+}

@@ -1,5 +1,5 @@
 ---
-title: "Tutorial of package `itsdm` with a virtual species"
+title: "Introduction of `itsdm` with a virtual species"
 author: "Lei Song"
 date: "`r Sys.Date()`"
 output: 
@@ -9,7 +9,7 @@ output:
     toc_float: true
     toc_depth: 3
 vignette: >
-  %\VignetteIndexEntry{tutorial_of_itsdm}
+  %\VignetteIndexEntry{Introduction of itsdm with a virtual species}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,7 +18,6 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  # eval = F,
   warning = F
 )
 ```
@@ -224,31 +223,50 @@ ggplot() +
   theme_linedraw()
 ```
 
+Let's do model evaluation using multiple presence-only metrics. In this package, we only implement presence-only evaluation metrics, the users also could calculate other presence-absence metrics using other packages or so.
+
+```{r, fig.align='center', fig.width=6, fig.height=6}
+# Metrics based on training dataset
+it_sdm$eval_train
+plot(it_sdm$eval_train)
+
+# Metrics based on test dataset
+it_sdm$eval_test
+plot(it_sdm$eval_test)
+```
+
 The result of `isotree_po` has options to generate response curves and variable analysis together. The response curves include marginal response curves, independent response curves and variable dependence made by SHAP. Variable analysis includes Jackknife of Pearson correlation with result of full model with all variables and AUC_ratio and variable dependence with SHAP test.
 
 ```{r marginal_responses, fig.align='center', fig.width=7, fig.height=7}
 # Plot response curves
+## Marginal response curves of all variables
 plot(it_sdm$marginal_responses)
 ```
 
 ```{r independent_responses, fig.align='center', fig.width=7}
+## Independent response curves of variable bio1, bio12, and bio15.
 plot(it_sdm$independent_responses, target_var = c('bio1', 'bio12', 'bio15'))
 ```
 
 ```{r variable_dependence, fig.align='center', fig.width=7, fig.height=7}
+## Variable dependence scatter points with fitted curves made by SHAP test
 plot(it_sdm$variable_dependence)
 ```
 
 ```{r variable_analysis, fig.align='center', fig.width=8, fig.height=8}
+# Printing variable analysis could give you enough info of variable importance
 it_sdm$variable_analysis
-# Plot variable importance
+
+# We also could plot variable importance out
 plot(it_sdm$variable_analysis)
 ```
 
 The direct result of function `isotree_po` is the environmental suitability. We could use function `convert_to_pa` to convert suitability to presence-absence based on different methods: threshold, logistic, and linear conversion, and/or a desirable species prevalence.
 
 ```{r pa, fig.align='center', fig.width=8, fig.height=8}
-# Convert to presence-absence map
+# An example of converting to presence-absence map
+## Use logistic conversion with alpha = -0.05, beta = 0.5 
+## and not set species prevalence
 pa_map <- convert_to_pa(it_sdm$prediction,
                         method = "logistic",
                         beta = 0.5,
@@ -266,8 +284,11 @@ var_dependence <- variable_dependence(
   it_sdm$var_train %>% st_drop_geometry())
 
 # Multiple ways to plot variable VariableDependence object
+## Plot with smooth fit curve
 plot(var_dependence, target_var = c('bio1', 'bio12', 'bio15'),
      related_var = 'bio13')
+
+## Plot without smooth fit curve
 plot(var_dependence, target_var = c('bio1', 'bio12', 'bio15'),
      related_var = 'bio13', smooth_span = 0)
 ```
@@ -279,13 +300,14 @@ Sometimes, we are interested in some observations, for instance, the outliers. `
 ```{r var_contrib, fig.align='center', fig.width=7, fig.height=7}
 ## Analyze variable contribution for interested observations.
 ## For example, outliers.
-
 var_contrib <- variable_contrib(
   it_sdm$model, 
   it_sdm$var_train %>% st_drop_geometry(),
   it_sdm$var_test %>% st_drop_geometry() %>% slice(1:12))
 
 # Plot contribution separately for each observation
+## By default, it only plot the most 5 important variables for each observation
+## You could change `num_features` to show more variables
 plot(var_contrib, plot_each_obs = T)
 ```
 

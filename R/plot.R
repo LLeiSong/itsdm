@@ -232,6 +232,7 @@ plot.VariableContribution <- function(x,
   shapley_values <- x$shapley_values
   feature_values <- x$feature_values
   stopifnot(identical(names(shapley_values), names(feature_values)))
+  checkmate::assert_int(num_features, lower = 1, upper = ncol(shapley_values))
 
   if (plot_each_obs) {
     # Convert data
