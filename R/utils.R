@@ -109,7 +109,7 @@
   stopifnot(minq < maxq)
 
   if (minq == 0 & maxq == 1) {
-    q <- cbind(.min_value(x), .max_value(x))
+    q <- cbind(min(x), max(x))
   } else {
     q <- quantile(x, c(minq, maxq), na.rm = TRUE)
   }
@@ -242,4 +242,25 @@
     kruskal.test(x = vals, g = cats, na.action = 'na.omit')[['p.value']]
   })
   data.frame(cors) %>% setNames(names(cat_rst))
+}
+
+# Convert categorical variables to numeric in RasterStack
+.remove_cats <- function(rst_stack){
+  # Check
+  categ_vars <- names(rst_stack)[is.factor(rst_stack)]
+  if (length(categ_vars) == 0) {
+    rst_stack
+  } else {
+    for (nm in categ_vars) {
+      rst_stack[[nm]] <- deratify(rst_stack[[nm]])
+    }
+    rst_stack
+  }
+}
+
+## Get the mode of categorical integerish vector
+.mode <- function(v) {
+  # Get mode
+  summary(v) %>% sort(decreasing = T) %>%
+    `[`(1) %>% names() %>% as.factor()
 }

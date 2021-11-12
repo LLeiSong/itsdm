@@ -20,6 +20,7 @@
 #' it must be no smaller than the dimension of environmental variables.
 #' When it is 0, the model is a traditional isolation forest, otherwise the model
 #' is an extended isolation forest. The default is 0.
+#' @param seed (integer) The random seed used in the modeling.
 #' @param ... Other arguments that `isotree::isolation.forest` needs.
 #' @param response (logical) if TRUE, generate response curves.
 #' The default is TRUE.
@@ -45,11 +46,13 @@ isotree_po <- function(
   occ_test = NULL, # sf, sp, or data.frame with x and y
   occ_crs = 4326,
   variables, # rasterstack or stars. if stars, must have dimension band
+  categ_vars = NULL, # categorical variables
   # Isotree-related inputs
   ntrees = 100L, # number of trees
   sample_size = NA, # sample size
   sample_rate = NA, # sample rate
   ndim = 0L, # extension level
+  seed = 10L, # random seed, must be integer
   # Other arguments of isolation.forest
   ...,
   # Other general inputs
@@ -70,7 +73,8 @@ isotree_po <- function(
     occ_crs, c('numeric', 'crs',
                 null.ok = T))
   checkmate::assert_multi_class(
-    variables, c('RasterStack', 'RasterLayer', 'stars'))
+    variables, c('RasterStack', 'stars'))
+  checkmate::assert_vector(categ_vars, null.ok = T)
   checkmate::assert_int(ntrees)
   checkmate::assert_int(
     sample_size, lower = 2,
@@ -79,15 +83,30 @@ isotree_po <- function(
     sample_rate, lower = 0,
     upper = 1, null.ok = T)
   if (is(variables, 'RasterStack')) dim_max <- nlayers(variables)
-  if (is(variables, 'RasterLayer')) dim_max <- 1
   if (is(variables, 'stars')) {
-    dim_max <- length(st_get_dimension_values(variables, 'band'))}
+    if (length(dim(variables)) == 2){
+      dim_max <- length(variables)
+    } else if (length(dim(variables)) == 3) {
+      if (!is.null(categ_vars)){
+        warning(paste0('Categorical layers are merged to an dimension.',
+                       ' Be careful if they are original values.'))
+      }
+      dim_max <- length(st_get_dimension_values(variables, 3))
+    } else {
+      stop('variables has more than 3 dimensions, do not know which one to use.')
+    }
+    }
   checkmate::assert_int(
-    ndim, lower = 0,
-    upper = dim_max - 1, na.ok = T)
+    ndim, lower = 1,
+    upper = dim_max, na.ok = T)
   checkmate::assert_logical(response)
   checkmate::assert_logical(check_variable)
   checkmate::assert_logical(visualize)
+
+  # Check categ_cols
+  if (exists('categ_cols')) {
+    stop('Set categ_vars instead.')
+  }
 
   # Check inputs - level 2
   ## Check related columns
@@ -102,14 +121,52 @@ isotree_po <- function(
     stop('Only set sample_size or sample_rate.')
   } else if (is.na(sample_size) & is.na(sample_rate)) {
     warning('No sample_size or sample_rate set. Use full sample.')
-    sample_rate <- 1
+    sample_rate <- 1.0
   }
 
   # Reformat the inputs
-  # Variables, use stars
-  if (is(variables, 'RasterStack') | is(variables, 'RasterLayer')){
-    variables <- st_as_stars(variabels)
+  # Variables
+  ## -- RasterStack - resume cat original values, convert to stars with multiple
+  ##                  attributes, check if categ_vars are existing cat vars.
+  ## -- Stars with 3 dims - split it, no need to check cat vars
+  ## -- Stars with multiple attributes - check categ_vars are existing cat vars
+  if (is(variables, 'RasterStack')){
+    # Check categ_vars
+    ## step 1
+    stopifnot(all(categ_vars %in% names(variables)))
+    ## step 2
+    if (!identical(names(variables) %in% categ_vars,
+                   is.factor(variables))) {
+      warning('Categorical layers detected in RasterStack do not match with categ_vars.')
+    }
+    variables <- .remove_cats(variables)
+    variables <- st_as_stars(variabels) %>% split('band')
+  } else {
+    if (length(dim(variables)) == 3) {
+      variables <- variables %>% split(3)
+      # Check categ_vars
+      stopifnot(all(categ_vars %in% names(variables)))
+    } else {
+      # Check categ_vars
+      ## step 1
+      stopifnot(all(categ_vars %in% names(variables)))
+      # step 2
+      isfacor <- as.vector(sapply(variables, is.factor))
+      if (!identical(names(variables) %in% categ_vars,
+                     isfacor)) {
+        warning('Categorical layers detected in RasterStack do not match with categ_vars.')
+      }
+    }
   }
+
+  # Convert to factors
+  for (nm in categ_vars) {
+    if (!is.factor(variables[[nm]])) {
+      variables <- variables %>%
+        mutate(!!nm := as.factor(variables[[nm]]))
+    }
+  }
+
   # Occurrence
   if (is(occ, 'data.frame') & (!is(occ, 'sf')) &
       (!is(occ, 'Spatial'))) {
@@ -132,20 +189,20 @@ isotree_po <- function(
     if (st_crs(variables) != st_crs(pts_occ_test)){
       pts_occ_test <- st_transform(pts_occ_test, st_crs(variables))
     }
-  }
-
-  # Sample size
-  if (is.na(sample_size)) sample_size <- nrow(occ) * sample_rate
+  } else pts_occ_test <- NULL
 
   # Extract values
   occ_mat <- st_extract(x = variables, at = pts_occ) %>%
-    st_as_sf()
+    st_as_sf() %>% na.omit()
   if (!is.null(occ_test)) {
     occ_test_mat <- st_extract(x = variables, at = pts_occ_test) %>%
-      st_as_sf()
+      st_as_sf() %>% na.omit()
   } else {
     occ_test_mat <- NULL
   }
+
+  # Sample size
+  if (is.na(sample_size)) sample_size <- nrow(occ_mat) * sample_rate
 
   # Train the model
   isotree_mod <- isolation.forest(
@@ -153,21 +210,22 @@ isotree_po <- function(
     ntrees = ntrees,
     sample_size = sample_size,
     ndim = ndim,
+    seed = seed,
     ...)
 
   # Do prediction
   ## Raster
-  var_pred <- predict(split(variables, 'band'), isotree_mod)
+  var_pred <- predict(variables, isotree_mod)
   # Stretch result to be comparable with other results
   var_pred <- 1 - var_pred
   var_pred <- .stars_stretch(var_pred)
 
   ## Training
-  occ_pred <- st_extract(x = var_pred, at = pts_occ)
+  occ_pred <- st_extract(x = var_pred, at = pts_occ) %>% na.omit()
 
   ## Test
   if (!is.null(occ_test)){
-    occ_test_pred <- st_extract(x = var_pred, at = pts_occ_test)
+    occ_test_pred <- st_extract(x = var_pred, at = pts_occ_test) %>% na.omit()
   } else {
     occ_test_pred <- NULL
   }
@@ -212,7 +270,7 @@ isotree_po <- function(
     st_xy2sfc(as_points = T) %>% st_as_sf() %>%
     sample_n(nrow(pts_occ)) %>% select(geometry)
   occ_bg_pred <- st_extract(x = var_pred, at = pts_bg_occ)
-  var_occ_bg <- st_extract(x = split(variables, 'band'),
+  var_occ_bg <- st_extract(x = variables,
                            at = pts_bg_occ)
   rm(stars_mask, pts_bg_occ)
 
@@ -228,7 +286,7 @@ isotree_po <- function(
       st_xy2sfc(as_points = T) %>% st_as_sf() %>%
       sample_n(nrow(pts_occ_test)) %>% select(geometry)
     occ_test_bg_pred <- st_extract(x = var_pred, at = pts_bg_occ_test)
-    var_occ_test_bg <- st_extract(x = split(variables, 'band'),
+    var_occ_test_bg <- st_extract(x = variables,
                                   at = pts_bg_occ_test)
     rm(stars_mask, pts_bg_occ_test)
   }
@@ -247,6 +305,7 @@ isotree_po <- function(
 
   # Return
   out <- list(model = isotree_mod,
+              variables = variables, # the formatted stars
               pts_occ = pts_occ,
               pts_occ_test = pts_occ_test,
               var_train = occ_mat,

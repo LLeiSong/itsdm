@@ -9,10 +9,12 @@ isotree_po(
   occ_test = NULL,
   occ_crs = 4326,
   variables,
+  categ_vars = NULL,
   ntrees = 100L,
   sample_size = NA,
   sample_rate = NA,
   ndim = 0L,
+  seed = 10L,
   ...,
   response = TRUE,
   check_variable = TRUE,
@@ -47,6 +49,8 @@ The default is NULL. Only set either \code{sample_size} or \code{sample_rate}.}
 it must be no smaller than the dimension of environmental variables.
 When it is 0, the model is a traditional isolation forest, otherwise the model
 is an extended isolation forest. The default is 0.}
+
+\item{seed}{(integer) The random seed used in the modeling.}
 
 \item{...}{Other arguments that \code{isotree::isolation.forest} needs.}
 

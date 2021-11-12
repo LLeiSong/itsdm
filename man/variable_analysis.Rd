@@ -24,7 +24,10 @@ include values of environmental variables at occurrence locations.}
 include values of environmental variables at occurrence locations of testing.
 If NULL, no test will be used. The default is NULL.}
 
-\item{variables}{(RasterStack or stars) The stack of environmental variables.}
+\item{variables}{(stars) The stars of environmental variables. It should have
+multiple attributes instead of dims. If you have \code{raster} object instead, you
+could use \code{st_as_stars} to convert it to \code{stars} or use \code{read_stars} directly
+read source data as a \code{stars}.}
 
 \item{shap_nsim}{(integer) The number of Monte Carlo repetitions in SHAP
 method to use for estimating each Shapley value.}

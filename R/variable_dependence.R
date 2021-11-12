@@ -40,6 +40,22 @@ variable_dependence <- function(model,
                y = shap_explain %>% pull(var))
   })
   names(dependences) <- names(var_occ)
+
+  # Split numeric and categorical
+  isfacor <- as.vector(sapply(var_occ, is.factor))
+  bands_cont <- names(var_occ)[!isfacor]
+  bands_cat <- names(var_occ)[isfacor]
+
+  if (length(bands_cont) > 0) {
+    dependences_cont <- dependences[bands_cont]
+  } else dependences_cont <- NULL
+  if (length(bands_cat) > 0) {
+    dependences_cat <- dependences[bands_cat]
+  } else dependences_cat <- NULL
+
+  # Reunion
+  dependences <- list(dependences_cont = dependences_cont,
+                     dependences_cat = dependences_cat)
   dependences$feature_values <- var_occ
   class(dependences) <- append("VariableDependence", class(dependences))
 

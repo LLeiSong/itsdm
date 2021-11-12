@@ -2,7 +2,7 @@
 % Please edit documentation in R/dim_reduce.R
 \name{dim_reduce}
 \alias{dim_reduce}
-\title{A function to remove auto-correlation between raster layers.}
+\title{A function to remove auto-correlation between numeric raster layers.}
 \usage{
 dim_reduce(
   img_stack = NULL,
@@ -32,7 +32,8 @@ ReducedImageStack.
 }
 \description{
 This function allows you to reduce dimensions of raster layers
-based on pearson correlation and a user-defined threshold.
+based on pearson correlation and a user-defined threshold. NOTE that it only
+works on numeric variables, does not work on categorical variables.
 }
 \examples{
 worldclim <- worldclim2(var = "bio")

@@ -13,8 +13,10 @@ In this package, it is isolation_forest.}
 \item{var_occ}{(data.frame, tibble) the data.frame style table that
 include values of environmental variables at occurrence locations.}
 
-\item{variables}{(RasterStack, RasterLayer or stars)
-the stack of environmental variables. Could be raster or stars object.}
+\item{variables}{(stars) The stars of environmental variables. It should have
+multiple attributes instead of dims. If you have \code{raster} object instead, you
+could use \code{st_as_stars} to convert it to \code{stars} or use \code{read_stars} directly
+read source data as a \code{stars}.}
 
 \item{si}{(integer) the number of samples to generate response curves.
 If it is too small, the response curves might be biased.
@@ -24,7 +26,7 @@ The default value is 1000.}
 The default is FALSE.}
 }
 \value{
-(MarginalResponse) a list of data.frame of response and variable values.
+(MarginalResponse) a nested list of data.frame of response and variable values.
 The response values correspond to suitability of this single variable.
 }
 \description{

@@ -67,7 +67,8 @@ find it.
 In species modeling, people usually want to remove the strong correlations between
 environmental variables. `dim_reduce` is just such function that you need. The function
 could either reduce the dimension of your environmental variable stack itself or according
-to a bunch of observations. It also allows you to set a desirable threshold.
+to a bunch of observations. It also allows you to set a desirable threshold. Note that it only
+works on numeric variables. Because categorical variables have less risk to have high correlation with others and usually we prefer to keep categorical variables.
 
 ```{r dim_reduction}
 # An example of reducing dimensions

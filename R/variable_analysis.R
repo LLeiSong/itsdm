@@ -10,7 +10,10 @@
 #' @param var_occ_test (data.frame, tibble) The data.frame style table that
 #' include values of environmental variables at occurrence locations of testing.
 #' If NULL, no test will be used. The default is NULL.
-#' @param variables (RasterStack or stars) The stack of environmental variables.
+#' @param variables (stars) The stars of environmental variables. It should have
+#' multiple attributes instead of dims. If you have `raster` object instead, you
+#' could use `st_as_stars` to convert it to `stars` or use `read_stars` directly
+#' read source data as a `stars`.
 #' @param shap_nsim (integer) The number of Monte Carlo repetitions in SHAP
 #' method to use for estimating each Shapley value.
 #' @param visualize (logical) if TRUE, plot the response curves.
@@ -37,27 +40,20 @@ variable_analysis <- function(model,
   # Check inputs
   checkmate::assert_data_frame(var_occ)
   checkmate::assert_data_frame(var_occ_test)
-  checkmate::assert_multi_class(
-    variables, c('RasterStack', 'RasterLayer', 'stars'))
+  checkmate::assert_class(variables, 'stars')
   checkmate::assert_int(shap_nsim)
   checkmate::assert_logical(visualize)
   checkmate::assert_int(seed)
-  bands <- st_get_dimension_values(variables, 'band')
+  bands <- names(variables)
   stopifnot(all(bands %in% colnames(var_occ)))
-
-  # Reformat data
-  # Variables, use stars
-  if (is(variables, 'RasterStack') |
-      is(variables, 'RasterLayer')){
-    variables <- st_as_stars(variables)}
 
   # Sampling from the whole image to speed things up.
   set.seed(seed)
-  samples <- variables %>% slice('band', 1) %>%
+  samples <- variables %>% select(bands[1]) %>%
     st_xy2sfc(as_points = T) %>% st_as_sf() %>%
     select(geometry) %>%
     sample_n(min(10000, nrow(.)))
-  vars <- st_extract(x = split(variables, 'band'), at = samples) %>%
+  vars <- st_extract(x = variables, at = samples) %>%
     st_drop_geometry()
   rm(samples, variables)
 
@@ -69,10 +65,13 @@ variable_analysis <- function(model,
 
   ## Stretch to 0 to 1.
   full_pred_occ <- .stretch(x = full_pred_var,
-                            new_values = full_pred_occ)
+                            new_values = full_pred_occ,
+                            minq = 0)
   full_pred_occ_test <- .stretch(x = full_pred_var,
-                                 new_values = full_pred_occ_test)
-  full_pred_var <- .stretch(x = full_pred_var)
+                                 new_values = full_pred_occ_test,
+                                 minq = 0)
+  full_pred_var <- .stretch(x = full_pred_var,
+                            minq = 0)
 
   ## AUC background and ratio
   full_auc_train <- .auc_ratio(full_pred_occ, full_pred_var)
@@ -82,9 +81,9 @@ variable_analysis <- function(model,
   var_each <- do.call(rbind, lapply(bands, function(nm){
     # Model with only this variable
     ## Subset dataset
-    this_var_occ <- var_occ %>% select(nm)
-    this_var_occ_test <- var_occ_test %>% select(nm)
-    this_vars <- vars %>% select(nm)
+    this_var_occ <- var_occ %>% select(all_of(nm))
+    this_var_occ_test <- var_occ_test %>% select(all_of(nm))
+    this_vars <- vars %>% select(all_of(nm))
 
     ## Fit model
     this_model <- isolation.forest(
@@ -121,10 +120,13 @@ variable_analysis <- function(model,
 
     # Stretch
     this_occ_pred <- .stretch(x = this_vars_pred,
-                              new_values = this_occ_pred)
+                              new_values = this_occ_pred,
+                              minq = 0)
     this_occ_test_pred <- .stretch(x = this_vars_pred,
-                                   new_values = this_occ_test_pred)
-    this_vars_pred <- .stretch(this_vars_pred)
+                                   new_values = this_occ_test_pred,
+                                   minq = 0)
+    this_vars_pred <- .stretch(this_vars_pred,
+                               minq = 0)
 
     ## Calculate metrics
     r_only_train <- cor(full_pred_occ, this_occ_pred,
@@ -177,10 +179,13 @@ variable_analysis <- function(model,
 
     ## Stretch
     except_occ_pred <- .stretch(x = except_vars_pred,
-                                new_values = except_occ_pred)
+                                new_values = except_occ_pred,
+                                minq = 0)
     except_occ_test_pred <- .stretch(x = except_vars_pred,
-                                     new_values = except_occ_test_pred)
-    except_vars_pred <- .stretch(except_vars_pred)
+                                     new_values = except_occ_test_pred,
+                                     minq = 0)
+    except_vars_pred <- .stretch(except_vars_pred,
+                                 minq = 0)
 
     ## Calculate metrics
     r_except_train <- cor(full_pred_occ, except_occ_pred,

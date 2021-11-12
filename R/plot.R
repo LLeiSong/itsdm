@@ -6,40 +6,87 @@
     response_list, c('MarginalResponse', 'IndependentResponse', 'List'))
   checkmate::assert_number(smooth_span)
 
-  # Convert list to tibble
-  response_df <- do.call(
-    rbind,
-    lapply(1:length(response_list),
-           function(n) {
-             response_list[[n]] %>%
-               mutate(variable = names(response_list)[n])}))
+  # Check categorical and continuous vars
+  if (!is.null(response_list$responses_cont)) {
+    responses_cont <- response_list$responses_cont
 
-  # Draw
-  cex.axis <- 1
-  cex.lab <- 1
-  if (smooth_span == 0){
-    invisibel(g <- ggplot(response_df, aes(x = x, y = y)) +
-      geom_line(color = "black") +
+    # Convert list to tibble
+    response_df <- do.call(
+      rbind,
+      lapply(1:length(responses_cont),
+             function(n) {
+               responses_cont[[n]] %>%
+                 mutate(variable = names(responses_cont)[n])}))
+
+    # Draw
+    cex.axis <- 1
+    cex.lab <- 1
+    if (smooth_span == 0){
+      invisibel(g_cont <- ggplot(response_df, aes(x = x, y = y)) +
+                  geom_line(color = "black") +
+                  scale_y_continuous(limits = c(0, 1.0)) +
+                  facet_wrap(~variable, scales = 'free', ncol = 2) +
+                  xlab('Value') + ylab('(Continuous variables)\nStandardized suitability') +
+                  theme(axis.text = element_text(size = rel(cex.axis)),
+                        axis.title = element_text(size = rel(cex.lab)),
+                        plot.title = element_text(hjust = 0.5)) +
+                  theme_linedraw())
+    } else {
+      invisible(g_cont <- ggplot(response_df, aes(x = x, y = y)) +
+                  geom_point(alpha = 0) +
+                  stat_smooth(method = 'loess', span = smooth_span, color = "black") +
+                  scale_y_continuous(limits = c(0, 1.0)) +
+                  facet_wrap(~variable, scales = 'free', ncol = 2) +
+                  xlab('Value') + ylab('(Continuous variables)\nStandardized suitability') +
+                  theme(axis.text = element_text(size = rel(cex.axis)),
+                        axis.title = element_text(size = rel(cex.lab)),
+                        plot.title = element_text(hjust = 0.5)) +
+                  theme_linedraw())
+    }
+  } else g_cont <- NULL
+
+  if (!is.null(response_list$responses_cat)) {
+    responses_cat <- response_list$responses_cat
+
+    # Convert list to tibble
+    response_df <- do.call(
+      rbind,
+      lapply(1:length(responses_cat),
+             function(n) {
+               responses_cat[[n]] %>%
+                 mutate(variable = names(responses_cat)[n])}))
+    var_order <- response_df %>%
+      mutate(x = as.numeric(levels(x))[x]) %>%
+      pull(x) %>% unique() %>% sort()
+    response_df <- response_df %>%
+      mutate(x = factor(x, levels = var_order))
+
+    # Draw
+    cex.axis <- 1
+    cex.lab <- 1
+    g_cat <- ggplot(response_df, aes(x = x, y = y)) +
+      geom_bar(fill = "black",
+               stat = 'identity',
+               position = position_dodge()) +
       scale_y_continuous(limits = c(0, 1.0)) +
       facet_wrap(~variable, scales = 'free', ncol = 2) +
-      xlab('Value') + ylab('Standardized suitability') +
+      xlab('Value') + ylab('(Categorical variables)\nStandardized suitability') +
       theme(axis.text = element_text(size = rel(cex.axis)),
             axis.title = element_text(size = rel(cex.lab)),
             plot.title = element_text(hjust = 0.5)) +
-      theme_linedraw())
-  } else {
-    invisible(g <- ggplot(response_df, aes(x = x, y = y)) +
-      geom_point(alpha = 0) +
-      stat_smooth(method = 'loess', span = smooth_span, color = "black") +
-      scale_y_continuous(limits = c(0, 1.0)) +
-      facet_wrap(~variable, scales = 'free', ncol = 2) +
-      xlab('Value') + ylab('Standardized suitability') +
-      theme(axis.text = element_text(size = rel(cex.axis)),
-            axis.title = element_text(size = rel(cex.lab)),
-            plot.title = element_text(hjust = 0.5)) +
-      theme_linedraw())
+      theme_linedraw()
+  } else g_cat <- NULL
+
+  if (!is.null(g_cont) & !is.null(g_cat)){
+    g_cont + g_cat +
+      plot_layout(guides = "collect", nrow = 2, ncol = 1,
+                  heights = c(ceiling(length(response_list$responses_cont) / 2),
+                              ceiling(length(response_list$responses_cat) / 2)))
+  } else if (!is.null(g_cont)) {
+    g_cont
+  } else if (!is.null(g_cat)) {
+    g_cat
   }
-  suppressMessages(suppressWarnings(print(g)))
 }
 # .plot_response end
 
@@ -54,6 +101,7 @@
 #' @param ... Not used.
 #' @return ggplot2 figure of response curves
 #' @import ggplot2
+#' @importFrom patchwork plot_layout
 #' @export
 #' @examples
 #' plot(marginal_responses)
@@ -65,10 +113,17 @@ plot.MarginalResponse <- function(x,
   # Checking
   checkmate::assert_character(target_var, min.len = 0)
   if (!all(is.na(target_var))) {
-    stopifnot(all(target_var %in% names(x)))}
+    nms <- do.call(c, sapply(x, names))
+    stopifnot(all(target_var %in% nms))}
+
+  # Subset
   if (!all(is.na(target_var))) {
     cls <- class(x)
-    x <- x[target_var]
+    x <- lapply(x, function(responses) {
+      target_this <- intersect(target_var, names(responses))
+      if (length(target_this) > 0) {
+        responses[target_this]
+      } else NULL})
     class(x) <- cls}
 
   # Plot
@@ -86,6 +141,7 @@ plot.MarginalResponse <- function(x,
 #' @param ... Not used.
 #' @return ggplot2 figure of response curves
 #' @import ggplot2
+#' @importFrom patchwork plot_layout
 #' @importFrom dplyr arrange slice
 #' @export
 #' @examples
@@ -98,10 +154,17 @@ plot.IndependentResponse <- function(x,
   # Checking
   checkmate::assert_character(target_var, min.len = 0)
   if (!all(is.na(target_var))) {
-    stopifnot(all(target_var %in% names(x)))}
+    nms <- do.call(c, sapply(x, names))
+    stopifnot(all(target_var %in% nms))}
+
+  # Subset
   if (!all(is.na(target_var))) {
     cls <- class(x)
-    x <- x[target_var]
+    x <- lapply(x, function(responses) {
+      target_this <- intersect(target_var, names(responses))
+      if (length(target_this) > 0) {
+        responses[target_this]
+      } else NULL})
     class(x) <- cls}
 
   # Plot
@@ -122,6 +185,7 @@ plot.IndependentResponse <- function(x,
 #' @param ... Not used.
 #' @return ggplot2 figure of dependent curves
 #' @import ggplot2
+#' @importFrom patchwork plot_layout
 #' @importFrom dplyr mutate
 #' @export
 #' @examples
@@ -133,70 +197,203 @@ plot.VariableDependence <- function(x,
                                     smooth_span = 0.3,
                                     ...) {
   # Checking
+  nms <- names(x$feature_values)
   checkmate::assert_string(related_var, na.ok = T)
-  if (!is.na(related_var)) stopifnot(related_var %in% names(x))
+  if (!is.na(related_var)) {
+    stopifnot(related_var %in% nms)}
   checkmate::assert_character(target_var, min.len = 0)
   if (!all(is.na(target_var))) {
-    stopifnot(all(target_var %in% names(x)))}
+    stopifnot(all(target_var %in% nms))}
 
   # Subset x if target_var is not NA
   # feature_values is the X in explain, so keep it.
+  bands_cat <- names(x$dependences_cat)
   if (!all(is.na(target_var))) {
-    x <- x[c(target_var, 'feature_values')] }
+    cls <- class(x)
+    x <- lapply(x, function(deps) {
+      if (is(deps,'data.frame')) {
+        deps
+      } else {
+        target_this <- intersect(target_var, names(deps))
+        if (length(target_this) > 0) {
+          deps[target_this]
+        } else NULL}})
+    class(x) <- cls}
 
+  # Do not have related var
   if(is.na(related_var)) {
-    # Transform data
-    nms <- names(x)
-    x_trans <- do.call(rbind, lapply(1:c(length(x) - 1), function(n) {
-      x[[n]] %>% mutate(variable = nms[n])
-    }))
+    # Continuous vars
+    if (!is.null(x$dependences_cont)) {
+      # Transform data
+      x_cont <- x$dependences_cont
+      nms <- names(x_cont)
+      x_trans <- do.call(rbind, lapply(1:c(length(x_cont)), function(n) {
+        x_cont[[n]] %>% mutate(variable = nms[n])
+      }))
 
-    # Plot
-    cex.axis <- 1
-    cex.lab <- 1
-    p <- ggplot(x_trans, aes(x = x, y = y)) +
-      geom_point(size = 0.8) +
-      xlab('Variable values') +
-      ylab("Shapley value") +
-      facet_wrap(~variable, scales = 'free', ncol = 2) +
-      theme(axis.text = element_text(size = rel(cex.axis)),
-            axis.title = element_text(size = rel(cex.lab)),
-            plot.title = element_text(hjust = 0.5)) +
-      theme_linedraw()
-    if (smooth_span > 0) {
-      p <- p +
-        geom_smooth(color = 'red', span = smooth_span, alpha = 0)
+      # Plot
+      cex.axis <- 1
+      cex.lab <- 1
+      g_cont <- ggplot(x_trans, aes(x = x, y = y)) +
+        geom_point(size = 0.8) +
+        xlab('Variable values') +
+        ylab("(Continuous variables)\nShapley value") +
+        facet_wrap(~variable, scales = 'free', ncol = 2) +
+        theme(axis.text = element_text(size = rel(cex.axis)),
+              axis.title = element_text(size = rel(cex.lab)),
+              plot.title = element_text(hjust = 0.5)) +
+        theme_linedraw()
+      if (smooth_span > 0) {
+        g_cont <- g_cont +
+          geom_smooth(color = 'red', span = smooth_span, alpha = 0)
+      }
+    } else g_cont <- NULL
+
+    # Categorical vars
+    if (!is.null(x$dependences_cat)) {
+      # Transform data
+      x_cat <- x$dependences_cat
+      nms <- names(x_cat)
+      x_trans <- do.call(rbind, lapply(1:c(length(x_cat)), function(n) {
+        x_cat[[n]] %>% mutate(variable = nms[n])
+      }))
+
+      # Plot
+      cex.axis <- 1
+      cex.lab <- 1
+      g_cat <- ggplot(x_trans, aes(x = x, y = y)) +
+        geom_violin(position = position_dodge()) +
+        geom_jitter(size = 1.5, position = position_jitter(0.2)) +
+        xlab('Variable values') +
+        ylab("(Categorical variables)\nShapley value") +
+        facet_wrap(~variable, scales = 'free', ncol = 2) +
+        theme(axis.text = element_text(size = rel(cex.axis)),
+              axis.title = element_text(size = rel(cex.lab)),
+              plot.title = element_text(hjust = 0.5)) +
+        theme_linedraw()
+    } else g_cat <- NULL
+
+    # Merge together
+    if (!is.null(g_cont) & !is.null(g_cat)){
+      g_cont + g_cat +
+        plot_layout(guides = "collect", nrow = 2, ncol = 1,
+                    heights = c(ceiling(length(x$dependences_cont) / 2),
+                                ceiling(length(x$dependences_cat) / 2)))
+    } else if (!is.null(g_cont)) {
+      g_cont
+    } else if (!is.null(g_cat)) {
+      g_cat
     }
-  } else {
-    # Transform data
-    nms <- names(x)
-    vars <- x$feature_values
-    x_trans <- do.call(rbind, lapply(1:c(length(x) - 1), function(n) {
-      x[[n]] %>% mutate(related_var = vars %>% pull(related_var),
-                        variable = rep(nms[n], nrow(.)))
-    }))
 
-    # Plot
-    cex.axis <- 1
-    cex.lab <- 1
-    p <- ggplot(x_trans,
-                aes(x = x, y = y, color = related_var)) +
-      geom_point(size = 0.8) +
-      xlab('Variable values') +
-      ylab("Shapley value") +
-      scale_color_viridis_c(related_var) +
-      facet_wrap(~variable, scales = 'free', ncol = 2) +
-      theme(axis.text = element_text(size = rel(cex.axis)),
-            axis.title = element_text(size = rel(cex.lab)),
-            plot.title = element_text(hjust = 0.5)) +
-      theme_linedraw()
-    if (smooth_span > 0) {
-      p <- p +
-        geom_smooth(color = 'red', span = smooth_span, alpha = 0)
+  # Have related var
+  ## related var is continuous
+  ## related var is categorical
+  } else {
+    # Continuous vars
+    if (!is.null(x$dependences_cont)) {
+      # Transform data
+      x_cont <- x$dependences_cont
+      nms <- names(x_cont)
+      vars <- x$feature_values
+      x_trans <- do.call(rbind, lapply(1:length(x_cont), function(n) {
+        x_cont[[n]] %>% mutate(related_var = vars %>% pull(related_var),
+                               variable = rep(nms[n], nrow(.)))
+      }))
+
+      # Plot
+      cex.axis <- 1
+      cex.lab <- 1
+      if (related_var %in% bands_cat) {
+        g_cont <- ggplot(x_trans,
+                    aes(x = x, y = y, color = related_var)) +
+          geom_point(size = 0.8) +
+          xlab('Variable values') +
+          ylab("(Continuous variables)\nShapley value") +
+          scale_color_viridis_d(related_var) +
+          facet_wrap(~variable, scales = 'free', ncol = 2) +
+          theme(axis.text = element_text(size = rel(cex.axis)),
+                axis.title = element_text(size = rel(cex.lab)),
+                plot.title = element_text(hjust = 0.5)) +
+          theme_linedraw()
+      } else {
+        g_cont <- ggplot(x_trans,
+                    aes(x = x, y = y, color = related_var)) +
+          geom_point(size = 0.8) +
+          xlab('Variable values') +
+          ylab("(Continuous variables)\nShapley value") +
+          scale_color_viridis_c(related_var) +
+          facet_wrap(~variable, scales = 'free', ncol = 2) +
+          theme(axis.text = element_text(size = rel(cex.axis)),
+                axis.title = element_text(size = rel(cex.lab)),
+                plot.title = element_text(hjust = 0.5)) +
+          theme_linedraw()
+      }
+      if (smooth_span > 0) {
+        g_cont <- g_cont +
+          geom_smooth(color = 'red', span = smooth_span, alpha = 0)
+      }
+    } else g_cont <- NULL
+
+    # Categorical vars
+    if (!is.null(x$dependences_cat)) {
+      # Transform data
+      x_cat <- x$dependences_cat
+      nms <- names(x_cat)
+      vars <- x$feature_values
+      x_trans <- do.call(rbind, lapply(1:c(length(x_cat)), function(n) {
+        x_cat[[n]] %>% mutate(related_var = vars %>% pull(related_var),
+                              variable = rep(nms[n], nrow(.)))
+      }))
+
+      # Plot
+      cex.axis <- 1
+      cex.lab <- 1
+      if (related_var %in% bands_cat) {
+        g_cat <- ggplot(x_trans,
+                        aes(x = x, y = y)) +
+          geom_violin(position = position_dodge()) +
+          geom_jitter(aes(color = related_var),
+                      size = 1.5, position = position_jitter(0.2),
+                      show.legend = FALSE) +
+          xlab('Variable values') +
+          ylab("(Categorical variables)\nShapley value") +
+          scale_color_viridis_d(related_var) +
+          facet_wrap(~variable, scales = 'free', ncol = 2) +
+          theme(axis.text = element_text(size = rel(cex.axis)),
+                axis.title = element_text(size = rel(cex.lab)),
+                plot.title = element_text(hjust = 0.5)) +
+          theme_linedraw()
+      } else {
+        g_cat <- ggplot(x_trans,
+                        aes(x = x, y = y)) +
+          geom_violin(position = position_dodge()) +
+          geom_jitter(aes(color = related_var),
+                      size = 1.5, position = position_jitter(0.2),
+                      show.legend = FALSE) +
+          xlab('Variable values') +
+          ylab("(Categorical variables)\nShapley value") +
+          scale_color_viridis_c(related_var) +
+          facet_wrap(~variable, scales = 'free', ncol = 2) +
+          theme(axis.text = element_text(size = rel(cex.axis)),
+                axis.title = element_text(size = rel(cex.lab)),
+                plot.title = element_text(hjust = 0.5)) +
+          theme_linedraw()
+      }
+
+    } else g_cat <- NULL
+
+    # Merge together
+    if (!is.null(g_cont) & !is.null(g_cat)){
+      g_cont + g_cat +
+        plot_layout(guides = "collect", nrow = 2, ncol = 1,
+                    heights = c(ceiling(length(x$dependences_cont) / 2),
+                                ceiling(length(x$dependences_cat) / 2)))
+    } else if (!is.null(g_cont)) {
+      g_cont
+    } else if (!is.null(g_cat)) {
+      g_cat
     }
   }
-
-  p
 }
 
 #' @title Function to plot variable contribution for target observations.
@@ -230,14 +427,15 @@ plot.VariableContribution <- function(x,
              'Consider to use less observations in VariableContribution or set ',
              'plot_each_obs to FALSE.'))}
   shapley_values <- x$shapley_values
-  feature_values <- x$feature_values
+  feature_values <- x$feature_values %>%
+    mutate_if(is.numeric, function(x) round(x, 2))
   stopifnot(identical(names(shapley_values), names(feature_values)))
   checkmate::assert_int(num_features, lower = 1, upper = ncol(shapley_values))
 
   if (plot_each_obs) {
     # Convert data
     values_cont <- do.call(rbind, lapply(1:nrow(shapley_values), function(n) {
-      vals <- round(feature_values[n, ], 2)
+      vals <- feature_values[n, ]
       vals <- paste0(names(vals), ' = ', as.vector(vals))
       data.frame(num_obs  = paste0('Obs No.', n),
                  variable = vals,

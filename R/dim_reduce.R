@@ -46,28 +46,32 @@ dim_reduce <- function(img_stack = NULL,
     if_stars <- is(img_stack, 'stars')
     if (if_stars) {
         if (length(dim(img_stack)) == 2) {
-            img_stack <- stack(as(img_stack, 'Spatial'))
+            img <- stack(as(img_stack, 'Spatial'))
         } else {
-            img_stack <- stack(as(split(img_stack), 'Spatial'))
+          img_stack <- split(img_stack)
+          img <- stack(as(img_stack, 'Spatial'))
         }
     }
 
     # Check preferred variables are all in image stack
-    if (is.null(preferred_vars)) preferred_vars <- names(img_stack)
-    if (!all(preferred_vars %in% names(img_stack))) {
+    if (is.null(preferred_vars)) preferred_vars <- names(img)
+    if (!all(preferred_vars %in% names(img))) {
         stop('Some of preferred_vars are not in image stack.')
     }
 
     # Extract samples if set any
     if (!is.null(samples)){
         samples <- st_as_sf(samples)
-        samples <- rasterize(samples, img_stack[[1]], 1)
-        img_stack <- mask(img_stack, samples)
+        if (st_crs(samples) != st_crs(img)){
+          samples <- st_transform(samples, st_crs(img))
+        }
+        samples <- rasterize(samples, img[[1]], 1)
+        img <- mask(img, samples)
     }
 
     # Calculate correlations
     stat <- "pearson" # Just use pearson because it is standardized.
-    cors <- layerStats(img_stack, stat, na.rm = T)
+    cors <- layerStats(img, stat, na.rm = T)
     ps_cor <- data.frame(cors[[1]])
     ids <- match(preferred_vars, names(ps_cor))
     ids <- c(ids, setdiff(1:nrow(ps_cor), ids))
@@ -82,10 +86,13 @@ dim_reduce <- function(img_stack = NULL,
     }
 
     # Subset images and make object
-    img_reduced <- raster::subset(img_stack, row.names(ps_cor))
     if (if_stars) {
-        img_reduced <- st_as_stars(img_reduced)
-        names(img_reduced) <- 'reduced_image'}
+        img_reduced <- img_stack %>% select(row.names(ps_cor)) %>%
+          merge(., name = 'band')
+        names(img_reduced) <- 'reduced_image'
+    } else {
+      img_reduced <- raster::subset(img_stack, row.names(ps_cor))
+        }
     img_reduced <- list(threshold = threshold,
                         img_reduced = img_reduced,
                         cors_original = cors,
