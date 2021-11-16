@@ -10,4 +10,4 @@ sticker(imgurl, package="itsdm",
         s_x = 1.02, s_y = 1.05, s_width = .6,
         h_fill = 'orange', h_color = '#53222e',
         filename = "man/figures/hexagon_sticker.png",
-        dpi = 600)
+        dpi = 300)
