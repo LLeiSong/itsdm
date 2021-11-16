@@ -1,10 +1,12 @@
-
-# itsdm
-
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+# itsdm <img src='man/figures/hexagon_sticker.png' align="right" height="120"/>
 
 <!-- badges: start -->
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2021--11--16-yellowgreen.svg)](/commits/master)
+[![license](https://img.shields.io/badge/license-MIT + file LICENSE-lightgrey.svg)](https://choosealicense.com/)
 <!-- badges: end -->
+
+## Overview
 
 
 ## Installation
@@ -24,4 +26,3 @@ This is a basic example which shows you how to solve a common problem:
 library(itsdm)
 ## basic example code
 ```
-

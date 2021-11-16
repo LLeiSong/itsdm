@@ -1,6 +1,6 @@
 Package: itsdm
 Title: Isolation forest-based presence-only species distribution modeling
-Version: 0.1.0
+Version: 0.0.1
 Date: 2021-10-21
 Author: Lei Song
 Maintainer: Lei Song <lsong@clarku.edu>
