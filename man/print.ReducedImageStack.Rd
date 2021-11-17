@@ -7,8 +7,8 @@
 \method{print}{ReducedImageStack}(x, ...)
 }
 \arguments{
-\item{x}{(ReducedImageStack) A ReducedImageStack object to be messaged.
-It could be the return of function \code{dim_reduce}.}
+\item{x}{(\code{ReducedImageStack}) A \code{ReducedImageStack} object to be messaged.
+It could be the return of function \code{\link{dim_reduce}}.}
 
 \item{...}{Not used.}
 }
@@ -20,6 +20,12 @@ Display the most general and informative characteristics of
 a ReducedImageStack object.
 }
 \examples{
+worldclim <- worldclim2(var = "bio")
+img_reduced <- dim_reduce(worldclim, threshold = 0.7,
+  preferred_vars = c('bio1', 'bio12'))
 print(img_reduced)
 
+}
+\seealso{
+\code{\link{dim_reduce}}
 }

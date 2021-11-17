@@ -7,28 +7,59 @@
 \method{plot}{VariableDependence}(x, target_var = NA, related_var = NA, smooth_span = 0.3, ...)
 }
 \arguments{
-\item{x}{(VariableDependence) The variable dependence object to plot.
-It could be the return of function \code{variable_dependence}.}
+\item{x}{(\code{VariableDependence}) The variable dependence object to plot.
+It could be the return of function \code{\link{variable_dependence}}.}
 
-\item{target_var}{(vector of character) The target variable to plot. It could be
-NA. If it is NA, all variables will be plotted.}
+\item{target_var}{(\code{vector} of \code{character}) The target variable to plot. It could be
+\code{NA}. If it is \code{NA}, all variables will be plotted.}
 
-\item{related_var}{(character) The dependent variable to plot together with
-target variables. It could be NA. If it is NA, no related variable will be
+\item{related_var}{(\code{character}) The dependent variable to plot together with
+target variables. It could be \code{NA}. If it is \code{NA}, no related variable will be
 plotted.}
 
-\item{smooth_span}{(numeric) The span value for smooth fit in ggplot2.
-When it is 0, no smooth applied. The default is 0.3.}
+\item{smooth_span}{(\code{numeric}) The span value for smooth fit in \code{ggplot2}.
+When it is \code{0}, no smooth applied. The default is \code{0.3}.}
 
 \item{...}{Not used.}
 }
 \value{
-ggplot2 figure of dependent curves
+\code{ggplot2} figure of dependent curves
 }
 \description{
 Plot variable dependence curves using ggplot2.
 }
 \examples{
-plot(var_dependence)
+# Using a pseudo presence-only occurrence dataset of
+# virtual species provided in this package
 
+data("occ_virtual_species")
+occ_virtual_species <- occ_virtual_species \%>\%
+  mutate(id = row_number())
+
+set.seed(11)
+occ <- occ_virtual_species \%>\% sample_frac(0.7)
+occ_test <- occ_virtual_species \%>\% filter(! id \%in\% occ$id)
+occ <- occ \%>\% select(-id)
+occ_test <- occ_test \%>\% select(-id)
+
+env_vars <- system.file(
+  'extdata/bioclim_africa_10min.tif',
+  package = 'itsdm') \%>\% read_stars() \%>\%
+  \%>\% slice('band', c(1, 12))
+
+mod <- isotree_po(
+  occ = occ, occ_test = occ_test,
+  variables = env_vars, ntrees = 200,
+  sample_rate = 0.8, ndim = 0L,
+  seed = 123L, response = FALSE,
+  check_variable = FALSE)
+
+var_dependence <- variable_dependence(
+  model = mod$model,
+  var_occ = mod$var_train \%>\% st_drop_geometry())
+plot(var_dependence, target_var = 'bio1', related_var = 'bio12')
+
+}
+\seealso{
+\code{\link{variable_dependence}}
 }

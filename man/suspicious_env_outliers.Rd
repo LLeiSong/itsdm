@@ -14,30 +14,60 @@ suspicious_env_outliers(
 )
 }
 \arguments{
-\item{occ}{(data.frame, sf, SpatialPointsDataFrame)
-The observation dataset to analyze.
-There must be column x and y for coordinates if it is a data.frame.}
+\item{occ}{(\code{data.frame}, \code{sf}, \code{SpatialPointsDataFrame})
+The occurrence dataset for training.
+There must be column \code{x} and \code{y} for coordinates if it is a regular \code{data.frame}.}
 
-\item{occ_crs}{(numeric or crs) The EPSG number or crs object of occurrence CRS.
-The default value is 4326, which is the geographic coordinate system.}
+\item{occ_crs}{(\code{numeric} or \code{\link{crs}}) The EPSG number or
+\code{\link{crs}} object of occurrence CRS.
+The default value is \code{4326}, which is the geographic coordinate system.}
 
-\item{variables}{(RasterStack or stars) The stack of environmental variables.}
+\item{variables}{(\code{RasterStack} or \code{stars}) The stack of environmental variables.}
 
-\item{rm_outliers}{(logical) The option to remove the suspicious outliers or not.
-The default is FALSE.}
+\item{rm_outliers}{(\code{logical}) The option to remove the suspicious outliers or not.
+The default is \code{FALSE}.}
 
-\item{...}{Other arguments passed to function \code{outlier.tree}.}
+\item{...}{Other arguments passed to function \code{\link{outlier.tree}} in
+package \code{outliertree}.}
 }
 \value{
-(EnvironmentalOutlier) a list that contains \code{sf} points of observations
-, outliers and outlier details returned from \code{outlier.tree}.
+(\code{EnvironmentalOutlier}) A list that contains
+\itemize{
+\item{outliers (\code{\link{sf}}) The \code{\link{sf}} points of outliers}
+\item{outlier_details (\code{tibble}) A table of outlier details returned from
+function \code{\link{outlier.tree}} in package \code{outliertree}}
+\item{pts_occ (\code{\link{sf}}) The \code{\link{sf}} points of occurrence.
 If \code{rm_outliers} is \code{TRUE}, outliers are deleted from points of
-observations. If \code{FALSE}, the full observations are returned.
+occurrence. If \code{FALSE}, the full observations are returned.}}
 }
 \description{
-Call outlier.tree to detect suspicious outliers in observations.
+Run \code{\link{outlier.tree}} to detect suspicious outliers in observations.
+}
+\details{
+Please check more details in R documentation of function
+\code{\link{outlier.tree}} in package \code{outliertree} and their GitHub.
 }
 \examples{
-suspicious_env_outliers(occ = occ, variables = env_vars)
+data("occ_virtual_species")
+env_vars <- system.file(
+  'extdata/bioclim_africa_10min.tif',
+  package = 'itsdm') \%>\% read_stars() \%>\%
+  \%>\% slice('band', c(1, 12))
+occ_outliers <- suspicious_env_outliers(
+  occ = occ_virtual_species, variables = env_vars,
+  z_outlier = 5, outliers_print = 4L)
+plot(occ_outliers)
 
+}
+\references{
+\itemize{
+\item{\href{https://arxiv.org/abs/2001.00636}{Cortes, David. "Explainable
+outlier detection through decision tree conditioning."
+\emph{arXiv preprint arXiv:2001.00636} (2020).}}
+\item{\href{https://github.com/david-cortes/outliertree}{https://github.
+com/david-cortes/outliertree}}}
+}
+\seealso{
+\code{\link{print.EnvironmentalOutlier}}, \code{\link{plot.EnvironmentalOutlier}}
+\code{\link{outlier.tree}} in package \code{outliertree}
 }

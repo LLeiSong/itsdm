@@ -1,30 +1,83 @@
-#' @title A function to convert suitability to presence-absence map.
+#' @title Convert predicted suitability to presence-absence map.
 #' @description Use threshold-based, logistic or linear conversion method to
 #' convert predicted suitability map to presence-absence map.
-#' @param suitability (stars or RasterLayer) The suitability raster.
-#' @param method (character) The conversion method, must be one of \code{'threshold'},
-#' logistic, and linear.
-#' @param beta (numeric) Works for threshold or logistic method. If method is
-#' threshold, then beta is the threshold value to cutoff. If method is logistic,
-#'  it is the
-#' @param alpha (numeric) Works for logistic method.
-#' @param a (numeric) Works for linear method. It is the slope of the line.
-#' @param b (numeric) Works for linear method. It is the intercept of the line.
-#' @param species_prevalence (numeric) Works for all three methods. It is the
-#' species prevalence to classify suitability map.
-#' @param seed (integer) The seed for random progress.
-#' @param visualize (logical) if TRUE, plot map of suitability, probability of
-#' occurrence, and presence-absence. The default is TRUE.
-#' @return (PAConversion) a list of suitability map, probability of occurrence,
-#' conversion details, and presence-absence map.
-#' @importFrom stars st_as_stars
-#' @details Multiple methods and arguments could be used as a combination to do
+#' @param suitability (`stars` or `RasterLayer`) The suitability raster.
+#' @param method (`character`) The conversion method, must be one of 'threshold',
+#' 'logistic', and 'linear'. The default is 'logistic'.
+#' @param beta (`numeric`) Works for 'threshold' or 'logistic' method. If `method` is
+#' threshold, then `beta` is the threshold value to cutoff. If `method` is logistic,
+#' it is the sigmoid midpoint. The default is `0.5`.
+#' @param alpha (`numeric`) Works for logistic method. It is the logistic growth
+#' rate or steepness of the curve. The default is `-.05`.
+#' @param a (`numeric`) Works for linear method. It is the slope of the line.
+#' The default is `1`.
+#' @param b (`numeric`) Works for linear method. It is the intercept of the line.
+#' The default is `0`.
+#' @param species_prevalence (`numeric` or `NA`) Works for all three methods. It is the
+#' species prevalence to classify suitability map. It could be `NA`, when the
+#' will be calculated automatically based on other arguments. The default is `NA`.
+#' @param seed (`integer`) The seed for random progress. The default is `10L`
+#' @param visualize (`logical`) If `TRUE`, plot map of suitability, probability of
+#' occurrence, and presence-absence together. The default is `TRUE`.
+#' @return (`PAConversion`) A list of
+#' \itemize{
+#' \item{suitability (`stars`) The input suitability map}
+#' \item{probability_of_occurrence (`stars`) The map of occurrence probability}
+#' \item{pa_conversion (`list`) A list of conversion arguments}
+#' \item{pa_map (`stars`) The presence-absence map}}
+#'
+#' @seealso
+#' \code{\link{plot.PAConversion}}
+#'
+#' @details
+#' Multiple methods and arguments could be used as a combination to do
 #' the conversion.
 #' @references
-#' https://github.com/Farewe/virtualspecies/blob/master/R/convertToPA.R
+#' \href{https://github.com/Farewe/virtualspecies/blob/master/R/convertToPA.R}{c
+#' onvertToPA in package `virtualspecies`}
+#'
+#' @importFrom stars st_as_stars
 #' @export
 #' @examples
-#' convert_to_pa(suitability)
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#'
+#' data("occ_virtual_species")
+#' occ_virtual_species <- occ_virtual_species %>%
+#'   mutate(id = row_number())
+#'
+#' set.seed(11)
+#' occ <- occ_virtual_species %>% sample_frac(0.7)
+#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
+#' occ <- occ %>% select(-id)
+#' occ_test <- occ_test %>% select(-id)
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#'
+#' mod <- isotree_po(
+#'   occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200,
+#'   sample_rate = 0.8, ndim = 0L,
+#'   seed = 123L, response = FALSE,
+#'   check_variable = FALSE)
+#'
+#' # Threshold conversion
+#' pa_thred <- convert_to_pa(mod$prediction, method = 'threshold', beta = 0.5)
+#'
+#' # Logistic conversion
+#' pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
+#'   beta = 0.5, alpha = -.05)
+#' pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
+#'   beta = 0.5, species_prevalence = 0.2)
+#' pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
+#'   alpha = -.05, species_prevalence = 0.2)
+#'
+#' # Linear conversion
+#' pa_lin <- convert_to_pa(mod$prediction, method = 'linear',
+#'   a = 1, b = 0)
 #'
 convert_to_pa <- function(suitability, # prediction from isotree_sdm
                           method = "logistic",
@@ -33,7 +86,7 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
                           a = 1, # for linear
                           b = 0, # for linear
                           species_prevalence = NA,  # could be NA, for all
-                          seed = 1,
+                          seed = 10L,
                           visualize = TRUE) {
   # Check inputs - level 1
   checkmate::assert_multi_class(

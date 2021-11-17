@@ -1,29 +1,85 @@
-#' @title A function to calculate variable dependence based on SHAP method.
-#' @description This function allows you to calculate the variable dependence
-#' based on Shapley values.
-#' @param model Any predictive model. In this package, it could be isolation_forest.
-#' @param var_occ (data.frame, tibble) the data.frame style table that
+#' @title Calculate variable dependence.
+#' @description Calculate the variable dependence based on Shapley Additive
+#' Explanations (SHAP) method using Shapley values.
+#' @param model (\code{\link{isolation_forest}}). The isolation forest SDM.
+#' It could be the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
+#' @param var_occ (`data.frame`, `tibble`) The `data.frame` style table that
 #' include values of environmental variables at occurrence locations.
-#' @param shap_nsim (integer) The number of Monte Carlo repetitions in SHAP
-#' method to use for estimating each Shapley value.
-#' @param visualize (logical) if TRUE, plot the response curves.
-#' The default is FALSE.
-#' @param seed (integer) The seed for random progress.
-#' @details The curves show how each environmental variable independently
-#' affects the modeling prediction. The curves show how the predicted result
-#' only using this variable changes as it is varied.
-#' @return (VariableDependence) a list of data.frame of dependence and variable values.
-#' The dependence values correspond to Shapley value.
+#' @param shap_nsim (`integer`) The number of Monte Carlo repetitions in SHAP
+#' method to use for estimating each Shapley value. See details in documentation of
+#' function \code{\link{explain}} in package `fastshap`.
+#' @param visualize (`logical`) if `TRUE`, plot the variable dependence plots.
+#' The default is `FALSE`.
+#' @param seed (`integer`) The seed for any random progress. The default is `10L`.
+#'
+#' @return (`VariableDependence`) A list of
+#' \itemize{
+#' \item{dependences_cont (`list`) A list of Shapley values of continuous variables}
+#' \item{dependences_cat (`list`) A list of Shapley values of categorical variables}
+#' \item{feature_values (`data.frame`) A table of feature values}
+#' }
+#'
+#' @seealso
+#' \code{\link{plot.VariableDependence}}
+#' \code{\link{explain}} in `fastshap`
+#'
+#' @details
+#' The values show how each environmental variable independently
+#' affects the modeling prediction. They show how the Shapley value of each variable
+#' changes as its value is varied.
+#'
+#' @references
+#' \itemize{
+#' \item{\href{https://doi.org/10.1007/s10115-013-0679-x}{Strumbelj, Erik,
+#' and Igor Kononenko. "Explaining prediction models and individual predictions
+#' with feature contributions." \emph{Knowledge and information systems}
+#' 41.3 (2014): 647-665.}}
+#' \item{\href{http://proceedings.mlr.press/v119/sundararajan20b.html}{Sundara
+#' rajan, Mukund, and Amir Najmi. "The many Shapley values for model explanation
+#' ." \emph{International Conference on Machine Learning}. PMLR, 2020.}}
+#' \item{\href{https://github.com/bgreenwell/fastshap}{https://github.com/
+#' bgreenwell/fastshap}}
+#' \item{\href{https://github.com/slundberg/shap}{https://github.com/slundberg/shap}}
+#' }
+#'
 #' @importFrom dplyr select
 #' @importFrom fastshap explain
 #' @export
 #' @examples
-#' variable_dependence(model = mod$model, var_occ = var_occ)
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#'
+#' data("occ_virtual_species")
+#' occ_virtual_species <- occ_virtual_species %>%
+#'   mutate(id = row_number())
+#'
+#' set.seed(11)
+#' occ <- occ_virtual_species %>% sample_frac(0.7)
+#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
+#' occ <- occ %>% select(-id)
+#' occ_test <- occ_test %>% select(-id)
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#'
+#' mod <- isotree_po(
+#'   occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200,
+#'   sample_rate = 0.8, ndim = 0L,
+#'   seed = 123L, response = FALSE,
+#'   check_variable = FALSE)
+#'
+#' var_dependence <- variable_dependence(
+#'   model = mod$model,
+#'   var_occ = mod$var_train %>% st_drop_geometry())
+#'
 variable_dependence <- function(model,
                                 var_occ,
                                 shap_nsim = 100,
                                 visualize = FALSE,
-                                seed = 10) {
+                                seed = 10L) {
 
   # Check inputs
   checkmate::assert_data_frame(var_occ)
@@ -55,7 +111,7 @@ variable_dependence <- function(model,
 
   # Reunion
   dependences <- list(dependences_cont = dependences_cont,
-                     dependences_cat = dependences_cat)
+                      dependences_cat = dependences_cat)
   dependences$feature_values <- var_occ
   class(dependences) <- append("VariableDependence", class(dependences))
 

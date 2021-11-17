@@ -1,35 +1,102 @@
 #' @title Function to run extended isolation forest as SDM.
 #' @description Call isolation forest and its variations to do species distribution modeling.
-#' @param occ (data.frame, sf, SpatialPointsDataFrame)
+#' @param occ (`data.frame`, `sf`, `SpatialPointsDataFrame`)
 #' The occurrence dataset for training.
-#' There must be column x and y for coordinates if it is a data.frame.
-#' @param occ_test (data.frame, sf, SpatialPointsDataFrame)
-#' The occurrence dataset for independent test.
-#' There must be column x and y for coordinates if not NULL and it is a data.frame.
-#' If NULL, no independent test will be used. The default is NULL.
-#' @param occ_crs (numeric or crs) The EPSG number or crs object of occurrence CRS.
-#' The default value is 4326, which is the geographic coordinate system.
-#' @param variables (RasterStack or stars) The stack of environmental variables.
-#' @param ntrees (integer) The number of trees for the isolation forest.
-#' The default is 100.
-#' @param sample_size (integer) A number for sampling size in `[2, nrow(occ)]`.
-#' The default is NULL.
-#' @param sample_rate (numeric) A rate for sampling size in [0, 1].
-#' The default is NULL. Only set either `sample_size` or `sample_rate`.
-#' @param ndim (integer) ExtensionLevel for isolation forest,
-#' it must be no smaller than the dimension of environmental variables.
+#' There must be column `x` and `y` for coordinates if it is a regular `data.frame`.
+#' @param occ_test (`data.frame`, `sf`, `SpatialPointsDataFrame`, or `NULL`)
+#' The occurrence dataset for independent test. The same structure as `occ`.
+#' If not `NULL`, there must be column `x` and `y` for coordinates when it is a
+#' regular `data.frame`. If `NULL`, no independent test will be used.
+#' The default is `NULL`.
+#' @param occ_crs (`numeric` or \code{\link{crs}}) The EPSG number or
+#' \code{\link{crs}} object of occurrence CRS.
+#' The default value is `4326`, which is the geographic coordinate system.
+#' @param variables (`RasterStack` or `stars`) The stack of environmental variables.
+#' @param ntrees (`integer`) The number of trees for the isolation forest. It must
+#' be integer, which you could use function \code{\link{as.integer}} to convert to.
+#' The default is `100L`.
+#' @param sample_size (`integer` or `NULL`) Alternative argument for `sample_rate`.
+#' If not `NULL`, it should be a number for sampling size in `[2, nrow(occ)]`. It must
+#' be integer, which you could use function \code{\link{as.integer}} to convert to.
+#' The default is `NULL`. Only set either `sample_size` or `sample_rate`.
+#' @param sample_rate (`numeric` or `NULL`) Alternative argument for `sample_size`.
+#' If not `NULL`, it should be a rate for sampling size in `[0, 1]`.
+#' The default is `NULL`. Only set either `sample_size` or `sample_rate`.
+#' @param ndim (`integer`) ExtensionLevel for isolation forest. It must
+#' be integer, which you could use function \code{\link{as.integer}} to convert to.
+#' Also, it must be no smaller than the dimension of environmental variables.
 #' When it is 0, the model is a traditional isolation forest, otherwise the model
 #' is an extended isolation forest. The default is 0.
-#' @param seed (integer) The random seed used in the modeling.
-#' @param ... Other arguments that `isotree::isolation.forest` needs.
-#' @param response (logical) if TRUE, generate response curves.
-#' The default is TRUE.
-#' @param check_variables (logical) if TRUE, check the variable importance.
-  #' The default is TRUE.
-#' @param visualize (logical) if TRUE, generate the essential figures related to
-#' the model. The default is FALSE.
-#' @return (POIsotree) a list of model, occ var_train, pred_train,
-#' pred_test,  prediction, responses, eval_train, and eval_test.
+#' @param seed (`integer`) The random seed used in the modeling. It should be an
+#' integer. The default is `10L`.
+#' @param ... Other arguments that \code{\link{isolation.forest}} needs.
+#' @param response (`logical`) If `TRUE`, generate response curves.
+#' The default is `TRUE`.
+#' @param check_variables (`logical`) If `TRUE`, check the variable importance.
+#' The default is `TRUE`.
+#' @param visualize (`logical`) If `TRUE`, generate the essential figures related to
+#' the model. The default is `FALSE`.
+#'
+#' @return (`POIsotree`) A list of
+#' \itemize{
+#' \item{model (\code{\link{isolation.forest}}) The threshold set in function inputs}
+#' \item{variables (`stars`) The formatted image stack of environmental variables}
+#' \item{pts_occ (\code{\link{sf}}) A \code{\link{sf}} of training occurrence dataset}
+#' \item{pts_occ_test (\code{\link{sf}} or `NULL`) A \code{\link{sf}} of test occurrence dataset}
+#' \item{var_train (\code{\link{sf}}) A \code{\link{sf}} with values of each
+#' environmental variables for training occurrence}
+#' \item{pred_train (\code{\link{sf}}) A \code{\link{sf}} with values of
+#' prediction for training occurrence}
+#' \item{eval_train (`POEvaluation`) A list of presence-only evaluation metrics
+#' based on training dataset. See details of `POEvaluation` in \code{\link{evaluate_po}}}
+#' \item{var_test (\code{\link{sf}}) A \code{\link{sf}} with values of each
+#' environmental variables for test occurrence}
+#' \item{pred_test (\code{\link{sf}}) A \code{\link{sf}} with values of
+#' prediction for test occurrence}
+#' \item{eval_test (`POEvaluation`) A list of presence-only evaluation metrics
+#' based on test dataset. See details of `POEvaluation` in \code{\link{evaluate_po}}}
+#' \item{prediction (`stars`) The predicted environmental suitability}
+#' \item{marginal_responses (`MarginalResponse`) A list of marginal response values
+#' of each environmental variables. See details in \code{\link{marginal_response}}}
+#' \item{independent_responses (`IndependentResponse`) A list of independent response values
+#' of each environmental variables. See details in \code{\link{independent_response}}}
+#' \item{variable_dependence (`VariableDependence`) A list of variable dependence values
+#' of each environmental variables. See details in \code{\link{variable_dependence}}}
+#' \item{variable_analysis (`VariableAnalysis`) A list of variable importance analysis based on
+#' multiple metrics. See details in \code{\link{variable_analysis}}}}
+#'
+#' @seealso
+#' \code{\link{evaluate_po}}, \code{\link{marginal_response}}, \code{\link{independent_response}},
+#' \code{\link{variable_dependence}}, \code{\link{variable_analysis}}, \code{\link{isolation.forest}}
+#'
+#' @references
+#' \itemize{
+#' \item{\href{https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/icd
+#' m08b.pdf?q=isolation-forest}{Liu, Fei Tony, Kai Ming Ting, and Zhi-Hua Zhou.
+#' "Isolation forest."\emph{2008 eighth ieee international conference on data mining}.
+#' IEEE, 2008.}}
+#' \item{\href{https://doi.org/10.1145/2133360.2133363}{Liu, Fei Tony, Kai Ming
+#' Ting, and Zhi-Hua Zhou. "Isolation-based anomaly detection."
+#' \emph{ACM Transactions on Knowledge Discovery from Data (TKDD)} 6.1 (2012): 1-39.}}
+#' \item{\href{https://link.springer.com/content/pdf/10.1007/978-3-642-15883-4_
+#' 18.pdf}{Liu, Fei Tony, Kai Ming Ting, and Zhi-Hua Zhou. "On detecting
+#' clustered anomalies using SCiForest." \emph{Joint European Conference on
+#' Machine Learning and Knowledge Discovery in Databases}. Springer, Berlin,
+#' Heidelberg, 2010.}}
+#' \item{\href{https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=8888179}{Ha
+#' riri, Sahand, Matias Carrasco Kind, and Robert J. Brunner. "Extended
+#' isolation forest." \emph{IEEE Transactions on Knowledge and Data Engineering (2019)}.}}
+#' \item{\href{https://github.com/david-cortes/isotree}{https://github.com/davi
+#' d-cortes/isotree}}
+#' \item{References of related feature such as response curves and variable importance
+#' will be listed under their own functions}
+#' }
+#'
+#' @details
+#' Please read details of algorithm \code{\link{isolation.forest}} on
+#' \href{https://github.com/david-cortes/isotree}{its GitHub page}, and
+#' the R documentation of function \code{\link{isolation.forest}}.
+#'
 #' @import checkmate
 #' @importFrom dplyr select slice mutate sample_n
 #' @importFrom stars st_as_stars st_extract st_xy2sfc st_rasterize
@@ -37,8 +104,27 @@
 #' @importFrom isotree isolation.forest
 #' @export
 #' @examples
-#' isotree_po(occ = occ, variables = env_vars, ntrees = 500,
-#' sample_size = 400, ndim = 0)
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#'
+#' data("occ_virtual_species")
+#' occ_virtual_species <- occ_virtual_species %>%
+#'   mutate(id = row_number())
+#'
+#' set.seed(11)
+#' occ <- occ_virtual_species %>% sample_frac(0.7)
+#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
+#' occ <- occ %>% select(-id)
+#' occ_test <- occ_test %>% select(-id)
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#'
+#' mod_virtual_species <- isotree_po(occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200, sample_rate = 0.8, ndim = 0L,
+#'   seed = 123L)
 #'
 isotree_po <- function(
   # SDM-related inputs
@@ -71,7 +157,7 @@ isotree_po <- function(
                 null.ok = T))
   checkmate::assert_multi_class(
     occ_crs, c('numeric', 'crs',
-                null.ok = T))
+               null.ok = T))
   checkmate::assert_multi_class(
     variables, c('RasterStack', 'stars'))
   checkmate::assert_vector(categ_vars, null.ok = T)
@@ -95,7 +181,7 @@ isotree_po <- function(
     } else {
       stop('variables has more than 3 dimensions, do not know which one to use.')
     }
-    }
+  }
   checkmate::assert_int(
     ndim, lower = 1,
     upper = dim_max, na.ok = T)
@@ -235,32 +321,49 @@ isotree_po <- function(
     marginal_responses <- marginal_response(
       model = isotree_mod,
       var_occ = occ_mat %>% st_drop_geometry(),
-      variables = variables)
+      variables = variables,
+      visualize = visualize)
     independent_responses <- independent_response(
       model = isotree_mod,
       var_occ = occ_mat %>% st_drop_geometry(),
-      variables = variables)
+      variables = variables,
+      visualize = visualize)
     variable_dependences <- variable_dependence(
       model = isotree_mod,
-      var_occ = occ_mat %>% st_drop_geometry())
+      var_occ = occ_mat %>% st_drop_geometry(),
+      visualize = visualize,
+      seed = seed)
   } else {
     marginal_responses <- NULL
     independent_responses <- NULL
     variable_dependences <- NULL}
 
   if (check_variable) {
-    vimp <- variable_analysis(
-      model = isotree_mod,
-      var_occ = occ_mat %>% st_drop_geometry(),
-      var_occ_test = occ_test_mat %>% st_drop_geometry(),
-      variables = variables)
+    if (is.null(occ_test_mat)) {
+      vimp <- variable_analysis(
+        model = isotree_mod,
+        var_occ = occ_mat %>% st_drop_geometry(),
+        var_occ_test = NULL,
+        variables = variables,
+        visualize = visualize,
+        seed = seed)
+    } else {
+      vimp <- variable_analysis(
+        model = isotree_mod,
+        var_occ = occ_mat %>% st_drop_geometry(),
+        var_occ_test = occ_test_mat %>% st_drop_geometry(),
+        variables = variables,
+        visualize = visualize,
+        seed = seed)
+    }
+
   } else {
     vimp <- NULL
   }
 
   # Make evaluation using presence-only
   ## Sample points from background
-  set.seed(123)
+  set.seed(seed)
   stars_mask <- var_pred
   stars_mask[[1]][!is.na(stars_mask[[1]])] <- 1
   pts_bg_occ <- pts_occ %>% mutate(value = 0) %>%
@@ -276,7 +379,7 @@ isotree_po <- function(
 
   ### Do the same to test if has any
   if(!is.null(occ_test)) {
-    set.seed(123)
+    set.seed(seed)
     stars_mask <- var_pred
     stars_mask[[1]][!is.na(stars_mask[[1]])] <- 1
     pts_bg_occ_test <- pts_occ_test %>% mutate(value = 0) %>%
@@ -295,12 +398,14 @@ isotree_po <- function(
   eval_train <- evaluate_po(isotree_mod,
                             occ_pred$prediction,
                             occ_bg_pred$prediction,
-                            na.omit(as.vector(var_pred[[1]])))
+                            na.omit(as.vector(var_pred[[1]])),
+                            visualize = visualize)
   if(!is.null(occ_test)){
     eval_test <- evaluate_po(isotree_mod,
                              occ_test_pred$prediction,
                              occ_test_bg_pred$prediction,
-                             na.omit(as.vector(var_pred[[1]])))
+                             na.omit(as.vector(var_pred[[1]])),
+                             visualize = visualize)
   } else eval_test <- NULL
 
   # Return

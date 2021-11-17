@@ -2,39 +2,96 @@
 % Please edit documentation in R/evaluate_po.R
 \name{evaluate_po}
 \alias{evaluate_po}
-\title{A function to evaluate the model based on presence-only data.}
+\title{Evaluate the model based on presence-only data.}
 \usage{
 evaluate_po(model, occ_pred, bg_pred = NULL, var_pred, visualize = FALSE)
 }
 \arguments{
-\item{model}{(isolation_forest) The extended isolation forest SDM.}
+\item{model}{(\code{isolation_forest}) The extended isolation forest SDM. It could be
+the item \code{model} of \code{POIsotree} made by function \code{\link{isotree_po}}.}
 
-\item{occ_pred}{(vector) the vector contains predicted values at occurrence locations.}
+\item{occ_pred}{(\code{vector} of \code{numeric}) A \code{vector} contains predicted values
+at occurrence locations.}
 
-\item{bg_pred}{(vector) the vector contains predicted values with same number
-of background points.}
+\item{bg_pred}{(\code{vector} of \code{numeric}) the vector contains predicted values
+with same number of background points.}
 
-\item{var_pred}{(vector) the vector contains predicted values of the whole area.}
+\item{var_pred}{(\code{vector} of \code{numeric}) the vector contains predicted values
+of the whole area.}
 
-\item{visualize}{(logical) If TRUE, print message and plot the curves.
-The default is FALSE.}
+\item{visualize}{(\code{logical}) If \code{TRUE}, plot the evaluation figures.
+The default is \code{FALSE}.}
 }
 \value{
-(POEvaluation) a list of evaluations
+(\code{POEvaluation}) A list of
+\itemize{
+\item{cvi (\code{list}) A list of CVI with 0.25, 0.5, and 0.75 as threshold}
+\item{boyce (\code{list}) A list of items related to continuous Boyce index (CBI)}
+\item{roc_ratio (\code{list}) A list of ROC ratio and AUC ratio}
+\item{roc_background (\code{list}) A list of ROC background and AUC background}}
 }
 \description{
 This function will calculate Contrast Validation Index (CVI),
-continuous Boyce index (CBI) and AUC_ratio.
-CVI is the proportion of presence points falling in cells having
-a threshold (0.5 here) habitat suitability index minus the proportion of
+continuous Boyce index (CBI), ROC_ratio and ROC_background.
+}
+\details{
+\bold{CVI} is the proportion of presence points falling in cells having
+a threshold (\code{0.5} for example) habitat suitability index minus the proportion of
 cells within this range of threshold of the model.
-Here we used varied thresholds: 0.25, 0.5, and 0.75.
-AUC_background uses background values as pseudo-absence values
-ROC curve plots the proportion of presences falling above a
+Here we used varied thresholds: \code{0.25}, \code{0.5}, and \code{0.75}.
+\bold{ROC_background} uses background values as pseudo-absence values to generate
+ROC curve. \bold{AUC_background} is the AUC calculated according to ROC_background.
+\bold{ROC_ratio} curve plots the proportion of presences falling above a
 range of thresholds against the proportion of cells falling
 above the range of thresholds. The area under the modified
-ROC curve was then called AUC_ratio.
+ROC curve was then called \bold{AUC_ratio}.
 }
 \examples{
-evaluate_po(mod, occ_pred = occ_pred, var_pred = var_pred)
+# Using a pseudo presence-only occurrence dataset of
+# virtual species provided in this package
+
+data("occ_virtual_species")
+occ_virtual_species <- occ_virtual_species \%>\%
+  mutate(id = row_number())
+
+set.seed(11)
+occ <- occ_virtual_species \%>\% sample_frac(0.7)
+occ_test <- occ_virtual_species \%>\% filter(! id \%in\% occ$id)
+occ <- occ \%>\% select(-id)
+occ_test <- occ_test \%>\% select(-id)
+
+env_vars <- system.file(
+  'extdata/bioclim_africa_10min.tif',
+  package = 'itsdm') \%>\% read_stars() \%>\%
+  \%>\% slice('band', c(1, 12))
+
+mod <- isotree_po(
+  occ = occ, occ_test = occ_test,
+  variables = env_vars, ntrees = 200,
+  sample_rate = 0.8, ndim = 0L,
+  seed = 123L, response = FALSE,
+  check_variable = FALSE)
+eval_train <- evaluate_po(mod$model,
+  occ_pred = mod$pred_train$prediction,
+  var_pred = na.omit(as.vector(mod$prediction[[1]])))
+
+}
+\references{
+\itemize{
+\item{\href{https://doi.org/10.1016/j.ecolmodel.2007.11.008}{Peterson,
+A. Townsend, Monica Papeş, and Jorge Soberón. "Rethinking receiver operating
+characteristic analysis applications in ecological niche modeling."
+\emph{Ecological modelling} 213.1 (2008): 63-72.}}
+\item{\href{https://doi.org/10.1016/j.ecolmodel.2006.05.017}{Hirzel,
+Alexandre H., et al. "Evaluating the ability of habitat suitability models
+to predict species presences." \emph{Ecological modelling}
+199.2 (2006): 142-152.}}
+\item{\href{https://doi.org/10.1007/s00267-003-0040-3}{Hirzel, Alexandre
+H., and Raphaël Arlettaz. "Modeling habitat suitability for complex species
+distributions by environmental-distance geometric mean."
+\emph{Environmental management} 32.5 (2003): 614-623.}}
+}
+}
+\seealso{
+\code{\link{print.POEvaluation}}, \code{\link{plot.POEvaluation}}
 }

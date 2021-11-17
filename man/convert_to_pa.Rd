@@ -2,7 +2,7 @@
 % Please edit documentation in R/convert_to_pa.R
 \name{convert_to_pa}
 \alias{convert_to_pa}
-\title{A function to convert suitability to presence-absence map.}
+\title{Convert predicted suitability to presence-absence map.}
 \usage{
 convert_to_pa(
   suitability,
@@ -12,37 +12,45 @@ convert_to_pa(
   a = 1,
   b = 0,
   species_prevalence = NA,
-  seed = 1,
+  seed = 10L,
   visualize = TRUE
 )
 }
 \arguments{
-\item{suitability}{(stars or RasterLayer) The suitability raster.}
+\item{suitability}{(\code{stars} or \code{RasterLayer}) The suitability raster.}
 
-\item{method}{(character) The conversion method, must be one of \code{'threshold'},
-logistic, and linear.}
+\item{method}{(\code{character}) The conversion method, must be one of 'threshold',
+'logistic', and 'linear'. The default is 'logistic'.}
 
-\item{beta}{(numeric) Works for threshold or logistic method. If method is
-threshold, then beta is the threshold value to cutoff. If method is logistic,
-it is the}
+\item{beta}{(\code{numeric}) Works for 'threshold' or 'logistic' method. If \code{method} is
+threshold, then \code{beta} is the threshold value to cutoff. If \code{method} is logistic,
+it is the sigmoid midpoint. The default is \code{0.5}.}
 
-\item{alpha}{(numeric) Works for logistic method.}
+\item{alpha}{(\code{numeric}) Works for logistic method. It is the logistic growth
+rate or steepness of the curve. The default is \code{-.05}.}
 
-\item{a}{(numeric) Works for linear method. It is the slope of the line.}
+\item{a}{(\code{numeric}) Works for linear method. It is the slope of the line.
+The default is \code{1}.}
 
-\item{b}{(numeric) Works for linear method. It is the intercept of the line.}
+\item{b}{(\code{numeric}) Works for linear method. It is the intercept of the line.
+The default is \code{0}.}
 
-\item{species_prevalence}{(numeric) Works for all three methods. It is the
-species prevalence to classify suitability map.}
+\item{species_prevalence}{(\code{numeric} or \code{NA}) Works for all three methods. It is the
+species prevalence to classify suitability map. It could be \code{NA}, when the
+will be calculated automatically based on other arguments. The default is \code{NA}.}
 
-\item{seed}{(integer) The seed for random progress.}
+\item{seed}{(\code{integer}) The seed for random progress. The default is \code{10L}}
 
-\item{visualize}{(logical) if TRUE, plot map of suitability, probability of
-occurrence, and presence-absence. The default is TRUE.}
+\item{visualize}{(\code{logical}) If \code{TRUE}, plot map of suitability, probability of
+occurrence, and presence-absence together. The default is \code{TRUE}.}
 }
 \value{
-(PAConversion) a list of suitability map, probability of occurrence,
-conversion details, and presence-absence map.
+(\code{PAConversion}) A list of
+\itemize{
+\item{suitability (\code{stars}) The input suitability map}
+\item{probability_of_occurrence (\code{stars}) The map of occurrence probability}
+\item{pa_conversion (\code{list}) A list of conversion arguments}
+\item{pa_map (\code{stars}) The presence-absence map}}
 }
 \description{
 Use threshold-based, logistic or linear conversion method to
@@ -53,9 +61,51 @@ Multiple methods and arguments could be used as a combination to do
 the conversion.
 }
 \examples{
-convert_to_pa(suitability)
+# Using a pseudo presence-only occurrence dataset of
+# virtual species provided in this package
+
+data("occ_virtual_species")
+occ_virtual_species <- occ_virtual_species \%>\%
+  mutate(id = row_number())
+
+set.seed(11)
+occ <- occ_virtual_species \%>\% sample_frac(0.7)
+occ_test <- occ_virtual_species \%>\% filter(! id \%in\% occ$id)
+occ <- occ \%>\% select(-id)
+occ_test <- occ_test \%>\% select(-id)
+
+env_vars <- system.file(
+  'extdata/bioclim_africa_10min.tif',
+  package = 'itsdm') \%>\% read_stars() \%>\%
+  \%>\% slice('band', c(1, 12))
+
+mod <- isotree_po(
+  occ = occ, occ_test = occ_test,
+  variables = env_vars, ntrees = 200,
+  sample_rate = 0.8, ndim = 0L,
+  seed = 123L, response = FALSE,
+  check_variable = FALSE)
+
+# Threshold conversion
+pa_thred <- convert_to_pa(mod$prediction, method = 'threshold', beta = 0.5)
+
+# Logistic conversion
+pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
+  beta = 0.5, alpha = -.05)
+pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
+  beta = 0.5, species_prevalence = 0.2)
+pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
+  alpha = -.05, species_prevalence = 0.2)
+
+# Linear conversion
+pa_lin <- convert_to_pa(mod$prediction, method = 'linear',
+  a = 1, b = 0)
 
 }
 \references{
-https://github.com/Farewe/virtualspecies/blob/master/R/convertToPA.R
+\href{https://github.com/Farewe/virtualspecies/blob/master/R/convertToPA.R}{c
+onvertToPA in package \code{virtualspecies}}
+}
+\seealso{
+\code{\link{plot.PAConversion}}
 }

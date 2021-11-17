@@ -7,8 +7,8 @@
 \method{print}{VariableAnalysis}(x, ...)
 }
 \arguments{
-\item{x}{(VariableAnalysis) A variable importance object to be messaged.
-It could be the return of function \code{variable_analysis}.}
+\item{x}{(\code{VariableAnalysis}) A variable importance object to be messaged.
+It could be the return of function \code{\link{variable_analysis}}.}
 
 \item{...}{Not used.}
 }
@@ -20,6 +20,39 @@ Display the most general and informative characteristics of
 a variable importance object.
 }
 \examples{
+# Using a pseudo presence-only occurrence dataset of
+# virtual species provided in this package
+
+data("occ_virtual_species")
+occ_virtual_species <- occ_virtual_species \%>\%
+  mutate(id = row_number())
+
+set.seed(11)
+occ <- occ_virtual_species \%>\% sample_frac(0.7)
+occ_test <- occ_virtual_species \%>\% filter(! id \%in\% occ$id)
+occ <- occ \%>\% select(-id)
+occ_test <- occ_test \%>\% select(-id)
+
+env_vars <- system.file(
+  'extdata/bioclim_africa_10min.tif',
+  package = 'itsdm') \%>\% read_stars() \%>\%
+  \%>\% slice('band', c(1, 12))
+
+mod <- isotree_po(
+  occ = occ, occ_test = occ_test,
+  variables = env_vars, ntrees = 200,
+  sample_rate = 0.8, ndim = 0L,
+  seed = 123L, response = FALSE,
+  check_variable = FALSE)
+
+var_analysis <- variable_analysis(
+  model = mod$model,
+  var_occ = mod$var_train \%>\% st_drop_geometry(),
+  var_occ_test = mod$var_test \%>\% st_drop_geometry(),
+  variables = mod$variables)
 print(variable_analysis)
 
+}
+\seealso{
+\code{\link{variable_analysis}}, \code{\link{plot.VariableAnalysis}}
 }

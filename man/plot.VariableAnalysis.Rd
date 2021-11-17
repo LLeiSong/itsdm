@@ -7,19 +7,52 @@
 \method{plot}{VariableAnalysis}(x, ...)
 }
 \arguments{
-\item{x}{(VariableAnalysis) The variable importance object to plot.
-It could be the return of function \code{variable_analysis}.}
+\item{x}{(\code{VariableAnalysis}) The variable importance object to plot.
+It could be the return of function \code{\link{variable_analysis}}.}
 
 \item{...}{Not used.}
 }
 \value{
-a patchwork of ggplot figure of variable importance
+A \code{patchwork} of \code{ggplot2} figure of variable importance
 according to multiple metrics.
 }
 \description{
 Display informative and detailed figures of variable importance.
 }
 \examples{
-plot(variable_analysis)
+# Using a pseudo presence-only occurrence dataset of
+# virtual species provided in this package
 
+data("occ_virtual_species")
+occ_virtual_species <- occ_virtual_species \%>\%
+  mutate(id = row_number())
+
+set.seed(11)
+occ <- occ_virtual_species \%>\% sample_frac(0.7)
+occ_test <- occ_virtual_species \%>\% filter(! id \%in\% occ$id)
+occ <- occ \%>\% select(-id)
+occ_test <- occ_test \%>\% select(-id)
+
+env_vars <- system.file(
+  'extdata/bioclim_africa_10min.tif',
+  package = 'itsdm') \%>\% read_stars() \%>\%
+  \%>\% slice('band', c(1, 12))
+
+mod <- isotree_po(
+  occ = occ, occ_test = occ_test,
+  variables = env_vars, ntrees = 200,
+  sample_rate = 0.8, ndim = 0L,
+  seed = 123L, response = FALSE,
+  check_variable = FALSE)
+
+var_analysis <- variable_analysis(
+  model = mod$model,
+  var_occ = mod$var_train \%>\% st_drop_geometry(),
+  var_occ_test = mod$var_test \%>\% st_drop_geometry(),
+  variables = mod$variables)
+plot(var_analysis)
+
+}
+\seealso{
+\code{\link{variable_analysis}}, \code{\link{print.VariableAnalysis}}
 }

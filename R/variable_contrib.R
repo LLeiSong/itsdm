@@ -1,26 +1,71 @@
-#' A function to evaluate relative importance of each variable.
-#' @description This function allows you to evaluate relative importance of
-#' each variable within the model using methods: with this variable only,
-#' with all variables except this variables, and permutation feature importance
-#' method. Because the model is presence-only, we only use pearson correlation
-#' with the result of full model as the metrics to rank the variables.
-#' @param model (isolation_forest) The extended isolation forest SDM.
-#' @param var_occ (data.frame, tibble) the data.frame style table that
+#' @title Evaluate variable contributions for targeted observations.
+#' @description Evaluate variable contribution for targeted observations according
+#' to Shapley Additive Explanations (SHAP).
+#' @param model (\code{\link{isolation_forest}}) The isolation forest SDM.
+#' It could be the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
+#' @param var_occ (`data.frame`, `tibble`) The `data.frame` style table that
 #' include values of environmental variables at occurrence locations.
-#' @param var_occ_analysis (data.frame, tibble) The data.frame style table that
-#' include values of environmental variables at occurrence locations of analysis.
-#' @param shap_nsim (integer) The number of Monte Carlo repetitions in SHAP
-#' method to use for estimating each Shapley value.
-#' @param visualize (logical) if TRUE, plot the response curves.
-#' The default is FALSE.
-#' @param seed (integer) The seed for any random progress. The default is 10.
-#' @return (VariableContribution) a tibble of Shapley values of each variable for
-#' each observation.
+#' @param var_occ_analysis (`data.frame`, `tibble`) The `data.frame` style table that
+#' include values of environmental variables at occurrence locations for analysis. It
+#' could be either `var_occ` or its subset, or any new dataset.
+#' @param shap_nsim (`integer`) The number of Monte Carlo repetitions in SHAP
+#' method to use for estimating each Shapley value. See details in documentation of
+#' function \code{\link{explain}} in package `fastshap`.
+#' @param visualize (`logical`) if `TRUE`, plot the response curves.
+#' The default is `FALSE`.
+#' @param seed (`integer`) The seed for any random progress. The default is `10L`.
+#' @return (`VariableContribution`) A list of
+#' \itemize{
+#' \item{shapley_values (`data.frame`) A table of Shapley values of each variables for
+#' all observations}
+#' \item{feature_values (`tibble`) A table of values of each variables for all
+#' observations}}
+#'
+#' @seealso
+#' \code{\link{plot.VariableContribution}}
+#' \code{\link{explain}} in `fastshap`
+#'
+#' @references
+#' \itemize{
+#' \item{\href{https://github.com/bgreenwell/fastshap}{https://github.com/
+#' bgreenwell/fastshap}}
+#' \item{\href{https://github.com/slundberg/shap}{https://github.com/slundberg/shap}}
+#' }
+#'
 #' @importFrom fastshap explain
 #' @export
 #' @examples
-#' variable_contrib(model = isotree_po,
-#' var_occ = var_occ, variables = env_vars)
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#'
+#' data("occ_virtual_species")
+#' occ_virtual_species <- occ_virtual_species %>%
+#'   mutate(id = row_number())
+#'
+#' set.seed(11)
+#' occ <- occ_virtual_species %>% sample_frac(0.7)
+#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
+#' occ <- occ %>% select(-id)
+#' occ_test <- occ_test %>% select(-id)
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#'
+#' mod <- isotree_po(
+#'   occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200,
+#'   sample_rate = 0.8, ndim = 0L,
+#'   seed = 123L, response = FALSE,
+#'   check_variable = FALSE)
+#'
+#' var_contribution <- variable_contrib(
+#'   model = mod$model,
+#'   var_occ = mod$var_train %>% st_drop_geometry(),
+#'   var_occ_analysis = mod$var_train %>%
+#'     st_drop_geometry() %>% slice(1:10))
+#' plot(var_contribution, plot_each_obs = T)
 #'
 variable_contrib <- function(model,
                              var_occ, # Training, must set for model

@@ -7,20 +7,36 @@
 \method{plot}{EnvironmentalOutlier}(x, overlay_raster = NULL, pts_alpha = 0.5, ...)
 }
 \arguments{
-\item{x}{(EnvironmentalOutlier) The PAConversion object to plot.
-It could be the return of function \code{suspicious_env_outliers}.}
+\item{x}{(\code{EnvironmentalOutlier}) The PAConversion object to plot.
+It could be the return of function \code{\link{suspicious_env_outliers}}.}
 
-\item{overlay_raster}{(RasterLayer or stars) The environmental raster to plot
+\item{overlay_raster}{(\code{RasterLayer} or \code{stars}) The environmental raster to plot
 together with points.}
 
-\item{pts_alpha}{(numeric) the alpha used by ggplot2 to show points.}
+\item{pts_alpha}{(\code{numeric}) The \code{alpha} used by \code{\link{geom_sf}} to show points.}
 
 \item{...}{Not used.}
+}
+\value{
+A \code{ggplot2} figure of outliers distribution among all observations.
 }
 \description{
 Display observations and outliers in a dataset.
 }
 \examples{
-plot(suspicious_outliers)
+data("occ_virtual_species")
+env_vars <- system.file(
+  'extdata/bioclim_africa_10min.tif',
+  package = 'itsdm') \%>\% read_stars() \%>\%
+  \%>\% slice('band', c(1, 12))
+occ_outliers <- suspicious_env_outliers(
+  occ = occ_virtual_species, variables = env_vars,
+  z_outlier = 5, outliers_print = 4L)
+plot(occ_outliers)
+plot(occ_outliers,
+  overlay_raster = env_vars \%>\% slice('band', 1))
 
+}
+\seealso{
+\code{\link{suspicious_env_outliers}}, \code{\link{print.EnvironmentalOutlier}}
 }

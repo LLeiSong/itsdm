@@ -7,13 +7,13 @@
 \method{plot}{PAConversion}(x, ...)
 }
 \arguments{
-\item{x}{(PAConversion) The PAConversion object to plot.
-It could be the return of function \code{convert_to_pa}.}
+\item{x}{(\code{PAConversion}) The \code{PAConversion} object to plot.
+It could be the return of function \code{\link{convert_to_pa}}.}
 
 \item{...}{Not used.}
 }
 \value{
-a patchwork of ggplot figure of suitability, probability of occurrence,
+A \code{patchwork} of \code{ggplot2} figure of suitability, probability of occurrence,
 presence-absence binary map.
 }
 \description{
@@ -21,6 +21,36 @@ Display raster of suitability, probability of occurrence,
 presence-absence binary map from PA conversion.
 }
 \examples{
-plot(pa_covert)
+# Using a pseudo presence-only occurrence dataset of
+# virtual species provided in this package
 
+data("occ_virtual_species")
+occ_virtual_species <- occ_virtual_species \%>\%
+  mutate(id = row_number())
+
+set.seed(11)
+occ <- occ_virtual_species \%>\% sample_frac(0.7)
+occ_test <- occ_virtual_species \%>\% filter(! id \%in\% occ$id)
+occ <- occ \%>\% select(-id)
+occ_test <- occ_test \%>\% select(-id)
+
+env_vars <- system.file(
+  'extdata/bioclim_africa_10min.tif',
+  package = 'itsdm') \%>\% read_stars() \%>\%
+  \%>\% slice('band', c(1, 12))
+
+mod <- isotree_po(
+  occ = occ, occ_test = occ_test,
+  variables = env_vars, ntrees = 200,
+  sample_rate = 0.8, ndim = 0L,
+  seed = 123L, response = FALSE,
+  check_variable = FALSE)
+
+# Threshold conversion
+pa_thred <- convert_to_pa(mod$prediction, method = 'threshold', beta = 0.5)
+plot(pa_thred)
+
+}
+\seealso{
+\code{\link{convert_to_pa}}, \code{\link{print.PAConversion}}
 }

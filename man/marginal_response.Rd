@@ -2,45 +2,88 @@
 % Please edit documentation in R/marginal_response.R
 \name{marginal_response}
 \alias{marginal_response}
-\title{A function to calculate marginal responses of each variables.}
+\title{Calculate marginal responses of each variables.}
 \usage{
 marginal_response(model, var_occ, variables, si = 1000, visualize = FALSE)
 }
 \arguments{
-\item{model}{Any predictive model. In this package, it could be isolation_forest.
-In this package, it is isolation_forest.}
+\item{model}{(Any predictive model). In this package, it is \code{isolation_forest}.
+It could be the item \code{model} of \code{POIsotree} made by function \code{\link{isotree_po}}.}
 
-\item{var_occ}{(data.frame, tibble) the data.frame style table that
+\item{var_occ}{(\code{data.frame}, \code{tibble}) The \code{data.frame} style table that
 include values of environmental variables at occurrence locations.}
 
-\item{variables}{(stars) The stars of environmental variables. It should have
-multiple attributes instead of dims. If you have \code{raster} object instead, you
-could use \code{st_as_stars} to convert it to \code{stars} or use \code{read_stars} directly
-read source data as a \code{stars}.}
+\item{variables}{(\code{stars}) The \code{stars} of environmental variables. It should have
+multiple \code{attributes} instead of \code{dims}. If you have \code{raster} object instead, you
+could use \code{\link{st_as_stars}} to convert it to \code{stars} or use
+\code{\link{read_stars}} directly read source data as a \code{stars}. You also could
+use item \code{variables} of \code{POIsotree} made by function \code{\link{isotree_po}}.}
 
-\item{si}{(integer) the number of samples to generate response curves.
+\item{si}{(\code{integer}) The number of samples to generate response curves.
 If it is too small, the response curves might be biased.
-The default value is 1000.}
+The default value is \code{1000}.}
 
-\item{visualize}{(logical) if TRUE, plot the response curves.
-The default is FALSE.}
+\item{visualize}{(\code{logical}) if \code{TRUE}, plot the response curves.
+The default is \code{FALSE}.}
 }
 \value{
-(MarginalResponse) a nested list of data.frame of response and variable values.
-The response values correspond to suitability of this single variable.
+(\code{MarginalResponse}) A nested list of
+\itemize{
+\item{responses_cont (\code{list}) A list of response values of continuous variables}
+\item{responses_cat (\code{list}) A list of response values of categorical variables}
+}
 }
 \description{
-This function allows you to calculate the marginal responses of
-each variables within the model.
+Calculate the marginal responses of each variables within the model.
 }
 \details{
-The curves show how each environmental variable affects the modeling
-prediction. The curves show how the predicted result changes as each environmental
+The values show how each environmental variable affects the modeling
+prediction. They show how the predicted result changes as each environmental
 variable is varied while keeping all other environmental variables at average
-sample value. The curves might be hard to interpret if there are strongly correlated
-variables. The users could use \code{dim_reduce} function to remove the strong correlation
-from original environmental variable stack.
+sample value. They might be hard to interpret if there are strongly correlated
+variables. The users could use \code{\link{dim_reduce}} function to remove
+the strong correlation from original environmental variable stack.
 }
 \examples{
-marginal_response(model = mod$model, variables = env_vars)
+# Using a pseudo presence-only occurrence dataset of
+# virtual species provided in this package
+
+data("occ_virtual_species")
+occ_virtual_species <- occ_virtual_species \%>\%
+  mutate(id = row_number())
+
+set.seed(11)
+occ <- occ_virtual_species \%>\% sample_frac(0.7)
+occ_test <- occ_virtual_species \%>\% filter(! id \%in\% occ$id)
+occ <- occ \%>\% select(-id)
+occ_test <- occ_test \%>\% select(-id)
+
+env_vars <- system.file(
+  'extdata/bioclim_africa_10min.tif',
+  package = 'itsdm') \%>\% read_stars() \%>\%
+  \%>\% slice('band', c(1, 12))
+
+mod <- isotree_po(
+  occ = occ, occ_test = occ_test,
+  variables = env_vars, ntrees = 200,
+  sample_rate = 0.8, ndim = 0L,
+  seed = 123L, response = FALSE,
+  check_variable = FALSE)
+
+marginal_responses <- marginal_response(
+  model = mod$model,
+  variables = mod$variables)
+plot(marginal_responses)
+
+}
+\references{
+\itemize{
+\item{\href{https://doi.org/10.1016/j.ecolmodel.2004.12.007}{Elith, Jane,
+et al. "The evaluation strip: a new and robust method for plotting predicted
+responses from species distribution models." \emph{Ecological modelling}
+186.3 (2005): 280-289.}}
+}
+}
+\seealso{
+\code{\link{plot.MarginalResponse}}
 }

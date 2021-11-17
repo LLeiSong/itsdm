@@ -1,31 +1,41 @@
-#' A function to parse future BIOs from CMCC-BioClimInd.
-#' @description This function allows you to parse future CMCC-BioClimInd
-#' bioclimatic variables with a setting of boundary and a few other options.
-#' @param bry (sf or sp) The boundary to mask the data.
-#' if NULL, no clip to the global map. The default is NULL.
-#' @param path (character) The path to save the downloaded imagery.
-#' If NULL, then use the current working directory. The default is NULL.
-#' @param esm (character) The option for  Earth System Models (ESMs).
+#' @title Download future Bioclimatic indicators (BIOs) named CMCC-BioClimInd.
+#' @description Parse future CMCC-BioClimInd bioclimatic indicators obtained by
+#' different Earth System Models (ESMs) optionally with a setting of boundary
+#' and a few other options.
+#' @param bry (\code{\link{sf}} or \code{\link{sp}}) The boundary to mask the downloaded original data.
+#' If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
+#' \code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
+#' The default is \code{NULL}.
+#' @param path (\code{character}) The path to save the downloaded imagery.
+#' If \code{NULL}, it would use the current working directory.
+#' The default is \code{NULL}.
+#' @param esm (\code{character}) The option for Earth System Models (ESMs).
 #' Should be one of "CMCC-CESM", 'GFDL-ESM2M', 'HadGEM2-ES',
 #' 'IPSL-CM5A-LR', 'MIROC-ESM-CHEM', 'NorESM1-M'.
 #' The default is CMCC-CESM.
-#' @param rcp (numeric) The option of Representative Concentration Pathways (RCPs).
-#' Should be 45 or 85. Only 85 is available for CMCC-CESM.
-#' The default is 85.
-#' @param interval (character) The option for time interval.
-#' Should be one of "2040-2079", "2060-2099".
-#' The default is 2040-2079.
-#' @param nm_mark (character) the name mark of clipped images.
-#' The default is "clip". It would be ignored if bry is NULL.
-#' @param return_stack (logical) if TRUE, stack the imagery together and return.
+#' @param rcp (\code{numeric}) The option of Representative Concentration Pathways (RCPs).
+#' Should be 45 or 85. Only 85 is available for CMCC-CESM. The default is 85.
+#' @param interval (\code{character}) The option for time interval.
+#' Should be one of "2040-2079", "2060-2099". The default is "2040-2079".
+#' @param nm_mark (\code{character}) the name mark of clipped images.
+#' The default is "clip". It would be ignored if \code{bry} is \code{NULL}.
+#' @param return_stack (\code{logical}) if \code{TRUE}, stack the imagery together and return.
 #' If the area is large and resolution is high, it is better not to stack them.
-#' The default is TRUE.
-#' #' @return stars if return_stack is TRUE.
-#' The images would be saved as a single file.
-#' @references Noce, Sergio, Luca Caporaso, and Monia Santini.
-#' "A new global dataset of bioclimatic indicators."
-#' Scientific data 7.1 (2020): 1-12.
-#' \url{https://doi.pangaea.de/10.1594/PANGAEA.904278?format=html#download}
+#' The default is \code{TRUE}.
+#' @return if \code{return_stack} is \code{TRUE}, the images would be
+#' returned as a \code{stars}. Otherwise, nothing to return, but the user
+#' would receive a message of where the images are.
+#' @references
+#' \href{https://www.nature.com/articles/s41597-020-00726-5}{Noce, Sergio, Luca
+#' Caporaso, and Monia Santini."A new global dataset of bioclimatic indicators.
+#' "\emph{Scientific data} 7.1 (2020): 1-12.}
+#'
+#' @details
+#' \href{https://doi.pangaea.de/10.1594/PANGAEA.904278?format=html#download}{Web
+#' page page for this dataset}
+#'
+#' @note The function is experimental at the moment, because the download server
+#' of this dataset is not as stable as Worldclim yet.
 #' @import ncdf4
 #' @importFrom glue glue
 #' @importFrom raster stack
@@ -33,8 +43,9 @@
 #' @importFrom stars read_stars write_stars st_as_stars
 #' @export
 #' @examples
-#' future_cmcc_bioclim()
-#' future_cmcc_bioclim(return_stack = FALSE)
+#' future_cmcc_bioclim(esm = 'GFDL-ESM2M', rcp = 45, interval = "2040-2079",
+#' return_stack = FALSE)
+#'
 future_cmcc_bioclim <- function(bry = NULL,
                                 path = NULL,
                                 esm = 'CMCC-CESM',

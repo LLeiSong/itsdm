@@ -1,14 +1,47 @@
 #' @title Print summary information from variable importance object.
 #' @description Display the most general and informative characteristics of
 #' a variable importance object.
-#' @param x (VariableAnalysis) A variable importance object to be messaged.
-#' It could be the return of function `variable_analysis`.
+#' @param x (`VariableAnalysis`) A variable importance object to be messaged.
+#' It could be the return of function \code{\link{variable_analysis}}.
 #' @param ... Not used.
 #' @importFrom dplyr filter pull
 #' @importFrom stringr str_pad
 #' @return The same object that was passed as input.
+#' @seealso
+#' \code{\link{variable_analysis}}, \code{\link{plot.VariableAnalysis}}
+#'
 #' @export
 #' @examples
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#'
+#' data("occ_virtual_species")
+#' occ_virtual_species <- occ_virtual_species %>%
+#'   mutate(id = row_number())
+#'
+#' set.seed(11)
+#' occ <- occ_virtual_species %>% sample_frac(0.7)
+#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
+#' occ <- occ %>% select(-id)
+#' occ_test <- occ_test %>% select(-id)
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#'
+#' mod <- isotree_po(
+#'   occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200,
+#'   sample_rate = 0.8, ndim = 0L,
+#'   seed = 123L, response = FALSE,
+#'   check_variable = FALSE)
+#'
+#' var_analysis <- variable_analysis(
+#'   model = mod$model,
+#'   var_occ = mod$var_train %>% st_drop_geometry(),
+#'   var_occ_test = mod$var_test %>% st_drop_geometry(),
+#'   variables = mod$variables)
 #' print(variable_analysis)
 #'
 print.VariableAnalysis <- function(x, ...){
@@ -177,14 +210,44 @@ print.VariableAnalysis <- function(x, ...){
 #' @title Print summary information from presence-only evaluation object.
 #' @description Display the most general and informative characteristics of
 #' a presence-only evaluation object.
-#' @param x (POEvaluation) A presence-only evaluation object to be messaged.
-#' It could be the return of function `evaluate_po`.
+#' @param x (`POEvaluation`) A presence-only evaluation object to be messaged.
+#' It could be the return of function \code{\link{evaluate_po}}.
 #' @param ... Not used.
 #' @importFrom stringr str_pad
 #' @return The same object that was passed as input.
+#' @seealso
+#' \code{\link{evaluate_po}}, \code{\link{plot.POEvaluation}}
+#'
 #' @export
 #' @examples
-#' print(evaluation_po)
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#'
+#' data("occ_virtual_species")
+#' occ_virtual_species <- occ_virtual_species %>%
+#'   mutate(id = row_number())
+#'
+#' set.seed(11)
+#' occ <- occ_virtual_species %>% sample_frac(0.7)
+#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
+#' occ <- occ %>% select(-id)
+#' occ_test <- occ_test %>% select(-id)
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#'
+#' mod <- isotree_po(
+#'   occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200,
+#'   sample_rate = 0.8, ndim = 0L,
+#'   seed = 123L, response = FALSE,
+#'   check_variable = FALSE)
+#' eval_train <- evaluate_po(mod$model,
+#'   occ_pred = mod$pred_train$prediction,
+#'   var_pred = na.omit(as.vector(mod$prediction[[1]])))
+#' print(eval_train)
 #'
 print.POEvaluation <- function(x, ...){
   # CVI
@@ -225,13 +288,19 @@ print.POEvaluation <- function(x, ...){
 #' @title Print summary information from ReducedImageStack object.
 #' @description Display the most general and informative characteristics of
 #' a ReducedImageStack object.
-#' @param x (ReducedImageStack) A ReducedImageStack object to be messaged.
-#' It could be the return of function `dim_reduce`.
+#' @param x (`ReducedImageStack`) A `ReducedImageStack` object to be messaged.
+#' It could be the return of function \code{\link{dim_reduce}}.
 #' @param ... Not used.
 #' @importFrom stars st_get_dimension_values
 #' @return The same object that was passed as input.
+#' @seealso
+#' \code{\link{dim_reduce}}
+#'
 #' @export
 #' @examples
+#' worldclim <- worldclim2(var = "bio")
+#' img_reduced <- dim_reduce(worldclim, threshold = 0.7,
+#'   preferred_vars = c('bio1', 'bio12'))
 #' print(img_reduced)
 #'
 
@@ -259,13 +328,43 @@ print.ReducedImageStack <- function(x, ...) {
 #' @title Print summary information from PAConversion object.
 #' @description Display the most general and informative characteristics of
 #' a PAConversion object.
-#' @param x (PAConversion) A PAConversion object to be messaged.
-#' It could be the return of function `convert_to_pa`.
+#' @param x (`PAConversion`) A PAConversion object to be messaged.
+#' It could be the return of function \code{\link{convert_to_pa}}.
 #' @param ... Not used.
 #' @return The same object that was passed as input.
+#' @seealso
+#' \code{\link{convert_to_pa}}, \code{\link{plot.PAConversion}}
+#'
 #' @export
 #' @examples
-#' print(pa_covert)
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#'
+#' data("occ_virtual_species")
+#' occ_virtual_species <- occ_virtual_species %>%
+#'   mutate(id = row_number())
+#'
+#' set.seed(11)
+#' occ <- occ_virtual_species %>% sample_frac(0.7)
+#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
+#' occ <- occ %>% select(-id)
+#' occ_test <- occ_test %>% select(-id)
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#'
+#' mod <- isotree_po(
+#'   occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200,
+#'   sample_rate = 0.8, ndim = 0L,
+#'   seed = 123L, response = FALSE,
+#'   check_variable = FALSE)
+#'
+#' # Threshold conversion
+#' pa_thred <- convert_to_pa(mod$prediction, method = 'threshold', beta = 0.5)
+#' print(pa_thred)
 #'
 print.PAConversion <- function(x, ...) {
   # threshold
@@ -294,14 +393,25 @@ print.PAConversion <- function(x, ...) {
 #' @title Print summary information from PAConversion object.
 #' @description Display the most general and informative characteristics of
 #' a PAConversion object.
-#' @param x (EnvironmentalOutlier) A EnvironmentalOutlier object to be messaged.
-#' It could be the return of function `suspicious_env_outliers`.
+#' @param x (`EnvironmentalOutlier`) A `EnvironmentalOutlier` object to be messaged.
+#' It could be the return of function \code{\link{suspicious_env_outliers}}.
 #' @param ... Not used.
 #' @import outliertree
 #' @return The same object that was passed as input.
+#' @seealso
+#' \code{\link{suspicious_env_outliers}}, \code{\link{plot.EnvironmentalOutlier}}
+#'
 #' @export
 #' @examples
-#' print(suspicious_outliers)
+#' data("occ_virtual_species")
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#' occ_outliers <- suspicious_env_outliers(
+#'   occ = occ_virtual_species, variables = env_vars,
+#'   z_outlier = 5, outliers_print = 4L)
+#' print(occ_outliers)
 #'
 print.EnvironmentalOutlier <- function(x, ...) {
   print(x$outlier_details)

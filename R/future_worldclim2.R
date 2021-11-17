@@ -1,35 +1,45 @@
 #' A function to parse the future climate from worldclim version 2.1.
 #' @description This function allows you to parse worldclim version 2.1 future climatic
 #' files with a setting of boundary and a few other options.
-#' @param var (character) The option for the variable to download.
+#' @param var (\code{character}) The option for the variable to download.
 #' Should be one of tmin, tmax, prec, bioc.
 #' The default is tmin.
-#' @param res (numeric) The option for the resolution of image to download.
+#' @param res (\code{numeric}) The option for the resolution of image to download.
 #' Should be one of 2.5, 5, 10.
 #' The default is 10.
-#' @param gcm (character) The option for global climate models.
+#' @param gcm (\code{character}) The option for global climate models.
 #' Should be one of "BCC-CSM2-MR", "CNRM-CM6-1","CNRM-ESM2-1", "CanESM5",
 #' "GFDL-ESM4", "IPSL-CM6A-LR","MIROC-ES2L", "MIROC6", "MRI-ESM2-0".
-#' The default is BCC-CSM2-MR.
-#' @param ssp (character) The option for Shared Socio-economic Pathways.
+#' The default is 'BCC-CSM2-MR'.
+#' @param ssp (\code{character}) The option for Shared Socio-economic Pathways.
 #' Should be one of "ssp126", "ssp245", "ssp370", "ssp585".
-#' The default is ssp585.
-#' @param interval (character) The option for time interval.
+#' The default is "ssp585".
+#' @param interval (\code{character}) The option for time interval.
 #' Should be one of "2021-2040", "2041-2060", "2061-2080", "2081-2100".
-#' The default is 2021-2040.
-#' @param bry (sf or sp) The boundary to download the data.
-#' If NULL, no clip to the downloaded files.
-#' The default is NULL.
-#' @param nm_mark (character) The prefix of the file names to download.
-#' The default is fut.
-#' @param path (character) The path to save the downloaded imagery.
-#' If NULL, the use the current working directory.
-#' The default is NULL.
-#' @param return_stack (logical) If TRUE, stack the imagery together and return.
-#' The default is TRUE.
-#' #' @return stars if return_stack is TRUE.
-#' The images would be saved as a single file.
-#' @references \url{https://worldclim.org/data/index.html}
+#' The default is "2021-2040".
+#' @param bry (\code{\link{sf}} or \code{\link{sp}}) The boundary to mask the downloaded original data.
+#' If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
+#' \code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
+#' The default is \code{NULL}.
+#' @param path (\code{character}) The path to save the downloaded imagery.
+#' If \code{NULL}, it would use the current working directory.
+#' The default is \code{NULL}.
+#' @param nm_mark (\code{character}) the name mark of clipped images.
+#' The default is "clip". It would be ignored if \code{bry} is \code{NULL}.
+#' @param return_stack (\code{logical}) if \code{TRUE}, stack the imagery together and return.
+#' If the area is large and resolution is high, it is better not to stack them.
+#' The default is \code{TRUE}.
+#' @return if \code{return_stack} is \code{TRUE}, the images would be
+#' returned as a \code{stars}. Otherwise, nothing to return, but the user
+#' would receive a message of where the images are.
+#' @references
+#' \href{https://doi.org/10.1002/joc.5086}{Fick, Stephen E., and Robert J.
+#' Hijmans. "WorldClim 2: new 1‐km spatial resolution climate surfaces for
+#' global land areas." \emph{International journal of climatology}
+#' 37.12 (2017): 4302-4315.}
+#'
+#' @details
+#' \href{https://worldclim.org/data/index.html}{Web page page for this dataset}
 #' @importFrom glue glue
 #' @importFrom sf st_as_sf st_make_valid
 #' @importFrom stars read_stars write_stars
@@ -44,7 +54,7 @@ future_worldclim2 <- function(var = "tmin",
                               interval = "2021-2040",
                               bry = NULL,
                               path = NULL,
-                              nm_mark = "fut",
+                              nm_mark = "clip",
                               return_stack = TRUE) {
     ## Check the inputs
     stopifnot(res %in% c(2.5, 5, 10))
@@ -65,6 +75,7 @@ future_worldclim2 <- function(var = "tmin",
         stop("There is no such var to download.")}
 
     if (is.null(bry)) {
+      nm_mark = "global"
         message("No bry set, download global map...")
     } else{
         if (!(is(bry, "sf") | is(bry, 'sfc') |

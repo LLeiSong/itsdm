@@ -92,19 +92,50 @@
 
 #' @title Function to plot marginal response curves.
 #' @description Plot marginal response curves using ggplot2.
-#' @param x (MarginalResponse) The marginal response curve object to plot.
-#' It could be the return of function `marginal_response`.
-#' @param target_var (vector of character) The target variable to plot. It could be
-#' NA. If it is NA, all variables will be plotted.
-#' @param smooth_span (numeric) The span value for smooth fit in ggplot2.
-#' When it is 0, no smooth applied. The default is 0.3.
+#' @param x (`MarginalResponse`) The marginal response curve object to plot.
+#' It could be the return of function \code{\link{marginal_response}}.
+#' @param target_var (`vector` of `character`) The target variable to plot. It could be
+#' `NA`. If it is `NA`, all variables will be plotted.
+#' @param smooth_span (`numeric`) The span value for smooth fit in `ggplot2`.
+#' When it is `0`, no smooth applied. The default is `0.3`.
 #' @param ... Not used.
-#' @return ggplot2 figure of response curves
+#' @return `ggplot2` figure of response curves
+#' @seealso
+#' \code{\link{marginal_response}}
+#'
 #' @import ggplot2
 #' @importFrom patchwork plot_layout
 #' @export
 #' @examples
-#' plot(marginal_responses)
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#'
+#' data("occ_virtual_species")
+#' occ_virtual_species <- occ_virtual_species %>%
+#'   mutate(id = row_number())
+#'
+#' set.seed(11)
+#' occ <- occ_virtual_species %>% sample_frac(0.7)
+#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
+#' occ <- occ %>% select(-id)
+#' occ_test <- occ_test %>% select(-id)
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#'
+#' mod <- isotree_po(
+#'   occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200,
+#'   sample_rate = 0.8, ndim = 0L,
+#'   seed = 123L, response = FALSE,
+#'   check_variable = FALSE)
+#'
+#' marginal_responses <- marginal_response(
+#'   model = mod$model,
+#'   variables = mod$variables)
+#' plot(marginal_responses, target_var = 'bio1')
 #'
 plot.MarginalResponse <- function(x,
                                   target_var = NA,
@@ -132,19 +163,50 @@ plot.MarginalResponse <- function(x,
 
 #' @title Function to plot independent response curves.
 #' @description Plot independent response curves using ggplot2.
-#' @param x (IndependentResponse) The independent response curve object to plot.
-#' It could be the return of function `independent_response`.
-#' @param target_var (vector of character) The target variable to plot. It could be
-#' NA. If it is NA, all variables will be plotted.
-#' @param smooth_span (numeric) The span value for smooth fit in ggplot2.
-#' When it is 0, no smooth applied. The default is 0.3.
+#' @param x (`IndependentResponse`) The independent response curve object to plot.
+#' It could be the return of function \code{\link{independent_response}}.
+#' @param target_var (`vector` of `character`) The target variable to plot. It could be
+#' `NA`. If it is `NA`, all variables will be plotted.
+#' @param smooth_span (`numeric`) The span value for smooth fit in `ggplot2`.
+#' When it is `0`, no smooth applied. The default is `0.3`.
 #' @param ... Not used.
-#' @return ggplot2 figure of response curves
+#' @return `ggplot2` figure of response curves
+#' @seealso
+#' \code{\link{independent_response}}
+#'
 #' @import ggplot2
 #' @importFrom patchwork plot_layout
 #' @importFrom dplyr arrange slice
 #' @export
 #' @examples
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#'
+#' data("occ_virtual_species")
+#' occ_virtual_species <- occ_virtual_species %>%
+#'   mutate(id = row_number())
+#'
+#' set.seed(11)
+#' occ <- occ_virtual_species %>% sample_frac(0.7)
+#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
+#' occ <- occ %>% select(-id)
+#' occ_test <- occ_test %>% select(-id)
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#'
+#' mod <- isotree_po(
+#'   occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200,
+#'   sample_rate = 0.8, ndim = 0L,
+#'   seed = 123L, response = FALSE,
+#'   check_variable = FALSE)
+#'
+#' independent_responses <- independent_response(
+#'   model = mod$model,
+#'   variables = mod$variables)
 #' plot(independent_responses)
 #'
 plot.IndependentResponse <- function(x,
@@ -173,23 +235,54 @@ plot.IndependentResponse <- function(x,
 
 #' @title Function to plot variable dependence obtained from SHAP test.
 #' @description Plot variable dependence curves using ggplot2.
-#' @param x (VariableDependence) The variable dependence object to plot.
-#' It could be the return of function `variable_dependence`.
-#' @param target_var (vector of character) The target variable to plot. It could be
-#' NA. If it is NA, all variables will be plotted.
-#' @param related_var (character) The dependent variable to plot together with
-#' target variables. It could be NA. If it is NA, no related variable will be
+#' @param x (`VariableDependence`) The variable dependence object to plot.
+#' It could be the return of function \code{\link{variable_dependence}}.
+#' @param target_var (`vector` of `character`) The target variable to plot. It could be
+#' `NA`. If it is `NA`, all variables will be plotted.
+#' @param related_var (`character`) The dependent variable to plot together with
+#' target variables. It could be `NA`. If it is `NA`, no related variable will be
 #' plotted.
-#' @param smooth_span (numeric) The span value for smooth fit in ggplot2.
-#' When it is 0, no smooth applied. The default is 0.3.
+#' @param smooth_span (`numeric`) The span value for smooth fit in `ggplot2`.
+#' When it is `0`, no smooth applied. The default is `0.3`.
 #' @param ... Not used.
-#' @return ggplot2 figure of dependent curves
+#' @return `ggplot2` figure of dependent curves
+#' @seealso
+#' \code{\link{variable_dependence}}
+#'
 #' @import ggplot2
 #' @importFrom patchwork plot_layout
 #' @importFrom dplyr mutate
 #' @export
 #' @examples
-#' plot(var_dependence)
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#'
+#' data("occ_virtual_species")
+#' occ_virtual_species <- occ_virtual_species %>%
+#'   mutate(id = row_number())
+#'
+#' set.seed(11)
+#' occ <- occ_virtual_species %>% sample_frac(0.7)
+#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
+#' occ <- occ %>% select(-id)
+#' occ_test <- occ_test %>% select(-id)
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#'
+#' mod <- isotree_po(
+#'   occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200,
+#'   sample_rate = 0.8, ndim = 0L,
+#'   seed = 123L, response = FALSE,
+#'   check_variable = FALSE)
+#'
+#' var_dependence <- variable_dependence(
+#'   model = mod$model,
+#'   var_occ = mod$var_train %>% st_drop_geometry())
+#' plot(var_dependence, target_var = 'bio1', related_var = 'bio12')
 #'
 plot.VariableDependence <- function(x,
                                     target_var = NA,
@@ -399,20 +492,54 @@ plot.VariableDependence <- function(x,
 #' @title Function to plot variable contribution for target observations.
 #' @description Plot variable contribution for target observation separately
 #' or together using ggplot2.
-#' @param x (VariableContribution) The VariableContribution object to plot.
-#' It could be the return of function `variable_contrib`.
-#' @param plot_each_obs (logical) The option of plot type. If `TRUE`, it will
+#' @param x (`VariableContribution`) The `VariableContribution` object to plot.
+#' It could be the return of function \code{\link{variable_contrib}}.
+#' @param plot_each_obs (`logical`) The option of plot type. If `TRUE`, it will
 #' plot variable contribution for every observation. Otherwise, it will plot
 #' variable contribution violin plot for all observations.
-#' @param num_features (integer) A number of most important features to plot.
+#' @param num_features (`integer`) A number of most important features to plot.
 #' Just work if plot_each_obs is `TRUE`.
 #' @param ... Not used.
-#' @return ggplot2 figure of Variable Contribution.
+#' @return `ggplot2` figure of Variable Contribution.
+#' @seealso
+#' \code{\link{variable_contrib}}
+#'
 #' @import ggplot2
 #' @importFrom dplyr arrange slice
 #' @export
 #' @examples
-#' plot(independent_responses)
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#'
+#' data("occ_virtual_species")
+#' occ_virtual_species <- occ_virtual_species %>%
+#'   mutate(id = row_number())
+#'
+#' set.seed(11)
+#' occ <- occ_virtual_species %>% sample_frac(0.7)
+#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
+#' occ <- occ %>% select(-id)
+#' occ_test <- occ_test %>% select(-id)
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#'
+#' mod <- isotree_po(
+#'   occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200,
+#'   sample_rate = 0.8, ndim = 0L,
+#'   seed = 123L, response = FALSE,
+#'   check_variable = FALSE)
+#'
+#' var_contribution <- variable_contrib(
+#'   model = mod$model,
+#'   var_occ = mod$var_train %>% st_drop_geometry(),
+#'   var_occ_analysis = mod$var_train %>%
+#'     st_drop_geometry() %>% slice(1:10))
+#' plot(var_contribution, plot_each_obs = T, num_features = 2)
+#' plot(var_contribution)
 #'
 plot.VariableContribution <- function(x,
                                       plot_each_obs = FALSE,
@@ -490,16 +617,49 @@ plot.VariableContribution <- function(x,
 
 #' @title Function to plot variable importance.
 #' @description Display informative and detailed figures of variable importance.
-#' @param x (VariableAnalysis) The variable importance object to plot.
-#' It could be the return of function `variable_analysis`.
+#' @param x (`VariableAnalysis`) The variable importance object to plot.
+#' It could be the return of function \code{\link{variable_analysis}}.
 #' @param ... Not used.
-#' @return a patchwork of ggplot figure of variable importance
+#' @return A `patchwork` of `ggplot2` figure of variable importance
 #' according to multiple metrics.
+#' @seealso
+#' \code{\link{variable_analysis}}, \code{\link{print.VariableAnalysis}}
+#'
 #' @import ggplot2
 #' @import patchwork
 #' @export
 #' @examples
-#' plot(variable_analysis)
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#'
+#' data("occ_virtual_species")
+#' occ_virtual_species <- occ_virtual_species %>%
+#'   mutate(id = row_number())
+#'
+#' set.seed(11)
+#' occ <- occ_virtual_species %>% sample_frac(0.7)
+#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
+#' occ <- occ %>% select(-id)
+#' occ_test <- occ_test %>% select(-id)
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#'
+#' mod <- isotree_po(
+#'   occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200,
+#'   sample_rate = 0.8, ndim = 0L,
+#'   seed = 123L, response = FALSE,
+#'   check_variable = FALSE)
+#'
+#' var_analysis <- variable_analysis(
+#'   model = mod$model,
+#'   var_occ = mod$var_train %>% st_drop_geometry(),
+#'   var_occ_test = mod$var_test %>% st_drop_geometry(),
+#'   variables = mod$variables)
+#' plot(var_analysis)
 #'
 plot.VariableAnalysis <- function(x, ...) {
   # Pearson correlation
@@ -726,15 +886,45 @@ plot.VariableAnalysis <- function(x, ...) {
 #' @title Function to plot presence-only evaluation.
 #' @description Display informative and detailed figures of continuous Boyce
 #' index and AUC curves.
-#' @param x (POEvaluation) The presence-only evaluation object to plot.
-#' It could be the return of function `evaluate_po`.
+#' @param x (`POEvaluation`) The presence-only evaluation object to plot.
+#' It could be the return of function \code{\link{evaluate_po}}.
 #' @param ... Not used.
-#' @return a patchwork of ggplot figure of AUC_ratio, AUC_background and CBI.
+#' @return A `patchwork` of `ggplot2` figure of AUC_ratio, AUC_background and CBI.
+#' @seealso
+#' \code{\link{evaluate_po}}, \code{\link{print.POEvaluation}}
+#'
 #' @import ggplot2
 #' @import patchwork
 #' @export
 #' @examples
-#' plot(evaluation_po)
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#'
+#' data("occ_virtual_species")
+#' occ_virtual_species <- occ_virtual_species %>%
+#'   mutate(id = row_number())
+#'
+#' set.seed(11)
+#' occ <- occ_virtual_species %>% sample_frac(0.7)
+#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
+#' occ <- occ %>% select(-id)
+#' occ_test <- occ_test %>% select(-id)
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#'
+#' mod <- isotree_po(
+#'   occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200,
+#'   sample_rate = 0.8, ndim = 0L,
+#'   seed = 123L, response = FALSE,
+#'   check_variable = FALSE)
+#' eval_train <- evaluate_po(mod$model,
+#'   occ_pred = mod$pred_train$prediction,
+#'   var_pred = na.omit(as.vector(mod$prediction[[1]])))
+#' plot(eval_train)
 #'
 plot.POEvaluation <- function(x, ...) {
   cex.axis <- 1
@@ -828,17 +1018,47 @@ plot.POEvaluation <- function(x, ...) {
 #' @title Function to plot results of conversion to PA.
 #' @description Display raster of suitability, probability of occurrence,
 #' presence-absence binary map from PA conversion.
-#' @param x (PAConversion) The PAConversion object to plot.
-#' It could be the return of function `convert_to_pa`.
+#' @param x (`PAConversion`) The `PAConversion` object to plot.
+#' It could be the return of function \code{\link{convert_to_pa}}.
 #' @param ... Not used.
+#' @return A `patchwork` of `ggplot2` figure of suitability, probability of occurrence,
+#' presence-absence binary map.
+#' @seealso
+#' \code{\link{convert_to_pa}}, \code{\link{print.PAConversion}}
+#'
 #' @importFrom dplyr as_tibble
 #' @import ggplot2
 #' @import patchwork
-#' @return a patchwork of ggplot figure of suitability, probability of occurrence,
-#' presence-absence binary map.
 #' @export
 #' @examples
-#' plot(pa_covert)
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#'
+#' data("occ_virtual_species")
+#' occ_virtual_species <- occ_virtual_species %>%
+#'   mutate(id = row_number())
+#'
+#' set.seed(11)
+#' occ <- occ_virtual_species %>% sample_frac(0.7)
+#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
+#' occ <- occ %>% select(-id)
+#' occ_test <- occ_test %>% select(-id)
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#'
+#' mod <- isotree_po(
+#'   occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200,
+#'   sample_rate = 0.8, ndim = 0L,
+#'   seed = 123L, response = FALSE,
+#'   check_variable = FALSE)
+#'
+#' # Threshold conversion
+#' pa_thred <- convert_to_pa(mod$prediction, method = 'threshold', beta = 0.5)
+#' plot(pa_thred)
 #'
 plot.PAConversion <- function(x, ...) {
   g1 <- ggplot() +
@@ -873,17 +1093,31 @@ plot.PAConversion <- function(x, ...) {
 
 #' @title Function to plot suspicious outliers in an observation dataset.
 #' @description Display observations and outliers in a dataset.
-#' @param x (EnvironmentalOutlier) The PAConversion object to plot.
-#' It could be the return of function `suspicious_env_outliers`.
-#' @param overlay_raster (RasterLayer or stars) The environmental raster to plot
+#' @param x (`EnvironmentalOutlier`) The PAConversion object to plot.
+#' It could be the return of function \code{\link{suspicious_env_outliers}}.
+#' @param overlay_raster (`RasterLayer` or `stars`) The environmental raster to plot
 #' together with points.
-#' @param pts_alpha (numeric) the alpha used by ggplot2 to show points.
+#' @param pts_alpha (`numeric`) The `alpha` used by \code{\link{geom_sf}} to show points.
 #' @param ... Not used.
+#' @return A `ggplot2` figure of outliers distribution among all observations.
+#' @seealso
+#' \code{\link{suspicious_env_outliers}}, \code{\link{print.EnvironmentalOutlier}}
+#'
 #' @import ggplot2
 #' @importFrom stars st_as_stars
 #' @export
 #' @examples
-#' plot(suspicious_outliers)
+#' data("occ_virtual_species")
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#' occ_outliers <- suspicious_env_outliers(
+#'   occ = occ_virtual_species, variables = env_vars,
+#'   z_outlier = 5, outliers_print = 4L)
+#' plot(occ_outliers)
+#' plot(occ_outliers,
+#'   overlay_raster = env_vars %>% slice('band', 1))
 #'
 plot.EnvironmentalOutlier <- function(x,
                                       overlay_raster = NULL,

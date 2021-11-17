@@ -1,25 +1,56 @@
 #' @title Function to detect suspicious outliers based on environmental variables.
-#' @description Call outlier.tree to detect suspicious outliers in observations.
-#' @param occ (data.frame, sf, SpatialPointsDataFrame)
-#' The observation dataset to analyze.
-#' There must be column x and y for coordinates if it is a data.frame.
-#' @param occ_crs (numeric or crs) The EPSG number or crs object of occurrence CRS.
-#' The default value is 4326, which is the geographic coordinate system.
-#' @param variables (RasterStack or stars) The stack of environmental variables.
-#' @param rm_outliers (logical) The option to remove the suspicious outliers or not.
-#' The default is FALSE.
-#' @param ... Other arguments passed to function `outlier.tree`.
-#' @return (EnvironmentalOutlier) a list that contains `sf` points of observations
-#', outliers and outlier details returned from `outlier.tree`.
-#'If `rm_outliers` is `TRUE`, outliers are deleted from points of
-#' observations. If `FALSE`, the full observations are returned.
+#' @description Run \code{\link{outlier.tree}} to detect suspicious outliers in observations.
+#' @param occ (`data.frame`, `sf`, `SpatialPointsDataFrame`)
+#' The occurrence dataset for training.
+#' There must be column `x` and `y` for coordinates if it is a regular `data.frame`.
+#' @param occ_crs (`numeric` or \code{\link{crs}}) The EPSG number or
+#' \code{\link{crs}} object of occurrence CRS.
+#' The default value is `4326`, which is the geographic coordinate system.
+#' @param variables (`RasterStack` or `stars`) The stack of environmental variables.
+#' @param rm_outliers (`logical`) The option to remove the suspicious outliers or not.
+#' The default is `FALSE`.
+#' @param ... Other arguments passed to function \code{\link{outlier.tree}} in
+#' package `outliertree`.
+#' @return (`EnvironmentalOutlier`) A list that contains
+#' \itemize{
+#' \item{outliers (\code{\link{sf}}) The \code{\link{sf}} points of outliers}
+#' \item{outlier_details (`tibble`) A table of outlier details returned from
+#' function \code{\link{outlier.tree}} in package `outliertree`}
+#' \item{pts_occ (\code{\link{sf}}) The \code{\link{sf}} points of occurrence.
+#' If `rm_outliers` is `TRUE`, outliers are deleted from points of
+#' occurrence. If `FALSE`, the full observations are returned.}}
+#'
+#' @seealso
+#' \code{\link{print.EnvironmentalOutlier}}, \code{\link{plot.EnvironmentalOutlier}}
+#' \code{\link{outlier.tree}} in package `outliertree`
+#'
+#' @details
+#' Please check more details in R documentation of function
+#' \code{\link{outlier.tree}} in package `outliertree` and their GitHub.
+#'
+#' @references
+#' \itemize{
+#' \item{\href{https://arxiv.org/abs/2001.00636}{Cortes, David. "Explainable
+#' outlier detection through decision tree conditioning."
+#' \emph{arXiv preprint arXiv:2001.00636} (2020).}}
+#' \item{\href{https://github.com/david-cortes/outliertree}{https://github.
+#' com/david-cortes/outliertree}}}
+#'
 #' @import checkmate
 #' @importFrom stars st_as_stars st_extract
 #' @importFrom sf st_as_sf st_crs st_transform st_drop_geometry
 #' @importFrom outliertree outlier.tree
 #' @export
 #' @examples
-#' suspicious_env_outliers(occ = occ, variables = env_vars)
+#' data("occ_virtual_species")
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   %>% slice('band', c(1, 12))
+#' occ_outliers <- suspicious_env_outliers(
+#'   occ = occ_virtual_species, variables = env_vars,
+#'   z_outlier = 5, outliers_print = 4L)
+#' plot(occ_outliers)
 #'
 suspicious_env_outliers <- function(occ,
                                     occ_crs = 4326,

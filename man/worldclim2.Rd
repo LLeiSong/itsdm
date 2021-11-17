@@ -2,7 +2,7 @@
 % Please edit documentation in R/worldclim2.R
 \name{worldclim2}
 \alias{worldclim2}
-\title{A function to parse worldclim version 2.1 variables.}
+\title{Download environmental variables made by worldclim version 2.1.}
 \usage{
 worldclim2(
   var = "tmin",
@@ -14,38 +14,53 @@ worldclim2(
 )
 }
 \arguments{
-\item{var}{(character) The option for the variable to download,
+\item{var}{(\code{character}) The option for the variable to download,
 should be one of tvag, tmin, tmax, prec, srad, wind, vapr and bio.
 The default is 'tmin'.}
 
-\item{res}{(numeric) The option for the resolution of image to download.
+\item{res}{(\code{numeric}) The option for the resolution of image to download.
 Should be one of 0.5, 2.5, 5, 10 in minute degree.
 The default is 10.}
 
-\item{bry}{(sf or sp) The boundary to mask the data.
-if NULL, no clip to the global map. The default is NULL.}
+\item{bry}{(\code{\link{sf}} or \code{\link{sp}}) The boundary to mask the downloaded original data.
+If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
+\code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
+The default is \code{NULL}.}
 
-\item{path}{(character) The path to save the downloaded imagery.
-If NULL, then use the current working directory. The default is NULL.}
+\item{path}{(\code{character}) The path to save the downloaded imagery.
+If \code{NULL}, it would use the current working directory.
+The default is \code{NULL}.}
 
-\item{nm_mark}{(character) the name mark of clipped images.
-The default is "clip". It would be ignored if bry is NULL.}
+\item{nm_mark}{(\code{character}) the name mark of clipped images.
+The default is "clip". It would be ignored if \code{bry} is \code{NULL}.}
 
-\item{return_stack}{(logical) if TRUE, stack the imagery together and return.
+\item{return_stack}{(\code{logical}) if \code{TRUE}, stack the imagery together and return.
 If the area is large and resolution is high, it is better not to stack them.
-The default is TRUE.}
+The default is \code{TRUE}.}
 }
 \value{
-stars if return_stack is TRUE.
-The images would be saved as separate files.
+if \code{return_stack} is \code{TRUE}, the images would be
+returned as a \code{stars}. Otherwise, nothing to return, but the user
+would receive a message of where the images are.
 }
 \description{
-This function allows you to parse worldclim version 2.1 files
+Parse historic worldclim version 2.1 variables
 with a setting of boundary and a few other options.
 }
+\details{
+\href{https://worldclim.org/data/index.html}{Web page page for this dataset}
+}
 \examples{
-worldclim2(var = "tmin", res = 10, return_stack = FALSE)
+bry <- sf::st_polygon(
+  list(rbind(c(29.34, -11.72), c(29.34, -0.95),
+             c(40.31, -0.95), c(40.31, -11.72),
+             c(29.34, -11.72)))) \%>\%
+  st_sfc(bry, crs = 4326)
+bios <- worldclim2(var = "bio", res = 10, bry = bry, nm_mark = 'tza')
 }
 \references{
-\url{https://worldclim.org/data/index.html}
+\href{https://doi.org/10.1002/joc.5086}{Fick, Stephen E., and Robert J.
+Hijmans. "WorldClim 2: new 1‐km spatial resolution climate surfaces for
+global land areas." \emph{International journal of climatology}
+37.12 (2017): 4302-4315.}
 }

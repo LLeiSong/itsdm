@@ -7,19 +7,49 @@
 \method{plot}{POEvaluation}(x, ...)
 }
 \arguments{
-\item{x}{(POEvaluation) The presence-only evaluation object to plot.
-It could be the return of function \code{evaluate_po}.}
+\item{x}{(\code{POEvaluation}) The presence-only evaluation object to plot.
+It could be the return of function \code{\link{evaluate_po}}.}
 
 \item{...}{Not used.}
 }
 \value{
-a patchwork of ggplot figure of AUC_ratio, AUC_background and CBI.
+A \code{patchwork} of \code{ggplot2} figure of AUC_ratio, AUC_background and CBI.
 }
 \description{
 Display informative and detailed figures of continuous Boyce
 index and AUC curves.
 }
 \examples{
-plot(evaluation_po)
+# Using a pseudo presence-only occurrence dataset of
+# virtual species provided in this package
 
+data("occ_virtual_species")
+occ_virtual_species <- occ_virtual_species \%>\%
+  mutate(id = row_number())
+
+set.seed(11)
+occ <- occ_virtual_species \%>\% sample_frac(0.7)
+occ_test <- occ_virtual_species \%>\% filter(! id \%in\% occ$id)
+occ <- occ \%>\% select(-id)
+occ_test <- occ_test \%>\% select(-id)
+
+env_vars <- system.file(
+  'extdata/bioclim_africa_10min.tif',
+  package = 'itsdm') \%>\% read_stars() \%>\%
+  \%>\% slice('band', c(1, 12))
+
+mod <- isotree_po(
+  occ = occ, occ_test = occ_test,
+  variables = env_vars, ntrees = 200,
+  sample_rate = 0.8, ndim = 0L,
+  seed = 123L, response = FALSE,
+  check_variable = FALSE)
+eval_train <- evaluate_po(mod$model,
+  occ_pred = mod$pred_train$prediction,
+  var_pred = na.omit(as.vector(mod$prediction[[1]])))
+plot(eval_train)
+
+}
+\seealso{
+\code{\link{evaluate_po}}, \code{\link{print.POEvaluation}}
 }

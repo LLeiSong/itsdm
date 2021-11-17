@@ -7,8 +7,8 @@
 \method{print}{EnvironmentalOutlier}(x, ...)
 }
 \arguments{
-\item{x}{(EnvironmentalOutlier) A EnvironmentalOutlier object to be messaged.
-It could be the return of function \code{suspicious_env_outliers}.}
+\item{x}{(\code{EnvironmentalOutlier}) A \code{EnvironmentalOutlier} object to be messaged.
+It could be the return of function \code{\link{suspicious_env_outliers}}.}
 
 \item{...}{Not used.}
 }
@@ -20,6 +20,17 @@ Display the most general and informative characteristics of
 a PAConversion object.
 }
 \examples{
-print(suspicious_outliers)
+data("occ_virtual_species")
+env_vars <- system.file(
+  'extdata/bioclim_africa_10min.tif',
+  package = 'itsdm') \%>\% read_stars() \%>\%
+  \%>\% slice('band', c(1, 12))
+occ_outliers <- suspicious_env_outliers(
+  occ = occ_virtual_species, variables = env_vars,
+  z_outlier = 5, outliers_print = 4L)
+print(occ_outliers)
 
+}
+\seealso{
+\code{\link{suspicious_env_outliers}}, \code{\link{plot.EnvironmentalOutlier}}
 }

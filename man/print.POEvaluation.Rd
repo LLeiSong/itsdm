@@ -7,8 +7,8 @@
 \method{print}{POEvaluation}(x, ...)
 }
 \arguments{
-\item{x}{(POEvaluation) A presence-only evaluation object to be messaged.
-It could be the return of function \code{evaluate_po}.}
+\item{x}{(\code{POEvaluation}) A presence-only evaluation object to be messaged.
+It could be the return of function \code{\link{evaluate_po}}.}
 
 \item{...}{Not used.}
 }
@@ -20,6 +20,36 @@ Display the most general and informative characteristics of
 a presence-only evaluation object.
 }
 \examples{
-print(evaluation_po)
+# Using a pseudo presence-only occurrence dataset of
+# virtual species provided in this package
 
+data("occ_virtual_species")
+occ_virtual_species <- occ_virtual_species \%>\%
+  mutate(id = row_number())
+
+set.seed(11)
+occ <- occ_virtual_species \%>\% sample_frac(0.7)
+occ_test <- occ_virtual_species \%>\% filter(! id \%in\% occ$id)
+occ <- occ \%>\% select(-id)
+occ_test <- occ_test \%>\% select(-id)
+
+env_vars <- system.file(
+  'extdata/bioclim_africa_10min.tif',
+  package = 'itsdm') \%>\% read_stars() \%>\%
+  \%>\% slice('band', c(1, 12))
+
+mod <- isotree_po(
+  occ = occ, occ_test = occ_test,
+  variables = env_vars, ntrees = 200,
+  sample_rate = 0.8, ndim = 0L,
+  seed = 123L, response = FALSE,
+  check_variable = FALSE)
+eval_train <- evaluate_po(mod$model,
+  occ_pred = mod$pred_train$prediction,
+  var_pred = na.omit(as.vector(mod$prediction[[1]])))
+print(eval_train)
+
+}
+\seealso{
+\code{\link{evaluate_po}}, \code{\link{plot.POEvaluation}}
 }
