@@ -145,7 +145,7 @@ occ_outliers <- suspicious_env_outliers(
 plot(occ_outliers)
 ```
 
-According to the figure and the prior knowledge of Africa savanna elephant, we decide not to drop the outliers. The outliers seem more like rare records. In addition, if they are really outliers, the later `isolation.forest` could detect them again. Now let's organize the occurrence before next step
+According to the figure and the prior knowledge of Africa savanna elephant, we decide not to drop the outliers. The outliers seem more like rare records. In addition, if they are really outliers, the later `isolation.forest` could detect them again. Now let's organize the occurrence before next step.
 
 ```{r, warning=F, message=F}
 occ <- occ_outliers$pts_occ
@@ -185,7 +185,7 @@ rm(var_merge)
 
 By far, the `variables` is the environmental variable stack with numeric ones with low correlation and categorical ones.
 
-## Split occurrence to train and test
+## Split occurrence to training and test
 
 ```{r}
 # Make occurrences
@@ -216,11 +216,12 @@ it_sdm <- isotree_po(occ = occ_sf,
                      categ_vars = c('wdpa', 'landcover'),
                      sample_rate = 1.0,
                      ndim = 2,
-                     seed = 10L,
-                     check_variable = F)
+                     seed = 10L)
 ```
 
-Let's visualize the results.
+## Visualize results
+
+Predicted environmental suitability
 
 ```{r prediction, echo = F, fig.align='center', fig.width=5.3, fig.height=4.3}
 # Compare with virtual species
@@ -232,38 +233,53 @@ ggplot() +
   theme_linedraw()
 ```
 
-Presence-only model evaluation.
+Presence-only model evaluation
 
-```{r}
+```{r eval, fig.width=6, fig.height=6}
+# According to training dataset
 it_sdm$eval_train
 plot(it_sdm$eval_train)
+
+# According to test dataset
 it_sdm$eval_test
 plot(it_sdm$eval_train)
 ```
 
-Now take a look at response curves.
+## Response curves
+
+Response curves of environmental variables show how the suitability of a variable to this species changes when its value is varied.
+
+Marginal response curves
 
 ```{r marginal_responses, fig.align='center', fig.width=7, fig.height=7}
 # Plot response curves
 plot(it_sdm$marginal_responses)
 ```
 
+Independent response curves
+
 ```{r independent_responses, fig.align='center', fig.width=7}
 plot(it_sdm$independent_responses, target_var = c('bio1', 'bio3', 'bio19', 'landcover'))
 ```
 
+Single variable dependence curves
+
 ```{r variable_dependence, fig.align='center', fig.width=7, fig.height=7}
 ## Variable dependence scatter points with fitted curves made by SHAP test
-plot(it_sdm$variable_dependence)
+plot(it_sdm$variable_dependence, smooth_span = 0.7)
 ```
 
-And variable importance.
+## Variable importance
+
+Variable importance analysis is another way for us to understand the relationship between environmental variables and species distribution. It also could help to improve model performance. 
 
 ```{r variable_analysis, fig.align='center', fig.width=8, fig.height=8}
 it_sdm$variable_analysis
 # Plot variable importance
 plot(it_sdm$variable_analysis)
 ```
+
+## Presence-absence map
 
 Use function `convert_to_pa` to convert suitability to presence-absence map.
 
@@ -277,29 +293,30 @@ pa_map <- convert_to_pa(it_sdm$prediction,
 pa_map; plot(pa_map)
 ```
 
-## Analyze vairable dependence
+## Analyze variable dependence
 
 Randomly check variable dependence with each other.
 
 ```{r var_inter_dependence, fig.align='center', fig.width=7, fig.height=6}
-# Multiple ways to plot variable VariableDependence object
-plot(it_sdm$variable_dependence, target_var = c('bio1', 'bio12', 'bio18'),
-     related_var = 'bio6', smooth_span = 0.7)
-plot(it_sdm$variable_dependence, target_var = c('bio1', 'bio6', 'bio12', 'wdpa'),
+plot(it_sdm$variable_dependence, 
+     target_var = c('bio1', 'bio6', 'bio12', 'wdpa'),
      related_var = 'landcover', smooth_span = 0)
 ```
 
 ## Analyze variable contribution
 
-Sometimes, we are interested in some observations, for instance, the outliers detected in the beginning steps. 
+Sometimes, we are interested in some observations, for instance, the outliers detected in the beginning steps. According to the figure below, we could tell that these suspicious outliers are not all environmental outliers. 
 
-```{r var_contrib, fig.align='center', fig.width=7, fig.height=7}
+```{r var_contrib, fig.align='center', fig.width=7, fig.height=9}
 ## Analyze variable contribution for interested observations.
 ## For example, outliers.
+var_occ <- it_sdm$var_train %>% st_drop_geometry()
+var_analysis <- var_occ %>% 
+  slice(occ_outliers$outliers %>% pull(suspious_row))
 var_contrib_outliers <- variable_contrib(
   it_sdm$model, 
-  it_sdm$var_train %>% st_drop_geometry(),
-  occ_outliers$outliers %>% st_drop_geometry())
+  var_occ,
+  var_analysis)
 
 # Plot contribution separately for each observation
 ## By default, it only plot the most 5 important variables for each observation
@@ -307,10 +324,10 @@ var_contrib_outliers <- variable_contrib(
 plot(var_contrib_outliers, plot_each_obs = T)
 ```
 
-Let's take a look at general variable contribution.
+Let's take a look at the general variable contribution.
 
-```{r, fig.align='center', fig.width=4, fig.height=3}
-var_contrib_outliers <- variable_contrib(
+```{r, fig.align='center', fig.width=6, fig.height=5}
+var_contrib <- variable_contrib(
   it_sdm$model, 
   it_sdm$var_train %>% st_drop_geometry(),
   it_sdm$var_train %>% st_drop_geometry())

@@ -27,7 +27,8 @@ landcover <- st_warp(landcover, stars_template,
                      use_gdal = T, method = 'near') %>%
   st_crop(., mainland_africa) %>%
   setNames('landcover') %>%
-  mutate(landcover = factor(landcover))
+  mutate(landcover = ifelse(landcover == 0, NA, landcover)) %>%
+  mutate(landcover = as.factor(landcover))
 
 write_stars(landcover, NA_value = 255, type = 'Byte',
             'inst/extdata/landcover_africa_10min.tif')

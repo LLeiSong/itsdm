@@ -555,7 +555,8 @@ plot.VariableContribution <- function(x,
              'plot_each_obs to FALSE.'))}
   shapley_values <- x$shapley_values
   feature_values <- x$feature_values %>%
-    mutate_if(is.numeric, function(x) round(x, 2))
+    mutate_if(is.numeric, function(x) round(x, 2)) %>%
+    mutate_if(is.factor, function(x) as.character(x))
   stopifnot(identical(names(shapley_values), names(feature_values)))
   checkmate::assert_int(num_features, lower = 1, upper = ncol(shapley_values))
 
