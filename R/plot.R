@@ -22,7 +22,7 @@
     cex.axis <- 1
     cex.lab <- 1
     if (smooth_span == 0){
-      invisibel(g_cont <- ggplot(response_df, aes(x = x, y = y)) +
+      invisible(g_cont <- ggplot(response_df, aes(x = x, y = y)) +
                   geom_line(color = "black") +
                   scale_y_continuous(limits = c(0, 1.0)) +
                   facet_wrap(~variable, scales = 'free', ncol = 2) +
@@ -109,6 +109,10 @@
 #' @examples
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
 #'
 #' data("occ_virtual_species")
 #' occ_virtual_species <- occ_virtual_species %>%
@@ -123,7 +127,7 @@
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   %>% slice('band', c(1, 12))
+#'   slice('band', c(1, 12))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
@@ -181,6 +185,10 @@ plot.MarginalResponse <- function(x,
 #' @examples
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
 #'
 #' data("occ_virtual_species")
 #' occ_virtual_species <- occ_virtual_species %>%
@@ -195,7 +203,7 @@ plot.MarginalResponse <- function(x,
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   %>% slice('band', c(1, 12))
+#'   slice('band', c(1, 12))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
@@ -250,12 +258,17 @@ plot.IndependentResponse <- function(x,
 #' \code{\link{variable_dependence}}
 #'
 #' @import ggplot2
+#' @importFrom methods is
 #' @importFrom patchwork plot_layout
-#' @importFrom dplyr mutate
+#' @importFrom dplyr mutate mutate_if
 #' @export
 #' @examples
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
 #'
 #' data("occ_virtual_species")
 #' occ_virtual_species <- occ_virtual_species %>%
@@ -270,7 +283,7 @@ plot.IndependentResponse <- function(x,
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   %>% slice('band', c(1, 12))
+#'   slice('band', c(1, 12))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
@@ -510,6 +523,10 @@ plot.VariableDependence <- function(x,
 #' @examples
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
 #'
 #' data("occ_virtual_species")
 #' occ_virtual_species <- occ_virtual_species %>%
@@ -524,7 +541,7 @@ plot.VariableDependence <- function(x,
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   %>% slice('band', c(1, 12))
+#'   slice('band', c(1, 12))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
@@ -628,10 +645,16 @@ plot.VariableContribution <- function(x,
 #'
 #' @import ggplot2
 #' @import patchwork
+#' @importFrom dplyr summarise across
+#' @importFrom tidyselect all_of
 #' @export
 #' @examples
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
 #'
 #' data("occ_virtual_species")
 #' occ_virtual_species <- occ_virtual_species %>%
@@ -646,7 +669,7 @@ plot.VariableContribution <- function(x,
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   %>% slice('band', c(1, 12))
+#'   slice('band', c(1, 12))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
@@ -900,6 +923,10 @@ plot.VariableAnalysis <- function(x, ...) {
 #' @examples
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
 #'
 #' data("occ_virtual_species")
 #' occ_virtual_species <- occ_virtual_species %>%
@@ -914,7 +941,7 @@ plot.VariableAnalysis <- function(x, ...) {
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   %>% slice('band', c(1, 12))
+#'   slice('band', c(1, 12))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
@@ -1034,6 +1061,10 @@ plot.POEvaluation <- function(x, ...) {
 #' @examples
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
 #'
 #' data("occ_virtual_species")
 #' occ_virtual_species <- occ_virtual_species %>%
@@ -1048,7 +1079,7 @@ plot.POEvaluation <- function(x, ...) {
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   %>% slice('band', c(1, 12))
+#'   slice('band', c(1, 12))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
@@ -1106,13 +1137,20 @@ plot.PAConversion <- function(x, ...) {
 #'
 #' @import ggplot2
 #' @importFrom stars st_as_stars
+#' @importFrom methods is
+#' @importFrom stars geom_stars
 #' @export
 #' @examples
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
+#'
 #' data("occ_virtual_species")
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   %>% slice('band', c(1, 12))
+#'   slice('band', c(1, 12))
 #' occ_outliers <- suspicious_env_outliers(
 #'   occ = occ_virtual_species, variables = env_vars,
 #'   z_outlier = 5, outliers_print = 4L)

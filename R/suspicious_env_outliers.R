@@ -9,6 +9,8 @@
 #' @param variables (`RasterStack` or `stars`) The stack of environmental variables.
 #' @param rm_outliers (`logical`) The option to remove the suspicious outliers or not.
 #' The default is `FALSE`.
+#' @param seed (`integer`) The random seed used in the modeling. It should be an
+#' integer. The default is `10L`.
 #' @param ... Other arguments passed to function \code{\link{outlier.tree}} in
 #' package `outliertree`.
 #' @return (`EnvironmentalOutlier`) A list that contains
@@ -37,16 +39,22 @@
 #' com/david-cortes/outliertree}}}
 #'
 #' @import checkmate
+#' @importFrom methods is
 #' @importFrom stars st_as_stars st_extract
 #' @importFrom sf st_as_sf st_crs st_transform st_drop_geometry
 #' @importFrom outliertree outlier.tree
 #' @export
 #' @examples
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
+#'
 #' data("occ_virtual_species")
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   %>% slice('band', c(1, 12))
+#'   slice('band', c(1, 12))
 #' occ_outliers <- suspicious_env_outliers(
 #'   occ = occ_virtual_species, variables = env_vars,
 #'   z_outlier = 5, outliers_print = 4L)
@@ -56,7 +64,7 @@ suspicious_env_outliers <- function(occ,
                                     occ_crs = 4326,
                                     variables,
                                     rm_outliers = FALSE,
-                                    seed = 10,
+                                    seed = 10L,
                                     ...) {
   # Check inputs
   checkmate::assert_multi_class(
@@ -73,7 +81,7 @@ suspicious_env_outliers <- function(occ,
   # Reformat the inputs
   # Variables, use stars
   if (is(variables, 'RasterStack') | is(variables, 'RasterLayer')){
-    variables <- st_as_stars(variabels)
+    variables <- st_as_stars(variables)
   }
   # Occurrence
   if (is(occ, 'data.frame') & (!is(occ, 'sf')) &

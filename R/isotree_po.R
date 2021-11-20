@@ -12,6 +12,8 @@
 #' \code{\link{crs}} object of occurrence CRS.
 #' The default value is `4326`, which is the geographic coordinate system.
 #' @param variables (`RasterStack` or `stars`) The stack of environmental variables.
+#' @param categ_vars (`vector` of `character` or `NULL`) The names of categorical
+#' variables. Must be the same as the names in `variables`.
 #' @param ntrees (`integer`) The number of trees for the isolation forest. It must
 #' be integer, which you could use function \code{\link{as.integer}} to convert to.
 #' The default is `100L`.
@@ -32,7 +34,7 @@
 #' @param ... Other arguments that \code{\link{isolation.forest}} needs.
 #' @param response (`logical`) If `TRUE`, generate response curves.
 #' The default is `TRUE`.
-#' @param check_variables (`logical`) If `TRUE`, check the variable importance.
+#' @param check_variable (`logical`) If `TRUE`, check the variable importance.
 #' The default is `TRUE`.
 #' @param visualize (`logical`) If `TRUE`, generate the essential figures related to
 #' the model. The default is `FALSE`.
@@ -98,14 +100,22 @@
 #' the R documentation of function \code{\link{isolation.forest}}.
 #'
 #' @import checkmate
+#' @importFrom raster nlayers
 #' @importFrom dplyr select slice mutate sample_n
 #' @importFrom stars st_as_stars st_extract st_xy2sfc st_rasterize
 #' @importFrom sf st_as_sf st_crs st_transform st_drop_geometry
 #' @importFrom isotree isolation.forest
+#' @importFrom rlang :=
+#' @importFrom stats na.omit predict
+#' @importFrom methods is
 #' @export
 #' @examples
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
 #'
 #' data("occ_virtual_species")
 #' occ_virtual_species <- occ_virtual_species %>%
@@ -120,7 +130,7 @@
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   %>% slice('band', c(1, 12))
+#'   slice('band', c(1, 12))
 #'
 #' mod_virtual_species <- isotree_po(occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200, sample_rate = 0.8, ndim = 0L,

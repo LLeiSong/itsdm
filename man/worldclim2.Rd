@@ -51,11 +51,14 @@ with a setting of boundary and a few other options.
 \href{https://worldclim.org/data/index.html}{Web page page for this dataset}
 }
 \examples{
+library(sf)
+library(itsdm)
+
 bry <- sf::st_polygon(
   list(rbind(c(29.34, -11.72), c(29.34, -0.95),
              c(40.31, -0.95), c(40.31, -11.72),
              c(29.34, -11.72)))) \%>\%
-  st_sfc(bry, crs = 4326)
+  st_sfc(crs = 4326)
 bios <- worldclim2(var = "bio", res = 10, bry = bry, nm_mark = 'tza')
 }
 \references{

@@ -4,7 +4,8 @@
 #' @param x (`VariableAnalysis`) A variable importance object to be messaged.
 #' It could be the return of function \code{\link{variable_analysis}}.
 #' @param ... Not used.
-#' @importFrom dplyr filter pull
+#' @importFrom tidyselect all_of
+#' @importFrom dplyr filter pull across summarise
 #' @importFrom stringr str_pad
 #' @return The same object that was passed as input.
 #' @seealso
@@ -14,6 +15,10 @@
 #' @examples
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
 #'
 #' data("occ_virtual_species")
 #' occ_virtual_species <- occ_virtual_species %>%
@@ -28,7 +33,7 @@
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   %>% slice('band', c(1, 12))
+#'   slice('band', c(1, 12))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
@@ -222,6 +227,10 @@ print.VariableAnalysis <- function(x, ...){
 #' @examples
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
 #'
 #' data("occ_virtual_species")
 #' occ_virtual_species <- occ_virtual_species %>%
@@ -236,7 +245,7 @@ print.VariableAnalysis <- function(x, ...){
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   %>% slice('band', c(1, 12))
+#'   slice('band', c(1, 12))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
@@ -298,6 +307,7 @@ print.POEvaluation <- function(x, ...){
 #'
 #' @export
 #' @examples
+#' library(itsdm)
 #' worldclim <- worldclim2(var = "bio")
 #' img_reduced <- dim_reduce(worldclim, threshold = 0.7,
 #'   preferred_vars = c('bio1', 'bio12'))
@@ -339,6 +349,10 @@ print.ReducedImageStack <- function(x, ...) {
 #' @examples
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
 #'
 #' data("occ_virtual_species")
 #' occ_virtual_species <- occ_virtual_species %>%
@@ -353,7 +367,7 @@ print.ReducedImageStack <- function(x, ...) {
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   %>% slice('band', c(1, 12))
+#'   slice('band', c(1, 12))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
@@ -403,11 +417,16 @@ print.PAConversion <- function(x, ...) {
 #'
 #' @export
 #' @examples
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
+#'
 #' data("occ_virtual_species")
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   %>% slice('band', c(1, 12))
+#'   slice('band', c(1, 12))
 #' occ_outliers <- suspicious_env_outliers(
 #'   occ = occ_virtual_species, variables = env_vars,
 #'   z_outlier = 5, outliers_print = 4L)

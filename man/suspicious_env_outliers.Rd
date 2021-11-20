@@ -9,7 +9,7 @@ suspicious_env_outliers(
   occ_crs = 4326,
   variables,
   rm_outliers = FALSE,
-  seed = 10,
+  seed = 10L,
   ...
 )
 }
@@ -26,6 +26,9 @@ The default value is \code{4326}, which is the geographic coordinate system.}
 
 \item{rm_outliers}{(\code{logical}) The option to remove the suspicious outliers or not.
 The default is \code{FALSE}.}
+
+\item{seed}{(\code{integer}) The random seed used in the modeling. It should be an
+integer. The default is \code{10L}.}
 
 \item{...}{Other arguments passed to function \code{\link{outlier.tree}} in
 package \code{outliertree}.}
@@ -48,11 +51,16 @@ Please check more details in R documentation of function
 \code{\link{outlier.tree}} in package \code{outliertree} and their GitHub.
 }
 \examples{
+library(dplyr)
+library(sf)
+library(stars)
+library(itsdm)
+
 data("occ_virtual_species")
 env_vars <- system.file(
   'extdata/bioclim_africa_10min.tif',
   package = 'itsdm') \%>\% read_stars() \%>\%
-  \%>\% slice('band', c(1, 12))
+  slice('band', c(1, 12))
 occ_outliers <- suspicious_env_outliers(
   occ = occ_virtual_species, variables = env_vars,
   z_outlier = 5, outliers_print = 4L)

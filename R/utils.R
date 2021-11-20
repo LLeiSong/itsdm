@@ -3,6 +3,7 @@
 .abs_mean <- function(v) mean(abs(v))
 
 # Get spatial resolution of stars
+#' @importFrom stars st_dimensions
 .res_stars <- function(s){
   x <- abs(st_dimensions(s)$x$delta)
   y <- abs(st_dimensions(s)$y$delta)
@@ -22,6 +23,8 @@
 }
 
 # Approximately calculate AUC_ratio
+#' @importFrom dplyr %>%
+#'
 .auc_ratio <- function(occ, full) {
   roc_r <- .roc_ratio(occ, full)
   roc_r <- roc_r %>% arrange(cell)
@@ -51,6 +54,7 @@
 .mean_value <- function(x) mean(x[[1]], na.rm = T)
 
 # Linear stretch of single-band stars
+#' @importFrom stats quantile
 .stars_stretch <- function(x, # stars
                            new_values = NULL,
                            minv = 0,
@@ -97,6 +101,7 @@
 }
 
 # Linear stretch of a vector, paralleling to .stars_stretch
+#' @importFrom stats quantile
 .stretch <- function(x,
                      new_values = NULL,
                      minv = 0,
@@ -130,12 +135,15 @@
 }
 
 # Predict_wrapper for SHAP
+#' @importFrom stats predict
 .pfun_shap <- function(X.model, newdata) {
   pred <- 1 - predict(X.model, newdata)
   .stretch(pred)}
 
 # Functions related to convert_to_pa
 # Calculate quantile of stars
+#' @importFrom stats quantile
+#'
 .quantile_stars <- function(x, # stars with one band
                             ...,
                             na.rm = TRUE) {
@@ -154,6 +162,9 @@
 # Function for a line with intercept (b) and slope (a)
 .lab = function(x, b, a) a * x + b
 
+# Function to find solutions
+#' @importFrom stats runif
+#' @importFrom raster ncell
 .quick_bernoulli_trial <- function(suitability,
                                    seed = 1,
                                    ...) {
@@ -232,19 +243,20 @@
 
 # kruskal.test between RasterStack and RasterLayer
 ## Return the p values
-.kruskal.test.raster <- function(rst_stack,
-                                 cat_rst){
-  # Convert data
-  cats <- getValues(cat_rst)
-  cors <- sapply(1:nlayers(rst_stack), function(n) {
-    vals <- getValues(subset(rst_stack, n))
-    # Calculate
-    kruskal.test(x = vals, g = cats, na.action = 'na.omit')[['p.value']]
-  })
-  data.frame(cors) %>% setNames(names(cat_rst))
-}
+# .kruskal.test.raster <- function(rst_stack,
+#                                  cat_rst){
+#   # Convert data
+#   cats <- getValues(cat_rst)
+#   cors <- sapply(1:nlayers(rst_stack), function(n) {
+#     vals <- getValues(subset(rst_stack, n))
+#     # Calculate
+#     kruskal.test(x = vals, g = cats, na.action = 'na.omit')[['p.value']]
+#   })
+#   data.frame(cors) %>% setNames(names(cat_rst))
+# }
 
 # Convert categorical variables to numeric in RasterStack
+#' @importFrom raster deratify
 .remove_cats <- function(rst_stack){
   # Check
   categ_vars <- names(rst_stack)[is.factor(rst_stack)]
@@ -259,6 +271,7 @@
 }
 
 ## Get the mode of categorical integerish vector
+#' @importFrom dplyr %>%
 .mode <- function(v) {
   # Get mode
   summary(v) %>% sort(decreasing = T) %>%

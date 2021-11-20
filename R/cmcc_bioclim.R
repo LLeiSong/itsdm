@@ -30,15 +30,21 @@
 #' @import ncdf4
 #' @importFrom glue glue
 #' @importFrom raster stack
-#' @importFrom sf st_as_sf st_make_valid
-#' @importFrom stars read_stars write_stars st_as_stars
+#' @importFrom sf st_as_sf st_make_valid st_crop
+#' @importFrom stars read_stars write_stars st_as_stars st_set_dimensions
+#' @importFrom utils download.file tail
+#' @importFrom methods is
 #' @export
 #' @examples
-#' bry <- sf::st_polygon(
+#' library(dplyr)
+#' library(sf)
+#'
+#' bry <- st_polygon(
 #'   list(rbind(c(29.34, -11.72), c(29.34, -0.95),
 #'              c(40.31, -0.95), c(40.31, -11.72),
 #'              c(29.34, -11.72)))) %>%
-#'   st_sfc(bry, crs = 4326)
+#'   st_sfc(crs = 4326)
+#'
 #' cmcc_bios <- cmcc_bioclim(bry = bry, nm_mark = 'tza')
 #'
 cmcc_bioclim <- function(bry = NULL,

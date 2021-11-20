@@ -24,13 +24,16 @@
 #' \item{cors_reduced (\code{\link{data.frame}}) A table of Pearson correlations
 #' between variables after dimension reduction.}}
 #' @import checkmate
-#' @importFrom sf st_as_sf
+#' @importFrom sf st_as_sf st_crop
 #' @importFrom raster stack layerStats mask rasterize subset
 #' @importFrom stars st_as_stars
 #' @importFrom dplyr between select
 #' @importFrom purrr is_empty
+#' @importFrom methods is as
 #' @export
 #' @examples
+#' library(itsdm)
+#'
 #' worldclim <- worldclim2(var = "bio")
 #' img_reduced <- dim_reduce(worldclim, threshold = 0.7,
 #'   preferred_vars = c('bio1', 'bio12'))

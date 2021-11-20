@@ -39,12 +39,18 @@
 #' 186.3 (2005): 280-289.}}
 #' }
 #'
-#' @importFrom dplyr select slice as_tibble pull
+#' @importFrom dplyr select slice as_tibble pull %>%
 #' @importFrom stars st_as_stars
+#' @importFrom stats predict setNames
+#' @importFrom rlang :=
 #' @export
 #' @examples
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
 #'
 #' data("occ_virtual_species")
 #' occ_virtual_species <- occ_virtual_species %>%
@@ -59,7 +65,7 @@
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   %>% slice('band', c(1, 12))
+#'   slice('band', c(1, 12))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
@@ -103,7 +109,8 @@ marginal_response <- function(model,
       min(variables %>% select(nm) %>% pull, na.rm = T)})
     maxs <- sapply(bands_cont, function(nm) {
       max(variables %>% select(nm) %>% pull, na.rm = T)})
-    vals_cont <- do.call(cbind, lapply(1:length(mins), function(n) {
+    vals_cont <- do.call(
+      cbind, lapply(1:length(mins), function(n) {
       seq(from = mins[n], to = maxs[n],
           length.out = si)})) %>%
       data.frame() %>%

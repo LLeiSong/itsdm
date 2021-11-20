@@ -30,16 +30,22 @@
 #'
 #' @details
 #' \href{https://worldclim.org/data/index.html}{Web page page for this dataset}
+#' @importFrom method is
+#' @importFrom utils download.file tail
 #' @importFrom glue glue
-#' @importFrom sf st_as_sf st_make_valid
+#' @importFrom sf st_as_sf st_make_valid st_is_valid st_crop
 #' @importFrom stars read_stars write_stars
+#' @importFrom methods is
 #' @export
 #' @examples
+#' library(sf)
+#' library(itsdm)
+#'
 #' bry <- sf::st_polygon(
 #'   list(rbind(c(29.34, -11.72), c(29.34, -0.95),
 #'              c(40.31, -0.95), c(40.31, -11.72),
 #'              c(29.34, -11.72)))) %>%
-#'   st_sfc(bry, crs = 4326)
+#'   st_sfc(crs = 4326)
 #' bios <- worldclim2(var = "bio", res = 10, bry = bry, nm_mark = 'tza')
 worldclim2 <- function(var = "tmin",
                        res = 10,

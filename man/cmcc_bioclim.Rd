@@ -41,11 +41,15 @@ The function is experimental at the moment, because the download server
 of this dataset is not as stable as Worldclim yet.
 }
 \examples{
-bry <- sf::st_polygon(
+library(dplyr)
+library(sf)
+
+bry <- st_polygon(
   list(rbind(c(29.34, -11.72), c(29.34, -0.95),
              c(40.31, -0.95), c(40.31, -11.72),
              c(29.34, -11.72)))) \%>\%
-  st_sfc(bry, crs = 4326)
+  st_sfc(crs = 4326)
+
 cmcc_bios <- cmcc_bioclim(bry = bry, nm_mark = 'tza')
 
 }

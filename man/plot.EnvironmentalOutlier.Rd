@@ -24,11 +24,16 @@ A \code{ggplot2} figure of outliers distribution among all observations.
 Display observations and outliers in a dataset.
 }
 \examples{
+library(dplyr)
+library(sf)
+library(stars)
+library(itsdm)
+
 data("occ_virtual_species")
 env_vars <- system.file(
   'extdata/bioclim_africa_10min.tif',
   package = 'itsdm') \%>\% read_stars() \%>\%
-  \%>\% slice('band', c(1, 12))
+  slice('band', c(1, 12))
 occ_outliers <- suspicious_env_outliers(
   occ = occ_virtual_species, variables = env_vars,
   z_outlier = 5, outliers_print = 4L)

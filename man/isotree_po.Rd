@@ -38,6 +38,9 @@ The default value is \code{4326}, which is the geographic coordinate system.}
 
 \item{variables}{(\code{RasterStack} or \code{stars}) The stack of environmental variables.}
 
+\item{categ_vars}{(\code{vector} of \code{character} or \code{NULL}) The names of categorical
+variables. Must be the same as the names in \code{variables}.}
+
 \item{ntrees}{(\code{integer}) The number of trees for the isolation forest. It must
 be integer, which you could use function \code{\link{as.integer}} to convert to.
 The default is \code{100L}.}
@@ -65,11 +68,11 @@ integer. The default is \code{10L}.}
 \item{response}{(\code{logical}) If \code{TRUE}, generate response curves.
 The default is \code{TRUE}.}
 
+\item{check_variable}{(\code{logical}) If \code{TRUE}, check the variable importance.
+The default is \code{TRUE}.}
+
 \item{visualize}{(\code{logical}) If \code{TRUE}, generate the essential figures related to
 the model. The default is \code{FALSE}.}
-
-\item{check_variables}{(\code{logical}) If \code{TRUE}, check the variable importance.
-The default is \code{TRUE}.}
 }
 \value{
 (\code{POIsotree}) A list of
@@ -111,6 +114,10 @@ the R documentation of function \code{\link{isolation.forest}}.
 \examples{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
+library(dplyr)
+library(sf)
+library(stars)
+library(itsdm)
 
 data("occ_virtual_species")
 occ_virtual_species <- occ_virtual_species \%>\%
@@ -125,7 +132,7 @@ occ_test <- occ_test \%>\% select(-id)
 env_vars <- system.file(
   'extdata/bioclim_africa_10min.tif',
   package = 'itsdm') \%>\% read_stars() \%>\%
-  \%>\% slice('band', c(1, 12))
+  slice('band', c(1, 12))
 
 mod_virtual_species <- isotree_po(occ = occ, occ_test = occ_test,
   variables = env_vars, ntrees = 200, sample_rate = 0.8, ndim = 0L,

@@ -39,10 +39,13 @@
 #' @import ncdf4
 #' @importFrom glue glue
 #' @importFrom raster stack
-#' @importFrom sf st_as_sf st_make_valid
-#' @importFrom stars read_stars write_stars st_as_stars
+#' @importFrom sf st_as_sf st_make_valid st_crop
+#' @importFrom stars read_stars write_stars st_as_stars st_set_dimensions
+#' @importFrom utils tail download.file
+#' @importFrom methods is
 #' @export
 #' @examples
+#' library(itsdm)
 #' future_cmcc_bioclim(esm = 'GFDL-ESM2M', rcp = 45, interval = "2040-2079",
 #' return_stack = FALSE)
 #'

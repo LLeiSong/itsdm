@@ -44,6 +44,10 @@ only using this variable changes as it is varied.
 \examples{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
+library(dplyr)
+library(sf)
+library(stars)
+library(itsdm)
 
 data("occ_virtual_species")
 occ_virtual_species <- occ_virtual_species \%>\%
@@ -58,7 +62,7 @@ occ_test <- occ_test \%>\% select(-id)
 env_vars <- system.file(
   'extdata/bioclim_africa_10min.tif',
   package = 'itsdm') \%>\% read_stars() \%>\%
-  \%>\% slice('band', c(1, 12))
+  slice('band', c(1, 12))
 
 mod <- isotree_po(
   occ = occ, occ_test = occ_test,

@@ -72,7 +72,7 @@ ggplot() +
 
 ## Plot independent response curves
 plot(it_sdm$independent_responses, 
-  target_var = c('bio1', 'bio12', 'bio15'))
+  target_var = c('bio1', 'bio12'))
 ```
 
 ## Package updates

@@ -41,12 +41,14 @@
 #' @details
 #' \href{https://worldclim.org/data/index.html}{Web page page for this dataset}
 #' @importFrom glue glue
-#' @importFrom sf st_as_sf st_make_valid
-#' @importFrom stars read_stars write_stars
+#' @importFrom sf st_as_sf st_make_valid st_crop
+#' @importFrom stars read_stars write_stars st_set_dimensions
+#' @importFrom utils tail download.file
+#' @importFrom methods is
 #' @export
 #' @examples
 #' future_worldclim2("tmin", 10, "BCC-CSM2-MR",
-#' "ssp585", "2021-2040", return_stack = FALSE)
+#'   "ssp585", "2021-2040", return_stack = FALSE)
 future_worldclim2 <- function(var = "tmin",
                               res = 10,
                               gcm = "BCC-CSM2-MR",

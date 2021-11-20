@@ -18,13 +18,17 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  warning = F
+  warning = F,
+  eval = F
 )
 ```
 
 ## Set up
 ```{r setup, warning=F, message=F, eval=T}
+library(here, quietly = T)
 library(itsdm, quietly = T)
+library(ggplot2, quietly = T)
+library(virtualspecies, quietly = T)
 ```
 
 ## Prepare environmental variables
