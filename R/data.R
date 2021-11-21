@@ -3,12 +3,12 @@
 #' The overall continental boundary of mainland Africa queried from `rnaturalearth`
 #' and get processed.
 #'
-#' @format A `sf` with one rows and 2 fields
+#' @format A \code{\link{sf}} with one rows and 2 fields
 #' \describe{
-#' \item{name (`character`) The name of the polygon: Africa}
-#' \item{area (\code{\link{units}}) The united number of the overall area. This
-#' is not a consensus area, but just a calculated area under this resolution.}
-#' \item{geometry (\code{\link{sfc}}) The simple polygon feature of the boundary}}
+#' \item{name}{(`character`) The name of the polygon: Africa}
+#' \item{area}{(\code{\link{units}}) The united number of the overall area in km2.
+#' This is not a consensus area, but just a calculated area under this resolution.}
+#' \item{geometry}{(\code{\link{sfc}}) The simple polygon feature of the boundary}}
 #'
 #' @source \code{\link{rnaturalearth}}
 #'
@@ -22,8 +22,8 @@
 #'
 #' @format A `data.frame` with 2000 rows and 2 fields
 #' \describe{
-#' \item{x (`numeric`) The x coordinates of the records in geographic coordinate system}
-#' \item{y (`numeric`) The y coordinates of the records}}
+#' \item{x}{(`numeric`) The x coordinates of the records in geographic coordinate system}
+#' \item{y}{(`numeric`) The y coordinates of the records}}
 #'
 #' @details
 #' The environmental niche of the virtual species is made by defining its

@@ -108,6 +108,7 @@
 #' @importFrom patchwork plot_layout
 #' @export
 #' @examples
+#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -141,6 +142,7 @@
 #'   model = mod$model,
 #'   variables = mod$variables)
 #' plot(marginal_responses, target_var = 'bio1')
+#'}
 #'
 plot.MarginalResponse <- function(x,
                                   target_var = NA,
@@ -184,6 +186,7 @@ plot.MarginalResponse <- function(x,
 #' @importFrom dplyr arrange slice
 #' @export
 #' @examples
+#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -217,6 +220,7 @@ plot.MarginalResponse <- function(x,
 #'   model = mod$model,
 #'   variables = mod$variables)
 #' plot(independent_responses)
+#'}
 #'
 plot.IndependentResponse <- function(x,
                                      target_var = NA,
@@ -264,6 +268,7 @@ plot.IndependentResponse <- function(x,
 #' @importFrom dplyr mutate mutate_if
 #' @export
 #' @examples
+#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -297,6 +302,7 @@ plot.IndependentResponse <- function(x,
 #'   model = mod$model,
 #'   var_occ = mod$var_train %>% st_drop_geometry())
 #' plot(var_dependence, target_var = 'bio1', related_var = 'bio12')
+#'}
 #'
 plot.VariableDependence <- function(x,
                                     target_var = NA,
@@ -522,6 +528,7 @@ plot.VariableDependence <- function(x,
 #' @importFrom dplyr arrange slice
 #' @export
 #' @examples
+#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -558,6 +565,7 @@ plot.VariableDependence <- function(x,
 #'     st_drop_geometry() %>% slice(1:10))
 #' plot(var_contribution, plot_each_obs = T, num_features = 2)
 #' plot(var_contribution)
+#'}
 #'
 plot.VariableContribution <- function(x,
                                       plot_each_obs = FALSE,
@@ -651,6 +659,7 @@ plot.VariableContribution <- function(x,
 #' @importFrom rlang .data
 #' @export
 #' @examples
+#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -686,6 +695,7 @@ plot.VariableContribution <- function(x,
 #'   var_occ_test = mod$var_test %>% st_drop_geometry(),
 #'   variables = mod$variables)
 #' plot(var_analysis)
+#'}
 #'
 plot.VariableAnalysis <- function(x, ...) {
   # Pearson correlation
@@ -924,6 +934,7 @@ plot.VariableAnalysis <- function(x, ...) {
 #' @importFrom rlang .data
 #' @export
 #' @examples
+#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -958,6 +969,7 @@ plot.VariableAnalysis <- function(x, ...) {
 #'   var_pred = na.omit(as.vector(mod$prediction[[1]])))
 #'
 #' plot(eval_train)
+#'}
 #'
 plot.POEvaluation <- function(x, ...) {
   cex.axis <- 1
@@ -1065,6 +1077,7 @@ plot.POEvaluation <- function(x, ...) {
 #' @importFrom rlang .data
 #' @export
 #' @examples
+#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -1097,6 +1110,7 @@ plot.POEvaluation <- function(x, ...) {
 #' # Threshold conversion
 #' pa_thred <- convert_to_pa(mod$prediction, method = 'threshold', beta = 0.5)
 #' plot(pa_thred)
+#'}
 #'
 plot.PAConversion <- function(x, ...) {
   g1 <- ggplot() +
@@ -1150,6 +1164,7 @@ plot.PAConversion <- function(x, ...) {
 #' @importFrom stars geom_stars
 #' @export
 #' @examples
+#' \donttest{
 #' library(dplyr)
 #' library(sf)
 #' library(stars)
@@ -1168,6 +1183,7 @@ plot.PAConversion <- function(x, ...) {
 #' plot(occ_outliers)
 #' plot(occ_outliers,
 #'   overlay_raster = env_vars %>% slice('band', 1))
+#'}
 #'
 plot.EnvironmentalOutlier <- function(x,
                                       overlay_raster = NULL,

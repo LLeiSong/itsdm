@@ -21,6 +21,7 @@ Display raster of suitability, probability of occurrence,
 presence-absence binary map from PA conversion.
 }
 \examples{
+\donttest{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
 library(dplyr)
@@ -53,6 +54,7 @@ mod <- isotree_po(
 # Threshold conversion
 pa_thred <- convert_to_pa(mod$prediction, method = 'threshold', beta = 0.5)
 plot(pa_thred)
+}
 
 }
 \seealso{

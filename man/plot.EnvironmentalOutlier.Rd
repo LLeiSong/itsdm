@@ -24,6 +24,7 @@ A \code{ggplot2} figure of outliers distribution among all observations.
 Display observations and outliers in a dataset.
 }
 \examples{
+\donttest{
 library(dplyr)
 library(sf)
 library(stars)
@@ -42,6 +43,7 @@ occ_outliers <- suspicious_env_outliers(
 plot(occ_outliers)
 plot(occ_outliers,
   overlay_raster = env_vars \%>\% slice('band', 1))
+}
 
 }
 \seealso{

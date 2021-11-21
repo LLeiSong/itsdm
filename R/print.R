@@ -13,6 +13,7 @@
 #'
 #' @export
 #' @examples
+#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -49,6 +50,7 @@
 #'   variables = mod$variables)
 #'
 #' print(variable_analysis)
+#'}
 #'
 print.VariableAnalysis <- function(x, ...){
   cat('Relative variable importance\n')
@@ -226,6 +228,7 @@ print.VariableAnalysis <- function(x, ...){
 #'
 #' @export
 #' @examples
+#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -260,6 +263,7 @@ print.VariableAnalysis <- function(x, ...){
 #'   var_pred = na.omit(as.vector(mod$prediction[[1]])))
 #'
 #' print(eval_train)
+#'}
 #'
 print.POEvaluation <- function(x, ...){
   # CVI
@@ -310,6 +314,7 @@ print.POEvaluation <- function(x, ...){
 #'
 #' @export
 #' @examples
+#' \donttest{
 #' library(itsdm)
 #' worldclim <- worldclim2(var = "bio")
 #'
@@ -317,8 +322,8 @@ print.POEvaluation <- function(x, ...){
 #'   preferred_vars = c('bio1', 'bio12'))
 #'
 #' print(img_reduced)
+#'}
 #'
-
 print.ReducedImageStack <- function(x, ...) {
   cat('Dimension reduction\n')
   cat(sprintf('Correlation threshold: %s\n', x$threshold))
@@ -352,6 +357,7 @@ print.ReducedImageStack <- function(x, ...) {
 #'
 #' @export
 #' @examples
+#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -384,6 +390,7 @@ print.ReducedImageStack <- function(x, ...) {
 #' # Threshold conversion
 #' pa_thred <- convert_to_pa(mod$prediction, method = 'threshold', beta = 0.5)
 #' print(pa_thred)
+#'}
 #'
 print.PAConversion <- function(x, ...) {
   # threshold
@@ -422,6 +429,7 @@ print.PAConversion <- function(x, ...) {
 #'
 #' @export
 #' @examples
+#' \donttest{
 #' library(dplyr)
 #' library(sf)
 #' library(stars)
@@ -438,6 +446,7 @@ print.PAConversion <- function(x, ...) {
 #'   z_outlier = 5, outliers_print = 4L)
 #'
 #' print(occ_outliers)
+#'}
 #'
 print.EnvironmentalOutlier <- function(x, ...) {
   print(x$outlier_details)

@@ -20,6 +20,7 @@ Display the most general and informative characteristics of
 a PAConversion object.
 }
 \examples{
+\donttest{
 library(dplyr)
 library(sf)
 library(stars)
@@ -36,6 +37,7 @@ occ_outliers <- suspicious_env_outliers(
   z_outlier = 5, outliers_print = 4L)
 
 print(occ_outliers)
+}
 
 }
 \seealso{

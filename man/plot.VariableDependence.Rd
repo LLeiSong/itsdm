@@ -29,6 +29,7 @@ When it is \code{0}, no smooth applied. The default is \code{0.3}.}
 Plot variable dependence curves using ggplot2.
 }
 \examples{
+\donttest{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
 library(dplyr)
@@ -62,6 +63,7 @@ var_dependence <- variable_dependence(
   model = mod$model,
   var_occ = mod$var_train \%>\% st_drop_geometry())
 plot(var_dependence, target_var = 'bio1', related_var = 'bio12')
+}
 
 }
 \seealso{

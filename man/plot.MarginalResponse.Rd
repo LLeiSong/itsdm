@@ -25,6 +25,7 @@ When it is \code{0}, no smooth applied. The default is \code{0.3}.}
 Plot marginal response curves using ggplot2.
 }
 \examples{
+\donttest{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
 library(dplyr)
@@ -58,6 +59,7 @@ marginal_responses <- marginal_response(
   model = mod$model,
   variables = mod$variables)
 plot(marginal_responses, target_var = 'bio1')
+}
 
 }
 \seealso{

@@ -7,8 +7,8 @@
 \format{
 A \code{data.frame} with 2000 rows and 2 fields
 \describe{
-\item{x (\code{numeric}) The x coordinates of the records in geographic coordinate system}
-\item{y (\code{numeric}) The y coordinates of the records}}
+\item{x}{(\code{numeric}) The x coordinates of the records in geographic coordinate system}
+\item{y}{(\code{numeric}) The y coordinates of the records}}
 }
 \usage{
 occ_virtual_species

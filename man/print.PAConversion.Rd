@@ -20,6 +20,7 @@ Display the most general and informative characteristics of
 a PAConversion object.
 }
 \examples{
+\donttest{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
 library(dplyr)
@@ -52,6 +53,7 @@ mod <- isotree_po(
 # Threshold conversion
 pa_thred <- convert_to_pa(mod$prediction, method = 'threshold', beta = 0.5)
 print(pa_thred)
+}
 
 }
 \seealso{

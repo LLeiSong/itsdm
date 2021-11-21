@@ -25,6 +25,7 @@ When it is \code{0}, no smooth applied. The default is \code{0.3}.}
 Plot independent response curves using ggplot2.
 }
 \examples{
+\donttest{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
 library(dplyr)
@@ -58,6 +59,7 @@ independent_responses <- independent_response(
   model = mod$model,
   variables = mod$variables)
 plot(independent_responses)
+}
 
 }
 \seealso{

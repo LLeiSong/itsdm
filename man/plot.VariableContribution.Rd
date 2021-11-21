@@ -27,6 +27,7 @@ Plot variable contribution for target observation separately
 or together using ggplot2.
 }
 \examples{
+\donttest{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
 library(dplyr)
@@ -63,6 +64,7 @@ var_contribution <- variable_contrib(
     st_drop_geometry() \%>\% slice(1:10))
 plot(var_contribution, plot_each_obs = T, num_features = 2)
 plot(var_contribution)
+}
 
 }
 \seealso{

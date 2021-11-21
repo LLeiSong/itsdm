@@ -20,6 +20,7 @@ Display the most general and informative characteristics of
 a variable importance object.
 }
 \examples{
+\donttest{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
 library(dplyr)
@@ -56,6 +57,7 @@ var_analysis <- variable_analysis(
   variables = mod$variables)
 
 print(variable_analysis)
+}
 
 }
 \seealso{

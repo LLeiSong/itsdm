@@ -20,6 +20,7 @@ according to multiple metrics.
 Display informative and detailed figures of variable importance.
 }
 \examples{
+\donttest{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
 library(dplyr)
@@ -55,6 +56,7 @@ var_analysis <- variable_analysis(
   var_occ_test = mod$var_test \%>\% st_drop_geometry(),
   variables = mod$variables)
 plot(var_analysis)
+}
 
 }
 \seealso{

@@ -20,6 +20,7 @@ Display the most general and informative characteristics of
 a presence-only evaluation object.
 }
 \examples{
+\donttest{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
 library(dplyr)
@@ -54,6 +55,7 @@ eval_train <- evaluate_po(mod$model,
   var_pred = na.omit(as.vector(mod$prediction[[1]])))
 
 print(eval_train)
+}
 
 }
 \seealso{
