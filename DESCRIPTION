@@ -40,8 +40,10 @@ Suggests:
     rgbif,
     virtualspecies,
     here,
-    lubridate,
-    scrubr
+    lubridate
+Remotes:
+    ropensci/scrubr
+BugReports: https://github.com/LLeiSong/itsdm/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
