@@ -33,12 +33,12 @@
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 12))
+#'   slice('band', c(1, 5, 12, 16))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200,
-#'   sample_rate = 0.8, ndim = 0L,
+#'   sample_rate = 0.8, ndim = 3L,
 #'   seed = 123L, response = FALSE,
 #'   check_variable = FALSE)
 #'
@@ -47,6 +47,7 @@
 #'   var_occ = mod$var_train %>% st_drop_geometry(),
 #'   var_occ_test = mod$var_test %>% st_drop_geometry(),
 #'   variables = mod$variables)
+#'
 #' print(variable_analysis)
 #'
 print.VariableAnalysis <- function(x, ...){
@@ -245,17 +246,19 @@ print.VariableAnalysis <- function(x, ...){
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 12))
+#'   slice('band', c(1, 5, 12, 16))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200,
-#'   sample_rate = 0.8, ndim = 0L,
+#'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   check_variable = FALSE)
+#'
 #' eval_train <- evaluate_po(mod$model,
 #'   occ_pred = mod$pred_train$prediction,
 #'   var_pred = na.omit(as.vector(mod$prediction[[1]])))
+#'
 #' print(eval_train)
 #'
 print.POEvaluation <- function(x, ...){
@@ -309,8 +312,10 @@ print.POEvaluation <- function(x, ...){
 #' @examples
 #' library(itsdm)
 #' worldclim <- worldclim2(var = "bio")
+#'
 #' img_reduced <- dim_reduce(worldclim, threshold = 0.7,
 #'   preferred_vars = c('bio1', 'bio12'))
+#'
 #' print(img_reduced)
 #'
 
@@ -367,12 +372,12 @@ print.ReducedImageStack <- function(x, ...) {
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 12))
+#'   slice('band', c(1, 5, 12, 16))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200,
-#'   sample_rate = 0.8, ndim = 0L,
+#'   sample_rate = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
 #'   check_variable = FALSE)
 #'
@@ -426,10 +431,12 @@ print.PAConversion <- function(x, ...) {
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 12))
+#'   slice('band', c(1, 5, 12, 16))
+#'
 #' occ_outliers <- suspicious_env_outliers(
 #'   occ = occ_virtual_species, variables = env_vars,
 #'   z_outlier = 5, outliers_print = 4L)
+#'
 #' print(occ_outliers)
 #'
 print.EnvironmentalOutlier <- function(x, ...) {

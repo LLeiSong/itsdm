@@ -40,12 +40,12 @@ occ_test <- occ_test \%>\% select(-id)
 env_vars <- system.file(
   'extdata/bioclim_africa_10min.tif',
   package = 'itsdm') \%>\% read_stars() \%>\%
-  slice('band', c(1, 12))
+  slice('band', c(1, 5, 12, 16))
 
 mod <- isotree_po(
   occ = occ, occ_test = occ_test,
   variables = env_vars, ntrees = 200,
-  sample_rate = 0.8, ndim = 0L,
+  sample_rate = 0.8, ndim = 1L,
   seed = 123L, response = FALSE,
   check_variable = FALSE)
 

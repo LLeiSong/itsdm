@@ -39,7 +39,7 @@
 #' 186.3 (2005): 280-289.}}
 #' }
 #'
-#' @importFrom dplyr select slice as_tibble pull %>%
+#' @importFrom dplyr select slice as_tibble pull n %>%
 #' @importFrom stars st_as_stars
 #' @importFrom stats predict setNames
 #' @importFrom rlang :=
@@ -65,12 +65,12 @@
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 12))
+#'   slice('band', c(1, 5, 12, 16))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200,
-#'   sample_rate = 0.8, ndim = 0L,
+#'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   check_variable = FALSE)
 #'
@@ -110,8 +110,8 @@ marginal_response <- function(model,
     maxs <- sapply(bands_cont, function(nm) {
       max(variables %>% select(nm) %>% pull, na.rm = T)})
     vals_cont <- do.call(
-      cbind, lapply(1:length(mins), function(n) {
-      seq(from = mins[n], to = maxs[n],
+      cbind, lapply(1:length(mins), function(m) {
+      seq(from = mins[m], to = maxs[m],
           length.out = si)})) %>%
       data.frame() %>%
       setNames(bands_cont)

@@ -1,4 +1,5 @@
 # An internal function to plot response curves
+#' @importFrom rlang .data
 .plot_responses <- function(response_list,
                             smooth_span = 0.3){
   # Check inputs
@@ -22,7 +23,7 @@
     cex.axis <- 1
     cex.lab <- 1
     if (smooth_span == 0){
-      invisible(g_cont <- ggplot(response_df, aes(x = x, y = y)) +
+      invisible(g_cont <- ggplot(response_df, aes(x = .data$x, y = .data$y)) +
                   geom_line(color = "black") +
                   scale_y_continuous(limits = c(0, 1.0)) +
                   facet_wrap(~variable, scales = 'free', ncol = 2) +
@@ -32,7 +33,7 @@
                         plot.title = element_text(hjust = 0.5)) +
                   theme_linedraw())
     } else {
-      invisible(g_cont <- ggplot(response_df, aes(x = x, y = y)) +
+      invisible(g_cont <- ggplot(response_df, aes(x = .data$x, y = .data$y)) +
                   geom_point(alpha = 0) +
                   stat_smooth(method = 'loess', span = smooth_span, color = "black") +
                   scale_y_continuous(limits = c(0, 1.0)) +
@@ -56,15 +57,15 @@
                responses_cat[[n]] %>%
                  mutate(variable = names(responses_cat)[n])}))
     var_order <- response_df %>%
-      mutate(x = as.numeric(levels(x))[x]) %>%
-      pull(x) %>% unique() %>% sort()
+      mutate(x = as.numeric(levels(.data$x))[.data$x]) %>%
+      pull(.data$x) %>% unique() %>% sort()
     response_df <- response_df %>%
-      mutate(x = factor(x, levels = var_order))
+      mutate(x = factor(.data$x, levels = var_order))
 
     # Draw
     cex.axis <- 1
     cex.lab <- 1
-    g_cat <- ggplot(response_df, aes(x = x, y = y)) +
+    g_cat <- ggplot(response_df, aes(x = .data$x, y = .data$y)) +
       geom_bar(fill = "black",
                stat = 'identity',
                position = position_dodge()) +
@@ -127,12 +128,12 @@
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 12))
+#'   slice('band', c(1, 5, 12, 16))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200,
-#'   sample_rate = 0.8, ndim = 0L,
+#'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   check_variable = FALSE)
 #'
@@ -203,12 +204,12 @@ plot.MarginalResponse <- function(x,
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 12))
+#'   slice('band', c(1, 5, 12, 16))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200,
-#'   sample_rate = 0.8, ndim = 0L,
+#'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   check_variable = FALSE)
 #'
@@ -283,12 +284,12 @@ plot.IndependentResponse <- function(x,
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 12))
+#'   slice('band', c(1, 5, 12, 16))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200,
-#'   sample_rate = 0.8, ndim = 0L,
+#'   sample_rate = 0.8, ndim = 3L,
 #'   seed = 123L, response = FALSE,
 #'   check_variable = FALSE)
 #'
@@ -541,12 +542,12 @@ plot.VariableDependence <- function(x,
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 12))
+#'   slice('band', c(1, 5, 12, 16))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200,
-#'   sample_rate = 0.8, ndim = 0L,
+#'   sample_rate = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
 #'   check_variable = FALSE)
 #'
@@ -647,6 +648,7 @@ plot.VariableContribution <- function(x,
 #' @import patchwork
 #' @importFrom dplyr summarise across
 #' @importFrom tidyselect all_of
+#' @importFrom rlang .data
 #' @export
 #' @examples
 #' # Using a pseudo presence-only occurrence dataset of
@@ -669,12 +671,12 @@ plot.VariableContribution <- function(x,
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 12))
+#'   slice('band', c(1, 5, 12, 16))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200,
-#'   sample_rate = 0.8, ndim = 0L,
+#'   sample_rate = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
 #'   check_variable = FALSE)
 #'
@@ -692,26 +694,26 @@ plot.VariableAnalysis <- function(x, ...) {
   # Training
   ## Rotate dataset
   var_order_train <- cor_x %>%
-    filter(usage == 'Train') %>%
-    filter(method == 'Only') %>%
-    arrange(value) %>% pull(variable)
+    filter(.data$usage == 'Train') %>%
+    filter(.data$method == 'Only') %>%
+    arrange(.data$value) %>% pull(.data$variable)
   cor_x_train <- cor_x %>%
-    filter(usage == 'Train') %>%
+    filter(.data$usage == 'Train') %>%
     rbind(tibble(variable = rep('', 2),
                  method = c('full', 'Only'),
                  usage = rep('Train', 2),
                  value = c(1, 0))) %>%
     mutate(variable = factor(
-      variable,
+      .data$variable,
       levels = c('', var_order_train)),
       method = factor(
-        method,
+        .data$method,
         levels = c('full', 'Only', 'Without')))
 
   ## Plot
   g_cor_train <- ggplot(cor_x_train,
-         aes(x = variable,
-             y = value, fill = method)) +
+         aes(x = .data$variable,
+             y = .data$value, fill = .data$method)) +
     geom_bar(stat = 'identity',
              position = position_dodge()) +
     ggtitle('Jackknife of correlation on training data') +
@@ -732,25 +734,25 @@ plot.VariableAnalysis <- function(x, ...) {
   # Test
   ## Rotate dataset
   var_order_test <- cor_x %>%
-    filter(usage == 'Test') %>%
-    filter(method == 'Only') %>%
-    arrange(value) %>% pull(variable)
+    filter(.data$usage == 'Test') %>%
+    filter(.data$method == 'Only') %>%
+    arrange(.data$value) %>% pull(.data$variable)
   cor_x_test <- cor_x %>%
-    filter(usage == 'Test') %>%
+    filter(.data$usage == 'Test') %>%
     rbind(tibble(variable = rep('', 2),
                  method = c('full', 'Only'),
                  usage = rep('Test', 2),
                  value = c(1, 0))) %>%
     mutate(variable = factor(
-      variable,
+      .data$variable,
       levels = c('', var_order_test)),
       method = factor(
-        method,
+        .data$method,
         levels = c('full', 'Only', 'Without')))
   ## Plot
   g_cor_test <- ggplot(cor_x_test) +
-    geom_bar(aes(x = variable,
-                 y = value, fill = method),
+    geom_bar(aes(x = .data$variable,
+                 y = .data$value, fill = .data$method),
              stat = 'identity',
              position = position_dodge()) +
     ggtitle('Jackknife of correlation on test data') +
@@ -775,26 +777,26 @@ plot.VariableAnalysis <- function(x, ...) {
   # Training
   ## Rotate dataset
   var_order_train <- auc_r %>%
-    filter(usage == 'Train') %>%
-    filter(method == 'Only') %>%
-    arrange(value) %>% pull(variable)
+    filter(.data$usage == 'Train') %>%
+    filter(.data$method == 'Only') %>%
+    arrange(.data$value) %>% pull(.data$variable)
   auc_r_train <- auc_r %>%
-    filter(usage == 'Train') %>%
+    filter(.data$usage == 'Train') %>%
     rbind(tibble(variable = rep('', 2),
                  method = c('full', 'Only'),
                  usage = rep('Train', 2),
                  value = c(full_auc_r$full_auc_train, 0))) %>%
     mutate(variable = factor(
-      variable,
+      .data$variable,
       levels = c('', var_order_train)),
       method = factor(
-        method,
+        .data$method,
         levels = c('full', 'Only', 'Without')))
 
   ## Plot
   g_auc_train <- ggplot(auc_r_train,
-                    aes(x = variable,
-                        y = value, fill = method)) +
+                    aes(x = .data$variable,
+                        y = .data$value, fill = .data$method)) +
     geom_bar(stat = 'identity',
              position = position_dodge()) +
     ggtitle('Jackknife of AUC on training data') +
@@ -817,26 +819,26 @@ plot.VariableAnalysis <- function(x, ...) {
   # Test
   ## Rotate dataset
   var_order_test <- auc_r %>%
-    filter(usage == 'Test') %>%
-    filter(method == 'Only') %>%
-    arrange(value) %>% pull(variable)
+    filter(.data$usage == 'Test') %>%
+    filter(.data$method == 'Only') %>%
+    arrange(.data$value) %>% pull(.data$variable)
   auc_r_test <- auc_r %>%
-    filter(usage == 'Test') %>%
+    filter(.data$usage == 'Test') %>%
     rbind(tibble(variable = rep('', 2),
                  method = c('full', 'Only'),
                  usage = rep('Test', 2),
                  value = c(full_auc_r$full_auc_test, 0))) %>%
     mutate(variable = factor(
-      variable,
+      .data$variable,
       levels = c('', var_order_test)),
       method = factor(
-        method,
+        .data$method,
         levels = c('full', 'Only', 'Without')))
 
   ## Plot
   g_auc_test <- ggplot(auc_r_test,
-                        aes(x = variable,
-                            y = value, fill = method)) +
+                        aes(x = .data$variable,
+                            y = .data$value, fill = .data$method)) +
     geom_bar(stat = 'identity',
              position = position_dodge()) +
     ggtitle('Jackknife of AUC on test data') +
@@ -866,8 +868,8 @@ plot.VariableAnalysis <- function(x, ...) {
     mutate(variable = factor(row.names(.),
                              levels = row.names(.)))
   g_shap_train <- ggplot(shap_x_train,
-                        aes(x = variable,
-                            y = value)) +
+                        aes(x = .data$variable,
+                            y = .data$value)) +
     geom_bar(stat = 'identity',
              fill = 'black',
              position = position_dodge()) +
@@ -888,8 +890,8 @@ plot.VariableAnalysis <- function(x, ...) {
     mutate(variable = factor(row.names(.),
                              levels = row.names(.)))
   g_shap_test <- ggplot(shap_x_test,
-                         aes(x = variable,
-                             y = value)) +
+                         aes(x = .data$variable,
+                             y = .data$value)) +
     geom_bar(stat = 'identity',
              fill = 'black',
              position = position_dodge()) +
@@ -919,6 +921,7 @@ plot.VariableAnalysis <- function(x, ...) {
 #'
 #' @import ggplot2
 #' @import patchwork
+#' @importFrom rlang .data
 #' @export
 #' @examples
 #' # Using a pseudo presence-only occurrence dataset of
@@ -941,17 +944,19 @@ plot.VariableAnalysis <- function(x, ...) {
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 12))
+#'   slice('band', c(1, 5, 12, 16))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200,
-#'   sample_rate = 0.8, ndim = 0L,
+#'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   check_variable = FALSE)
+#'
 #' eval_train <- evaluate_po(mod$model,
 #'   occ_pred = mod$pred_train$prediction,
 #'   var_pred = na.omit(as.vector(mod$prediction[[1]])))
+#'
 #' plot(eval_train)
 #'
 plot.POEvaluation <- function(x, ...) {
@@ -959,7 +964,7 @@ plot.POEvaluation <- function(x, ...) {
   cex.lab <- 1
   # ROC ratio
   roc_r <- x$roc_ratio$roc_ratio
-  p_roc_r <- ggplot(roc_r, aes(y = presence,x = cell)) +
+  p_roc_r <- ggplot(roc_r, aes(y = .data$presence, x = .data$cell)) +
     geom_line(aes(colour = "roc", linetype = 'roc'), size = 0.8) +
     geom_line(aes(y = cell, x = cell,
                   colour = "chance", linetype = "chance"),
@@ -991,8 +996,8 @@ plot.POEvaluation <- function(x, ...) {
   roc_bg <- x$roc_background$roc_background
   roc_bg <- data.frame(tpr = roc_bg$TPR,
                        fpr = roc_bg$FPR)
-  p_roc_bg <- ggplot(roc_bg, aes(y = tpr,
-                                 x = fpr)) +
+  p_roc_bg <- ggplot(roc_bg, aes(y = .data$tpr,
+                                 x = .data$fpr)) +
     geom_line(aes(colour = "roc", linetype = 'roc'), size = 0.8) +
     geom_line(aes(y = fpr, x = fpr,
                   colour = "chance", linetype = "chance"),
@@ -1023,8 +1028,8 @@ plot.POEvaluation <- function(x, ...) {
   # CBI
   cbi_bins <- data.frame(f_ratio = x$boyce$F.ratio,
                          hs = x$boyce$HS)
-  p_boy <- ggplot(cbi_bins, aes(y = f_ratio,
-                                x = hs)) +
+  p_boy <- ggplot(cbi_bins, aes(y = .data$f_ratio,
+                                x = .data$hs)) +
     geom_line(colour = "black", size = 0.8) +
     geom_hline(yintercept = 1, color = 'red', size = 0.8) +
     scale_x_continuous(n.breaks = 9) +
@@ -1057,6 +1062,7 @@ plot.POEvaluation <- function(x, ...) {
 #' @importFrom dplyr as_tibble
 #' @import ggplot2
 #' @import patchwork
+#' @importFrom rlang .data
 #' @export
 #' @examples
 #' # Using a pseudo presence-only occurrence dataset of
@@ -1079,12 +1085,12 @@ plot.POEvaluation <- function(x, ...) {
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 12))
+#'   slice('band', c(1, 5, 12, 16))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200,
-#'   sample_rate = 0.8, ndim = 0L,
+#'   sample_rate = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
 #'   check_variable = FALSE)
 #'
@@ -1095,7 +1101,8 @@ plot.POEvaluation <- function(x, ...) {
 plot.PAConversion <- function(x, ...) {
   g1 <- ggplot() +
     geom_raster(data = as_tibble(x$suitability),
-                aes(x = x, y = y, fill = prediction)) +
+                aes(x = .data$x, y = .data$y,
+                    fill = .data$prediction)) +
     ggtitle('Suitability') +
     scale_fill_viridis_c('Value', na.value = "transparent") +
     coord_equal() +
@@ -1103,7 +1110,8 @@ plot.PAConversion <- function(x, ...) {
     theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5))
   g2 <- ggplot() +
     geom_raster(data = as_tibble(x$probability_of_occurrence),
-                aes(x = x, y = y, fill = prediction)) +
+                aes(x = .data$x, y = .data$y,
+                    fill = .data$prediction)) +
     ggtitle('Probability of ocurrence') +
     scale_fill_viridis_c('Value', na.value = "transparent") +
     coord_equal() +
@@ -1111,7 +1119,8 @@ plot.PAConversion <- function(x, ...) {
     theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5))
   g3 <- ggplot() +
     geom_raster(data = as_tibble(x$pa_map),
-                aes(x = x, y = y, fill = prediction)) +
+                aes(x = .data$x, y = .data$y,
+                    fill = .data$prediction)) +
     ggtitle('Presence-absence') +
     scale_fill_manual(values = c('yellow', 'red', 'none'),
                       labels = c('Absence', 'Presence', ''),
@@ -1150,10 +1159,12 @@ plot.PAConversion <- function(x, ...) {
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 12))
+#'   slice('band', c(1, 5, 12, 16))
+#'
 #' occ_outliers <- suspicious_env_outliers(
 #'   occ = occ_virtual_species, variables = env_vars,
 #'   z_outlier = 5, outliers_print = 4L)
+#'
 #' plot(occ_outliers)
 #' plot(occ_outliers,
 #'   overlay_raster = env_vars %>% slice('band', 1))

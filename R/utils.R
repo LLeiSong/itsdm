@@ -24,10 +24,11 @@
 
 # Approximately calculate AUC_ratio
 #' @importFrom dplyr %>%
+#' @importFrom rlang .data
 #'
 .auc_ratio <- function(occ, full) {
   roc_r <- .roc_ratio(occ, full)
-  roc_r <- roc_r %>% arrange(cell)
+  roc_r <- roc_r %>% arrange(.data$cell)
   sum(sapply(2:nrow(roc_r), function(n){
     (roc_r$cell[n] - roc_r$cell[n - 1]) * roc_r$presence[n - 1] +
       (roc_r$cell[n] - roc_r$cell[n - 1]) *

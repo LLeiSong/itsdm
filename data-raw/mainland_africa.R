@@ -12,7 +12,11 @@ mainland_africa <- mainland_africa %>%
   st_union() %>%
   st_as_sf() %>%
   rename(geometry = x) %>%
-  st_make_valid()
+  st_make_valid() %>%
+  mutate(name = 'Africa',
+         area = st_area(.) %>%
+           units::set_units('km2')) %>%
+  select(name, area, geometry)
 
 # Save out
 usethis::use_data(mainland_africa, overwrite = TRUE)

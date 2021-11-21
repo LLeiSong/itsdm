@@ -27,8 +27,8 @@
 #' @param ndim (`integer`) ExtensionLevel for isolation forest. It must
 #' be integer, which you could use function \code{\link{as.integer}} to convert to.
 #' Also, it must be no smaller than the dimension of environmental variables.
-#' When it is 0, the model is a traditional isolation forest, otherwise the model
-#' is an extended isolation forest. The default is 0.
+#' When it is 1, the model is a traditional isolation forest, otherwise the model
+#' is an extended isolation forest. The default is 1.
 #' @param seed (`integer`) The random seed used in the modeling. It should be an
 #' integer. The default is `10L`.
 #' @param ... Other arguments that \code{\link{isolation.forest}} needs.
@@ -96,7 +96,7 @@
 #'
 #' @details
 #' Please read details of algorithm \code{\link{isolation.forest}} on
-#' \href{https://github.com/david-cortes/isotree}{its GitHub page}, and
+#' \url{https://github.com/david-cortes/isotree}, and
 #' the R documentation of function \code{\link{isolation.forest}}.
 #'
 #' @import checkmate
@@ -105,7 +105,7 @@
 #' @importFrom stars st_as_stars st_extract st_xy2sfc st_rasterize
 #' @importFrom sf st_as_sf st_crs st_transform st_drop_geometry
 #' @importFrom isotree isolation.forest
-#' @importFrom rlang :=
+#' @importFrom rlang := .data
 #' @importFrom stats na.omit predict
 #' @importFrom methods is
 #' @export
@@ -130,10 +130,10 @@
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 12))
+#'   slice('band', c(1, 5, 12, 16))
 #'
 #' mod_virtual_species <- isotree_po(occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 200, sample_rate = 0.8, ndim = 0L,
+#'   variables = env_vars, ntrees = 200, sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L)
 #'
 isotree_po <- function(
@@ -147,7 +147,7 @@ isotree_po <- function(
   ntrees = 100L, # number of trees
   sample_size = NA, # sample size
   sample_rate = NA, # sample rate
-  ndim = 0L, # extension level
+  ndim = 1L, # extension level
   seed = 10L, # random seed, must be integer
   # Other arguments of isolation.forest
   ...,
@@ -236,7 +236,7 @@ isotree_po <- function(
       warning('Categorical layers detected in RasterStack do not match with categ_vars.')
     }
     variables <- .remove_cats(variables)
-    variables <- st_as_stars(variabels) %>% split('band')
+    variables <- st_as_stars(variables) %>% split('band')
   } else {
     if (length(dim(variables)) == 3) {
       variables <- variables %>% split(3)
@@ -381,7 +381,7 @@ isotree_po <- function(
   pts_bg_occ[[1]][pts_bg_occ[[1]] == 0] <- NA
   pts_bg_occ <- pts_bg_occ %>%
     st_xy2sfc(as_points = T) %>% st_as_sf() %>%
-    sample_n(nrow(pts_occ)) %>% select(geometry)
+    sample_n(nrow(pts_occ)) %>% select(.data$geometry)
   occ_bg_pred <- st_extract(x = var_pred, at = pts_bg_occ)
   var_occ_bg <- st_extract(x = variables,
                            at = pts_bg_occ)
@@ -397,7 +397,7 @@ isotree_po <- function(
     pts_bg_occ_test[[1]][pts_bg_occ_test[[1]] == 0] <- NA
     pts_bg_occ_test <- pts_bg_occ_test %>%
       st_xy2sfc(as_points = T) %>% st_as_sf() %>%
-      sample_n(nrow(pts_occ_test)) %>% select(geometry)
+      sample_n(nrow(pts_occ_test)) %>% select(.data$geometry)
     occ_test_bg_pred <- st_extract(x = var_pred, at = pts_bg_occ_test)
     var_occ_test_bg <- st_extract(x = variables,
                                   at = pts_bg_occ_test)

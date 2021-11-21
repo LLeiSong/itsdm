@@ -101,7 +101,7 @@ dim_reduce <- function(img_stack = NULL,
     # Subset images and make object
     if (if_stars) {
         img_reduced <- img_stack %>% select(row.names(ps_cor)) %>%
-          merge(., name = 'band')
+          merge(name = 'band')
         names(img_reduced) <- 'reduced_image'
     } else {
       img_reduced <- raster::subset(img_stack, row.names(ps_cor))

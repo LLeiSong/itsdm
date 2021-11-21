@@ -1,7 +1,7 @@
 #' @title Calculate variable dependence.
 #' @description Calculate the variable dependence based on Shapley Additive
 #' Explanations (SHAP) method using Shapley values.
-#' @param model (\code{\link{isolation_forest}}). The isolation forest SDM.
+#' @param model (\code{isolation_forest}). The isolation forest SDM.
 #' It could be the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
 #' @param var_occ (`data.frame`, `tibble`) The `data.frame` style table that
 #' include values of environmental variables at occurrence locations.
@@ -66,12 +66,12 @@
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 12))
+#'   slice('band', c(1, 5, 12, 16))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200,
-#'   sample_rate = 0.8, ndim = 0L,
+#'   sample_rate = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
 #'   check_variable = FALSE)
 #'

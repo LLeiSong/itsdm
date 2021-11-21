@@ -13,7 +13,7 @@ isotree_po(
   ntrees = 100L,
   sample_size = NA,
   sample_rate = NA,
-  ndim = 0L,
+  ndim = 1L,
   seed = 10L,
   ...,
   response = TRUE,
@@ -57,8 +57,8 @@ The default is \code{NULL}. Only set either \code{sample_size} or \code{sample_r
 \item{ndim}{(\code{integer}) ExtensionLevel for isolation forest. It must
 be integer, which you could use function \code{\link{as.integer}} to convert to.
 Also, it must be no smaller than the dimension of environmental variables.
-When it is 0, the model is a traditional isolation forest, otherwise the model
-is an extended isolation forest. The default is 0.}
+When it is 1, the model is a traditional isolation forest, otherwise the model
+is an extended isolation forest. The default is 1.}
 
 \item{seed}{(\code{integer}) The random seed used in the modeling. It should be an
 integer. The default is \code{10L}.}
@@ -108,7 +108,7 @@ Call isolation forest and its variations to do species distribution modeling.
 }
 \details{
 Please read details of algorithm \code{\link{isolation.forest}} on
-\href{https://github.com/david-cortes/isotree}{its GitHub page}, and
+\url{https://github.com/david-cortes/isotree}, and
 the R documentation of function \code{\link{isolation.forest}}.
 }
 \examples{
@@ -132,10 +132,10 @@ occ_test <- occ_test \%>\% select(-id)
 env_vars <- system.file(
   'extdata/bioclim_africa_10min.tif',
   package = 'itsdm') \%>\% read_stars() \%>\%
-  slice('band', c(1, 12))
+  slice('band', c(1, 5, 12, 16))
 
 mod_virtual_species <- isotree_po(occ = occ, occ_test = occ_test,
-  variables = env_vars, ntrees = 200, sample_rate = 0.8, ndim = 0L,
+  variables = env_vars, ntrees = 200, sample_rate = 0.8, ndim = 2L,
   seed = 123L)
 
 }

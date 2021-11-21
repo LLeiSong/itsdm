@@ -33,10 +33,12 @@ data("occ_virtual_species")
 env_vars <- system.file(
   'extdata/bioclim_africa_10min.tif',
   package = 'itsdm') \%>\% read_stars() \%>\%
-  slice('band', c(1, 12))
+  slice('band', c(1, 5, 12, 16))
+
 occ_outliers <- suspicious_env_outliers(
   occ = occ_virtual_species, variables = env_vars,
   z_outlier = 5, outliers_print = 4L)
+
 plot(occ_outliers)
 plot(occ_outliers,
   overlay_raster = env_vars \%>\% slice('band', 1))

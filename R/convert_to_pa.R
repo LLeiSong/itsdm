@@ -62,12 +62,12 @@
 #' env_vars <- system.file(
 #'   'extdata/bioclim_africa_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 12))
+#'   slice('band', c(1, 5, 12, 16))
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200,
-#'   sample_rate = 0.8, ndim = 0L,
+#'   sample_rate = 0.8, ndim = 3L,
 #'   seed = 123L, response = FALSE,
 #'   check_variable = FALSE)
 #'
@@ -236,7 +236,7 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
                          'because of the chosen beta and available environmental',
                          ' conditions.\n',
                          sprintf("The closest possible estimate of prevalence was %s.",
-                                 round(alpha.test[1, 2], 2)),
+                                 round(alpha_test[1, 2], 2)),
                          "\nPerhaps you can try a higher beta value."))
           alpha <- alpha_test[1, 1]
         } else {
