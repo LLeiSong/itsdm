@@ -50,4 +50,5 @@ library(itsdm)
 worldclim <- worldclim2(var = "bio")
 img_reduced <- dim_reduce(worldclim, threshold = 0.7,
   preferred_vars = c('bio1', 'bio12'))
+
 }

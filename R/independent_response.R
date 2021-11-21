@@ -45,6 +45,7 @@
 #' @importFrom tidyselect all_of
 #' @export
 #' @examples
+#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -76,8 +77,10 @@
 #'
 #' independent_responses <- independent_response(
 #'   model = mod$model,
+#'   var_occ = mod$var_train %>% st_drop_geometry(),
 #'   variables = mod$variables)
 #' plot(independent_responses)
+#'}
 #'
 independent_response <- function(model,
                                  var_occ,

@@ -1,0 +1,33 @@
+#' @title Isolation forest-based presence-only species distribution modeling
+#'
+#' @description This package is a wrapper for a few packages including `isotree`, `outliertree`, `fastshap`, etc. It does purely presence-only species distribution modeling with isolation forest and variations such as SCiForest and EIF. It also provides functions to make response curves, analyze variable importance, analyze variable dependence and analyze variable contribution. As utilities, the package includes a few function to download bioclimatic variables including worldclim verison 2.0 and CMCC-BioClimInd. There is also functions to detect outliers in occurrence dataset to do data cleaning.
+#'
+#' @details
+#' This package provides multiple features.
+#' \enumerate{
+#' \item{Download bioclimatic variables and reduce their dimensions.
+#' This includes historic and future climatic indicators from two sources:
+#' \itemize{
+#' \item{\href{https://www.worldclim.org}{worldclim}}
+#' \item{\href{https://doi.pangaea.de/10.1594/PANGAEA.904278?format=html}{CMCC-BioClimInd}}
+#' }}
+#' \item{Detect suspicous environmental outliers.}
+#' \item{Fit a isolation forest-based SDM.}
+#' \item{Make presence-only evaluation.}
+#' \item{Generate response curves of environmental variables including marginal and
+#' independent responses and analyze interactions between environmental variables.}
+#' \item{Analyze variable importance using Shapley values.}
+#' \item{Convert predicted environmental suitability to presence-absence map.}
+#' \item{Analyze variable contributions to any specific observations.}
+#' }
+#'
+#' @references
+#' Please check references in R documentation of each specific function.
+#'
+#' @name itsdm-package
+#' @aliases itsdm-package itsdm
+#' @docType package
+#' @author Lei Song \email{lsong@clarku.edu}
+#'
+#' Maintainer: Lei Song \email{lsong@clarku.edu}
+NULL

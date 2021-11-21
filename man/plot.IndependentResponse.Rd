@@ -57,6 +57,7 @@ mod <- isotree_po(
 
 independent_responses <- independent_response(
   model = mod$model,
+  var_occ = mod$var_train \%>\% st_drop_geometry(),
   variables = mod$variables)
 plot(independent_responses)
 }

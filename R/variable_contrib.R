@@ -72,6 +72,9 @@
 #'
 #' plot(var_contribution, plot_each_obs = T)
 #'
+#' # Plot together
+#' plot(var_contribution)
+#'
 variable_contrib <- function(model,
                              var_occ, # Training, must set for model
                              var_occ_analysis,

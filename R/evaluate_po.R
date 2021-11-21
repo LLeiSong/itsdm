@@ -54,6 +54,7 @@
 #' @importFrom ROCit rocit ciAUC
 #' @export
 #' @examples
+#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -86,6 +87,7 @@
 #' eval_train <- evaluate_po(mod$model,
 #'   occ_pred = mod$pred_train$prediction,
 #'   var_pred = na.omit(as.vector(mod$prediction[[1]])))
+#'}
 #'
 evaluate_po <- function(model,
                         occ_pred,

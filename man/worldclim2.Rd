@@ -62,6 +62,7 @@ bry <- sf::st_polygon(
 
 bios <- worldclim2(var = "bio", res = 10,
   bry = bry, nm_mark = 'tza')
+
 }
 \references{
 \href{https://doi.org/10.1002/joc.5086}{Fick, Stephen E., and Robert J.

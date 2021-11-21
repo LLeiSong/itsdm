@@ -10,7 +10,7 @@
 #' This is not a consensus area, but just a calculated area under this resolution.}
 #' \item{geometry}{(\code{\link{sfc}}) The simple polygon feature of the boundary}}
 #'
-#' @source \code{\link{ne_countries}}
+#' @source \code{rnaturalearth}
 #'
 'mainland_africa'
 

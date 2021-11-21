@@ -18,17 +18,17 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  warning = F,
-  eval = F
+  warning = F
 )
 ```
 
 ## Set up
 ```{r setup, warning=F, message=F, eval=T}
-library(here, quietly = T)
+library(sf, quietly = T)
 library(itsdm, quietly = T)
 library(ggplot2, quietly = T)
-library(virtualspecies, quietly = T)
+library(dplyr, quietly = T)
+select <- dplyr::select
 ```
 
 ## Prepare environmental variables
@@ -74,7 +74,8 @@ could either reduce the dimension of your environmental variable stack itself or
 to a bunch of observations. It also allows you to set a desirable threshold. Note that it only
 works on numeric variables. Because categorical variables have less risk to have high correlation with others and usually we prefer to keep categorical variables.
 
-```{r dim_reduction}
+```{r dim_reduction, warning=F, message=F}
+library(stars, quietly = T)
 # An example of reducing dimensions
 ## Read bios from package
 bios <- system.file('extdata/bioclim_africa_10min.tif', package = 'itsdm') %>% 
@@ -96,7 +97,7 @@ bios_reduce$img_reduced
 
 Using virtual species is a crucial method in ecological studies. First, let's create a virtual species using package `virtualspecies` in order to know exactly what is going on. 
 
-```{r virtualspecies, fig.align='center', fig.width=7, fig.height=6}
+```{r virtualspecies, fig.align='center', fig.width=7, fig.height=6, warning=F, message=F}
 library(here, quietly = T)
 library(virtualspecies, quietly = T)
 
@@ -289,12 +290,9 @@ var_dependence <- variable_dependence(
   it_sdm$var_train %>% st_drop_geometry())
 
 # Multiple ways to plot variable VariableDependence object
-## Plot with smooth fit curve
-plot(var_dependence, target_var = c('bio1', 'bio12', 'bio15'),
-     related_var = 'bio13')
-
 ## Plot without smooth fit curve
-plot(var_dependence, target_var = c('bio1', 'bio12', 'bio15'),
+plot(var_dependence, 
+     target_var = c('bio1', 'bio12', 'bio15'),
      related_var = 'bio13', smooth_span = 0)
 ```
 

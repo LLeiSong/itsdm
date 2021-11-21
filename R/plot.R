@@ -140,6 +140,7 @@
 #'
 #' marginal_responses <- marginal_response(
 #'   model = mod$model,
+#'   var_occ = mod$var_train %>% st_drop_geometry(),
 #'   variables = mod$variables)
 #' plot(marginal_responses, target_var = 'bio1')
 #'}
@@ -218,6 +219,7 @@ plot.MarginalResponse <- function(x,
 #'
 #' independent_responses <- independent_response(
 #'   model = mod$model,
+#'   var_occ = mod$var_train %>% st_drop_geometry(),
 #'   variables = mod$variables)
 #' plot(independent_responses)
 #'}
@@ -266,6 +268,7 @@ plot.IndependentResponse <- function(x,
 #' @importFrom methods is
 #' @importFrom patchwork plot_layout
 #' @importFrom dplyr mutate mutate_if
+#' @importFrom rlang .data
 #' @export
 #' @examples
 #' \donttest{
@@ -347,7 +350,7 @@ plot.VariableDependence <- function(x,
       # Plot
       cex.axis <- 1
       cex.lab <- 1
-      g_cont <- ggplot(x_trans, aes(x = x, y = y)) +
+      g_cont <- ggplot(x_trans, aes(x = .data$x, y = .data$y)) +
         geom_point(size = 0.8) +
         xlab('Variable values') +
         ylab("(Continuous variables)\nShapley value") +
@@ -374,7 +377,7 @@ plot.VariableDependence <- function(x,
       # Plot
       cex.axis <- 1
       cex.lab <- 1
-      g_cat <- ggplot(x_trans, aes(x = x, y = y)) +
+      g_cat <- ggplot(x_trans, aes(x = .data$x, y = .data$y)) +
         geom_violin(position = position_dodge()) +
         geom_jitter(size = 1.5, position = position_jitter(0.2)) +
         xlab('Variable values') +
@@ -418,7 +421,8 @@ plot.VariableDependence <- function(x,
       cex.lab <- 1
       if (related_var %in% bands_cat) {
         g_cont <- ggplot(x_trans,
-                    aes(x = x, y = y, color = related_var)) +
+                    aes(x = .data$x, y = .data$y,
+                        color = .data$related_var)) +
           geom_point(size = 0.8) +
           xlab('Variable values') +
           ylab("(Continuous variables)\nShapley value") +
@@ -430,7 +434,8 @@ plot.VariableDependence <- function(x,
           theme_linedraw()
       } else {
         g_cont <- ggplot(x_trans,
-                    aes(x = x, y = y, color = related_var)) +
+                    aes(x = .data$x, y = .data$y,
+                        color = .data$related_var)) +
           geom_point(size = 0.8) +
           xlab('Variable values') +
           ylab("(Continuous variables)\nShapley value") +
@@ -463,7 +468,7 @@ plot.VariableDependence <- function(x,
       cex.lab <- 1
       if (related_var %in% bands_cat) {
         g_cat <- ggplot(x_trans,
-                        aes(x = x, y = y)) +
+                        aes(x = .data$x, y = .data$y)) +
           geom_violin(position = position_dodge()) +
           geom_jitter(aes(color = related_var),
                       size = 1.5, position = position_jitter(0.2),
@@ -478,7 +483,7 @@ plot.VariableDependence <- function(x,
           theme_linedraw()
       } else {
         g_cat <- ggplot(x_trans,
-                        aes(x = x, y = y)) +
+                        aes(x = .data$x, y = .data$y)) +
           geom_violin(position = position_dodge()) +
           geom_jitter(aes(color = related_var),
                       size = 1.5, position = position_jitter(0.2),
@@ -526,6 +531,7 @@ plot.VariableDependence <- function(x,
 #'
 #' @import ggplot2
 #' @importFrom dplyr arrange slice
+#' @importFrom rlang .data
 #' @export
 #' @examples
 #' \donttest{
@@ -563,7 +569,7 @@ plot.VariableDependence <- function(x,
 #'   var_occ = mod$var_train %>% st_drop_geometry(),
 #'   var_occ_analysis = mod$var_train %>%
 #'     st_drop_geometry() %>% slice(1:10))
-#' plot(var_contribution, plot_each_obs = T, num_features = 2)
+#' plot(var_contribution, plot_each_obs = T, num_features = 3)
 #' plot(var_contribution)
 #'}
 #'
@@ -594,17 +600,17 @@ plot.VariableContribution <- function(x,
       data.frame(num_obs  = paste0('Obs No.', n),
                  variable = vals,
                  shapley_value = unlist(shapley_values[n, ])) %>%
-        arrange(-abs(shapley_value)) %>% slice(1:num_features)
+        arrange(-abs(.data$shapley_value)) %>% slice(1:num_features)
     })); row.names(values_cont) <- NULL
     values_cont <- values_cont %>%
       mutate(num_obs = factor(
-        num_obs, levels = paste0('Obs No.', 1:nrow(shapley_values))))
+        .data$num_obs, levels = paste0('Obs No.', 1:nrow(shapley_values))))
 
     # Plot
     ggplot(values_cont,
-           aes(x = variable,
-               y = shapley_value)) +
-      geom_bar(aes(fill = abs(shapley_value)),
+           aes(x = .data$variable,
+               y = .data$shapley_value)) +
+      geom_bar(aes(fill = abs(.data$shapley_value)),
                stat = 'identity',
                position = position_dodge()) +
       ggtitle('Variable contribution') +
@@ -625,10 +631,10 @@ plot.VariableContribution <- function(x,
 
     # Plot
     ggplot(values_cont,
-           aes(x = variable,
-               y = shapley_value)) +
+           aes(x = .data$variable,
+               y = .data$shapley_value)) +
       geom_violin(position = position_dodge()) +
-      geom_jitter(aes(color = abs(shapley_value)),
+      geom_jitter(aes(color = abs(.data$shapley_value)),
                   size = 1.5, position = position_jitter(0.2)) +
       scale_color_viridis_c('Abs value') +
       ggtitle('Variable contribution') +
@@ -978,7 +984,7 @@ plot.POEvaluation <- function(x, ...) {
   roc_r <- x$roc_ratio$roc_ratio
   p_roc_r <- ggplot(roc_r, aes(y = .data$presence, x = .data$cell)) +
     geom_line(aes(colour = "roc", linetype = 'roc'), size = 0.8) +
-    geom_line(aes(y = cell, x = cell,
+    geom_line(aes(y = .data$cell, x = .data$cell,
                   colour = "chance", linetype = "chance"),
               size = 0.8) +
     geom_text(x = 0.8, y = 0.1,
@@ -1011,7 +1017,7 @@ plot.POEvaluation <- function(x, ...) {
   p_roc_bg <- ggplot(roc_bg, aes(y = .data$tpr,
                                  x = .data$fpr)) +
     geom_line(aes(colour = "roc", linetype = 'roc'), size = 0.8) +
-    geom_line(aes(y = fpr, x = fpr,
+    geom_line(aes(y = .data$fpr, x = .data$fpr,
                   colour = "chance", linetype = "chance"),
               size = 0.8) +
     geom_text(x = 0.8, y = 0.1,

@@ -59,6 +59,7 @@
 #'   occ = occ_virtual_species, variables = env_vars,
 #'   z_outlier = 5, outliers_print = 4L)
 #'
+#' occ_outliers
 #' plot(occ_outliers)
 #'
 suspicious_env_outliers <- function(occ,

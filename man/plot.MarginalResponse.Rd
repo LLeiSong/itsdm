@@ -57,6 +57,7 @@ mod <- isotree_po(
 
 marginal_responses <- marginal_response(
   model = mod$model,
+  var_occ = mod$var_train \%>\% st_drop_geometry(),
   variables = mod$variables)
 plot(marginal_responses, target_var = 'bio1')
 }

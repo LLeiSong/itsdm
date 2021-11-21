@@ -45,6 +45,7 @@
 #' @importFrom fastshap explain
 #' @export
 #' @examples
+#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -77,6 +78,7 @@
 #' var_dependence <- variable_dependence(
 #'   model = mod$model,
 #'   var_occ = mod$var_train %>% st_drop_geometry())
+#'}
 #'
 variable_dependence <- function(model,
                                 var_occ,

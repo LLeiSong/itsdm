@@ -42,6 +42,7 @@ affects the modeling prediction. They show how the predicted result
 only using this variable changes as it is varied.
 }
 \examples{
+\donttest{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
 library(dplyr)
@@ -73,8 +74,10 @@ mod <- isotree_po(
 
 independent_responses <- independent_response(
   model = mod$model,
+  var_occ = mod$var_train \%>\% st_drop_geometry(),
   variables = mod$variables)
 plot(independent_responses)
+}
 
 }
 \references{

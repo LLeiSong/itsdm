@@ -47,6 +47,7 @@ above the range of thresholds. The area under the modified
 ROC curve was then called \bold{AUC_ratio}.
 }
 \examples{
+\donttest{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
 library(dplyr)
@@ -79,6 +80,7 @@ mod <- isotree_po(
 eval_train <- evaluate_po(mod$model,
   occ_pred = mod$pred_train$prediction,
   var_pred = na.omit(as.vector(mod$prediction[[1]])))
+}
 
 }
 \references{

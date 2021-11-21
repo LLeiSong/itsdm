@@ -45,6 +45,7 @@
 #' @importFrom rlang :=
 #' @export
 #' @examples
+#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -76,8 +77,10 @@
 #'
 #' marginal_responses <- marginal_response(
 #'   model = mod$model,
+#'   var_occ = mod$var_train %>% st_drop_geometry(),
 #'   variables = mod$variables)
 #' plot(marginal_responses)
+#'}
 #'
 marginal_response <- function(model,
                               var_occ,

@@ -10,12 +10,15 @@ A \code{data.frame} with 2000 rows and 2 fields
 \item{x}{(\code{numeric}) The x coordinates of the records in geographic coordinate system}
 \item{y}{(\code{numeric}) The y coordinates of the records}}
 }
+\source{
+\code{virtualspecies}
+}
 \usage{
 occ_virtual_species
 }
 \description{
 A pseudo presence-only occurrence dataset of a virtual species made
-by package \code{\link{virtualspecies}}.
+by package \code{virtualspecies}.
 }
 \details{
 The environmental niche of the virtual species is made by defining its
@@ -27,8 +30,5 @@ mean = 1000 and standard deviation = 500.
 Then the suitability is convert to presence-absence map by logistic conversion
 with beta = 0.7, alpha = -0.05, and species prevalence = 0.27.
 Finally 2000 presence-only points are sampled across the whole region.
-}
-\seealso{
-\code{\link{virtualspecies}}
 }
 \keyword{datasets}

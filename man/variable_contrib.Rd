@@ -83,6 +83,9 @@ var_contribution <- variable_contrib(
 
 plot(var_contribution, plot_each_obs = T)
 
+# Plot together
+plot(var_contribution)
+
 }
 \references{
 \itemize{

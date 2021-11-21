@@ -7,6 +7,7 @@
 #' @importFrom tidyselect all_of
 #' @importFrom dplyr filter pull across summarise
 #' @importFrom stringr str_pad
+#' @importFrom rlang .data
 #' @return The same object that was passed as input.
 #' @seealso
 #' \code{\link{variable_analysis}}, \code{\link{plot.VariableAnalysis}}
@@ -65,16 +66,16 @@ print.VariableAnalysis <- function(x, ...){
   cor_x <- x$pearson_correlation
   cat('[Training dataset]:\n')
   cor_x_train <- cor_x %>%
-    filter(usage == 'Train') %>%
-    arrange(-value)
+    filter(.data$usage == 'Train') %>%
+    arrange(-.data$value)
 
   n_max <- max(nchar(unique(cor_x_train$variable)))
   invisible(lapply(unique(cor_x_train %>%
-                            filter(method == 'Only') %>%
-                            pull(variable)), function(var){
-    this_var <- cor_x_train %>% filter(variable == var)
-    only <- this_var %>% filter(method == 'Only') %>% pull(value)
-    without <- this_var %>% filter(method == 'Without') %>% pull(value)
+                            filter(.data$method == 'Only') %>%
+                            pull(.data$variable)), function(var){
+    this_var <- cor_x_train %>% filter(.data$variable == var)
+    only <- this_var %>% filter(.data$method == 'Only') %>% pull(.data$value)
+    without <- this_var %>% filter(.data$method == 'Without') %>% pull(.data$value)
 
     # print
     var <- ifelse(length(var) >= 20, var[1:20], var)
@@ -90,14 +91,14 @@ print.VariableAnalysis <- function(x, ...){
 
   cat('[Test dataset]:\n')
   cor_x_test <- cor_x %>%
-    filter(usage == 'Test') %>%
-    arrange(-value)
+    filter(.data$usage == 'Test') %>%
+    arrange(-.data$value)
   invisible(lapply(unique(cor_x_test %>%
-                  filter(method == 'Only') %>%
-                  pull(variable)), function(var){
-    this_var <- cor_x_test %>% filter(variable == var)
-    only <- this_var %>% filter(method == 'Only') %>% pull(value)
-    without <- this_var %>% filter(method == 'Without') %>% pull(value)
+                  filter(.data$method == 'Only') %>%
+                  pull(.data$variable)), function(var){
+    this_var <- cor_x_test %>% filter(.data$variable == var)
+    only <- this_var %>% filter(.data$method == 'Only') %>% pull(.data$value)
+    without <- this_var %>% filter(.data$method == 'Without') %>% pull(.data$value)
 
     # print
     var <- ifelse(length(var) >= 20, var[1:20], var)
@@ -120,16 +121,16 @@ print.VariableAnalysis <- function(x, ...){
       full_auc_x$full_auc_train, full_auc_x$full_auc_test))
   cat('[Training dataset]:\n')
   auc_x_train <- auc_x %>%
-    filter(usage == 'Train') %>%
-    arrange(-value)
+    filter(.data$usage == 'Train') %>%
+    arrange(-.data$value)
 
   n_max <- max(nchar(unique(auc_x_train$variable)))
   invisible(lapply(unique(auc_x_train %>%
-                            filter(method == 'Only') %>%
-                            pull(variable)), function(var){
-    this_var <- auc_x_train %>% filter(variable == var)
-    only <- this_var %>% filter(method == 'Only') %>% pull(value)
-    without <- this_var %>% filter(method == 'Without') %>% pull(value)
+                            filter(.data$method == 'Only') %>%
+                            pull(.data$variable)), function(var){
+    this_var <- auc_x_train %>% filter(.data$variable == var)
+    only <- this_var %>% filter(.data$method == 'Only') %>% pull(.data$value)
+    without <- this_var %>% filter(.data$method == 'Without') %>% pull(.data$value)
 
     # print
     var <- ifelse(length(var) >= 20, var[1:20], var)
@@ -145,14 +146,14 @@ print.VariableAnalysis <- function(x, ...){
 
   cat('[Test dataset]:\n')
   auc_x_test <- auc_x %>%
-    filter(usage == 'Test') %>%
-    arrange(-value)
+    filter(.data$usage == 'Test') %>%
+    arrange(-.data$value)
   invisible(lapply(unique(auc_x_test %>%
-                            filter(method == 'Only') %>%
-                            pull(variable)), function(var){
-    this_var <- auc_x_test %>% filter(variable == var)
-    only <- this_var %>% filter(method == 'Only') %>% pull(value)
-    without <- this_var %>% filter(method == 'Without') %>% pull(value)
+                            filter(.data$method == 'Only') %>%
+                            pull(.data$variable)), function(var){
+    this_var <- auc_x_test %>% filter(.data$variable == var)
+    only <- this_var %>% filter(.data$method == 'Only') %>% pull(.data$value)
+    without <- this_var %>% filter(.data$method == 'Without') %>% pull(.data$value)
 
     # print
     var <- ifelse(length(var) >= 20, var[1:20], var)

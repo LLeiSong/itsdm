@@ -18,16 +18,16 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  warning = F,
-  eval = F
+  warning = F
 )
 ```
 
 ## Set up
 ```{r setup, warning=F, message=F, eval=T}
-library(here, quietly = T)
 library(itsdm, quietly = T)
 library(ggplot2, quietly = T)
+library(dplyr, quietly = T)
+select <- dplyr::select
 ```
 
 ## Prepare environmental variables
@@ -40,7 +40,8 @@ As an example of a package, we won't use too much complex variables. Here we use
 Note that these datasets are prepared and provided in this package. You could use
 `system.file` with file names to find them like the following. 
 
-```{r}
+```{r, warning=F, message=F}
+library(stars)
 # Bioclimatic variables
 fname <- 'extdata/bioclim_africa_10min.tif'
 bios <- system.file(fname, package = 'itsdm') %>% 
@@ -131,7 +132,7 @@ occ_clean_sf <- st_rasterize(
 
 ```{r, echo=F, warning=F, message=F}
 # Clean
-rm(start_year, year, nm_search, occ, occ_clean, mainland_africa); gc()
+rm(start_year, year, nm_search, occ, occ_clean, mainland_africa)
 ```
 
 ```{r, fig.align='center', fig.width=5, fig.height=5}
@@ -153,7 +154,6 @@ According to the figure and the prior knowledge of Africa savanna elephant, we d
 ```{r, warning=F, message=F}
 occ <- occ_outliers$pts_occ
 rm(occ_clean_sf)
-gc()
 ```
 
 ## Understand the correlations between variables
@@ -238,7 +238,7 @@ ggplot() +
 
 Presence-only model evaluation
 
-```{r eval, fig.width=6, fig.height=6}
+```{r eval, fig.align='center', fig.width=6, fig.height=6}
 # According to training dataset
 it_sdm$eval_train
 plot(it_sdm$eval_train)
@@ -291,7 +291,6 @@ Use function `convert_to_pa` to convert suitability to presence-absence map.
 pa_map <- convert_to_pa(it_sdm$prediction,
                         method = "logistic",
                         beta = 0.2,
-                        # alpha = -.05,
                         species_prevalence = 0.2)
 pa_map; plot(pa_map)
 ```
@@ -302,8 +301,8 @@ Randomly check variable dependence with each other.
 
 ```{r var_inter_dependence, fig.align='center', fig.width=7, fig.height=6}
 plot(it_sdm$variable_dependence, 
-     target_var = c('bio1', 'bio6', 'bio12', 'wdpa'),
-     related_var = 'landcover', smooth_span = 0)
+     target_var = c('bio1', 'bio6', 'bio12', 'landcover'),
+     related_var = 'bio3', smooth_span = 0)
 ```
 
 ## Analyze variable contribution

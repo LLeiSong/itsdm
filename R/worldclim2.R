@@ -49,6 +49,7 @@
 #'
 #' bios <- worldclim2(var = "bio", res = 10,
 #'   bry = bry, nm_mark = 'tza')
+#'
 worldclim2 <- function(var = "tmin",
                        res = 10,
                        bry = NULL,

@@ -85,8 +85,10 @@
 #' @importFrom fastshap explain
 #' @importFrom stats cor predict
 #' @importFrom tidyselect all_of
+#' @importFrom rlang .data
 #' @export
 #' @examples
+#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -121,6 +123,7 @@
 #'   var_occ = mod$var_train %>% st_drop_geometry(),
 #'   var_occ_test = mod$var_test %>% st_drop_geometry(),
 #'   variables = mod$variables)
+#'}
 #'
 variable_analysis <- function(model,
                               var_occ,
@@ -148,7 +151,7 @@ variable_analysis <- function(model,
   set.seed(seed)
   samples <- variables %>% select(bands[1]) %>%
     st_xy2sfc(as_points = T) %>% st_as_sf() %>%
-    select(geometry) %>%
+    select(.data$geometry) %>%
     sample_n(min(10000, nrow(.)))
   vars <- st_extract(x = variables, at = samples) %>%
     st_drop_geometry()
@@ -326,15 +329,15 @@ variable_analysis <- function(model,
   out <- list(variables = bands,
               pearson_correlation =
                 var_each %>%
-                filter(metrics == 'pearson_correlation') %>%
-                select(-metrics),
+                filter(.data$metrics == 'pearson_correlation') %>%
+                select(-.data$metrics),
               full_AUC_ratio =
                 tibble(full_auc_train = full_auc_train,
                        full_auc_test = full_auc_test),
               AUC_ratio =
                 var_each %>%
-                filter(metrics == 'AUC_ratio') %>%
-                select(-metrics),
+                filter(.data$metrics == 'AUC_ratio') %>%
+                select(-.data$metrics),
               SHAP = list(train = shap_train,
                           test = shap_test))
 

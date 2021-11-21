@@ -45,6 +45,7 @@ variables. The users could use \code{\link{dim_reduce}} function to remove
 the strong correlation from original environmental variable stack.
 }
 \examples{
+\donttest{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
 library(dplyr)
@@ -76,8 +77,10 @@ mod <- isotree_po(
 
 marginal_responses <- marginal_response(
   model = mod$model,
+  var_occ = mod$var_train \%>\% st_drop_geometry(),
   variables = mod$variables)
 plot(marginal_responses)
+}
 
 }
 \references{

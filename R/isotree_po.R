@@ -114,6 +114,7 @@
 #' library(stars)
 #' library(itsdm)
 #'
+#' # Prepate data
 #' data("occ_virtual_species")
 #' occ_virtual_species <- occ_virtual_species %>%
 #'   mutate(id = row_number())
@@ -129,9 +130,29 @@
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
+#' # Modeling
 #' mod_virtual_species <- isotree_po(occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200, sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L)
+#'
+#' # Check results
+#' ## Evaluation based on training dataset
+#' print(mod_virtual_species$eval_train)
+#' plot(mod_virtual_species$eval_train)
+#'
+#' ## Response curves
+#' plot(mod_virtual_species$marginal_responses)
+#' plot(mod_virtual_species$independent_responses,
+#'   target_var = c('bio1', 'bio5', 'bio12'))
+#' plot(mod_virtual_species$variable_dependence)
+#'
+#' ## Relationships between target var and related var
+#' plot(var_dependence, target_var = c('bio1', 'bio5', 'bio12'),
+#'   related_var = 'bio16', smooth_span = 0)
+#'
+#' # Variable importance
+#' mod_virtual_species$variable_analysis
+#' plot(mod_virtual_species$variable_analysis)
 #'
 isotree_po <- function(
   # SDM-related inputs

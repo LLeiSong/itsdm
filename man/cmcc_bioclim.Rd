@@ -33,7 +33,7 @@ Parse historic CMCC-BioClimInd bioclimatic indicators
 optionally with a setting of boundary and a few other options.
 }
 \details{
-\href{https://doi.pangaea.de/10.1594/PANGAEA.904278?format=html#download}{Web
+\href{https://doi.pangaea.de/10.1594/PANGAEA.904278?format=html}{Web
 page page for this dataset}
 }
 \note{
@@ -54,7 +54,7 @@ cmcc_bios <- cmcc_bioclim(bry = bry, nm_mark = 'tza')
 
 }
 \references{
-\href{https://www.nature.com/articles/s41597-020-00726-5}{Noce, Sergio, Luca
+\href{https://doi.org/10.1038/s41597-020-00726-5}{Noce, Sergio, Luca
 Caporaso, and Monia Santini."A new global dataset of bioclimatic indicators.
 "\emph{Scientific data} 7.1 (2020): 1-12.}
 }

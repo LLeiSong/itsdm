@@ -66,6 +66,7 @@ occ_outliers <- suspicious_env_outliers(
   occ = occ_virtual_species, variables = env_vars,
   z_outlier = 5, outliers_print = 4L)
 
+occ_outliers
 plot(occ_outliers)
 
 }
@@ -74,8 +75,7 @@ plot(occ_outliers)
 \item{\href{https://arxiv.org/abs/2001.00636}{Cortes, David. "Explainable
 outlier detection through decision tree conditioning."
 \emph{arXiv preprint arXiv:2001.00636} (2020).}}
-\item{\href{https://github.com/david-cortes/outliertree}{https://github.
-com/david-cortes/outliertree}}}
+\item{\url{https://github.com/david-cortes/outliertree}}}
 }
 \seealso{
 \code{\link{print.EnvironmentalOutlier}}, \code{\link{plot.EnvironmentalOutlier}}
