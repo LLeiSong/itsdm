@@ -3,7 +3,7 @@
 <!-- badges: start -->
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://choosealicense.com/licenses/mit/)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2021--11--16-yellowgreen.svg)](/commits/main)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2021--11--21-yellowgreen.svg)](/commits/main)
 <!-- badges: end -->
 
 ## Overview
@@ -52,13 +52,13 @@ occ_test <- occ_test %>% select(-id)
 env_vars <- system.file(
   'extdata/bioclim_africa_10min.tif',
   package = 'itsdm') %>% read_stars() %>%
-  %>% slice('band', c(1, 12))
+  %>% slice('band', c(1, 6, 12, 15))
 
 # Train the model
 mod <- isotree_po(
   occ = occ, occ_test = occ_test,
   variables = env_vars, ntrees = 200,
-  sample_rate = 0.8, ndim = 0L,
+  sample_rate = 0.8, ndim = 2L,
   seed = 123L)
 
 # Check results

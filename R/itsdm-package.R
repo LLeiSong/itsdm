@@ -30,4 +30,8 @@
 #' @author Lei Song \email{lsong@clarku.edu}
 #'
 #' Maintainer: Lei Song \email{lsong@clarku.edu}
+#'
 NULL
+
+## Make R CMD check quiet for `.`
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("."))

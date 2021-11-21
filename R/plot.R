@@ -854,7 +854,8 @@ plot.VariableAnalysis <- function(x, ...) {
   ## Plot
   g_auc_test <- ggplot(auc_r_test,
                         aes(x = .data$variable,
-                            y = .data$value, fill = .data$method)) +
+                            y = .data$value,
+                            fill = .data$method)) +
     geom_bar(stat = 'identity',
              position = position_dodge()) +
     ggtitle('Jackknife of AUC on test data') +
