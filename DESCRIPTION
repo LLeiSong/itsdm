@@ -40,7 +40,8 @@ Suggests:
     rgbif,
     virtualspecies,
     here,
-    lubridate
+    lubridate,
+    scrubr
 Remotes:
     ropensci/scrubr
 BugReports: https://github.com/LLeiSong/itsdm/issues

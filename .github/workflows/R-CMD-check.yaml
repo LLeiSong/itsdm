@@ -29,6 +29,13 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
+      - name: Install terra libraries on macOs
+        if: runner.os == 'macOS'
+        run: |
+          brew install proj
+          brew install geos
+          brew install gdal
+
       - uses: actions/checkout@v2
 
       - uses: r-lib/actions/setup-pandoc@v1
