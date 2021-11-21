@@ -75,9 +75,8 @@
 #' \item{\href{http://proceedings.mlr.press/v119/sundararajan20b.html}{Sundara
 #' rajan, Mukund, and Amir Najmi. "The many Shapley values for model explanation
 #' ." \emph{International Conference on Machine Learning}. PMLR, 2020.}}
-#' \item{\href{https://github.com/bgreenwell/fastshap}{https://github.com/
-#' bgreenwell/fastshap}}
-#' \item{\href{https://github.com/slundberg/shap}{https://github.com/slundberg/shap}}
+#' \item{\url{https://github.com/bgreenwell/fastshap}}
+#' \item{\url{https://github.com/slundberg/shap}}
 #' }
 #'
 #' @importFrom dplyr select tibble filter sample_n

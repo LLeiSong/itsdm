@@ -73,23 +73,20 @@
 #'
 #' @references
 #' \itemize{
-#' \item{\href{https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/icd
-#' m08b.pdf?q=isolation-forest}{Liu, Fei Tony, Kai Ming Ting, and Zhi-Hua Zhou.
-#' "Isolation forest."\emph{2008 eighth ieee international conference on data mining}.
-#' IEEE, 2008.}}
+#' \item{\href{https://doi.org/10.1109/ICDM.2008.17}{Liu, Fei
+#' Tony, Kai Ming Ting, and Zhi-Hua Zhou. "Isolation forest."
+#' \emph{2008 eighth ieee international conference on data mining}.IEEE, 2008.}}
 #' \item{\href{https://doi.org/10.1145/2133360.2133363}{Liu, Fei Tony, Kai Ming
 #' Ting, and Zhi-Hua Zhou. "Isolation-based anomaly detection."
 #' \emph{ACM Transactions on Knowledge Discovery from Data (TKDD)} 6.1 (2012): 1-39.}}
-#' \item{\href{https://link.springer.com/content/pdf/10.1007/978-3-642-15883-4_
-#' 18.pdf}{Liu, Fei Tony, Kai Ming Ting, and Zhi-Hua Zhou. "On detecting
-#' clustered anomalies using SCiForest." \emph{Joint European Conference on
-#' Machine Learning and Knowledge Discovery in Databases}. Springer, Berlin,
-#' Heidelberg, 2010.}}
-#' \item{\href{https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=8888179}{Ha
+#' \item{\href{https://doi.org/10.1007/978-3-642-15883-4_18}{Liu, Fei Tony,
+#' Kai Ming Ting, and Zhi-Hua Zhou. "On detecting clustered anomalies using
+#' SCiForest." \emph{Joint European Conference on Machine Learning and
+#' Knowledge Discovery in Databases}. Springer, Berlin, Heidelberg, 2010.}}
+#' \item{\href{https://doi.org/10.1109/TKDE.2019.2947676}{Ha
 #' riri, Sahand, Matias Carrasco Kind, and Robert J. Brunner. "Extended
 #' isolation forest." \emph{IEEE Transactions on Knowledge and Data Engineering (2019)}.}}
-#' \item{\href{https://github.com/david-cortes/isotree}{https://github.com/davi
-#' d-cortes/isotree}}
+#' \item{\url{https://github.com/david-cortes/isotree}}
 #' \item{References of related feature such as response curves and variable importance
 #' will be listed under their own functions}
 #' }

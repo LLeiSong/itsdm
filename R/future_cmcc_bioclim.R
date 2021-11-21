@@ -26,13 +26,12 @@
 #' returned as a \code{stars}. Otherwise, nothing to return, but the user
 #' would receive a message of where the images are.
 #' @references
-#' \href{https://www.nature.com/articles/s41597-020-00726-5}{Noce, Sergio, Luca
+#' \href{https://doi.org/10.1038/s41597-020-00726-5}{Noce, Sergio, Luca
 #' Caporaso, and Monia Santini."A new global dataset of bioclimatic indicators.
 #' "\emph{Scientific data} 7.1 (2020): 1-12.}
 #'
 #' @details
-#' \href{https://doi.pangaea.de/10.1594/PANGAEA.904278?format=html#download}{Web
-#' page page for this dataset}
+#' \url{https://doi.pangaea.de/10.1594/PANGAEA.904278?format=html#download}
 #'
 #' @note The function is experimental at the moment, because the download server
 #' of this dataset is not as stable as Worldclim yet.
@@ -129,19 +128,60 @@ future_cmcc_bioclim <- function(bry = NULL,
         }
     }))
 
-    ## Check unzipped files
+    ####################################################
+    ############## Deal with BIO18 #####################
     imgs_in <- list.files(path, pattern = "*.nc", full.names = T)
     imgs <- file.path(
-        path, sprintf("BIO%s_%s_%s_%s.nc", 1:35, esm, rcp, interval))
-    if (length(intersect(imgs, imgs_in)) != 35) {
+      path, sprintf("BIO%s_%s_%s_%s.nc", 1:35, esm, rcp, interval))
+    if (any(c('BIO18_CMCC_85_2040_79.nc',
+              'BIO18_GFDL_45_2040_79.nc',
+              'BIO18_GFDL_45_2060_99.nc',
+              'BIO18_GFDL_85_2040_79.nc',
+              'BIO18_GFDL_85_2060_99.nc',
+              'BIO18_HADGEM_85_2060_99.nc') %in%
+            basename(imgs))) {
+      warning('BIO18 does not have such product, skip it.')
+
+      # Remove it and check
+      imgs <- file.path(
+        path, sprintf("BIO%s_%s_%s_%s.nc", c(1:17, 19:35),
+                      esm, rcp, interval))
+      if (length(intersect(imgs, imgs_in)) != 34) {
         stop("Wrong file numbers unzipped.")}
 
-    # Read files
-    clip_imgs <- stack(imgs) %>% st_as_stars()
-    clip_imgs <- st_set_dimensions(
-        clip_imgs, 'band', values = paste0('bio', 1:35))
-    names(clip_imgs) <- sprintf('bioclim_%s_%s_%s', esm, rcp, interval)
+      # Read imgs
+      clip_imgs <- stack(imgs) %>% st_as_stars()
+      clip_imgs <- st_set_dimensions(
+        clip_imgs, 'band', values = paste0('bio', c(1:17, 19:35)))
+    } else {
+      if (length(intersect(imgs, imgs_in)) != 35) {
+        stop("Wrong file numbers unzipped.")}
 
+      # Read files
+      clip_imgs <- stack(imgs) %>% st_as_stars()
+      clip_imgs <- st_set_dimensions(
+        clip_imgs, 'band', values = paste0('bio', 1:35))
+    }
+    ####################################################
+
+    ####################################################
+    ################ Original code #####################
+    # ## Check unzipped files
+    # imgs_in <- list.files(path, pattern = "*.nc", full.names = T)
+    # imgs <- file.path(
+    #   path, sprintf("BIO%s_%s_%s_%s.nc", 1:35, esm, rcp, interval))
+    #
+    # if (length(intersect(imgs, imgs_in)) != 35) {
+    #   stop("Wrong file numbers unzipped.")}
+    #
+    # # Read files
+    # clip_imgs <- stack(imgs) %>% st_as_stars()
+    # clip_imgs <- st_set_dimensions(
+    #   clip_imgs, 'band', values = paste0('bio', 1:35))
+    ####################################################
+
+    names(clip_imgs) <- sprintf('bioclim_%s_%s_%s',
+                                esm, rcp, interval)
     if (!is.null(bry)) {
         # Read files
         bry <- st_as_sf(bry) %>% st_make_valid()

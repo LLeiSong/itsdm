@@ -10,7 +10,7 @@
 #' This is not a consensus area, but just a calculated area under this resolution.}
 #' \item{geometry}{(\code{\link{sfc}}) The simple polygon feature of the boundary}}
 #'
-#' @source \code{\link{rnaturalearth}}
+#' @source \code{\link{ne_countries}}
 #'
 'mainland_africa'
 
@@ -18,7 +18,7 @@
 #' Occurrence dataset of a virtual species
 #'
 #' A pseudo presence-only occurrence dataset of a virtual species made
-#' by package \code{\link{virtualspecies}}.
+#' by package `virtualspecies`.
 #'
 #' @format A `data.frame` with 2000 rows and 2 fields
 #' \describe{
@@ -37,6 +37,6 @@
 #' Finally 2000 presence-only points are sampled across the whole region.
 #'
 #'
-#' @seealso \code{\link{virtualspecies}}
+#' @source \code{virtualspecies}
 #'
 'occ_virtual_species'

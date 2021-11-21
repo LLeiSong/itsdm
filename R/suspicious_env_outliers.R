@@ -35,8 +35,7 @@
 #' \item{\href{https://arxiv.org/abs/2001.00636}{Cortes, David. "Explainable
 #' outlier detection through decision tree conditioning."
 #' \emph{arXiv preprint arXiv:2001.00636} (2020).}}
-#' \item{\href{https://github.com/david-cortes/outliertree}{https://github.
-#' com/david-cortes/outliertree}}}
+#' \item{\url{https://github.com/david-cortes/outliertree}}}
 #'
 #' @import checkmate
 #' @importFrom methods is

@@ -37,6 +37,7 @@
 #' worldclim <- worldclim2(var = "bio")
 #' img_reduced <- dim_reduce(worldclim, threshold = 0.7,
 #'   preferred_vars = c('bio1', 'bio12'))
+#'
 dim_reduce <- function(img_stack = NULL,
                        threshold = 0.5,
                        preferred_vars = NULL,
