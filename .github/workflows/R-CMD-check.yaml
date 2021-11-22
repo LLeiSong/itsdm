@@ -29,7 +29,7 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
-      - name: Install terra libraries on macOs
+      - name: Install GDAL on macOS
         if: runner.os == 'macOS'
         run: |
           brew install proj

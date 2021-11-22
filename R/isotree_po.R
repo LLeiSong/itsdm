@@ -147,7 +147,8 @@
 #' plot(mod_virtual_species$variable_dependence)
 #'
 #' ## Relationships between target var and related var
-#' plot(var_dependence, target_var = c('bio1', 'bio5', 'bio12'),
+#' plot(mod_virtual_species$variable_dependence,
+#'   target_var = c('bio1', 'bio5', 'bio12'),
 #'   related_var = 'bio16', smooth_span = 0)
 #'
 #' # Variable importance
