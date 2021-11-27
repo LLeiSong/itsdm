@@ -93,6 +93,8 @@ mod <- isotree_po(
 # Threshold conversion
 pa_thred <- convert_to_pa(mod$prediction,
   method = 'threshold', beta = 0.5)
+pa_thred
+plot(pa_thred)
 
 # Logistic conversion
 pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
@@ -101,10 +103,14 @@ pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
   beta = 0.5, species_prevalence = 0.2)
 pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
   alpha = -.05, species_prevalence = 0.2)
+pa_log
+plot(pa_log)
 
 # Linear conversion
 pa_lin <- convert_to_pa(mod$prediction, method = 'linear',
   a = 1, b = 0)
+pa_lin
+plot(pa_lin)
 
 }
 \references{

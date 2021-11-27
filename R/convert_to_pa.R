@@ -74,6 +74,8 @@
 #' # Threshold conversion
 #' pa_thred <- convert_to_pa(mod$prediction,
 #'   method = 'threshold', beta = 0.5)
+#' pa_thred
+#' plot(pa_thred)
 #'
 #' # Logistic conversion
 #' pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
@@ -82,10 +84,14 @@
 #'   beta = 0.5, species_prevalence = 0.2)
 #' pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
 #'   alpha = -.05, species_prevalence = 0.2)
+#' pa_log
+#' plot(pa_log)
 #'
 #' # Linear conversion
 #' pa_lin <- convert_to_pa(mod$prediction, method = 'linear',
 #'   a = 1, b = 0)
+#' pa_lin
+#' plot(pa_lin)
 #'
 convert_to_pa <- function(suitability, # prediction from isotree_sdm
                           method = "logistic",
@@ -209,6 +215,8 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
       mutate(prediction = case_when(prediction < beta ~ 0,
                                     prediction >= beta ~ 1))
     prob_of_occurrence <- pa_map
+    # Convert to binary
+    pa_map <- pa_map == 1
   }
 
   ## logistic conversion

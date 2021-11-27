@@ -294,9 +294,11 @@ print.POEvaluation <- function(x, ...){
   cat(paste0(str_pad('AUC (ratio)',
                      30, side = 'right', pad = ' '),
              sprintf('%.3f\n', auc_r)))
-  cat(paste0(str_pad('AUC (Presence-background)',
-                     30, side = 'right', pad = ' '),
-             sprintf('%.3f\n', auc_bg)))
+  if (!is.null(auc_bg)){
+    cat(paste0(str_pad('AUC (Presence-background)',
+                       30, side = 'right', pad = ' '),
+               sprintf('%.3f\n', auc_bg)))
+  }
 
   # return
   invisible(return(x))

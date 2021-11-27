@@ -72,7 +72,7 @@ ggplot() +
   theme_linedraw()
 
 ## Plot independent response curves
-plot(it_sdm$independent_responses, 
+plot(mod$independent_responses, 
   target_var = c('bio1', 'bio12'))
 ```
 

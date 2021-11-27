@@ -569,7 +569,9 @@ plot.VariableDependence <- function(x,
 #'   var_occ = mod$var_train %>% st_drop_geometry(),
 #'   var_occ_analysis = mod$var_train %>%
 #'     st_drop_geometry() %>% slice(1:10))
-#' plot(var_contribution, plot_each_obs = T, num_features = 3)
+#' plot(var_contribution,
+#'   plot_each_obs = T,
+#'   num_features = 3)
 #' plot(var_contribution)
 #'}
 #'
@@ -590,8 +592,12 @@ plot.VariableContribution <- function(x,
     mutate_if(is.numeric, function(x) round(x, 2)) %>%
     mutate_if(is.factor, function(x) as.character(x))
   stopifnot(identical(names(shapley_values), names(feature_values)))
-  checkmate::assert_int(num_features, lower = 1, upper = ncol(shapley_values))
+  if (plot_each_obs) {
+    checkmate::assert_int(num_features,
+                          lower = 1, upper = ncol(shapley_values))}
 
+
+  # Plot
   if (plot_each_obs) {
     # Convert data
     values_cont <- do.call(rbind, lapply(1:nrow(shapley_values), function(n) {
@@ -1012,37 +1018,39 @@ plot.POEvaluation <- function(x, ...) {
           legend.position = 'top')
 
   # AUC background
-  roc_bg <- x$roc_background$roc_background
-  roc_bg <- data.frame(tpr = roc_bg$TPR,
-                       fpr = roc_bg$FPR)
-  p_roc_bg <- ggplot(roc_bg, aes(y = .data$tpr,
-                                 x = .data$fpr)) +
-    geom_line(aes(colour = "roc", linetype = 'roc'), size = 0.8) +
-    geom_line(aes(y = .data$fpr, x = .data$fpr,
-                  colour = "chance", linetype = "chance"),
-              size = 0.8) +
-    geom_text(x = 0.8, y = 0.1,
-              label = sprintf("AUC: %s",
-                              round(x$roc_background$auc_background, 3))) +
-    ggtitle('ROC curve') +
-    labs(y = "Sensitivity (TPR)",
-         x = "1-Specificity (FPR)") +
-    scale_color_manual(
-      '',
-      values = c('roc' = 'black', 'chance' = 'grey'),
-      labels = c(expression('Empirical ROC'['ratio']~'curve'),
-                 'Chance line')) +
-    scale_linetype_manual(
-      '',
-      values = c('roc' = 'solid', 'chance' = 'dashed'),
-      labels = c(expression('Empirical ROC'['ratio']~'curve'),
-                 'Chance line')) +
-    theme_minimal() +
-    theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
-          plot.title.position = 'panel',
-          axis.text = element_text(size = rel(cex.axis)),
-          axis.title = element_text(size = rel(cex.lab)),
-          legend.position = 'top')
+  if (!is.null(x$roc_background$auc_background)){
+    roc_bg <- x$roc_background$roc_background
+    roc_bg <- data.frame(tpr = roc_bg$TPR,
+                         fpr = roc_bg$FPR)
+    p_roc_bg <- ggplot(roc_bg, aes(y = .data$tpr,
+                                   x = .data$fpr)) +
+      geom_line(aes(colour = "roc", linetype = 'roc'), size = 0.8) +
+      geom_line(aes(y = .data$fpr, x = .data$fpr,
+                    colour = "chance", linetype = "chance"),
+                size = 0.8) +
+      geom_text(x = 0.8, y = 0.1,
+                label = sprintf("AUC: %s",
+                                round(x$roc_background$auc_background, 3))) +
+      ggtitle('ROC curve') +
+      labs(y = "Sensitivity (TPR)",
+           x = "1-Specificity (FPR)") +
+      scale_color_manual(
+        '',
+        values = c('roc' = 'black', 'chance' = 'grey'),
+        labels = c(expression('Empirical ROC'['ratio']~'curve'),
+                   'Chance line')) +
+      scale_linetype_manual(
+        '',
+        values = c('roc' = 'solid', 'chance' = 'dashed'),
+        labels = c(expression('Empirical ROC'['ratio']~'curve'),
+                   'Chance line')) +
+      theme_minimal() +
+      theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
+            plot.title.position = 'panel',
+            axis.text = element_text(size = rel(cex.axis)),
+            axis.title = element_text(size = rel(cex.lab)),
+            legend.position = 'top')
+  }
 
   # CBI
   cbi_bins <- data.frame(f_ratio = x$boyce$F.ratio,
@@ -1115,7 +1123,8 @@ plot.POEvaluation <- function(x, ...) {
 #'   check_variable = FALSE)
 #'
 #' # Threshold conversion
-#' pa_thred <- convert_to_pa(mod$prediction, method = 'threshold', beta = 0.5)
+#' pa_thred <- convert_to_pa(mod$prediction,
+#'   method = 'threshold', beta = 0.5)
 #' plot(pa_thred)
 #'}
 #'

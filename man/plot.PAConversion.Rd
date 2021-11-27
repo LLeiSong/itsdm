@@ -52,7 +52,8 @@ mod <- isotree_po(
   check_variable = FALSE)
 
 # Threshold conversion
-pa_thred <- convert_to_pa(mod$prediction, method = 'threshold', beta = 0.5)
+pa_thred <- convert_to_pa(mod$prediction,
+  method = 'threshold', beta = 0.5)
 plot(pa_thred)
 }
 

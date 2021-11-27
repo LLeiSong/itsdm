@@ -70,7 +70,9 @@
 #'   var_occ_analysis = mod$var_train %>%
 #'     st_drop_geometry() %>% slice(1:10))
 #'
-#' plot(var_contribution, plot_each_obs = T)
+#' plot(var_contribution,
+#'   num_features = 3,
+#'   plot_each_obs = TRUE)
 #'
 #' # Plot together
 #' plot(var_contribution)

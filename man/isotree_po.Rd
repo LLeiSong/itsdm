@@ -119,7 +119,7 @@ library(sf)
 library(stars)
 library(itsdm)
 
-# Prepate data
+# Prepare data
 data("occ_virtual_species")
 occ_virtual_species <- occ_virtual_species \%>\%
   mutate(id = row_number())

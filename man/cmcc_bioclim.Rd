@@ -43,6 +43,7 @@ of this dataset is not as stable as Worldclim yet.
 \examples{
 library(dplyr)
 library(sf)
+library(itsdm)
 
 bry <- st_polygon(
   list(rbind(c(29.34, -11.72), c(29.34, -0.95),
