@@ -1072,7 +1072,11 @@ plot.POEvaluation <- function(x, ...) {
           axis.title = element_text(size = rel(cex.lab)))
 
   # Ensemble
-  (p_roc_r | p_roc_bg) / p_boy
+  if (!is.null(x$roc_background$auc_background)){
+    (p_roc_r | p_roc_bg) / p_boy
+  } else {
+    (p_roc_r | p_boy)
+  }
 }
 
 #' @title Function to plot results of conversion to PA.
