@@ -424,17 +424,17 @@ isotree_po <- function(
   }
 
   ## Calculate
-  eval_train <- evaluate_po(isotree_mod,
+  eval_train <- suppressMessages(evaluate_po(isotree_mod,
                             occ_pred$prediction,
                             occ_bg_pred$prediction,
                             na.omit(as.vector(var_pred[[1]])),
-                            visualize = visualize)
+                            visualize = visualize))
   if(!is.null(occ_test)){
-    eval_test <- evaluate_po(isotree_mod,
+    eval_test <- suppressMessages(evaluate_po(isotree_mod,
                              occ_test_pred$prediction,
                              occ_test_bg_pred$prediction,
                              na.omit(as.vector(var_pred[[1]])),
-                             visualize = visualize)
+                             visualize = visualize))
   } else eval_test <- NULL
 
   # Return

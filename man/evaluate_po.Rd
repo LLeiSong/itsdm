@@ -4,7 +4,14 @@
 \alias{evaluate_po}
 \title{Evaluate the model based on presence-only data.}
 \usage{
-evaluate_po(model, occ_pred, bg_pred = NULL, var_pred, visualize = FALSE)
+evaluate_po(
+  model,
+  occ_pred,
+  bg_pred = NULL,
+  var_pred,
+  threshold = NULL,
+  visualize = FALSE
+)
 }
 \arguments{
 \item{model}{(\code{isolation_forest}) The extended isolation forest SDM. It could be
@@ -19,32 +26,71 @@ with same number of background points.}
 \item{var_pred}{(\code{vector} of \code{numeric}) the vector contains predicted values
 of the whole area.}
 
+\item{threshold}{(\code{numeric} or \code{NULL}) The threshold to calculate threshold-based
+evaluation metrics. If \code{NULL}, a recommended threshold will be calculated
+based on optimal TSS value. The default is \code{NULL}.}
+
 \item{visualize}{(\code{logical}) If \code{TRUE}, plot the evaluation figures.
 The default is \code{FALSE}.}
 }
 \value{
 (\code{POEvaluation}) A list of
 \itemize{
+\item{
+\bold{po_evaluation} is presence-only evaluation metrics. It is a list of
+\itemize{
 \item{cvi (\code{list}) A list of CVI with 0.25, 0.5, and 0.75 as threshold}
 \item{boyce (\code{list}) A list of items related to continuous Boyce index (CBI)}
 \item{roc_ratio (\code{list}) A list of ROC ratio and AUC ratio}
-\item{roc_background (\code{list}) A list of ROC background and AUC background}}
+}}
+\item{
+\bold{pb_evaluation} is presence-background evaluation metrics. It is a list of
+\itemize{
+\item{confusion matrix (\code{table}) A table of confusion matrix. The columns are
+true values, and the rows are predicted values.}
+\item{sensitivity (\code{numeric}) The sensitivity or TPR}
+\item{specificity (\code{numeric}) The specificity or TNR}
+\item{TSS (\code{list}) A list of info related to true skill statistic (TSS)
+\itemize{
+\item{cutoff (\code{vector} of \code{numeric}) A vector of cutoff threshold values}
+\item{tss (\code{vector} of \code{numeric}) A vector of TSS for each cutoff threshold}
+\item{Recommended threshold (\code{numeric}) A recommended threshold according to TSS}
+\item{Optimal TSS (\code{numeric}) The best TSS value}}}
+\item{roc (\code{list}) A list of ROC values and AUC value}
+\item{Jaccard's similarity index (\code{numeric}) The Jaccard's similarity index}
+\item{Sørensen's similarity index (\code{numeric}) The Sørensen's similarity index or
+F-measure}
+\item{Overprediction rate (\code{numeric}) The Overprediction rate}
+\item{Underprediction rate (\code{numeric}) The Underprediction rate}
+}}}
 }
 \description{
-This function will calculate Contrast Validation Index (CVI),
-continuous Boyce index (CBI), ROC_ratio and ROC_background.
+This function will calculate two major types of evaluation metrics
+in terms of presence-only data. The first type is presence-only customized metrics,
+such as Contrast Validation Index (CVI), continuous Boyce index (CBI), and ROC_ratio.
+The second type is presence-background evaluation metrics by extracting background
+points as pseudo absence observations.
 }
 \details{
+\itemize{
+\item{
 \bold{CVI} is the proportion of presence points falling in cells having
 a threshold (\code{0.5} for example) habitat suitability index minus the proportion of
 cells within this range of threshold of the model.
-Here we used varied thresholds: \code{0.25}, \code{0.5}, and \code{0.75}.
-\bold{ROC_background} uses background values as pseudo-absence values to generate
-ROC curve. \bold{AUC_background} is the AUC calculated according to ROC_background.
+Here we used varied thresholds: \code{0.25}, \code{0.5}, and \code{0.75}.}
+\item{
 \bold{ROC_ratio} curve plots the proportion of presences falling above a
 range of thresholds against the proportion of cells falling
 above the range of thresholds. The area under the modified
-ROC curve was then called \bold{AUC_ratio}.
+ROC curve was then called \bold{AUC_ratio}.}
+\item{\bold{Sensitivity (TPR)} = TP/(TP + FN)}
+\item{\bold{Specificity (TNR)} = TN/(TN + FP)}
+\item{\bold{True skill statistic (TSS)} = Sensitivity + specificity - 1}
+\item{\bold{Jaccard's similarity index} = TP/(FN + TP + FP)}
+\item{\bold{Sørensen's similarity index (F-measure)} = 2TP/(FN + 2TP + FP)}
+\item{\bold{Overprediction rate} = FP/(TP + FP)}
+\item{\bold{Underprediction rate} = FN/(TP + FN)}
+}
 }
 \examples{
 \donttest{
@@ -97,6 +143,10 @@ to predict species presences." \emph{Ecological modelling}
 H., and Raphaël Arlettaz. "Modeling habitat suitability for complex species
 distributions by environmental-distance geometric mean."
 \emph{Environmental management} 32.5 (2003): 614-623.}}
+\item{\href{https://doi.org/10.1111/jbi.13402}{Leroy, Boris, et al.
+"Without quality presence–absence data, discrimination metrics such as
+TSS can be misleading measures of model performance."
+\emph{Journal of Biogeography} 45.9 (2018): 1994-2002.}}
 }
 }
 \seealso{

@@ -267,22 +267,22 @@ print.VariableAnalysis <- function(x, ...){
 #'}
 #'
 print.POEvaluation <- function(x, ...){
+  # Presence-only
+  po_eval <- x$po_evaluation
   # CVI
-  cvi25 <- x$cvi$`cvi with 0.25`
-  cvi05 <- x$cvi$`cvi with 0.5`
-  cvi75 <- x$cvi$`cvi with 0.75`
+  cvi25 <- po_eval$cvi$`cvi with 0.25`
+  cvi05 <- po_eval$cvi$`cvi with 0.5`
+  cvi75 <- po_eval$cvi$`cvi with 0.75`
 
   # CBI with 100 moving windows
-  cbi <- x$boyce$Spearman.cor
+  cbi <- po_eval$boyce$Spearman.cor
 
   # AUC_ratio
-  auc_r <- x$roc_ratio$auc_ratio
-
-  # AUC_bg
-  auc_bg <- x$roc_background$auc_background
+  auc_r <- po_eval$roc_ratio$auc_ratio
 
   # print
-  cat('Presence-only evaluation\n')
+  cat(paste0(paste(rep('=', 35), collapse = ''), '\n'))
+  cat('Presence-only evaluation:\n')
   cat(paste0(str_pad('CVI with 0.25 threshold:', 30, side = 'right', pad = ' '),
              sprintf('%.3f\n', cvi25)))
   cat(paste0(str_pad('CVI with 0.5 threshold:', 30, side = 'right', pad = ' '),
@@ -294,10 +294,31 @@ print.POEvaluation <- function(x, ...){
   cat(paste0(str_pad('AUC (ratio)',
                      30, side = 'right', pad = ' '),
              sprintf('%.3f\n', auc_r)))
-  if (!is.null(auc_bg)){
-    cat(paste0(str_pad('AUC (Presence-background)',
+  if (!is.null(x$pb_evaluation)) {
+    cat(paste0(paste(rep('=', 35), collapse = ''), '\n'))
+    cat('Presence-background evaluation:\n')
+    pb_eval <- x$pb_evaluation
+    cat(paste0(str_pad('Sensitivity:', 30, side = 'right', pad = ' '),
+               sprintf('%.3f\n', pb_eval$sensitivity)))
+    cat(paste0(str_pad('Specificity:', 30, side = 'right', pad = ' '),
+               sprintf('%.3f\n', pb_eval$specificity)))
+    cat(paste0(str_pad('TSS:', 30, side = 'right', pad = ' '),
+               sprintf('%.3f\n', pb_eval$TSS$`Optimal TSS`)))
+    cat(paste0(str_pad('AUC:', 30, side = 'right', pad = ' '),
+               sprintf('%.3f\n', pb_eval$roc$auc)))
+    cat('Similarity indices:\n')
+    cat(paste0(str_pad("Jaccard's similarity index:",
                        30, side = 'right', pad = ' '),
-               sprintf('%.3f\n', auc_bg)))
+               sprintf('%.3f\n', pb_eval$`Jaccard's similarity index`)))
+    cat(paste0(str_pad("S\u00F8rensen's similarity index:",
+                       30, side = 'right', pad = ' '),
+               sprintf('%.3f\n', pb_eval$`f-measure`)))
+    cat(paste0(str_pad("Overprediction rate:",
+                       30, side = 'right', pad = ' '),
+               sprintf('%.3f\n', pb_eval$`Overprediction rate`)))
+    cat(paste0(str_pad("Underprediction rate:",
+                       30, side = 'right', pad = ' '),
+               sprintf('%.3f\n', pb_eval$`Underprediction rate`)))
   }
 
   # return
@@ -453,6 +474,121 @@ print.PAConversion <- function(x, ...) {
 #'
 print.EnvironmentalOutlier <- function(x, ...) {
   print(x$outlier_details)
+
+  # Return
+  invisible(x)
+}
+
+#' @title Print summary information from POIsotree object.
+#' @description Display the most general and informative characteristics of
+#' a fitted POIsotree object.
+#' @param x (`POIsotree`) The POIsotree object to be messaged.
+#' It could be the return of function \code{\link{isotree_po}}.
+#' @param ... Not used.
+#' @return The same object that was passed as input.
+#' @seealso
+#' \code{\link{isotree_po}}
+#'
+#' @importFrom stringr str_pad
+#' @export
+#' @examples
+#' \donttest{
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
+#'
+#' data("occ_virtual_species")
+#' occ_virtual_species <- occ_virtual_species %>%
+#'   mutate(id = row_number())
+#'
+#' set.seed(11)
+#' occ <- occ_virtual_species %>% sample_frac(0.7)
+#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
+#' occ <- occ %>% select(-id)
+#' occ_test <- occ_test %>% select(-id)
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_africa_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   slice('band', c(1, 5, 12, 16))
+#'
+#' mod <- isotree_po(
+#'   occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200,
+#'   sample_rate = 0.8, ndim = 1L,
+#'   seed = 123L, response = FALSE,
+#'   check_variable = FALSE)
+#' print(mod)
+#'}
+#'
+print.POIsotree <- function(x, ...){
+  # Model itself
+  cat(paste0(paste(rep('=', 60), collapse = ''), '\n'))
+  cat('Species distribution model:\n')
+  print(x$model)
+  cat(sprintf('Variables are: %s.\n',
+              paste(names(x$variables), collapse = ', ')))
+
+  # Evaluation
+  cat(paste0(paste(rep('=', 60), collapse = ''), '\n'))
+  cat('Model evaluation:\n')
+  cat('[Training dataset]:\n')
+  print(x$eval_train)
+  cat('[Test dataset]:\n')
+  print(x$eval_test)
+
+  # Variable importance
+  cat(paste0(paste(rep('=', 60), collapse = ''), '\n'))
+  cat('Variable importance:\n')
+  cat('Just show SHAP result, use print or plot of variable_analysis to see all.\n')
+
+  # SHAP
+  ## Subset
+  cat('SHAP (mean(|Shapley value|))\n')
+  shap_x <- x$variable_analysis$SHAP
+  shap_x_train <- shap_x$train %>%
+    summarise(across(all_of(names(.)), .abs_mean))
+  shap_x_train <- t(
+    apply(shap_x_train, 1,
+          function(x) sort(x, decreasing = T))) %>%
+    as.data.frame()
+  shap_x_test <- shap_x$test %>%
+    summarise(across(all_of(names(.)), .abs_mean))
+  shap_x_test <- t(
+    apply(shap_x_test, 1,
+          function(x) sort(x, decreasing = T))) %>%
+    as.data.frame()
+
+  ## Training
+  cat('[Training dataset]:\n')
+  n_max <- max(nchar(names(shap_x_train)))
+  val_max <- max(max(shap_x_train), max(shap_x_test))
+  invisible(lapply(names(shap_x_train), function(var){
+    val <- shap_x_train %>% pull(all_of(var))
+    # print
+    var <- ifelse(length(var) >= 20, var[1:20], var)
+    n_space <- min(n_max, 20)
+    cat(paste0(str_pad(var, n_space, side = 'right', pad = ' '),
+               ' : ',
+               paste(rep('#', round(val / val_max * 45)), collapse = ''),
+               sprintf(' %s\n', round(val, 3))))
+  }))
+
+  ## Test
+  cat('[Test dataset]:\n')
+  invisible(lapply(names(shap_x_test), function(var){
+    val <- shap_x_test %>% pull(all_of(var))
+    # print
+    var <- ifelse(length(var) >= 20, var[1:20], var)
+    n_space <- min(n_max, 20)
+    cat(paste0(str_pad(var, n_space, side = 'right', pad = ' '),
+               ' : ',
+               paste(rep('#', round(val / val_max * 45)), collapse = ''),
+               sprintf(' %s\n', round(val, 3))))
+  }))
 
   # Return
   invisible(x)

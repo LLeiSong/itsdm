@@ -570,7 +570,7 @@ plot.VariableDependence <- function(x,
 #'   var_occ_analysis = mod$var_train %>%
 #'     st_drop_geometry() %>% slice(1:10))
 #' plot(var_contribution,
-#'   plot_each_obs = T,
+#'   plot_each_obs = TRUE,
 #'   num_features = 3)
 #' plot(var_contribution)
 #'}
@@ -987,8 +987,10 @@ plot.VariableAnalysis <- function(x, ...) {
 plot.POEvaluation <- function(x, ...) {
   cex.axis <- 1
   cex.lab <- 1
-  # ROC ratio
-  roc_r <- x$roc_ratio$roc_ratio
+  # Presence-only
+  ## ROC ratio
+  po_eval <- x$po_evaluation
+  roc_r <- po_eval$roc_ratio$roc_ratio
   p_roc_r <- ggplot(roc_r, aes(y = .data$presence, x = .data$cell)) +
     geom_line(aes(colour = "roc", linetype = 'roc'), size = 0.8) +
     geom_line(aes(y = .data$cell, x = .data$cell,
@@ -996,7 +998,7 @@ plot.POEvaluation <- function(x, ...) {
               size = 0.8) +
     geom_text(x = 0.8, y = 0.1,
               label = sprintf("AUC: %s",
-                              round(x$roc_ratio$auc_ratio, 3))) +
+                              round(po_eval$roc_ratio$auc_ratio, 3))) +
     ggtitle('Modified ROC curve') +
     labs(y = "1 - omission error",
          x = "Proportion of area predicted present") +
@@ -1017,9 +1019,30 @@ plot.POEvaluation <- function(x, ...) {
           axis.title = element_text(size = rel(cex.lab)),
           legend.position = 'top')
 
-  # AUC background
-  if (!is.null(x$roc_background$auc_background)){
-    roc_bg <- x$roc_background$roc_background
+  ## CBI
+  cbi_bins <- data.frame(f_ratio = po_eval$boyce$F.ratio,
+                         hs = po_eval$boyce$HS)
+  p_boy <- ggplot(cbi_bins, aes(y = .data$f_ratio,
+                                x = .data$hs)) +
+    geom_line(colour = "black", size = 0.8) +
+    geom_hline(yintercept = 1, color = 'red', size = 0.8) +
+    scale_x_continuous(n.breaks = 9) +
+    geom_text(x = 0.2, y = max(cbi_bins$f_ratio),
+              label = sprintf("CBI: %s", round(po_eval$boyce$Spearman.cor, 3))) +
+    labs(y = "P/E ratio",
+         x = "Suitability") +
+    ggtitle("Continuous boyces index") +
+    theme_minimal() +
+    theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
+          plot.title.position = 'panel',
+          axis.text = element_text(size = rel(cex.axis)),
+          axis.title = element_text(size = rel(cex.lab)))
+
+  # Presence-background
+  ## AUC background
+  if (!is.null(x$pb_evaluation)){
+    pb_eval <- x$pb_evaluation
+    roc_bg <- pb_eval$roc$roc
     roc_bg <- data.frame(tpr = roc_bg$TPR,
                          fpr = roc_bg$FPR)
     p_roc_bg <- ggplot(roc_bg, aes(y = .data$tpr,
@@ -1030,8 +1053,8 @@ plot.POEvaluation <- function(x, ...) {
                 size = 0.8) +
       geom_text(x = 0.8, y = 0.1,
                 label = sprintf("AUC: %s",
-                                round(x$roc_background$auc_background, 3))) +
-      ggtitle('ROC curve') +
+                                round(pb_eval$roc$auc, 3))) +
+      ggtitle('Receiver-operator curve') +
       labs(y = "Sensitivity (TPR)",
            x = "1-Specificity (FPR)") +
       scale_color_manual(
@@ -1050,30 +1073,44 @@ plot.POEvaluation <- function(x, ...) {
             axis.text = element_text(size = rel(cex.axis)),
             axis.title = element_text(size = rel(cex.lab)),
             legend.position = 'top')
-  }
 
-  # CBI
-  cbi_bins <- data.frame(f_ratio = x$boyce$F.ratio,
-                         hs = x$boyce$HS)
-  p_boy <- ggplot(cbi_bins, aes(y = .data$f_ratio,
-                                x = .data$hs)) +
-    geom_line(colour = "black", size = 0.8) +
-    geom_hline(yintercept = 1, color = 'red', size = 0.8) +
-    scale_x_continuous(n.breaks = 9) +
-    geom_text(x = 0.2, y = max(cbi_bins$f_ratio),
-              label = sprintf("CBI: %s", round(x$boyce$Spearman.cor, 3))) +
-    labs(y = "P/E ratio",
-         x = "Suitability") +
-    ggtitle("Continuous boyces index") +
-    theme_minimal() +
-    theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
-          plot.title.position = 'panel',
-          axis.text = element_text(size = rel(cex.axis)),
-          axis.title = element_text(size = rel(cex.lab)))
+    ## Threshold-based
+    pb_eval <- x$pb_evaluation
+    tss_pb <- data.frame(thred = pb_eval$TSS$cutoff,
+                         tss = pb_eval$TSS$tss)
+    p_thred_bg <- ggplot(tss_pb, aes(y = .data$tss,
+                                   x = .data$thred)) +
+      geom_line(aes(colour = "tss", linetype = 'tss'), size = 0.8) +
+      geom_line(aes(y = .data$tss,
+                    x = rep(pb_eval$TSS$`Recommended threshold`,
+                            length(.data$tss)),
+                    colour = "best", linetype = "best"),
+                size = 0.8) +
+      geom_text(x = 0.5, y = 0.1,
+                label = sprintf("Threshold: %s",
+                                round(pb_eval$TSS$`Optimal TSS`, 3))) +
+      ggtitle('Threshold-performance curve') +
+      labs(y = "True skill statistic (TSS)",
+           x = "Threshold") +
+      scale_color_manual(
+        '',
+        values = c('tss' = 'black', 'best' = 'grey'),
+        labels = c('TSS curve',
+                   'Recommended thresold')) +
+      scale_linetype_manual(
+        '',
+        values = c('tss' = 'solid', 'best' = 'dashed'),
+        labels = c('TSS curve',
+                   'Recommended thresold')) +
+      theme_minimal() +
+      theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
+            plot.title.position = 'panel',
+            axis.text = element_text(size = rel(cex.axis)),
+            axis.title = element_text(size = rel(cex.lab)),
+            legend.position = 'top')
 
-  # Ensemble
-  if (!is.null(x$roc_background$auc_background)){
-    (p_roc_r | p_roc_bg) / p_boy
+    # Ensemble
+    (p_roc_r | p_boy) / (p_roc_bg | p_thred_bg)
   } else {
     (p_roc_r | p_boy)
   }
