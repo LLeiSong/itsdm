@@ -1088,7 +1088,7 @@ plot.POEvaluation <- function(x, ...) {
                 size = 0.8) +
       geom_text(x = 0.5, y = 0.1,
                 label = sprintf("Threshold: %s",
-                                round(pb_eval$TSS$`Optimal TSS`, 3))) +
+                                round(pb_eval$TSS$`Recommended threshold`, 3))) +
       ggtitle('Threshold-performance curve') +
       labs(y = "True skill statistic (TSS)",
            x = "Threshold") +

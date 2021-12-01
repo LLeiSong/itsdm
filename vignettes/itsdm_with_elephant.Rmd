@@ -245,7 +245,7 @@ plot(it_sdm$eval_train)
 
 # According to test dataset
 it_sdm$eval_test
-plot(it_sdm$eval_train)
+plot(it_sdm$eval_test)
 ```
 
 ## Response curves
