@@ -523,8 +523,7 @@ print.EnvironmentalOutlier <- function(x, ...) {
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200,
 #'   sample_rate = 0.8, ndim = 1L,
-#'   seed = 123L, response = FALSE,
-#'   check_variable = FALSE)
+#'   seed = 123L, response = FALSE)
 #' print(mod)
 #'}
 #'
@@ -541,58 +540,62 @@ print.POIsotree <- function(x, ...){
   cat('Model evaluation:\n')
   cat('[Training dataset]:\n')
   print(x$eval_train)
-  cat('[Test dataset]:\n')
-  print(x$eval_test)
+  if (!is.null(x$eval_test)) {
+    cat('[Test dataset]:\n')
+    print(x$eval_test)
+  }
 
   # Variable importance
-  cat(paste0(paste(rep('=', 60), collapse = ''), '\n'))
-  cat('Variable importance:\n')
-  cat('Just show SHAP result, use print or plot of variable_analysis to see all.\n')
+  if (!is.null(x$variable_analysis)) {
+    cat(paste0(paste(rep('=', 60), collapse = ''), '\n'))
+    cat('Variable importance:\n')
+    cat('Just show SHAP result, use print or plot of variable_analysis to see all.\n')
 
-  # SHAP
-  ## Subset
-  cat('SHAP (mean(|Shapley value|))\n')
-  shap_x <- x$variable_analysis$SHAP
-  shap_x_train <- shap_x$train %>%
-    summarise(across(all_of(names(.)), .abs_mean))
-  shap_x_train <- t(
-    apply(shap_x_train, 1,
-          function(x) sort(x, decreasing = T))) %>%
-    as.data.frame()
-  shap_x_test <- shap_x$test %>%
-    summarise(across(all_of(names(.)), .abs_mean))
-  shap_x_test <- t(
-    apply(shap_x_test, 1,
-          function(x) sort(x, decreasing = T))) %>%
-    as.data.frame()
+    # SHAP
+    ## Subset
+    cat('SHAP (mean(|Shapley value|))\n')
+    shap_x <- x$variable_analysis$SHAP
+    shap_x_train <- shap_x$train %>%
+      summarise(across(all_of(names(.)), .abs_mean))
+    shap_x_train <- t(
+      apply(shap_x_train, 1,
+            function(x) sort(x, decreasing = T))) %>%
+      as.data.frame()
+    shap_x_test <- shap_x$test %>%
+      summarise(across(all_of(names(.)), .abs_mean))
+    shap_x_test <- t(
+      apply(shap_x_test, 1,
+            function(x) sort(x, decreasing = T))) %>%
+      as.data.frame()
 
-  ## Training
-  cat('[Training dataset]:\n')
-  n_max <- max(nchar(names(shap_x_train)))
-  val_max <- max(max(shap_x_train), max(shap_x_test))
-  invisible(lapply(names(shap_x_train), function(var){
-    val <- shap_x_train %>% pull(all_of(var))
-    # print
-    var <- ifelse(length(var) >= 20, var[1:20], var)
-    n_space <- min(n_max, 20)
-    cat(paste0(str_pad(var, n_space, side = 'right', pad = ' '),
-               ' : ',
-               paste(rep('#', round(val / val_max * 45)), collapse = ''),
-               sprintf(' %s\n', round(val, 3))))
-  }))
+    ## Training
+    cat('[Training dataset]:\n')
+    n_max <- max(nchar(names(shap_x_train)))
+    val_max <- max(max(shap_x_train), max(shap_x_test))
+    invisible(lapply(names(shap_x_train), function(var){
+      val <- shap_x_train %>% pull(all_of(var))
+      # print
+      var <- ifelse(length(var) >= 20, var[1:20], var)
+      n_space <- min(n_max, 20)
+      cat(paste0(str_pad(var, n_space, side = 'right', pad = ' '),
+                 ' : ',
+                 paste(rep('#', round(val / val_max * 45)), collapse = ''),
+                 sprintf(' %s\n', round(val, 3))))
+    }))
 
-  ## Test
-  cat('[Test dataset]:\n')
-  invisible(lapply(names(shap_x_test), function(var){
-    val <- shap_x_test %>% pull(all_of(var))
-    # print
-    var <- ifelse(length(var) >= 20, var[1:20], var)
-    n_space <- min(n_max, 20)
-    cat(paste0(str_pad(var, n_space, side = 'right', pad = ' '),
-               ' : ',
-               paste(rep('#', round(val / val_max * 45)), collapse = ''),
-               sprintf(' %s\n', round(val, 3))))
-  }))
+    ## Test
+    cat('[Test dataset]:\n')
+    invisible(lapply(names(shap_x_test), function(var){
+      val <- shap_x_test %>% pull(all_of(var))
+      # print
+      var <- ifelse(length(var) >= 20, var[1:20], var)
+      n_space <- min(n_max, 20)
+      cat(paste0(str_pad(var, n_space, side = 'right', pad = ' '),
+                 ' : ',
+                 paste(rep('#', round(val / val_max * 45)), collapse = ''),
+                 sprintf(' %s\n', round(val, 3))))
+    }))
+  }
 
   # Return
   invisible(x)

@@ -47,8 +47,7 @@ mod <- isotree_po(
   occ = occ, occ_test = occ_test,
   variables = env_vars, ntrees = 200,
   sample_rate = 0.8, ndim = 1L,
-  seed = 123L, response = FALSE,
-  check_variable = FALSE)
+  seed = 123L, response = FALSE)
 print(mod)
 }
 
