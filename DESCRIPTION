@@ -12,7 +12,6 @@ Imports:
     utils,
     stats,
     methods,
-    sp,
     sf,
     stars,
     raster,
@@ -30,13 +29,14 @@ Imports:
     ecospat,
     stringr,
     ROCit,
-    ncdf4,
-    rgdal,
-    rgeos
+    ncdf4
 Suggests: 
     kableExtra,
     knitr, 
     rmarkdown,
+    sp,
+    rgdal,
+    rgeos,
     rgbif,
     virtualspecies,
     here,

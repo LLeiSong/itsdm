@@ -490,6 +490,10 @@ print.EnvironmentalOutlier <- function(x, ...) {
 #' \code{\link{isotree_po}}
 #'
 #' @importFrom stringr str_pad
+#' @importFrom tidyselect all_of
+#' @importFrom dplyr filter pull across summarise
+#' @importFrom stringr str_pad
+#' @importFrom rlang .data
 #' @export
 #' @examples
 #' \donttest{
