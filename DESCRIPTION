@@ -44,6 +44,7 @@ Suggests:
     scrubr
 Remotes:
     ropensci/scrubr
+    bgreenwell/fastshap
 BugReports: https://github.com/LLeiSong/itsdm/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
