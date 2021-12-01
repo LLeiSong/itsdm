@@ -43,7 +43,7 @@ Suggests:
     lubridate,
     scrubr
 Remotes:
-    ropensci/scrubr
+    ropensci/scrubr,
     bgreenwell/fastshap
 BugReports: https://github.com/LLeiSong/itsdm/issues
 Encoding: UTF-8
