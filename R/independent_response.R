@@ -1,14 +1,17 @@
 #' @title Calculate independent responses of each variables.
-#' @description Calculate the independent responses of each variables within the model.
-#' @param model (Any predictive model). In this package, it is `isolation_forest`.
-#' It could be the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
+#' @description Calculate the independent responses of each variables
+#' within the model.
+#' @param model (Any predictive model). It is `isolation_forest` here. It could
+#' be the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
 #' @param var_occ (`data.frame`, `tibble`) The `data.frame` style table that
 #' include values of environmental variables at occurrence locations.
-#' @param variables (`stars`) The `stars` of environmental variables. It should have
-#' multiple `attributes` instead of `dims`. If you have `raster` object instead, you
+#' @param variables (`stars`) The `stars` of environmental variables.
+#' It should have multiple `attributes` instead of `dims`.
+#' If you have `raster` object instead, you
 #' could use \code{\link{st_as_stars}} to convert it to `stars` or use
-#' \code{\link{read_stars}} directly read source data as a `stars`. You also could
-#' use item `variables` of `POIsotree` made by function \code{\link{isotree_po}}.
+#' \code{\link{read_stars}} directly read source data as a `stars`.
+#' You also could use item `variables` of `POIsotree` made by function
+#' \code{\link{isotree_po}}.
 #' @param si (`integer`) The number of samples to generate response curves.
 #' If it is too small, the response curves might be biased.
 #' The default value is `1000`.
@@ -17,8 +20,10 @@
 #'
 #' @return (`IndependentResponse`) A list of
 #' \itemize{
-#' \item{responses_cont (`list`) A list of response values of continuous variables}
-#' \item{responses_cat (`list`) A list of response values of categorical variables}
+#' \item{responses_cont (`list`) A list of response values of continuous
+#' variables}
+#' \item{responses_cat (`list`) A list of response values of categorical
+#' variables}
 #' }
 #'
 #' @details

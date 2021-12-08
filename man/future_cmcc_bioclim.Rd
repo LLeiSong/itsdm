@@ -15,9 +15,10 @@ future_cmcc_bioclim(
 )
 }
 \arguments{
-\item{bry}{(\code{\link{sf}} or \code{sp}) The boundary to mask the downloaded original data.
-If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
-\code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
+\item{bry}{(\code{\link{sf}} or \code{sp}) The boundary to mask the
+downloaded original data. If \code{NULL}, it would get global map.
+If not \code{NULL}, it can take \code{\link{sf}}, \code{\link{sfc}},
+\code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
 The default is \code{NULL}.}
 
 \item{path}{(\code{character}) The path to save the downloaded imagery.
@@ -29,7 +30,8 @@ Should be one of "CMCC-CESM", 'GFDL-ESM2M', 'HadGEM2-ES',
 'IPSL-CM5A-LR', 'MIROC-ESM-CHEM', 'NorESM1-M'.
 The default is CMCC-CESM.}
 
-\item{rcp}{(\code{numeric}) The option of Representative Concentration Pathways (RCPs).
+\item{rcp}{(\code{numeric}) The option of Representative Concentration
+Pathways (RCPs).
 Should be 45 or 85. Only 85 is available for CMCC-CESM. The default is 85.}
 
 \item{interval}{(\code{character}) The option for time interval.
@@ -38,7 +40,8 @@ Should be one of "2040-2079", "2060-2099". The default is "2040-2079".}
 \item{nm_mark}{(\code{character}) the name mark of clipped images.
 The default is "clip". It would be ignored if \code{bry} is \code{NULL}.}
 
-\item{return_stack}{(\code{logical}) if \code{TRUE}, stack the imagery together and return.
+\item{return_stack}{(\code{logical}) if \code{TRUE}, stack the imagery
+together and return.
 If the area is large and resolution is high, it is better not to stack them.
 The default is \code{TRUE}.}
 }

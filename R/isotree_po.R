@@ -1,8 +1,10 @@
 #' @title Function to run extended isolation forest as SDM.
-#' @description Call isolation forest and its variations to do species distribution modeling.
+#' @description Call isolation forest and its variations to do
+#' species distribution modeling.
 #' @param occ (`data.frame`, `sf`, `SpatialPointsDataFrame`)
 #' The occurrence dataset for training.
-#' There must be column `x` and `y` for coordinates if it is a regular `data.frame`.
+#' There must be column `x` and `y` for coordinates if
+#' it is a regular `data.frame`.
 #' @param occ_test (`data.frame`, `sf`, `SpatialPointsDataFrame`, or `NULL`)
 #' The occurrence dataset for independent test. The same structure as `occ`.
 #' If not `NULL`, there must be column `x` and `y` for coordinates when it is a
@@ -18,15 +20,16 @@
 #' be integer, which you could use function \code{\link{as.integer}} to convert to.
 #' The default is `100L`.
 #' @param sample_size (`integer` or `NULL`) Alternative argument for `sample_rate`.
-#' If not `NULL`, it should be a number for sampling size in `[2, nrow(occ)]`. It must
-#' be integer, which you could use function \code{\link{as.integer}} to convert to.
-#' The default is `NULL`. Only set either `sample_size` or `sample_rate`.
+#' If not `NULL`, it should be a number for sampling size in `[2, nrow(occ)]`.
+#' It must be integer, which you could use function \code{\link{as.integer}} to
+#' convert to. The default is `NULL`.
+#' Only set either `sample_size` or `sample_rate`.
 #' @param sample_rate (`numeric` or `NULL`) Alternative argument for `sample_size`.
 #' If not `NULL`, it should be a rate for sampling size in `[0, 1]`.
 #' The default is `NULL`. Only set either `sample_size` or `sample_rate`.
 #' @param ndim (`integer`) ExtensionLevel for isolation forest. It must
-#' be integer, which you could use function \code{\link{as.integer}} to convert to.
-#' Also, it must be no smaller than the dimension of environmental variables.
+#' be integer, which you could use function \code{\link{as.integer}} to convert
+#' to. Also, it must be no smaller than the dimension of environmental variables.
 #' When it is 1, the model is a traditional isolation forest, otherwise the model
 #' is an extended isolation forest. The default is 1.
 #' @param seed (`integer`) The random seed used in the modeling. It should be an
@@ -36,40 +39,51 @@
 #' The default is `TRUE`.
 #' @param check_variable (`logical`) If `TRUE`, check the variable importance.
 #' The default is `TRUE`.
-#' @param visualize (`logical`) If `TRUE`, generate the essential figures related to
-#' the model. The default is `FALSE`.
+#' @param visualize (`logical`) If `TRUE`, generate the essential figures
+#' related to the model. The default is `FALSE`.
 #'
 #' @return (`POIsotree`) A list of
 #' \itemize{
-#' \item{model (\code{\link{isolation.forest}}) The threshold set in function inputs}
-#' \item{variables (`stars`) The formatted image stack of environmental variables}
-#' \item{pts_occ (\code{\link{sf}}) A \code{\link{sf}} of training occurrence dataset}
-#' \item{pts_occ_test (\code{\link{sf}} or `NULL`) A \code{\link{sf}} of test occurrence dataset}
+#' \item{model (\code{\link{isolation.forest}}) The threshold set in
+#' function inputs}
+#' \item{variables (`stars`) The formatted image stack of
+#' environmental variables}
+#' \item{pts_occ (\code{\link{sf}}) A \code{\link{sf}} of training occurrence
+#' dataset}
+#' \item{pts_occ_test (\code{\link{sf}} or `NULL`) A \code{\link{sf}} of test
+#' occurrence dataset}
 #' \item{var_train (\code{\link{sf}}) A \code{\link{sf}} with values of each
 #' environmental variables for training occurrence}
 #' \item{pred_train (\code{\link{sf}}) A \code{\link{sf}} with values of
 #' prediction for training occurrence}
 #' \item{eval_train (`POEvaluation`) A list of presence-only evaluation metrics
-#' based on training dataset. See details of `POEvaluation` in \code{\link{evaluate_po}}}
+#' based on training dataset. See details of `POEvaluation` in
+#' \code{\link{evaluate_po}}}
 #' \item{var_test (\code{\link{sf}}) A \code{\link{sf}} with values of each
 #' environmental variables for test occurrence}
 #' \item{pred_test (\code{\link{sf}}) A \code{\link{sf}} with values of
 #' prediction for test occurrence}
 #' \item{eval_test (`POEvaluation`) A list of presence-only evaluation metrics
-#' based on test dataset. See details of `POEvaluation` in \code{\link{evaluate_po}}}
+#' based on test dataset.
+#' See details of `POEvaluation` in \code{\link{evaluate_po}}}
 #' \item{prediction (`stars`) The predicted environmental suitability}
-#' \item{marginal_responses (`MarginalResponse`) A list of marginal response values
-#' of each environmental variables. See details in \code{\link{marginal_response}}}
-#' \item{independent_responses (`IndependentResponse`) A list of independent response values
-#' of each environmental variables. See details in \code{\link{independent_response}}}
-#' \item{variable_dependence (`VariableDependence`) A list of variable dependence values
-#' of each environmental variables. See details in \code{\link{variable_dependence}}}
-#' \item{variable_analysis (`VariableAnalysis`) A list of variable importance analysis based on
-#' multiple metrics. See details in \code{\link{variable_analysis}}}}
+#' \item{marginal_responses (`MarginalResponse`) A list of marginal response
+#' values of each environmental variables.
+#' See details in \code{\link{marginal_response}}}
+#' \item{independent_responses (`IndependentResponse`) A list of independent
+#' response values of each environmental variables.
+#' See details in \code{\link{independent_response}}}
+#' \item{variable_dependence (`VariableDependence`) A list of variable
+#' dependence values of each environmental variables.
+#' See details in \code{\link{variable_dependence}}}
+#' \item{variable_analysis (`VariableAnalysis`) A list of variable importance
+#' analysis based on multiple metrics.
+#' See details in \code{\link{variable_analysis}}}}
 #'
 #' @seealso
-#' \code{\link{evaluate_po}}, \code{\link{marginal_response}}, \code{\link{independent_response}},
-#' \code{\link{variable_dependence}}, \code{\link{variable_analysis}}, \code{\link{isolation.forest}}
+#' \code{\link{evaluate_po}}, \code{\link{marginal_response}},
+#' \code{\link{independent_response}}, \code{\link{variable_dependence}},
+#' \code{\link{variable_analysis}}, \code{\link{isolation.forest}}
 #'
 #' @references
 #' \itemize{

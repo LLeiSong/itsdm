@@ -2,23 +2,26 @@
 #' @description Use threshold-based, logistic or linear conversion method to
 #' convert predicted suitability map to presence-absence map.
 #' @param suitability (`stars` or `RasterLayer`) The suitability raster.
-#' @param method (`character`) The conversion method, must be one of 'threshold',
-#' 'logistic', and 'linear'. The default is 'logistic'.
-#' @param beta (`numeric`) Works for 'threshold' or 'logistic' method. If `method` is
-#' threshold, then `beta` is the threshold value to cutoff. If `method` is logistic,
-#' it is the sigmoid midpoint. The default is `0.5`.
-#' @param alpha (`numeric`) Works for logistic method. It is the logistic growth
-#' rate or steepness of the curve. The default is `-.05`.
+#' @param method (`character`) The conversion method, must be one of
+#' 'threshold', 'logistic', and 'linear'. The default is 'logistic'.
+#' @param beta (`numeric`) Works for 'threshold' or 'logistic' method.
+#' If `method` is threshold, then `beta` is the threshold value to cutoff.
+#' If `method` is logistic, it is the sigmoid midpoint. The default is `0.5`.
+#' @param alpha (`numeric`) Works for logistic method.
+#' It is the logistic growth rate or steepness of the curve.
+#' The default is `-.05`.
 #' @param a (`numeric`) Works for linear method. It is the slope of the line.
 #' The default is `1`.
-#' @param b (`numeric`) Works for linear method. It is the intercept of the line.
-#' The default is `0`.
-#' @param species_prevalence (`numeric` or `NA`) Works for all three methods. It is the
-#' species prevalence to classify suitability map. It could be `NA`, when the
-#' will be calculated automatically based on other arguments. The default is `NA`.
+#' @param b (`numeric`) Works for linear method.
+#' It is the intercept of the line. The default is `0`.
+#' @param species_prevalence (`numeric` or `NA`) Works for all three methods.
+#' It is the species prevalence to classify suitability map.
+#' It could be `NA`, when the will be calculated automatically
+#' based on other arguments. The default is `NA`.
 #' @param seed (`integer`) The seed for random progress. The default is `10L`
-#' @param visualize (`logical`) If `TRUE`, plot map of suitability, probability of
-#' occurrence, and presence-absence together. The default is `TRUE`.
+#' @param visualize (`logical`) If `TRUE`, plot map of suitability,
+#' probability of occurrence, and presence-absence together.
+#' The default is `TRUE`.
 #' @return (`PAConversion`) A list of
 #' \itemize{
 #' \item{suitability (`stars`) The input suitability map}
@@ -156,15 +159,17 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
   if (method == 'logistic') {
     if (length(na.omit(c(beta, alpha, species_prevalence))) == 1){
       if (!is.na(species_prevalence)) {
-        warning(paste0('Neither alpha or beta set. Randomly select alpha and',
-                       ' adjust beta programmatically to the desired prevalence.'))
+        warning(
+          paste0('Neither alpha or beta set. Randomly select alpha and',
+                 ' adjust beta programmatically to the desired prevalence.'))
         set.seed(seed)
         alpha <- -sample(c(seq((suit_max - suit_min)/1000,
                                (suit_max - suit_min)/100, length = 10),
                            seq((suit_max - suit_min)/100,
                                (suit_max - suit_min)/10, length = 100),
                            seq((suit_max - suit_min)/10,
-                               (suit_max - suit_min)*10, length = 10)), size = 1)
+                               (suit_max - suit_min)*10, length = 10)),
+                         size = 1)
       }
     } else if (length(na.omit(c(beta, alpha, species_prevalence))) == 3) {
       beta <- NA}
@@ -172,12 +177,15 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
     # Provide necessary message
     if (!is.na(species_prevalence)) {
       if (!is.na(beta)) {
-        message('species_prevalence and beta are set, choose alpha automatically.')
+        message(paste0('species_prevalence and beta are set,',
+                       ' choose alpha automatically.'))
       } else {
-        message('species_prevalence and alpha are set, choose beta automatically.')
+        message(paste0('species_prevalence and alpha are set,',
+                       ' choose beta automatically.'))
       }
     } else {
-      message('alpha and beta are set, choose species_prevalence automatically.')
+      message(paste0('alpha and beta are set,',
+                     ' choose species_prevalence automatically.'))
     }
   }
 
@@ -228,25 +236,30 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
             (.max_value(suitability) - .min_value(suitability)) * 10),
           function(alpha) {
             if(alpha > 0) alpha <- -alpha
-            prob_of_occurrence <- .logistic(suitability, beta = beta, alpha = alpha)
+            prob_of_occurrence <- .logistic(
+              suitability, beta = beta, alpha = alpha)
             pa_map <- .quick_bernoulli_trial(prob_of_occurrence)
             c(alpha, .mean_value(pa_map))}))
         epsilon <- species_prevalence - alpha_test[, 2]
         if(all(epsilon > 0)){
-          warning(paste0('The desired species prevalence cannot be obtained, ',
-                         'because of the chosen beta and available environmental',
-                         ' conditions.\n',
-                         sprintf("The closest possible estimate of prevalence was %s.",
-                                 round(alpha_test[2, 2], 2)),
-                         "\nPerhaps you can try a lower beta value."))
+          warning(
+            paste0(
+              'The desired species prevalence cannot be obtained, ',
+              'because of the chosen beta and available environmental',
+              ' conditions.\n',
+              sprintf("The closest possible estimate of prevalence was %s.",
+                      round(alpha_test[2, 2], 2)),
+              "\nPerhaps you can try a lower beta value."))
           alpha <- alpha_test[2, 1]
         } else if (all(epsilon < 0)){
-          warning(paste0('The desired species prevalence cannot be obtained, ',
-                         'because of the chosen beta and available environmental',
-                         ' conditions.\n',
-                         sprintf("The closest possible estimate of prevalence was %s.",
-                                 round(alpha_test[1, 2], 2)),
-                         "\nPerhaps you can try a higher beta value."))
+          warning(
+            paste0(
+              'The desired species prevalence cannot be obtained, ',
+              'because of the chosen beta and available environmental',
+              ' conditions.\n',
+              sprintf("The closest possible estimate of prevalence was %s.",
+                      round(alpha_test[1, 2], 2)),
+              "\nPerhaps you can try a higher beta value."))
           alpha <- alpha_test[1, 1]
         } else {
           while (all(abs(epsilon) > 0.01)){
@@ -269,27 +282,32 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
         bb <- .max_value(suitability) +
           diff(c(.min_value(suitability), .max_value(suitability))) / 2
         beta_test <- do.call(rbind, lapply(c(aa, bb), function(beta) {
-          prob_of_occurrence <- .logistic(suitability, beta = beta, alpha = alpha)
+          prob_of_occurrence <- .logistic(suitability,
+                                          beta = beta, alpha = alpha)
           pa_map <- .quick_bernoulli_trial(prob_of_occurrence)
           c(beta, .mean_value(pa_map))}))
 
         epsilon <- data.frame(epsi = species_prevalence - beta_test[, 2],
                               prevalence = beta_test[, 2])
         if(all(epsilon$epsi > 0)) {
-          warning(paste0('The desired species prevalence cannot be obtained, ',
-                         'because of the chosen alpha and available environmental',
-                         ' conditions.\n',
-                         sprintf("The closest possible estimate of prevalence was %s.",
-                                 round(beta_test[1, 2], 2)),
-                         "\nPerhaps you can try an alpha value closer to 0."))
+          warning(
+            paste0(
+              'The desired species prevalence cannot be obtained, ',
+              'because of the chosen alpha and available environmental',
+              ' conditions.\n',
+              sprintf("The closest possible estimate of prevalence was %s.",
+                      round(beta_test[1, 2], 2)),
+              "\nPerhaps you can try an alpha value closer to 0."))
           beta <- beta_test[1, 1]
         } else if (all(epsilon$epsi < 0)) {
-          warning(paste0('The desired species prevalence cannot be obtained, ',
-                         'because of the chosen alpha and available environmental',
-                         ' conditions.\n',
-                         sprintf("The closest possible estimate of prevalence was %s.",
-                                 round(beta_test[2, 2], 2)),
-                         "\nPerhaps you can try an alpha value closer to 0."))
+          warning(
+            paste0(
+              'The desired species prevalence cannot be obtained, ',
+              'because of the chosen alpha and available environmental',
+              ' conditions.\n',
+              sprintf("The closest possible estimate of prevalence was %s.",
+                      round(beta_test[2, 2], 2)),
+              "\nPerhaps you can try an alpha value closer to 0."))
           beta <- beta_test[2, 1]
         } else {
           while (all(apply(
@@ -343,16 +361,16 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
   species_prevalence <- .mean_value(pa_map)
 
   if(method == "threshold") {
-    pa_conversion = list(cutoff = beta,
+    pa_conversion <-  list(cutoff = beta,
                          conversion_method = method,
                          species_prevalence = species_prevalence)
   } else if(method == "logistic") {
-    pa_conversion = list(conversion_method = method,
+    pa_conversion <- list(conversion_method = method,
                          alpha = alpha,
                          beta = beta,
                          species_prevalence = species_prevalence)
   } else if(method == "linear") {
-    pa_conversion = list(conversion_method = method,
+    pa_conversion <- list(conversion_method = method,
                          a = a,
                          b = b,
                          species_prevalence = species_prevalence)

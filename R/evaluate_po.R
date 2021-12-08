@@ -1,20 +1,22 @@
 #' @title Evaluate the model based on presence-only data.
-#' @description This function will calculate two major types of evaluation metrics
-#' in terms of presence-only data. The first type is presence-only customized metrics,
-#' such as Contrast Validation Index (CVI), continuous Boyce index (CBI), and ROC_ratio.
-#' The second type is presence-background evaluation metrics by extracting background
-#' points as pseudo absence observations.
-#' @param model (`isolation_forest`) The extended isolation forest SDM. It could be
-#' the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
+#' @description This function will calculate two major types of evaluation
+#' metrics in terms of presence-only data. The first type is presence-only
+#' customized metrics, such as Contrast Validation Index (CVI),
+#' continuous Boyce index (CBI), and ROC_ratio.
+#' The second type is presence-background evaluation metrics by
+#' extracting background points as pseudo absence observations.
+#' @param model (`isolation_forest`) The extended isolation forest SDM.
+#' It could be the item `model` of `POIsotree` made by
+#' function \code{\link{isotree_po}}.
 #' @param occ_pred (`vector` of `numeric`) A `vector` contains predicted values
 #' at occurrence locations.
 #' @param bg_pred (`vector` of `numeric`) the vector contains predicted values
 #' with same number of background points.
 #' @param var_pred (`vector` of `numeric`) the vector contains predicted values
 #' of the whole area.
-#' @param threshold (`numeric` or `NULL`) The threshold to calculate threshold-based
-#' evaluation metrics. If `NULL`, a recommended threshold will be calculated
-#' based on optimal TSS value. The default is `NULL`.
+#' @param threshold (`numeric` or `NULL`) The threshold to calculate
+#' threshold-based evaluation metrics. If `NULL`, a recommended threshold
+#' will be calculated based on optimal TSS value. The default is `NULL`.
 #' @param visualize (`logical`) If `TRUE`, plot the evaluation figures.
 #' The default is `FALSE`.
 #' @return (`POEvaluation`) A list of
@@ -27,7 +29,8 @@
 #' \item{roc_ratio (`list`) A list of ROC ratio and AUC ratio}
 #' }}
 #' \item{
-#' \bold{pb_evaluation} is presence-background evaluation metrics. It is a list of
+#' \bold{pb_evaluation} is presence-background evaluation metrics.
+#' It is a list of
 #' \itemize{
 #' \item{confusion matrix (`table`) A table of confusion matrix. The columns are
 #' true values, and the rows are predicted values.}
@@ -37,12 +40,13 @@
 #' \itemize{
 #' \item{cutoff (`vector` of `numeric`) A vector of cutoff threshold values}
 #' \item{tss (`vector` of `numeric`) A vector of TSS for each cutoff threshold}
-#' \item{Recommended threshold (`numeric`) A recommended threshold according to TSS}
+#' \item{Recommended threshold (`numeric`) A recommended threshold
+#' according to TSS}
 #' \item{Optimal TSS (`numeric`) The best TSS value}}}
 #' \item{roc (`list`) A list of ROC values and AUC value}
 #' \item{Jaccard's similarity index (`numeric`) The Jaccard's similarity index}
-#' \item{Sørensen's similarity index (`numeric`) The Sørensen's similarity index or
-#' F-measure}
+#' \item{Sørensen's similarity index (`numeric`) The Sørensen's similarity index
+#' or F-measure}
 #' \item{Overprediction rate (`numeric`) The Overprediction rate}
 #' \item{Underprediction rate (`numeric`) The Underprediction rate}
 #' }}}
@@ -54,8 +58,8 @@
 #' \itemize{
 #' \item{
 #' \bold{CVI} is the proportion of presence points falling in cells having
-#' a threshold (`0.5` for example) habitat suitability index minus the proportion of
-#' cells within this range of threshold of the model.
+#' a threshold (`0.5` for example) habitat suitability index minus
+#' the proportion of cells within this range of threshold of the model.
 #' Here we used varied thresholds: `0.25`, `0.5`, and `0.75`.}
 #' \item{
 #' \bold{ROC_ratio} curve plots the proportion of presences falling above a

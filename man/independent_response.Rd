@@ -7,17 +7,19 @@
 independent_response(model, var_occ, variables, si = 1000, visualize = FALSE)
 }
 \arguments{
-\item{model}{(Any predictive model). In this package, it is \code{isolation_forest}.
-It could be the item \code{model} of \code{POIsotree} made by function \code{\link{isotree_po}}.}
+\item{model}{(Any predictive model). It is \code{isolation_forest} here. It could
+be the item \code{model} of \code{POIsotree} made by function \code{\link{isotree_po}}.}
 
 \item{var_occ}{(\code{data.frame}, \code{tibble}) The \code{data.frame} style table that
 include values of environmental variables at occurrence locations.}
 
-\item{variables}{(\code{stars}) The \code{stars} of environmental variables. It should have
-multiple \code{attributes} instead of \code{dims}. If you have \code{raster} object instead, you
+\item{variables}{(\code{stars}) The \code{stars} of environmental variables.
+It should have multiple \code{attributes} instead of \code{dims}.
+If you have \code{raster} object instead, you
 could use \code{\link{st_as_stars}} to convert it to \code{stars} or use
-\code{\link{read_stars}} directly read source data as a \code{stars}. You also could
-use item \code{variables} of \code{POIsotree} made by function \code{\link{isotree_po}}.}
+\code{\link{read_stars}} directly read source data as a \code{stars}.
+You also could use item \code{variables} of \code{POIsotree} made by function
+\code{\link{isotree_po}}.}
 
 \item{si}{(\code{integer}) The number of samples to generate response curves.
 If it is too small, the response curves might be biased.
@@ -29,12 +31,15 @@ The default is \code{FALSE}.}
 \value{
 (\code{IndependentResponse}) A list of
 \itemize{
-\item{responses_cont (\code{list}) A list of response values of continuous variables}
-\item{responses_cat (\code{list}) A list of response values of categorical variables}
+\item{responses_cont (\code{list}) A list of response values of continuous
+variables}
+\item{responses_cat (\code{list}) A list of response values of categorical
+variables}
 }
 }
 \description{
-Calculate the independent responses of each variables within the model.
+Calculate the independent responses of each variables
+within the model.
 }
 \details{
 The values show how each environmental variable independently

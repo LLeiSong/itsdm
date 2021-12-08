@@ -2,27 +2,31 @@
 #' @description Reduce dimensions of raster layers based on Pearson correlation
 #' and a user-defined threshold. NOTE that it only works on numeric variables,
 #' does not work on categorical variables.
-#' @param img_stack (\code{stars} or \code{RasterStack}) The image stack to work on.
-#' @param threshold (\code{numeric}) The threshold number of Pearson correlation that
-#' indicates two variables are strongly correlated. The default is 0.5.
+#' @param img_stack (\code{stars} or \code{RasterStack})
+#' The image stack to work on.
+#' @param threshold (\code{numeric}) The threshold number of Pearson
+#' correlation that indicates two variables are strongly correlated.
+#' The default is 0.5.
 #' @param preferred_vars (\code{vector} of \code{character}) The preferred
 #' variables \bold{in order} in dimension reduction. The preferred variables
-#' will move to the beginning before the reduction. So make sure they are placed
-#' in order. Furthermore, setting preferred_vars does not guarantee they can survive.
-#' For example, one preferred variable that is placed later has strong correlation with former
-#' preferred variable.
-#' @param samples (\code{\link{sf}} or \code{sp}) The samples to reduce dimension.
+#' will move to the beginning before the reduction. So make sure they are
+#' placed in order. Furthermore, setting preferred_vars does not guarantee
+#' they can survive. For example, one preferred variable that is placed later
+#' has strong correlation with former preferred variable.
+#' @param samples (\code{\link{sf}} or \code{sp}) The samples to reduce
+#' dimension.
 #' If not \code{NULL}, it can take \code{\link{sf}}, \code{\link{sfc}},
 #' \code{SpatialPointsDataFrame}, \code{SpatialPoints}, etc.
-#' If \code{NULL}, the whole raster stack would be used. The default is \code{NULL}.
+#' If \code{NULL}, the whole raster stack would be used.
+#' The default is \code{NULL}.
 #' @return (\code{ReducedImageStack}) A list of
 #' \itemize{
 #' \item{threshold (\code{numeric}) The threshold set in function inputs}
 #' \item{img_reduced (\code{stars}) The image stack after dimension reduction}
-#' \item{cors_original (\code{\link{data.frame}}) A table of Pearson correlations
-#' between all variables.}
-#' \item{cors_reduced (\code{\link{data.frame}}) A table of Pearson correlations
-#' between variables after dimension reduction.}}
+#' \item{cors_original (\code{\link{data.frame}}) A table of Pearson
+#' correlations between all variables.}
+#' \item{cors_reduced (\code{\link{data.frame}}) A table of Pearson
+#' correlations between variables after dimension reduction.}}
 #' @import checkmate
 #' @importFrom sf st_as_sf st_crop
 #' @importFrom raster stack layerStats mask rasterize subset

@@ -19,30 +19,33 @@ convert_to_pa(
 \arguments{
 \item{suitability}{(\code{stars} or \code{RasterLayer}) The suitability raster.}
 
-\item{method}{(\code{character}) The conversion method, must be one of 'threshold',
-'logistic', and 'linear'. The default is 'logistic'.}
+\item{method}{(\code{character}) The conversion method, must be one of
+'threshold', 'logistic', and 'linear'. The default is 'logistic'.}
 
-\item{beta}{(\code{numeric}) Works for 'threshold' or 'logistic' method. If \code{method} is
-threshold, then \code{beta} is the threshold value to cutoff. If \code{method} is logistic,
-it is the sigmoid midpoint. The default is \code{0.5}.}
+\item{beta}{(\code{numeric}) Works for 'threshold' or 'logistic' method.
+If \code{method} is threshold, then \code{beta} is the threshold value to cutoff.
+If \code{method} is logistic, it is the sigmoid midpoint. The default is \code{0.5}.}
 
-\item{alpha}{(\code{numeric}) Works for logistic method. It is the logistic growth
-rate or steepness of the curve. The default is \code{-.05}.}
+\item{alpha}{(\code{numeric}) Works for logistic method.
+It is the logistic growth rate or steepness of the curve.
+The default is \code{-.05}.}
 
 \item{a}{(\code{numeric}) Works for linear method. It is the slope of the line.
 The default is \code{1}.}
 
-\item{b}{(\code{numeric}) Works for linear method. It is the intercept of the line.
-The default is \code{0}.}
+\item{b}{(\code{numeric}) Works for linear method.
+It is the intercept of the line. The default is \code{0}.}
 
-\item{species_prevalence}{(\code{numeric} or \code{NA}) Works for all three methods. It is the
-species prevalence to classify suitability map. It could be \code{NA}, when the
-will be calculated automatically based on other arguments. The default is \code{NA}.}
+\item{species_prevalence}{(\code{numeric} or \code{NA}) Works for all three methods.
+It is the species prevalence to classify suitability map.
+It could be \code{NA}, when the will be calculated automatically
+based on other arguments. The default is \code{NA}.}
 
 \item{seed}{(\code{integer}) The seed for random progress. The default is \code{10L}}
 
-\item{visualize}{(\code{logical}) If \code{TRUE}, plot map of suitability, probability of
-occurrence, and presence-absence together. The default is \code{TRUE}.}
+\item{visualize}{(\code{logical}) If \code{TRUE}, plot map of suitability,
+probability of occurrence, and presence-absence together.
+The default is \code{TRUE}.}
 }
 \value{
 (\code{PAConversion}) A list of

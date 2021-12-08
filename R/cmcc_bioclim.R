@@ -1,16 +1,19 @@
 #' @title Download historic Bioclimatic indicators (BIOs) named CMCC-BioClimInd.
 #' @description Parse historic CMCC-BioClimInd bioclimatic indicators
 #' optionally with a setting of boundary and a few other options.
-#' @param bry (\code{\link{sf}} or \code{sp}) The boundary to mask the downloaded original data.
-#' If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
-#' \code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
+#' @param bry (\code{\link{sf}} or \code{sp}) The boundary to mask the
+#' downloaded original data. If \code{NULL}, it would get global map.
+#' If not \code{NULL}, it can take \code{\link{sf}},
+#' \code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons},
+#'  etc.
 #' The default is \code{NULL}.
 #' @param path (\code{character}) The path to save the downloaded imagery.
 #' If \code{NULL}, it would use the current working directory.
 #' The default is \code{NULL}.
 #' @param nm_mark (\code{character}) the name mark of clipped images.
 #' The default is "clip". It would be ignored if \code{bry} is \code{NULL}.
-#' @param return_stack (\code{logical}) if \code{TRUE}, stack the imagery together and return.
+#' @param return_stack (\code{logical}) if \code{TRUE}, stack the imagery
+#' together and return.
 #' If the area is large and resolution is high, it is better not to stack them.
 #' The default is \code{TRUE}.
 #' @return if \code{return_stack} is \code{TRUE}, the images would be
@@ -91,11 +94,12 @@ cmcc_bioclim <- function(bry = NULL,
              download.file(url, temp)
 
              # Extract hist file from downloaded zip
-             decompression <- system2("unzip",
-                                      args = c("-j", "-o", temp,
-                                               sprintf("%s_HIST_1960_99.nc", var),
-                                               sprintf("-d %s", path)),
-                                      stdout = TRUE)
+             decompression <- system2(
+               "unzip",
+               args = c("-j", "-o", temp,
+                        sprintf("%s_HIST_1960_99.nc", var),
+                        sprintf("-d %s", path)),
+               stdout = TRUE)
              if (grepl("Warning message", tail(decompression, 1))) {
                  print(decompression)
              }

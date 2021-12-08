@@ -7,9 +7,11 @@
 cmcc_bioclim(bry = NULL, path = NULL, nm_mark = "clip", return_stack = TRUE)
 }
 \arguments{
-\item{bry}{(\code{\link{sf}} or \code{sp}) The boundary to mask the downloaded original data.
-If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
-\code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
+\item{bry}{(\code{\link{sf}} or \code{sp}) The boundary to mask the
+downloaded original data. If \code{NULL}, it would get global map.
+If not \code{NULL}, it can take \code{\link{sf}},
+\code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons},
+etc.
 The default is \code{NULL}.}
 
 \item{path}{(\code{character}) The path to save the downloaded imagery.
@@ -19,7 +21,8 @@ The default is \code{NULL}.}
 \item{nm_mark}{(\code{character}) the name mark of clipped images.
 The default is "clip". It would be ignored if \code{bry} is \code{NULL}.}
 
-\item{return_stack}{(\code{logical}) if \code{TRUE}, stack the imagery together and return.
+\item{return_stack}{(\code{logical}) if \code{TRUE}, stack the imagery
+together and return.
 If the area is large and resolution is high, it is better not to stack them.
 The default is \code{TRUE}.}
 }

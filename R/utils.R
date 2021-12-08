@@ -155,13 +155,13 @@
 # Functions to find linear conversion
 # Reference: https://github.com/Farewe/virtualspecies/blob/master/R/convertToPA.R
 # Get line coefficients from two points
-.abcoefs = function(x1, y1, x2, y2) {
+.abcoefs <- function(x1, y1, x2, y2) {
   list(b = y1 - x1 * (y1 - y2) / (x1 - x2),
        a = (y1 - y2) / (x1 - x2))
 }
 
 # Function for a line with intercept (b) and slope (a)
-.lab = function(x, b, a) a * x + b
+.lab <- function(x, b, a) a * x + b
 
 # Function to find solutions
 #' @importFrom stats runif
@@ -180,7 +180,7 @@
   suitability > random_numbers
 }
 
-.find_linear_conversion = function(suitability,
+.find_linear_conversion <- function(suitability,
                                    target_prevalence,
                                    seed = 1) {
   suit_max <- .max_value(suitability)

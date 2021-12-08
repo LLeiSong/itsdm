@@ -24,7 +24,8 @@ isotree_po(
 \arguments{
 \item{occ}{(\code{data.frame}, \code{sf}, \code{SpatialPointsDataFrame})
 The occurrence dataset for training.
-There must be column \code{x} and \code{y} for coordinates if it is a regular \code{data.frame}.}
+There must be column \code{x} and \code{y} for coordinates if
+it is a regular \code{data.frame}.}
 
 \item{occ_test}{(\code{data.frame}, \code{sf}, \code{SpatialPointsDataFrame}, or \code{NULL})
 The occurrence dataset for independent test. The same structure as \code{occ}.
@@ -46,17 +47,18 @@ be integer, which you could use function \code{\link{as.integer}} to convert to.
 The default is \code{100L}.}
 
 \item{sample_size}{(\code{integer} or \code{NULL}) Alternative argument for \code{sample_rate}.
-If not \code{NULL}, it should be a number for sampling size in \verb{[2, nrow(occ)]}. It must
-be integer, which you could use function \code{\link{as.integer}} to convert to.
-The default is \code{NULL}. Only set either \code{sample_size} or \code{sample_rate}.}
+If not \code{NULL}, it should be a number for sampling size in \verb{[2, nrow(occ)]}.
+It must be integer, which you could use function \code{\link{as.integer}} to
+convert to. The default is \code{NULL}.
+Only set either \code{sample_size} or \code{sample_rate}.}
 
 \item{sample_rate}{(\code{numeric} or \code{NULL}) Alternative argument for \code{sample_size}.
 If not \code{NULL}, it should be a rate for sampling size in \verb{[0, 1]}.
 The default is \code{NULL}. Only set either \code{sample_size} or \code{sample_rate}.}
 
 \item{ndim}{(\code{integer}) ExtensionLevel for isolation forest. It must
-be integer, which you could use function \code{\link{as.integer}} to convert to.
-Also, it must be no smaller than the dimension of environmental variables.
+be integer, which you could use function \code{\link{as.integer}} to convert
+to. Also, it must be no smaller than the dimension of environmental variables.
 When it is 1, the model is a traditional isolation forest, otherwise the model
 is an extended isolation forest. The default is 1.}
 
@@ -71,40 +73,51 @@ The default is \code{TRUE}.}
 \item{check_variable}{(\code{logical}) If \code{TRUE}, check the variable importance.
 The default is \code{TRUE}.}
 
-\item{visualize}{(\code{logical}) If \code{TRUE}, generate the essential figures related to
-the model. The default is \code{FALSE}.}
+\item{visualize}{(\code{logical}) If \code{TRUE}, generate the essential figures
+related to the model. The default is \code{FALSE}.}
 }
 \value{
 (\code{POIsotree}) A list of
 \itemize{
-\item{model (\code{\link{isolation.forest}}) The threshold set in function inputs}
-\item{variables (\code{stars}) The formatted image stack of environmental variables}
-\item{pts_occ (\code{\link{sf}}) A \code{\link{sf}} of training occurrence dataset}
-\item{pts_occ_test (\code{\link{sf}} or \code{NULL}) A \code{\link{sf}} of test occurrence dataset}
+\item{model (\code{\link{isolation.forest}}) The threshold set in
+function inputs}
+\item{variables (\code{stars}) The formatted image stack of
+environmental variables}
+\item{pts_occ (\code{\link{sf}}) A \code{\link{sf}} of training occurrence
+dataset}
+\item{pts_occ_test (\code{\link{sf}} or \code{NULL}) A \code{\link{sf}} of test
+occurrence dataset}
 \item{var_train (\code{\link{sf}}) A \code{\link{sf}} with values of each
 environmental variables for training occurrence}
 \item{pred_train (\code{\link{sf}}) A \code{\link{sf}} with values of
 prediction for training occurrence}
 \item{eval_train (\code{POEvaluation}) A list of presence-only evaluation metrics
-based on training dataset. See details of \code{POEvaluation} in \code{\link{evaluate_po}}}
+based on training dataset. See details of \code{POEvaluation} in
+\code{\link{evaluate_po}}}
 \item{var_test (\code{\link{sf}}) A \code{\link{sf}} with values of each
 environmental variables for test occurrence}
 \item{pred_test (\code{\link{sf}}) A \code{\link{sf}} with values of
 prediction for test occurrence}
 \item{eval_test (\code{POEvaluation}) A list of presence-only evaluation metrics
-based on test dataset. See details of \code{POEvaluation} in \code{\link{evaluate_po}}}
+based on test dataset.
+See details of \code{POEvaluation} in \code{\link{evaluate_po}}}
 \item{prediction (\code{stars}) The predicted environmental suitability}
-\item{marginal_responses (\code{MarginalResponse}) A list of marginal response values
-of each environmental variables. See details in \code{\link{marginal_response}}}
-\item{independent_responses (\code{IndependentResponse}) A list of independent response values
-of each environmental variables. See details in \code{\link{independent_response}}}
-\item{variable_dependence (\code{VariableDependence}) A list of variable dependence values
-of each environmental variables. See details in \code{\link{variable_dependence}}}
-\item{variable_analysis (\code{VariableAnalysis}) A list of variable importance analysis based on
-multiple metrics. See details in \code{\link{variable_analysis}}}}
+\item{marginal_responses (\code{MarginalResponse}) A list of marginal response
+values of each environmental variables.
+See details in \code{\link{marginal_response}}}
+\item{independent_responses (\code{IndependentResponse}) A list of independent
+response values of each environmental variables.
+See details in \code{\link{independent_response}}}
+\item{variable_dependence (\code{VariableDependence}) A list of variable
+dependence values of each environmental variables.
+See details in \code{\link{variable_dependence}}}
+\item{variable_analysis (\code{VariableAnalysis}) A list of variable importance
+analysis based on multiple metrics.
+See details in \code{\link{variable_analysis}}}}
 }
 \description{
-Call isolation forest and its variations to do species distribution modeling.
+Call isolation forest and its variations to do
+species distribution modeling.
 }
 \details{
 Please read details of algorithm \code{\link{isolation.forest}} on
@@ -186,6 +199,7 @@ will be listed under their own functions}
 }
 }
 \seealso{
-\code{\link{evaluate_po}}, \code{\link{marginal_response}}, \code{\link{independent_response}},
-\code{\link{variable_dependence}}, \code{\link{variable_analysis}}, \code{\link{isolation.forest}}
+\code{\link{evaluate_po}}, \code{\link{marginal_response}},
+\code{\link{independent_response}}, \code{\link{variable_dependence}},
+\code{\link{variable_analysis}}, \code{\link{isolation.forest}}
 }

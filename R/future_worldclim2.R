@@ -1,12 +1,11 @@
 #' A function to parse the future climate from worldclim version 2.1.
-#' @description This function allows you to parse worldclim version 2.1 future climatic
-#' files with a setting of boundary and a few other options.
+#' @description This function allows you to parse worldclim version 2.1
+#' future climatic files with a setting of boundary and a few other options.
 #' @param var (\code{character}) The option for the variable to download.
 #' Should be one of tmin, tmax, prec, bioc.
 #' The default is tmin.
-#' @param res (\code{numeric}) The option for the resolution of image to download.
-#' Should be one of 2.5, 5, 10.
-#' The default is 10.
+#' @param res (\code{numeric}) The option for the resolution of image to
+#' download. Should be one of 2.5, 5, 10. The default is 10.
 #' @param gcm (\code{character}) The option for global climate models.
 #' Should be one of "BCC-CSM2-MR", "CNRM-CM6-1","CNRM-ESM2-1", "CanESM5",
 #' "GFDL-ESM4", "IPSL-CM6A-LR","MIROC-ES2L", "MIROC6", "MRI-ESM2-0".
@@ -17,16 +16,18 @@
 #' @param interval (\code{character}) The option for time interval.
 #' Should be one of "2021-2040", "2041-2060", "2061-2080", "2081-2100".
 #' The default is "2021-2040".
-#' @param bry (\code{\link{sf}} or \code{sp}) The boundary to mask the downloaded original data.
-#' If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
-#' \code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
+#' @param bry (\code{\link{sf}} or \code{sp}) The boundary to mask the
+#' downloaded original data. If \code{NULL}, it would get global map.
+#' If not \code{NULL}, it can take \code{\link{sf}},  \code{\link{sfc}},
+#' \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
 #' The default is \code{NULL}.
 #' @param path (\code{character}) The path to save the downloaded imagery.
 #' If \code{NULL}, it would use the current working directory.
 #' The default is \code{NULL}.
 #' @param nm_mark (\code{character}) the name mark of clipped images.
 #' The default is "clip". It would be ignored if \code{bry} is \code{NULL}.
-#' @param return_stack (\code{logical}) if \code{TRUE}, stack the imagery together and return.
+#' @param return_stack (\code{logical}) if \code{TRUE}, stack the imagery
+#' together and return.
 #' If the area is large and resolution is high, it is better not to stack them.
 #' The default is \code{TRUE}.
 #' @return if \code{return_stack} is \code{TRUE}, the images would be
@@ -80,7 +81,7 @@ future_worldclim2 <- function(var = "tmin",
         stop("There is no such var to download.")}
 
     if (is.null(bry)) {
-      nm_mark = "global"
+      nm_mark <- "global"
         message("No bry set, download global map...")
     } else{
         if (!(is(bry, "sf") | is(bry, 'sfc') |

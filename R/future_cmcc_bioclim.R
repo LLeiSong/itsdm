@@ -2,9 +2,10 @@
 #' @description Parse future CMCC-BioClimInd bioclimatic indicators obtained by
 #' different Earth System Models (ESMs) optionally with a setting of boundary
 #' and a few other options.
-#' @param bry (\code{\link{sf}} or \code{sp}) The boundary to mask the downloaded original data.
-#' If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
-#' \code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
+#' @param bry (\code{\link{sf}} or \code{sp}) The boundary to mask the
+#' downloaded original data. If \code{NULL}, it would get global map.
+#' If not \code{NULL}, it can take \code{\link{sf}}, \code{\link{sfc}},
+#' \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
 #' The default is \code{NULL}.
 #' @param path (\code{character}) The path to save the downloaded imagery.
 #' If \code{NULL}, it would use the current working directory.
@@ -13,13 +14,15 @@
 #' Should be one of "CMCC-CESM", 'GFDL-ESM2M', 'HadGEM2-ES',
 #' 'IPSL-CM5A-LR', 'MIROC-ESM-CHEM', 'NorESM1-M'.
 #' The default is CMCC-CESM.
-#' @param rcp (\code{numeric}) The option of Representative Concentration Pathways (RCPs).
+#' @param rcp (\code{numeric}) The option of Representative Concentration
+#' Pathways (RCPs).
 #' Should be 45 or 85. Only 85 is available for CMCC-CESM. The default is 85.
 #' @param interval (\code{character}) The option for time interval.
 #' Should be one of "2040-2079", "2060-2099". The default is "2040-2079".
 #' @param nm_mark (\code{character}) the name mark of clipped images.
 #' The default is "clip". It would be ignored if \code{bry} is \code{NULL}.
-#' @param return_stack (\code{logical}) if \code{TRUE}, stack the imagery together and return.
+#' @param return_stack (\code{logical}) if \code{TRUE}, stack the imagery
+#' together and return.
 #' If the area is large and resolution is high, it is better not to stack them.
 #' The default is \code{TRUE}.
 #' @return if \code{return_stack} is \code{TRUE}, the images would be

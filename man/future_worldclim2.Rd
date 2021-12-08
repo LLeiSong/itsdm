@@ -21,9 +21,8 @@ future_worldclim2(
 Should be one of tmin, tmax, prec, bioc.
 The default is tmin.}
 
-\item{res}{(\code{numeric}) The option for the resolution of image to download.
-Should be one of 2.5, 5, 10.
-The default is 10.}
+\item{res}{(\code{numeric}) The option for the resolution of image to
+download. Should be one of 2.5, 5, 10. The default is 10.}
 
 \item{gcm}{(\code{character}) The option for global climate models.
 Should be one of "BCC-CSM2-MR", "CNRM-CM6-1","CNRM-ESM2-1", "CanESM5",
@@ -38,9 +37,10 @@ The default is "ssp585".}
 Should be one of "2021-2040", "2041-2060", "2061-2080", "2081-2100".
 The default is "2021-2040".}
 
-\item{bry}{(\code{\link{sf}} or \code{sp}) The boundary to mask the downloaded original data.
-If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
-\code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
+\item{bry}{(\code{\link{sf}} or \code{sp}) The boundary to mask the
+downloaded original data. If \code{NULL}, it would get global map.
+If not \code{NULL}, it can take \code{\link{sf}},  \code{\link{sfc}},
+\code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
 The default is \code{NULL}.}
 
 \item{path}{(\code{character}) The path to save the downloaded imagery.
@@ -50,7 +50,8 @@ The default is \code{NULL}.}
 \item{nm_mark}{(\code{character}) the name mark of clipped images.
 The default is "clip". It would be ignored if \code{bry} is \code{NULL}.}
 
-\item{return_stack}{(\code{logical}) if \code{TRUE}, stack the imagery together and return.
+\item{return_stack}{(\code{logical}) if \code{TRUE}, stack the imagery
+together and return.
 If the area is large and resolution is high, it is better not to stack them.
 The default is \code{TRUE}.}
 }
@@ -60,8 +61,8 @@ returned as a \code{stars}. Otherwise, nothing to return, but the user
 would receive a message of where the images are.
 }
 \description{
-This function allows you to parse worldclim version 2.1 future climatic
-files with a setting of boundary and a few other options.
+This function allows you to parse worldclim version 2.1
+future climatic files with a setting of boundary and a few other options.
 }
 \details{
 \href{https://worldclim.org/data/index.html}{Web page page for this dataset}
