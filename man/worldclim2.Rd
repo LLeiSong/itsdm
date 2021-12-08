@@ -22,7 +22,7 @@ The default is 'tmin'.}
 Should be one of 0.5, 2.5, 5, 10 in minute degree.
 The default is 10.}
 
-\item{bry}{(\code{\link{sf}} or \code{\link{sp}}) The boundary to mask the downloaded original data.
+\item{bry}{(\code{\link{sf}} or \code{sp}) The boundary to mask the downloaded original data.
 If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
 \code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
 The default is \code{NULL}.}
@@ -51,6 +51,7 @@ with a setting of boundary and a few other options.
 \href{https://worldclim.org/data/index.html}{Web page page for this dataset}
 }
 \examples{
+\dontrun{
 library(sf)
 library(itsdm)
 
@@ -62,11 +63,12 @@ bry <- sf::st_polygon(
 
 bios <- worldclim2(var = "bio", res = 10,
   bry = bry, nm_mark = 'tza')
+}
 
 }
 \references{
-\href{https://doi.org/10.1002/joc.5086}{Fick, Stephen E., and Robert J.
+Fick, Stephen E., and Robert J.
 Hijmans. "WorldClim 2: new 1‐km spatial resolution climate surfaces for
 global land areas." \emph{International journal of climatology}
-37.12 (2017): 4302-4315.}
+37.12 (2017): 4302-4315.\doi{10.1002/joc.5086}
 }

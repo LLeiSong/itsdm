@@ -38,7 +38,7 @@ The default is "ssp585".}
 Should be one of "2021-2040", "2041-2060", "2061-2080", "2081-2100".
 The default is "2021-2040".}
 
-\item{bry}{(\code{\link{sf}} or \code{\link{sp}}) The boundary to mask the downloaded original data.
+\item{bry}{(\code{\link{sf}} or \code{sp}) The boundary to mask the downloaded original data.
 If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
 \code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
 The default is \code{NULL}.}
@@ -67,13 +67,15 @@ files with a setting of boundary and a few other options.
 \href{https://worldclim.org/data/index.html}{Web page page for this dataset}
 }
 \examples{
+\dontrun{
 future_worldclim2("tmin", 10, "BCC-CSM2-MR",
   "ssp585", "2021-2040", return_stack = FALSE)
+}
 
 }
 \references{
-\href{https://doi.org/10.1002/joc.5086}{Fick, Stephen E., and Robert J.
+Fick, Stephen E., and Robert J.
 Hijmans. "WorldClim 2: new 1‐km spatial resolution climate surfaces for
 global land areas." \emph{International journal of climatology}
-37.12 (2017): 4302-4315.}
+37.12 (2017): 4302-4315.\doi{10.1002/joc.5086}
 }

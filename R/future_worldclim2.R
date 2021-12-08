@@ -17,7 +17,7 @@
 #' @param interval (\code{character}) The option for time interval.
 #' Should be one of "2021-2040", "2041-2060", "2061-2080", "2081-2100".
 #' The default is "2021-2040".
-#' @param bry (\code{\link{sf}} or \code{\link{sp}}) The boundary to mask the downloaded original data.
+#' @param bry (\code{\link{sf}} or \code{sp}) The boundary to mask the downloaded original data.
 #' If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
 #' \code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
 #' The default is \code{NULL}.
@@ -33,10 +33,10 @@
 #' returned as a \code{stars}. Otherwise, nothing to return, but the user
 #' would receive a message of where the images are.
 #' @references
-#' \href{https://doi.org/10.1002/joc.5086}{Fick, Stephen E., and Robert J.
+#' Fick, Stephen E., and Robert J.
 #' Hijmans. "WorldClim 2: new 1‐km spatial resolution climate surfaces for
 #' global land areas." \emph{International journal of climatology}
-#' 37.12 (2017): 4302-4315.}
+#' 37.12 (2017): 4302-4315.\doi{10.1002/joc.5086}
 #'
 #' @details
 #' \href{https://worldclim.org/data/index.html}{Web page page for this dataset}
@@ -47,8 +47,10 @@
 #' @importFrom methods is
 #' @export
 #' @examples
+#' \dontrun{
 #' future_worldclim2("tmin", 10, "BCC-CSM2-MR",
 #'   "ssp585", "2021-2040", return_stack = FALSE)
+#'}
 #'
 future_worldclim2 <- function(var = "tmin",
                               res = 10,

@@ -1,7 +1,7 @@
 #' @title Download historic Bioclimatic indicators (BIOs) named CMCC-BioClimInd.
 #' @description Parse historic CMCC-BioClimInd bioclimatic indicators
 #' optionally with a setting of boundary and a few other options.
-#' @param bry (\code{\link{sf}} or \code{\link{sp}}) The boundary to mask the downloaded original data.
+#' @param bry (\code{\link{sf}} or \code{sp}) The boundary to mask the downloaded original data.
 #' If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
 #' \code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
 #' The default is \code{NULL}.
@@ -17,9 +17,9 @@
 #' returned as a \code{stars}. Otherwise, nothing to return, but the user
 #' would receive a message of where the images are.
 #' @references
-#' \href{https://doi.org/10.1038/s41597-020-00726-5}{Noce, Sergio, Luca
-#' Caporaso, and Monia Santini."A new global dataset of bioclimatic indicators.
-#' "\emph{Scientific data} 7.1 (2020): 1-12.}
+#' Noce, Sergio, Luca Caporaso, and Monia Santini."A new global dataset of
+#' bioclimatic indicators. "\emph{Scientific data} 7.1 (2020): 1-12.
+#' \doi{10.1038/s41597-020-00726-5}
 #'
 #' @details
 #' \href{https://doi.pangaea.de/10.1594/PANGAEA.904278?format=html}{Web
@@ -39,7 +39,7 @@
 #' library(dplyr)
 #' library(sf)
 #' library(itsdm)
-#'
+#' \dontrun{
 #' bry <- st_polygon(
 #'   list(rbind(c(29.34, -11.72), c(29.34, -0.95),
 #'              c(40.31, -0.95), c(40.31, -11.72),
@@ -47,6 +47,7 @@
 #'   st_sfc(crs = 4326)
 #'
 #' cmcc_bios <- cmcc_bioclim(bry = bry, nm_mark = 'tza')
+#'}
 #'
 cmcc_bioclim <- function(bry = NULL,
                          path = NULL,

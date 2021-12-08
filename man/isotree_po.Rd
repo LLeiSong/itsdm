@@ -163,19 +163,23 @@ plot(mod_virtual_species$variable_analysis)
 }
 \references{
 \itemize{
-\item{\href{https://doi.org/10.1109/ICDM.2008.17}{Liu, Fei
+\item{Liu, Fei
 Tony, Kai Ming Ting, and Zhi-Hua Zhou. "Isolation forest."
-\emph{2008 eighth ieee international conference on data mining}.IEEE, 2008.}}
-\item{\href{https://doi.org/10.1145/2133360.2133363}{Liu, Fei Tony, Kai Ming
+\emph{2008 eighth ieee international conference on data mining}.IEEE, 2008.
+\doi{10.1109/ICDM.2008.17}}
+\item{Liu, Fei Tony, Kai Ming
 Ting, and Zhi-Hua Zhou. "Isolation-based anomaly detection."
-\emph{ACM Transactions on Knowledge Discovery from Data (TKDD)} 6.1 (2012): 1-39.}}
-\item{\href{https://doi.org/10.1007/978-3-642-15883-4_18}{Liu, Fei Tony,
+\emph{ACM Transactions on Knowledge Discovery from Data (TKDD)} 6.1 (2012): 1-39.
+\doi{10.1145/2133360.2133363}}
+\item{Liu, Fei Tony,
 Kai Ming Ting, and Zhi-Hua Zhou. "On detecting clustered anomalies using
 SCiForest." \emph{Joint European Conference on Machine Learning and
-Knowledge Discovery in Databases}. Springer, Berlin, Heidelberg, 2010.}}
-\item{\href{https://doi.org/10.1109/TKDE.2019.2947676}{Ha
+Knowledge Discovery in Databases}. Springer, Berlin, Heidelberg, 2010.
+\doi{10.1007/978-3-642-15883-4_18}}
+\item{Ha
 riri, Sahand, Matias Carrasco Kind, and Robert J. Brunner. "Extended
-isolation forest." \emph{IEEE Transactions on Knowledge and Data Engineering (2019)}.}}
+isolation forest." \emph{IEEE Transactions on Knowledge and Data Engineering (2019)}.
+\doi{10.1109/TKDE.2019.2947676}}
 \item{\url{https://github.com/david-cortes/isotree}}
 \item{References of related feature such as response curves and variable importance
 will be listed under their own functions}

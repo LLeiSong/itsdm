@@ -24,7 +24,7 @@ in order. Furthermore, setting preferred_vars does not guarantee they can surviv
 For example, one preferred variable that is placed later has strong correlation with former
 preferred variable.}
 
-\item{samples}{(\code{\link{sf}} or \code{\link{sp}}) The samples to reduce dimension.
+\item{samples}{(\code{\link{sf}} or \code{sp}) The samples to reduce dimension.
 If not \code{NULL}, it can take \code{\link{sf}}, \code{\link{sfc}},
 \code{SpatialPointsDataFrame}, \code{SpatialPoints}, etc.
 If \code{NULL}, the whole raster stack would be used. The default is \code{NULL}.}
@@ -45,9 +45,14 @@ and a user-defined threshold. NOTE that it only works on numeric variables,
 does not work on categorical variables.
 }
 \examples{
+library(sf)
 library(itsdm)
-
-worldclim <- worldclim2(var = "bio")
+bry <- st_polygon(
+  list(rbind(c(29.34, -11.72), c(29.34, -0.95),
+             c(40.31, -0.95), c(40.31, -11.72),
+             c(29.34, -11.72)))) \%>\%
+  st_sfc(crs = 4326)
+worldclim <- worldclim2(var = "bio", bry = bry)
 img_reduced <- dim_reduce(worldclim, threshold = 0.7,
   preferred_vars = c('bio1', 'bio12'))
 

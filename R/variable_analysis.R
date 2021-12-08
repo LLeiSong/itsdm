@@ -64,14 +64,14 @@
 #'
 #' @references
 #' \itemize{
-#' \item{\href{https://doi.org/10.1016/j.ecolmodel.2007.11.008}{Peterson,
+#' \item{Peterson,
 #' A. Townsend, Monica Papeş, and Jorge Soberón. "Rethinking receiver operating
 #' characteristic analysis applications in ecological niche modeling."
-#' \emph{Ecological modelling} 213.1 (2008): 63-72.}}
-#' \item{\href{https://doi.org/10.1007/s10115-013-0679-x}{Strumbelj, Erik,
+#' \emph{Ecological modelling} 213.1 (2008): 63-72.\doi{10.1016/j.ecolmodel.2007.11.008}}
+#' \item{Strumbelj, Erik,
 #' and Igor Kononenko. "Explaining prediction models and individual predictions
 #' with feature contributions." \emph{Knowledge and information systems}
-#' 41.3 (2014): 647-665.}}
+#' 41.3 (2014): 647-665.\doi{10.1007/s10115-013-0679-x}}
 #' \item{\href{http://proceedings.mlr.press/v119/sundararajan20b.html}{Sundara
 #' rajan, Mukund, and Amir Najmi. "The many Shapley values for model explanation
 #' ." \emph{International Conference on Machine Learning}. PMLR, 2020.}}

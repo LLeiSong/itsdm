@@ -84,10 +84,10 @@ var_dependence <- variable_dependence(
 }
 \references{
 \itemize{
-\item{\href{https://doi.org/10.1007/s10115-013-0679-x}{Strumbelj, Erik,
+\item{Strumbelj, Erik,
 and Igor Kononenko. "Explaining prediction models and individual predictions
 with feature contributions." \emph{Knowledge and information systems}
-41.3 (2014): 647-665.}}
+41.3 (2014): 647-665.\doi{10.1007/s10115-013-0679-x}}
 \item{\href{http://proceedings.mlr.press/v119/sundararajan20b.html}{Sundara
 rajan, Mukund, and Amir Najmi. "The many Shapley values for model explanation
 ." \emph{International Conference on Machine Learning}. PMLR, 2020.}}

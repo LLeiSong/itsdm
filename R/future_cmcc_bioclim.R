@@ -2,7 +2,7 @@
 #' @description Parse future CMCC-BioClimInd bioclimatic indicators obtained by
 #' different Earth System Models (ESMs) optionally with a setting of boundary
 #' and a few other options.
-#' @param bry (\code{\link{sf}} or \code{\link{sp}}) The boundary to mask the downloaded original data.
+#' @param bry (\code{\link{sf}} or \code{sp}) The boundary to mask the downloaded original data.
 #' If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
 #' \code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
 #' The default is \code{NULL}.
@@ -26,9 +26,9 @@
 #' returned as a \code{stars}. Otherwise, nothing to return, but the user
 #' would receive a message of where the images are.
 #' @references
-#' \href{https://doi.org/10.1038/s41597-020-00726-5}{Noce, Sergio, Luca
+#' Noce, Sergio, Luca
 #' Caporaso, and Monia Santini."A new global dataset of bioclimatic indicators.
-#' "\emph{Scientific data} 7.1 (2020): 1-12.}
+#' "\emph{Scientific data} 7.1 (2020): 1-12.\doi{10.1038/s41597-020-00726-5}
 #'
 #' @details
 #' \url{https://doi.pangaea.de/10.1594/PANGAEA.904278?format=html#download}
@@ -44,9 +44,11 @@
 #' @importFrom methods is
 #' @export
 #' @examples
+#' \dontrun{
 #' library(itsdm)
 #' future_cmcc_bioclim(esm = 'GFDL-ESM2M', rcp = 45,
 #'   interval = "2040-2079", return_stack = FALSE)
+#'}
 #'
 future_cmcc_bioclim <- function(bry = NULL,
                                 path = NULL,

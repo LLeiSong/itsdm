@@ -7,7 +7,7 @@
 cmcc_bioclim(bry = NULL, path = NULL, nm_mark = "clip", return_stack = TRUE)
 }
 \arguments{
-\item{bry}{(\code{\link{sf}} or \code{\link{sp}}) The boundary to mask the downloaded original data.
+\item{bry}{(\code{\link{sf}} or \code{sp}) The boundary to mask the downloaded original data.
 If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
 \code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
 The default is \code{NULL}.}
@@ -44,7 +44,7 @@ of this dataset is not as stable as Worldclim yet.
 library(dplyr)
 library(sf)
 library(itsdm)
-
+\dontrun{
 bry <- st_polygon(
   list(rbind(c(29.34, -11.72), c(29.34, -0.95),
              c(40.31, -0.95), c(40.31, -11.72),
@@ -52,10 +52,11 @@ bry <- st_polygon(
   st_sfc(crs = 4326)
 
 cmcc_bios <- cmcc_bioclim(bry = bry, nm_mark = 'tza')
+}
 
 }
 \references{
-\href{https://doi.org/10.1038/s41597-020-00726-5}{Noce, Sergio, Luca
-Caporaso, and Monia Santini."A new global dataset of bioclimatic indicators.
-"\emph{Scientific data} 7.1 (2020): 1-12.}
+Noce, Sergio, Luca Caporaso, and Monia Santini."A new global dataset of
+bioclimatic indicators. "\emph{Scientific data} 7.1 (2020): 1-12.
+\doi{10.1038/s41597-020-00726-5}
 }

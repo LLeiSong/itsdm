@@ -15,7 +15,7 @@ future_cmcc_bioclim(
 )
 }
 \arguments{
-\item{bry}{(\code{\link{sf}} or \code{\link{sp}}) The boundary to mask the downloaded original data.
+\item{bry}{(\code{\link{sf}} or \code{sp}) The boundary to mask the downloaded original data.
 If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
 \code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
 The default is \code{NULL}.}
@@ -60,13 +60,15 @@ The function is experimental at the moment, because the download server
 of this dataset is not as stable as Worldclim yet.
 }
 \examples{
+\dontrun{
 library(itsdm)
 future_cmcc_bioclim(esm = 'GFDL-ESM2M', rcp = 45,
   interval = "2040-2079", return_stack = FALSE)
+}
 
 }
 \references{
-\href{https://doi.org/10.1038/s41597-020-00726-5}{Noce, Sergio, Luca
+Noce, Sergio, Luca
 Caporaso, and Monia Santini."A new global dataset of bioclimatic indicators.
-"\emph{Scientific data} 7.1 (2020): 1-12.}
+"\emph{Scientific data} 7.1 (2020): 1-12.\doi{10.1038/s41597-020-00726-5}
 }

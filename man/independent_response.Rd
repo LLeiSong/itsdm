@@ -82,10 +82,10 @@ plot(independent_responses)
 }
 \references{
 \itemize{
-\item{\href{https://doi.org/10.1016/j.ecolmodel.2004.12.007}{Elith, Jane,
+\item{Elith, Jane,
 et al. "The evaluation strip: a new and robust method for plotting predicted
 responses from species distribution models." \emph{Ecological modelling}
-186.3 (2005): 280-289.}}
+186.3 (2005): 280-289.\doi{10.1016/j.ecolmodel.2004.12.007}}
 }
 }
 \seealso{
