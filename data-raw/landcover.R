@@ -18,10 +18,14 @@ landcover <- do.call(st_mosaic, lapply(tiles, function(tile) {
 }))
 
 # Warp to bios and boundary
-fname <- 'extdata/bioclim_africa_10min.tif'
-stars_template <- system.file(fname, package = 'itsdm') %>%
-  read_stars() %>% slice('band', 1)
 data("mainland_africa")
+bios <- worldclim2(var = 'bio',
+                   bry = mainland_africa,
+                   path = tempdir(),
+                   nm_mark = 'africa') %>%
+  st_normalize()
+stars_template <- bios %>% slice('band', 1) %>%
+  mutate('wc2.1_10m_bio.tif' = 0)
 
 landcover <- st_warp(landcover, stars_template,
                      use_gdal = T, method = 'near') %>%

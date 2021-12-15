@@ -39,17 +39,18 @@
 #' @importFrom methods is
 #' @export
 #' @examples
+#' \dontrun{
 #' library(dplyr)
 #' library(sf)
 #' library(itsdm)
-#' \dontrun{
 #' bry <- st_polygon(
 #'   list(rbind(c(29.34, -11.72), c(29.34, -0.95),
 #'              c(40.31, -0.95), c(40.31, -11.72),
 #'              c(29.34, -11.72)))) %>%
 #'   st_sfc(crs = 4326)
 #'
-#' cmcc_bios <- cmcc_bioclim(bry = bry, nm_mark = 'tza')
+#' cmcc_bios <- cmcc_bioclim(bry = bry,
+#'   nm_mark = 'tza', path = tempdir())
 #'}
 #'
 cmcc_bioclim <- function(bry = NULL,

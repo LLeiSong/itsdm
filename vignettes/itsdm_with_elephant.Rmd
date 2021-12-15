@@ -10,7 +10,7 @@ output:
     toc_depth: 3
 vignette: >
   %\VignetteIndexEntry{Using itsdm to a real species: Africa savanna elephant}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
 ---
 
@@ -40,12 +40,17 @@ As an example of a package, we won't use too much complex variables. Here we use
 Note that these datasets are prepared and provided in this package. You could use
 `system.file` with file names to find them like the following. 
 
-```{r, warning=F, message=F}
+```{r variables, warning=F, message=F}
 library(stars)
+library(rnaturalearth, quietly = T)
+
 # Bioclimatic variables
-fname <- 'extdata/bioclim_africa_10min.tif'
-bios <- system.file(fname, package = 'itsdm') %>% 
-  read_stars()
+data("mainland_africa")
+bios <- worldclim2(var = 'bio', 
+                   bry = mainland_africa, 
+                   path = tempdir(),
+                   nm_mark = 'africa') %>% 
+  st_normalize()
 
 # Protected area
 fname <- 'extdata/wdpa_africa_10min.tif'
@@ -135,7 +140,7 @@ occ_clean_sf <- st_rasterize(
 rm(start_year, year, nm_search, occ, occ_clean, mainland_africa)
 ```
 
-```{r, fig.align='center', fig.width=5, fig.height=5}
+```{r outliers, fig.align='center', fig.width=5, fig.height=5}
 # Environmental-cleaning on occurrence
 ## We used a very high z_outliers
 ## It is tricky to remove environmental outliers
@@ -151,7 +156,7 @@ plot(occ_outliers)
 
 According to the figure and the prior knowledge of Africa savanna elephant, we decide not to drop the outliers. The outliers seem more like rare records. In addition, if they are really outliers, the later `isolation.forest` could detect them again. Now let's organize the occurrence before next step.
 
-```{r, warning=F, message=F}
+```{r pts_occ, warning=F, message=F}
 occ <- occ_outliers$pts_occ
 rm(occ_clean_sf)
 ```
@@ -162,7 +167,7 @@ Function `dim_reduce` in this package allow the user to reduce the dimensions ar
 
 It is highly not recommended to merge `attributes` of `variables` to band or any other dimension if there are any categorical layers in it unless you know pretty well about what you are doing. Because merging will force categorical values change to numeric ones. You know that it is tricky to convert between factors and numbers in R. 
 
-```{r, warning=F, message=F}
+```{r var_clean, warning=F, message=F}
 # Split continuous and categorical variables
 # and reduce dimensions for continuous ones
 cat_vars <- c('wdpa', 'landcover')
@@ -190,7 +195,7 @@ By far, the `variables` is the environmental variable stack with numeric ones wi
 
 ## Split occurrence to training and test
 
-```{r}
+```{r occ_split}
 # Make occurrences
 occ <- occ %>% mutate(id = 1:nrow(.))
 set.seed(11)
@@ -328,7 +333,7 @@ plot(var_contrib_outliers, plot_each_obs = T)
 
 Let's take a look at the general variable contribution.
 
-```{r, fig.align='center', fig.width=6, fig.height=5}
+```{r var_contrib_general, fig.align='center', fig.width=6, fig.height=5}
 var_contrib <- variable_contrib(
   it_sdm$model, 
   it_sdm$var_train %>% st_drop_geometry(),

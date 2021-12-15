@@ -49,7 +49,7 @@
 #'   st_sfc(crs = 4326)
 #'
 #' bios <- worldclim2(var = "bio", res = 10,
-#'   bry = bry, nm_mark = 'tza')
+#'   bry = bry, nm_mark = 'tza', path = tempdir())
 #'}
 #'
 worldclim2 <- function(var = "tmin",

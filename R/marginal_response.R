@@ -45,7 +45,6 @@
 #' @importFrom rlang :=
 #' @export
 #' @examples
-#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -64,7 +63,7 @@
 #' occ_test <- occ_test %>% select(-id)
 #'
 #' env_vars <- system.file(
-#'   'extdata/bioclim_africa_10min.tif',
+#'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
@@ -80,7 +79,6 @@
 #'   var_occ = mod$var_train %>% st_drop_geometry(),
 #'   variables = mod$variables)
 #' plot(marginal_responses)
-#'}
 #'
 marginal_response <- function(model,
                               var_occ,

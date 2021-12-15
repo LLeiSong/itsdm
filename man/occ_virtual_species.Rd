@@ -5,7 +5,7 @@
 \alias{occ_virtual_species}
 \title{Occurrence dataset of a virtual species}
 \format{
-A \code{data.frame} with 2000 rows and 2 fields
+A \code{data.frame} with 300 rows and 2 fields
 \describe{
 \item{x}{(\code{numeric}) The x coordinates of the records in
 geographic coordinate system}
@@ -26,11 +26,11 @@ The environmental niche of the virtual species is made by defining its
 response functions to annual temperature and annual precipitation
 in mainland Africa.
 The response function of annual temperature is normal distribution with
-mean = 25 and standard deviation = 10.
+mean = 22 and standard deviation = 5.
 The response function of annual precipitation is normal distribution with
-mean = 1000 and standard deviation = 500.
+mean = 1000 and standard deviation = 200.
 Then the suitability is convert to presence-absence map by logistic
 conversion with beta = 0.7, alpha = -0.05, and species prevalence = 0.27.
-Finally 2000 presence-only points are sampled across the whole region.
+Finally 300 presence-only points are sampled across the whole region.
 }
 \keyword{datasets}

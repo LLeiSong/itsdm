@@ -32,7 +32,7 @@ library(itsdm)
 
 data("occ_virtual_species")
 env_vars <- system.file(
-  'extdata/bioclim_africa_10min.tif',
+  'extdata/bioclim_tanzania_10min.tif',
   package = 'itsdm') \%>\% read_stars() \%>\%
   slice('band', c(1, 5, 12, 16))
 

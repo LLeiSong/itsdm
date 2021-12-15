@@ -2,7 +2,7 @@
 library(itsdm, quietly = T)
 library(virtualspecies, quietly = T)
 
-bios <- system.file('extdata/bioclim_africa_10min.tif', package = 'itsdm') %>%
+bios <- system.file('extdata/bioclim_tanzania_10min.tif', package = 'itsdm') %>%
   read_stars() %>% slice('band', c(1, 12))
 
 # Convert to raster for virtualspecies
@@ -11,8 +11,8 @@ bios <- stack(as(split(bios), 'Spatial'))
 # Formatting of the response functions
 set.seed(10)
 my.parameters <- formatFunctions(
-  bio1 = c(fun = 'dnorm', mean = 25, sd = 10),
-  bio12 = c(fun = 'dnorm', mean = 1000, sd = 500))
+  bio1 = c(fun = 'dnorm', mean = 22, sd = 5),
+  bio12 = c(fun = 'dnorm', mean = 1000, sd = 200))
 
 # Generation of the virtual species
 set.seed(10)
@@ -32,7 +32,7 @@ my.species <- convertToPA(
 set.seed(10)
 po.points <- sampleOccurrences(
   my.species,
-  n = 2000,
+  n = 300,
   type = "presence only")
 occ_virtual_species <- po.points$sample.points %>%
   select(x, y)

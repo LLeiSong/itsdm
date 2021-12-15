@@ -127,7 +127,7 @@
 #' occ_test <- occ_test %>% select(-id)
 #'
 #' env_vars <- system.file(
-#'   'extdata/bioclim_africa_10min.tif',
+#'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
@@ -206,7 +206,7 @@ plot.MarginalResponse <- function(x,
 #' occ_test <- occ_test %>% select(-id)
 #'
 #' env_vars <- system.file(
-#'   'extdata/bioclim_africa_10min.tif',
+#'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
@@ -290,7 +290,7 @@ plot.IndependentResponse <- function(x,
 #' occ_test <- occ_test %>% select(-id)
 #'
 #' env_vars <- system.file(
-#'   'extdata/bioclim_africa_10min.tif',
+#'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
@@ -553,7 +553,7 @@ plot.VariableDependence <- function(x,
 #' occ_test <- occ_test %>% select(-id)
 #'
 #' env_vars <- system.file(
-#'   'extdata/bioclim_africa_10min.tif',
+#'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
@@ -690,7 +690,7 @@ plot.VariableContribution <- function(x,
 #' occ_test <- occ_test %>% select(-id)
 #'
 #' env_vars <- system.file(
-#'   'extdata/bioclim_africa_10min.tif',
+#'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
@@ -966,7 +966,7 @@ plot.VariableAnalysis <- function(x, ...) {
 #' occ_test <- occ_test %>% select(-id)
 #'
 #' env_vars <- system.file(
-#'   'extdata/bioclim_africa_10min.tif',
+#'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
@@ -1152,7 +1152,7 @@ plot.POEvaluation <- function(x, ...) {
 #' occ_test <- occ_test %>% select(-id)
 #'
 #' env_vars <- system.file(
-#'   'extdata/bioclim_africa_10min.tif',
+#'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
@@ -1229,7 +1229,7 @@ plot.PAConversion <- function(x, ...) {
 #'
 #' data("occ_virtual_species")
 #' env_vars <- system.file(
-#'   'extdata/bioclim_africa_10min.tif',
+#'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'

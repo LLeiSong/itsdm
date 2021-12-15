@@ -1,12 +1,17 @@
 ## code to prepare `wdpa` dataset goes here
 library(itsdm, quietly = T)
+library(dplyr, quietly = T)
+library(stars)
 
 # Get a raster template
-fname <- 'extdata/bioclim_africa_10min.tif'
-stars_template <- system.file(fname, package = 'itsdm') %>%
-  read_stars() %>% slice('band', 1) %>%
-  mutate('bioclim_africa_10min.tif' = 0)
 data("mainland_africa")
+bios <- worldclim2(var = 'bio',
+                   bry = mainland_africa,
+                   path = tempdir(),
+                   nm_mark = 'africa') %>%
+  st_normalize()
+stars_template <- bios %>% slice('band', 1) %>%
+  mutate('wc2.1_10m_bio.tif' = 0)
 
 # Get protected area
 # Manually download from website. Note that the link will change everyday.
@@ -16,7 +21,7 @@ data("mainland_africa")
 # Measures (WD-OECM) [Online], November 2021, Cambridge, UK: UNEP-WCMC and IUCN.
 # Available at: www.protectedplanet.net.
 # Download
-urlpath <- file.path('https://d1gam3xoknrgr2.cloudfront.net/current',
+urlpath <- file.path('https://d1gam3xoknrgr2.cloudfront.net/current/',
                      'WDPA_WDOECM_Nov2021_Public_AF_shp.zip')
 temp <- tempfile(); temp_dir <- tempdir()
 options(timeout = 1e5)

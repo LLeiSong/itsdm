@@ -33,7 +33,7 @@
 #' occ_test <- occ_test %>% select(-id)
 #'
 #' env_vars <- system.file(
-#'   'extdata/bioclim_africa_10min.tif',
+#'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
@@ -248,7 +248,7 @@ print.VariableAnalysis <- function(x, ...){
 #' occ_test <- occ_test %>% select(-id)
 #'
 #' env_vars <- system.file(
-#'   'extdata/bioclim_africa_10min.tif',
+#'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
@@ -340,9 +340,11 @@ print.POEvaluation <- function(x, ...){
 #' @examples
 #' \donttest{
 #' library(itsdm)
-#' worldclim <- worldclim2(var = "bio")
+#' env_vars <- system.file(
+#'   'extdata/bioclim_tanzania_10min.tif',
+#'   package = 'itsdm') %>% read_stars()
 #'
-#' img_reduced <- dim_reduce(worldclim, threshold = 0.7,
+#' img_reduced <- dim_reduce(env_vars, threshold = 0.7,
 #'   preferred_vars = c('bio1', 'bio12'))
 #'
 #' print(img_reduced)
@@ -400,7 +402,7 @@ print.ReducedImageStack <- function(x, ...) {
 #' occ_test <- occ_test %>% select(-id)
 #'
 #' env_vars <- system.file(
-#'   'extdata/bioclim_africa_10min.tif',
+#'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
@@ -461,7 +463,7 @@ print.PAConversion <- function(x, ...) {
 #'
 #' data("occ_virtual_species")
 #' env_vars <- system.file(
-#'   'extdata/bioclim_africa_10min.tif',
+#'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
@@ -515,7 +517,7 @@ print.EnvironmentalOutlier <- function(x, ...) {
 #' occ_test <- occ_test %>% select(-id)
 #'
 #' env_vars <- system.file(
-#'   'extdata/bioclim_africa_10min.tif',
+#'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'

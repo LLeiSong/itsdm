@@ -104,7 +104,6 @@
 #' @importFrom ROCit rocit ciAUC
 #' @export
 #' @examples
-#' \donttest{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -123,7 +122,7 @@
 #' occ_test <- occ_test %>% select(-id)
 #'
 #' env_vars <- system.file(
-#'   'extdata/bioclim_africa_10min.tif',
+#'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
@@ -137,7 +136,6 @@
 #' eval_train <- evaluate_po(mod$model,
 #'   occ_pred = mod$pred_train$prediction,
 #'   var_pred = na.omit(as.vector(mod$prediction[[1]])))
-#'}
 #'
 evaluate_po <- function(model,
                         occ_pred,

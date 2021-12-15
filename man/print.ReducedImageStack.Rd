@@ -22,9 +22,11 @@ a ReducedImageStack object.
 \examples{
 \donttest{
 library(itsdm)
-worldclim <- worldclim2(var = "bio")
+env_vars <- system.file(
+  'extdata/bioclim_tanzania_10min.tif',
+  package = 'itsdm') \%>\% read_stars()
 
-img_reduced <- dim_reduce(worldclim, threshold = 0.7,
+img_reduced <- dim_reduce(env_vars, threshold = 0.7,
   preferred_vars = c('bio1', 'bio12'))
 
 print(img_reduced)

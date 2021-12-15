@@ -45,7 +45,6 @@ variables. The users could use \code{\link{dim_reduce}} function to remove
 the strong correlation from original environmental variable stack.
 }
 \examples{
-\donttest{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
 library(dplyr)
@@ -64,7 +63,7 @@ occ <- occ \%>\% select(-id)
 occ_test <- occ_test \%>\% select(-id)
 
 env_vars <- system.file(
-  'extdata/bioclim_africa_10min.tif',
+  'extdata/bioclim_tanzania_10min.tif',
   package = 'itsdm') \%>\% read_stars() \%>\%
   slice('band', c(1, 5, 12, 16))
 
@@ -80,7 +79,6 @@ marginal_responses <- marginal_response(
   var_occ = mod$var_train \%>\% st_drop_geometry(),
   variables = mod$variables)
 plot(marginal_responses)
-}
 
 }
 \references{

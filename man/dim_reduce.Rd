@@ -51,13 +51,10 @@ does not work on categorical variables.
 \examples{
 library(sf)
 library(itsdm)
-bry <- st_polygon(
-  list(rbind(c(29.34, -11.72), c(29.34, -0.95),
-             c(40.31, -0.95), c(40.31, -11.72),
-             c(29.34, -11.72)))) \%>\%
-  st_sfc(crs = 4326)
-worldclim <- worldclim2(var = "bio", bry = bry)
-img_reduced <- dim_reduce(worldclim, threshold = 0.7,
+env_vars <- system.file(
+  'extdata/bioclim_tanzania_10min.tif',
+  package = 'itsdm') \%>\% read_stars()
+img_reduced <- dim_reduce(env_vars, threshold = 0.7,
   preferred_vars = c('bio1', 'bio12'))
 
 }
