@@ -340,6 +340,8 @@ print.POEvaluation <- function(x, ...){
 #' @examples
 #' \donttest{
 #' library(itsdm)
+#' library(dplyr)
+#' library(stars)
 #' env_vars <- system.file(
 #'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars()

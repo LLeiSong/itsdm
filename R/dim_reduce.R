@@ -38,6 +38,8 @@
 #' @examples
 #' library(sf)
 #' library(itsdm)
+#' library(stars)
+#' library(dplyr)
 #' env_vars <- system.file(
 #'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars()

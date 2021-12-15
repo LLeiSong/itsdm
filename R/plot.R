@@ -1235,7 +1235,7 @@ plot.PAConversion <- function(x, ...) {
 #'
 #' occ_outliers <- suspicious_env_outliers(
 #'   occ = occ_virtual_species, variables = env_vars,
-#'   z_outlier = 5, outliers_print = 4L)
+#'   z_outlier = 3.5, outliers_print = 4L)
 #'
 #' plot(occ_outliers)
 #' plot(occ_outliers,
@@ -1254,28 +1254,54 @@ plot.EnvironmentalOutlier <- function(x,
     overlay_raster <- st_as_stars(overlay_raster)}
   checkmate::assert_number(pts_alpha, lower = 0, upper = 1)
 
-  if (is.null(overlay_raster)) {
-    ggplot() +
-      geom_sf(data = x$pts_occ, aes(color = 'Normal'), size = 0.8) +
-      geom_sf(data = x$outliers, aes(color = 'Outlier')) +
-      scale_color_manual(values = c('Normal' = 'blue', 'Outlier' = 'red')) +
-      xlab('x') + ylab('y') +
-      ggtitle('Environmental outliers') +
-      theme_classic() +
-      theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
-            legend.title = element_blank())
+  if (!is.null(x$outliers)) {
+    if (is.null(overlay_raster)) {
+      ggplot() +
+        geom_sf(data = x$pts_occ, aes(color = 'Normal'), size = 0.8) +
+        geom_sf(data = x$outliers, aes(color = 'Outlier')) +
+        scale_color_manual(values = c('Normal' = 'blue', 'Outlier' = 'red')) +
+        xlab('x') + ylab('y') +
+        ggtitle('Environmental outliers') +
+        theme_classic() +
+        theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
+              legend.title = element_blank())
+    } else {
+      ggplot() +
+        geom_stars(data = overlay_raster) +
+        scale_fill_viridis_c(names(overlay_raster)[1],
+                             na.value = 'transparent') +
+        geom_sf(data = x$pts_occ, aes(color = 'Normal'),
+                size = 0.8, alpha = pts_alpha) +
+        geom_sf(data = x$outliers, aes(color = 'Outlier')) +
+        scale_color_manual('',
+                           values = c('Normal' = 'blue', 'Outlier' = 'red')) +
+        ggtitle('Environmental outliers') +
+        theme_classic() +
+        theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5))
+    }
   } else {
-    ggplot() +
-      geom_stars(data = overlay_raster) +
-      scale_fill_viridis_c(names(overlay_raster)[1],
-                           na.value = 'transparent') +
-      geom_sf(data = x$pts_occ, aes(color = 'Normal'),
-              size = 0.8, alpha = pts_alpha) +
-      geom_sf(data = x$outliers, aes(color = 'Outlier')) +
-      scale_color_manual('',
-                         values = c('Normal' = 'blue', 'Outlier' = 'red')) +
-      ggtitle('Environmental outliers') +
-      theme_classic() +
-      theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5))
+    if (is.null(overlay_raster)) {
+      ggplot() +
+        geom_sf(data = x$pts_occ, aes(color = 'Normal'), size = 0.8) +
+        scale_color_manual(values = c('Normal' = 'blue', 'Outlier' = 'red')) +
+        xlab('x') + ylab('y') +
+        ggtitle('Environmental outliers') +
+        theme_classic() +
+        theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
+              legend.title = element_blank())
+    } else {
+      ggplot() +
+        geom_stars(data = overlay_raster) +
+        scale_fill_viridis_c(names(overlay_raster)[1],
+                             na.value = 'transparent') +
+        geom_sf(data = x$pts_occ, aes(color = 'Normal'),
+                size = 0.8, alpha = pts_alpha) +
+        scale_color_manual('',
+                           values = c('Normal' = 'blue', 'Outlier' = 'red')) +
+        ggtitle('Environmental outliers') +
+        theme_classic() +
+        theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5))
+    }
   }
+
 }

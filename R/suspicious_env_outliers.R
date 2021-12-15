@@ -57,7 +57,7 @@
 #'
 #' occ_outliers <- suspicious_env_outliers(
 #'   occ = occ_virtual_species, variables = env_vars,
-#'   z_outlier = 5, outliers_print = 4L)
+#'   z_outlier = 3.5, outliers_print = 4L)
 #'
 #' occ_outliers
 #' plot(occ_outliers)
@@ -119,13 +119,15 @@ suspicious_env_outliers <- function(occ,
   outliers_details <- outliers_model$outliers_data[unlist(outliers[, 'suspious_row'])]
 
   # Remove outliers
-  if (rm_outliers) {
-    pts_occ <- pts_occ %>%
-      slice(-unlist(outliers[, 'suspious_row']))
+  if (!is.null(outliers)) {
+    if (rm_outliers) {
+      pts_occ <- pts_occ %>%
+        slice(-unlist(outliers[, 'suspious_row']))
+    }
+    outliers <- pts_occ %>%
+      slice(unlist(outliers[, 'suspious_row'])) %>%
+      cbind(outliers)
   }
-  outliers <- pts_occ %>%
-    slice(unlist(outliers[, 'suspious_row'])) %>%
-    cbind(outliers)
 
   # Return
   out <- list(outliers = outliers,
