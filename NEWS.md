@@ -1,3 +1,3 @@
-# itsdm 0.0.1
+# itsdm 0.1.0
 
 First GitHub release.

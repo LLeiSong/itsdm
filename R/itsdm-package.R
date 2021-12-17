@@ -1,6 +1,6 @@
 #' @title Isolation forest-based presence-only species distribution modeling
 #'
-#' @description This package is a wrapper for a few packages including `isotree`, `outliertree`, `fastshap`, etc. It does purely presence-only species distribution modeling with isolation forest and variations such as SCiForest and EIF. It also provides functions to make response curves, analyze variable importance, analyze variable dependence and analyze variable contribution. As utilities, the package includes a few function to download bioclimatic variables including worldclim verison 2.0 and CMCC-BioClimInd. There is also functions to detect outliers in occurrence dataset to do data cleaning.
+#' @description This package is a wrapper for a few packages including `isotree`, `outliertree`, `fastshap`, etc. It does purely presence-only species distribution modeling with isolation forest and variations such as SCiForest and EIF. It also provides functions to make response curves, analyze variable importance, analyze variable dependence and analyze variable contribution. As utilities, the package includes a few functions to download bioclimatic variables including worldclim version 2.0 and CMCC-BioClimInd. There are also functions to detect outliers in the occurrence dataset to do data cleaning.
 #'
 #' @details
 #' This package provides multiple features.

@@ -37,8 +37,7 @@ The default is \code{FALSE}.}
 }
 }
 \description{
-Calculate the variable dependence based on Shapley Additive
-Explanations (SHAP) method using Shapley values.
+Calculate the variable dependence based on SHapley Additive exPlanations (SHAP) method using Shapley values.
 }
 \details{
 The values show how each environmental variable independently

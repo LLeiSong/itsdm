@@ -31,7 +31,6 @@
 #' @note The function is experimental at the moment, because the download server
 #' of this dataset is not as stable as Worldclim yet.
 #' @import ncdf4
-#' @importFrom glue glue
 #' @importFrom raster stack
 #' @importFrom sf st_as_sf st_make_valid st_crop
 #' @importFrom stars read_stars write_stars st_as_stars st_set_dimensions
@@ -92,7 +91,11 @@ cmcc_bioclim <- function(bry = NULL,
              # Download to local
              temp <- tempfile()
              options(timeout = 1e5)
-             download.file(url, temp)
+             dl <- try(download.file(url, temp))
+             if (class(dl) == "try-error") {
+               Sys.sleep(10)
+               download.file(url, temp)
+             }
 
              # Extract hist file from downloaded zip
              decompression <- system2(
@@ -139,7 +142,7 @@ cmcc_bioclim <- function(bry = NULL,
     if (return_stack == TRUE) {
         clip_imgs
     } else {
-        message(glue("Files are written to {path}."))
+        message(sprintf("Files are written to %s.", path))
     }
 }
 

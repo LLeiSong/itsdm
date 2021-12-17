@@ -8,24 +8,30 @@
 
 ## Overview
 
-`itsdm` calls isolation forest and variations such as SCiForest and EIF to do species distribution modeling. It provides features including:
+`itsdm` calls isolation forest and variations such as SCiForest and EIF to model species distribution. It provides features including:
 
-- A few function to download environmental variables.
-- Outlier tree based suspicious environmental outliers detection.
-- Isolation forest based environmental suitability modeling.
+- A few functions to download environmental variables.
+- Outlier tree-based suspicious environmental outliers detection.
+- Isolation forest-based environmental suitability modeling.
 - Response curves of environmental variable.
 - Variable importance analysis.
 - Presence-only model evaluation.
 - Method to convert predicted suitability to presence-absence map.
-- Variable contribution analysis for interested observations.
+- Variable contribution analysis for the target observations.
 
 ## Installation
 
-You can install the development version of itsdm from [GitHub](https://github.com/) with:
+Install the CRAN release of `itsdm` with
+
+```r
+install.packages('itsdm')
+```
+
+You can install the development version of itsdm from GitHub with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("LLeiSong/itsdm")
+# install.packages("remotes")
+remotes::install_github("LLeiSong/itsdm")
 ```
 
 ## Example
@@ -50,7 +56,7 @@ occ_test <- occ_test %>% select(-id)
 
 # Get environmental variables
 env_vars <- system.file(
-  'extdata/bioclim_africa_10min.tif',
+  'extdata/bioclim_tanzania_10min.tif',
   package = 'itsdm') %>% read_stars() %>%
   %>% slice('band', c(1, 6, 12, 15))
 

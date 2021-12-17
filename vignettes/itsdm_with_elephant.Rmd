@@ -1,29 +1,21 @@
 ---
 title: "Using `itsdm` to a real species: Africa savanna elephant"
 author: "Lei Song"
-date: "`r Sys.Date()`"
-output: 
+date: "2021-12-16"
+output:
   rmarkdown::html_document:
     theme: readable
-    toc: true
-    toc_float: true
-    toc_depth: 3
 vignette: >
   %\VignetteIndexEntry{Using itsdm to a real species: Africa savanna elephant}
   %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  warning = F
-)
-```
+
 
 ## Set up
-```{r setup, warning=F, message=F, eval=T}
+
+```r
 library(itsdm, quietly = T)
 library(ggplot2, quietly = T)
 library(dplyr, quietly = T)
@@ -32,52 +24,54 @@ select <- dplyr::select
 
 ## Prepare environmental variables
 
-As an example of a package, we won't use too much complex variables. Here we use:
+As an example of a package, we won't use too many complex variables. Here we use:
 
 1. Bioclimatic variables
 2. Protected area and land cover type as categorical variables.
 
-Note that these datasets are prepared and provided in this package. You could use
-`system.file` with file names to find them like the following. 
+Note that maps of the protected area and land cover types are prepared and provided in this package. You could use
+`system.file` with file names to find them like the following.
 
-```{r variables, warning=F, message=F}
+
+```r
 library(stars)
 library(rnaturalearth, quietly = T)
 
 # Bioclimatic variables
 data("mainland_africa")
-bios <- worldclim2(var = 'bio', 
-                   bry = mainland_africa, 
+bios <- worldclim2(var = 'bio',
+                   bry = mainland_africa,
                    path = tempdir(),
-                   nm_mark = 'africa') %>% 
+                   nm_mark = 'africa') %>%
   st_normalize()
 
 # Protected area
 fname <- 'extdata/wdpa_africa_10min.tif'
-wdpa <- system.file(fname, package = 'itsdm') %>% 
+wdpa <- system.file(fname, package = 'itsdm') %>%
   read_stars() %>% setNames('wdpa')
 
 # Land cover
 fname <- 'extdata/landcover_africa_10min.tif'
-landcover <- system.file(fname, package = 'itsdm') %>% 
+landcover <- system.file(fname, package = 'itsdm') %>%
   read_stars() %>% setNames('landcover')
 
 # Merge them together as variable stack
-variables <- do.call(c, list(split(bios, 'band'), 
+variables <- do.call(c, list(split(bios, 'band'),
                              wdpa, landcover))
 rm(fname, bios, wdpa, landcover)
 ```
 
 ## Prepare occurrence from GBIF
 
-The official name for African savanna elephant is Loxodonta africana (Blumenbach, 1797), which could be used to search in GBIF. According to the following reasons:
+The official name for the African savanna elephant is Loxodonta africana (Blumenbach, 1797), which could be used to search in GBIF. According to the following reasons:
 
 1. It is not reasonable to use the very past data.
-2. The distribution of elephant is relatively stable over short time.
+2. The distribution of elephants is relatively stable over a short time.
 
-We choose the most recent occurrence observations (2010 to now) with an assumption that landcover changes could be ignorable between 2010 and now. 
+We choose the most recent occurrence observations (2010 to now) with an assumption that landcover changes could be ignorable between 2010 and now.
 
-```{r occ}
+
+```r
 library(lubridate, quietly = T)
 library(rgbif, quietly = T)
 
@@ -94,34 +88,35 @@ occ <- occ_search(scientificName = nm_search,
                   hasGeospatialIssue = FALSE)
 ```
 
-Even though occurrence dataset obtained from GBIF have high quality and its API provide general options to do some screening. There are still some disturbances contained in occurrence. As a complement，we do extra steps to clean the occurrence data. The steps include:
+Even though the occurrence dataset obtained from GBIF has high quality and its API provides available options to do some screening. There are still some disturbances contained in occurrence. As a complement, we do extra steps to clean the occurrence data. The steps include:
 
 1. Basic Geo-cleaning. For example, clean the records with impossible or incomplete coordinates. Or clean the duplicated records. We did this step using package `scrubr`.
 2. Range-cleaning. Strict the records to a specific area, which is an extra step for Geo-cleaning.
-3. Spatial deduction. This step is to remove duplicates at spatial resolution of raster.
-4. __Environmental cleaning__. Detect and/or drop the records that with outlier environmental values comparing to the general conditions. We could do this step before dimension reduction of environmental variable because `outlier.tree` just compare records with general condition.
+3. Spatial deduction. This step is to remove duplicates at the spatial resolution of raster.
+4. __Environmental cleaning__. Detect and/or drop the records with outlier environmental values. We could do this step before dimension reduction of the environmental variable because `outlier.tree` compares records with the general condition.
 
-```{r cleaning}
+
+```r
 library(scrubr, quietly = T)
 
 # Basic Geo-cleaning on occurrence
-occ_clean <- occ$data %>% 
-  select(name, decimalLongitude, 
-         decimalLatitude, eventDate, key) %>% 
-  setNames(c('name', 'longitude', 
+occ_clean <- occ$data %>%
+  select(name, decimalLongitude,
+         decimalLatitude, eventDate, key) %>%
+  setNames(c('name', 'longitude',
              'latitude', 'date', 'key')) %>%
-  mutate(date = as.Date(date)) %>% 
+  mutate(date = as.Date(date)) %>%
   dframe() %>%
   coord_impossible() %>%
   coord_incomplete() %>%
-  coord_unlikely() %>% 
+  coord_unlikely() %>%
   # Will remove more duplicates according to raster resolution
-  dedup() 
+  dedup()
 
 # Range-cleaning on occurrence
 ## For example, Africa savanna elephant only could appear in Africa
 data("mainland_africa")
-occ_clean_sf <- occ_clean %>% 
+occ_clean_sf <- occ_clean %>%
   st_as_sf(coords = c('longitude', 'latitude'),
            crs = 4326)
 occ_clean_sf <- st_intersection(mainland_africa, occ_clean_sf)
@@ -129,45 +124,74 @@ occ_clean_sf <- st_intersection(mainland_africa, occ_clean_sf)
 # Spatial deduction
 occ_clean_sf <- st_rasterize(
   occ_clean_sf,
-  template = variables %>% select('bio1') %>% 
-    mutate(bio1 = NA)) %>% 
-  st_xy2sfc(as_points = T) %>% st_as_sf() %>% 
+  template = variables %>% select('bio1') %>%
+    mutate(bio1 = NA)) %>%
+  st_xy2sfc(as_points = T) %>% st_as_sf() %>%
   select(geometry)
 ```
 
-```{r, echo=F, warning=F, message=F}
-# Clean
-rm(start_year, year, nm_search, occ, occ_clean, mainland_africa)
-```
 
-```{r outliers, fig.align='center', fig.width=5, fig.height=5}
+
+
+```r
 # Environmental-cleaning on occurrence
 ## We used a very high z_outliers
 ## It is tricky to remove environmental outliers
-## because it is hard to tell if they are outliers or 
+## because it is hard to tell if they are outliers or
 ## just rare records.
 occ_outliers <- suspicious_env_outliers(
-  occ_clean_sf, 
+  occ_clean_sf,
   variables = variables,
   z_outlier = 16,
   outliers_print = 4L)
+#> Reporting top 4 outliers [out of 19 found]
+#> 
+#> row [122] - suspicious column: [bio14] - suspicious value: [1.00]
+#> 	distribution: 98.718% <= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 77]
+#> 	given:
+#> 		[bio11] > [25.71] (value: 26.22)
+#> 
+#> 
+#> row [1] - suspicious column: [bio17] - suspicious value: [1.00]
+#> 	distribution: 96.154% <= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 25]
+#> 	given:
+#> 		[bio14] <= [1.00] (value: 0.00)
+#> 		[bio5] > [39.79] (value: 41.24)
+#> 
+#> 
+#> row [44] - suspicious column: [bio17] - suspicious value: [1.00]
+#> 	distribution: 92.000% <= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 23]
+#> 	given:
+#> 		[bio14] <= [1.00] (value: 0.00)
+#> 		[bio10] > [32.05] (value: 32.09)
+#> 
+#> 
+#> row [98] - suspicious column: [bio14] - suspicious value: [1.00]
+#> 	distribution: 98.790% <= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 245]
+#> 	given:
+#> 		[bio17] <= [8.00] (value: 6.00)
+#> 		[bio18] <= [145.00] (value: 99.00)
 plot(occ_outliers)
 ```
 
-According to the figure and the prior knowledge of Africa savanna elephant, we decide not to drop the outliers. The outliers seem more like rare records. In addition, if they are really outliers, the later `isolation.forest` could detect them again. Now let's organize the occurrence before next step.
+<img src="itsdm-outliers-1.png" title="plot of chunk outliers" alt="plot of chunk outliers" style="display: block; margin: auto;" />
 
-```{r pts_occ, warning=F, message=F}
+According to the figure and the prior knowledge of the Africa savanna elephant, we decide not to drop the outliers. The outliers seem more like rare records. In addition, if they are real outliers, the later `isolation.forest` could detect them again. Now let's organize the occurrence before the next step.
+
+
+```r
 occ <- occ_outliers$pts_occ
 rm(occ_clean_sf)
 ```
 
 ## Understand the correlations between variables
 
-Function `dim_reduce` in this package allow the user to reduce the dimensions arbitrarily for numeric environmental variables based on their correlation. Thus, here we do such thing to numeric ones of `variables` and keep the categorical ones.
+Function `dim_reduce` in this package allows the user to reduce the dimensions arbitrarily for numeric environmental variables based on their correlation. Thus, here we do such thing to numeric ones of `variables` and keep the categorical ones.
 
-It is highly not recommended to merge `attributes` of `variables` to band or any other dimension if there are any categorical layers in it unless you know pretty well about what you are doing. Because merging will force categorical values change to numeric ones. You know that it is tricky to convert between factors and numbers in R. 
+It is highly not recommended to merge `attributes` of `variables` to `band ` or any other dimension if there are any categorical layers in it unless you know pretty well about what you are doing. Because merging will force categorical values to change to numeric ones, you know that it is tricky to convert between factors and numbers in R.
 
-```{r var_clean, warning=F, message=F}
+
+```r
 # Split continuous and categorical variables
 # and reduce dimensions for continuous ones
 cat_vars <- c('wdpa', 'landcover')
@@ -175,6 +199,23 @@ var_cat <- variables %>% select(all_of(cat_vars))
 var_con <- variables %>% select(-all_of(cat_vars))
 var_con_rdc <- dim_reduce(var_con, threshold = 0.75, samples = occ)
 var_con_rdc
+#> Dimension reduction
+#> Correlation threshold: 0.75
+#> Original variables: bio1, bio2, bio3, bio4, bio5, bio6, bio7, bio8, bio9,
+#> bio10, bio11, bio12, bio13, bio14, bio15, bio16, bio17, bio18, bio19
+#> Variables after dimension reduction: bio1, bio2, bio3, bio6, bio12, bio14,
+#> bio18, bio19
+#> ================================================================================
+#> Reduced correlations:
+#>        bio1  bio2  bio3  bio6 bio12 bio14 bio18 bio19
+#> bio1   1.00  0.02 -0.22  0.64  0.05 -0.40 -0.41  0.28
+#> bio2   0.02  1.00 -0.43 -0.66 -0.54 -0.47 -0.34 -0.29
+#> bio3  -0.22 -0.43  1.00  0.43  0.33  0.42  0.24  0.22
+#> bio6   0.64 -0.66  0.43  1.00  0.45  0.10 -0.08  0.48
+#> bio12  0.05 -0.54  0.33  0.45  1.00  0.59  0.50  0.54
+#> bio14 -0.40 -0.47  0.42  0.10  0.59  1.00  0.44  0.29
+#> bio18 -0.41 -0.34  0.24 -0.08  0.50  0.44  1.00 -0.06
+#> bio19  0.28 -0.29  0.22  0.48  0.54  0.29 -0.06  1.00
 
 # Put together
 var_con <- var_con_rdc$img_reduced
@@ -184,7 +225,7 @@ rm(cat_vars, var_cat, var_con, var_con_rdc)
 # If you really want to merge
 ## At least could ensure the values are the original values
 var_merge <- variables
-var_merge <- var_merge %>% 
+var_merge <- var_merge %>%
   mutate(wdpa = as.integer(levels(wdpa))[wdpa],
          landcover = as.integer(levels(landcover))[landcover])
 var_merge <- merge(var_merge, name = 'band')
@@ -195,7 +236,8 @@ By far, the `variables` is the environmental variable stack with numeric ones wi
 
 ## Split occurrence to training and test
 
-```{r occ_split}
+
+```r
 # Make occurrences
 occ <- occ %>% mutate(id = 1:nrow(.))
 set.seed(11)
@@ -210,16 +252,17 @@ Now both occurrence and environmental variables are ready to use for modeling.
 
 ## Build a `isolation_forest` species distribution model
 
-At this step, the users could use strategy like grid search and preferred evaluation metrics to find the optimal arguments for the model. As an example, here we just use a set of arguments:
+At this step, the users could use strategies like grid search and preferred evaluation metrics to find the optimal arguments for the model. As an example, here we use a set of arguments:
 
 - `sample_rate = 1.0`
 - `ndim = 2`
 - `categ_cols = c('wdpa', 'landcover')`
 
-```{r sdm, fig.align='center', fig.width=4, fig.height=3}
+
+```r
 # Do modeling
-it_sdm <- isotree_po(occ = occ_sf, 
-                     occ_test = occ_test_sf, 
+it_sdm <- isotree_po(occ = occ_sf,
+                     occ_test = occ_test_sf,
                      variables = variables,
                      categ_vars = c('wdpa', 'landcover'),
                      sample_rate = 1.0,
@@ -231,27 +274,40 @@ it_sdm <- isotree_po(occ = occ_sf,
 
 Predicted environmental suitability
 
-```{r prediction, echo = F, fig.align='center', fig.width=5.3, fig.height=4.3}
-# Compare with virtual species
-ggplot() +
-  geom_stars(data = it_sdm$prediction) +
-  scale_fill_viridis_c('Predicted suitability',
-                       na.value = 'transparent') +
-  coord_equal() +
-  theme_linedraw()
-```
+<img src="itsdm-prediction-1.png" title="plot of chunk prediction" alt="plot of chunk prediction" style="display: block; margin: auto;" />
 
 Presence-only model evaluation
 
-```{r eval, fig.align='center', fig.width=6, fig.height=6}
+
+```r
 # According to training dataset
-it_sdm$eval_train
-plot(it_sdm$eval_train)
+# it_sdm$eval_train
+# plot(it_sdm$eval_train)
 
 # According to test dataset
 it_sdm$eval_test
+#> ===================================
+#> Presence-only evaluation:
+#> CVI with 0.25 threshold:      0.579
+#> CVI with 0.5 threshold:       0.548
+#> CVI with 0.75 threshold:      0.306
+#> CBI:                          0.984
+#> AUC (ratio)                   0.878
+#> ===================================
+#> Presence-background evaluation:
+#> Sensitivity:                  0.873
+#> Specificity:                  0.721
+#> TSS:                          0.594
+#> AUC:                          0.865
+#> Similarity indices:
+#> Jaccard's similarity index:   0.682
+#> Sørensen's similarity index:  0.811
+#> Overprediction rate:          0.243
+#> Underprediction rate:         0.127
 plot(it_sdm$eval_test)
 ```
+
+<img src="itsdm-eval-1.png" title="plot of chunk eval" alt="plot of chunk eval" style="display: block; margin: auto;" />
 
 ## Response curves
 
@@ -259,69 +315,206 @@ Response curves of environmental variables show how the suitability of a variabl
 
 Marginal response curves
 
-```{r marginal_responses, fig.align='center', fig.width=7, fig.height=7}
+
+```r
 # Plot response curves
 plot(it_sdm$marginal_responses)
 ```
 
+<img src="itsdm-marginal_responses-1.png" title="plot of chunk marginal_responses" alt="plot of chunk marginal_responses" style="display: block; margin: auto;" />
+
 Independent response curves
 
-```{r independent_responses, fig.align='center', fig.width=7}
-plot(it_sdm$independent_responses, target_var = c('bio1', 'bio3', 'bio19', 'landcover'))
+
+```r
+plot(it_sdm$independent_responses, target_var = c('bio1', 'bio3', 'landcover'))
 ```
+
+<img src="itsdm-independent_responses-1.png" title="plot of chunk independent_responses" alt="plot of chunk independent_responses" style="display: block; margin: auto;" />
 
 Single variable dependence curves
 
-```{r variable_dependence, fig.align='center', fig.width=7, fig.height=7}
+
+```r
 ## Variable dependence scatter points with fitted curves made by SHAP test
 plot(it_sdm$variable_dependence, smooth_span = 0.7)
 ```
 
+<img src="itsdm-variable_dependence-1.png" title="plot of chunk variable_dependence" alt="plot of chunk variable_dependence" style="display: block; margin: auto;" />
+
 ## Variable importance
 
-Variable importance analysis is another way for us to understand the relationship between environmental variables and species distribution. It also could help to improve model performance. 
+Variable importance analysis is another way to understand the relationship between environmental variables and species distribution. It also could help to improve model performance.
 
-```{r variable_analysis, fig.align='center', fig.width=8, fig.height=8}
+
+```r
 it_sdm$variable_analysis
-# Plot variable importance
-plot(it_sdm$variable_analysis)
+#> Relative variable importance
+#> ===================================
+#> Methods: Jackknife test and SHAP
+#> Numer of variables: 10
+#> ===================================
+#> Jackknife test
+#> Based on Pearson correlation (Max value is 1)
+#> [Training dataset]:
+#> bio19     With only: ############################## 0.673
+#>           Without  : ########################################### 0.951
+#> bio14     With only: ########################## 0.575
+#>           Without  : ########################################### 0.965
+#> bio1      With only: ######################### 0.558
+#>           Without  : ########################################### 0.965
+#> bio6      With only: ######################## 0.542
+#>           Without  : ########################################### 0.965
+#> bio12     With only: ######################## 0.539
+#>           Without  : ########################################### 0.963
+#> bio3      With only: ###################### 0.49
+#>           Without  : ########################################### 0.961
+#> bio18     With only: ##################### 0.465
+#>           Without  : ########################################### 0.961
+#> landcover With only: ################### 0.416
+#>           Without  : ############################################ 0.973
+#> wdpa      With only: ############### 0.332
+#>           Without  : ############################################ 0.97
+#> bio2      With only: ########### 0.255
+#>           Without  : ########################################### 0.955
+#> [Test dataset]:
+#> bio19     With only: ############################# 0.651
+#>           Without  : ########################################## 0.943
+#> bio1      With only: ############################ 0.619
+#>           Without  : ############################################ 0.969
+#> bio14     With only: ########################### 0.591
+#>           Without  : ############################################ 0.971
+#> bio12     With only: ########################## 0.569
+#>           Without  : ############################################ 0.967
+#> bio6      With only: ######################### 0.547
+#>           Without  : ############################################ 0.968
+#> bio18     With only: ####################### 0.506
+#>           Without  : ########################################### 0.963
+#> bio3      With only: ###################### 0.478
+#>           Without  : ########################################### 0.961
+#> landcover With only: ################### 0.415
+#>           Without  : ############################################ 0.968
+#> bio2      With only: ############ 0.277
+#>           Without  : ########################################### 0.956
+#> wdpa      With only: ########## 0.218
+#>           Without  : ############################################ 0.969
+#> ======================================================================
+#> Jackknife test
+#> Based on AUC ratio (Max value of traing and test are 0.882 and 0.878)
+#> [Training dataset]:
+#> bio12     With only: ###################################### 0.847
+#>           Without  : ###################################### 0.844
+#> bio18     With only: #################################### 0.8
+#>           Without  : ###################################### 0.855
+#> bio3      With only: ################################## 0.757
+#>           Without  : ####################################### 0.868
+#> bio6      With only: ################################ 0.72
+#>           Without  : ####################################### 0.868
+#> bio1      With only: ############################### 0.697
+#>           Without  : ####################################### 0.857
+#> landcover With only: ############################### 0.685
+#>           Without  : ######################################## 0.887
+#> wdpa      With only: ############################### 0.684
+#>           Without  : ####################################### 0.874
+#> bio2      With only: ############################## 0.669
+#>           Without  : ####################################### 0.869
+#> bio19     With only: ######################## 0.535
+#>           Without  : ######################################## 0.888
+#> bio14     With only: ############## 0.319
+#>           Without  : ######################################## 0.892
+#> [Test dataset]:
+#> bio12     With only: #################################### 0.811
+#>           Without  : ###################################### 0.836
+#> bio18     With only: ################################## 0.761
+#>           Without  : ####################################### 0.856
+#> bio3      With only: ################################## 0.756
+#>           Without  : ###################################### 0.848
+#> wdpa      With only: ############################### 0.685
+#>           Without  : ####################################### 0.872
+#> bio6      With only: ############################### 0.683
+#>           Without  : ####################################### 0.868
+#> bio1      With only: ############################### 0.682
+#>           Without  : ###################################### 0.851
+#> landcover With only: ############################## 0.667
+#>           Without  : ######################################## 0.88
+#> bio2      With only: ########################### 0.59
+#>           Without  : ####################################### 0.866
+#> bio19     With only: ######################## 0.53
+#>           Without  : ######################################## 0.879
+#> bio14     With only: ############## 0.317
+#>           Without  : ######################################## 0.884
+#> ======================================================================
+#> SHAP (mean(|Shapley value|))
+#> [Training dataset]:
+#> bio3      : ############################################# 0.062
+#> bio1      : ##################################### 0.051
+#> landcover : ################################### 0.048
+#> bio19     : ################################# 0.045
+#> bio6      : ############################### 0.043
+#> bio12     : ############################### 0.042
+#> wdpa      : ############################## 0.042
+#> bio2      : ############################ 0.039
+#> bio14     : ############################ 0.038
+#> bio18     : ######################### 0.034
+#> [Test dataset]:
+#> bio3      : ############################################ 0.06
+#> landcover : ###################################### 0.052
+#> bio1      : #################################### 0.049
+#> wdpa      : ################################# 0.046
+#> bio12     : ################################# 0.046
+#> bio19     : ################################ 0.044
+#> bio6      : ################################ 0.044
+#> bio2      : ############################### 0.042
+#> bio14     : ############################ 0.039
+#> bio18     : ########################## 0.036
 ```
 
 ## Presence-absence map
 
 Use function `convert_to_pa` to convert suitability to presence-absence map.
 
-```{r pa, fig.align='center', fig.width=8, fig.height=8}
+
+```r
 # Convert to presence-absence map
 pa_map <- convert_to_pa(it_sdm$prediction,
                         method = "logistic",
                         beta = 0.2,
                         species_prevalence = 0.2)
 pa_map; plot(pa_map)
+#> Logistic conversion
+#> beta = 0.3828125
+#> alpha = -0.05
+#> species prevalence = 0.199763828190527
 ```
+
+<img src="itsdm-pa-1.png" title="plot of chunk pa" alt="plot of chunk pa" style="display: block; margin: auto;" />
 
 ## Analyze variable dependence
 
 Randomly check variable dependence with each other.
 
-```{r var_inter_dependence, fig.align='center', fig.width=7, fig.height=6}
-plot(it_sdm$variable_dependence, 
-     target_var = c('bio1', 'bio6', 'bio12', 'landcover'),
+
+```r
+plot(it_sdm$variable_dependence,
+     target_var = c('bio1', 'bio12', 'landcover'),
      related_var = 'bio3', smooth_span = 0)
 ```
 
+<img src="itsdm-var_inter_dependence-1.png" title="plot of chunk var_inter_dependence" alt="plot of chunk var_inter_dependence" style="display: block; margin: auto;" />
+
 ## Analyze variable contribution
 
-Sometimes, we are interested in some observations, for instance, the outliers detected in the beginning steps. According to the figure below, we could tell that these suspicious outliers are not all environmental outliers. 
+Sometimes, we are interested in some observations, for instance, the outliers detected in the beginning steps. According to the figure below, we can tell that these suspicious outliers are not all environmental outliers.
 
-```{r var_contrib, fig.align='center', fig.width=7, fig.height=9}
+
+```r
 ## Analyze variable contribution for interested observations.
 ## For example, outliers.
 var_occ <- it_sdm$var_train %>% st_drop_geometry()
-var_analysis <- var_occ %>% 
+var_analysis <- var_occ %>%
   slice(occ_outliers$outliers %>% pull(suspious_row))
 var_contrib_outliers <- variable_contrib(
-  it_sdm$model, 
+  it_sdm$model,
   var_occ,
   var_analysis)
 
@@ -331,13 +524,18 @@ var_contrib_outliers <- variable_contrib(
 plot(var_contrib_outliers, plot_each_obs = T)
 ```
 
+<img src="itsdm-var_contrib-1.png" title="plot of chunk var_contrib" alt="plot of chunk var_contrib" style="display: block; margin: auto;" />
+
 Let's take a look at the general variable contribution.
 
-```{r var_contrib_general, fig.align='center', fig.width=6, fig.height=5}
+
+```r
 var_contrib <- variable_contrib(
-  it_sdm$model, 
+  it_sdm$model,
   it_sdm$var_train %>% st_drop_geometry(),
   it_sdm$var_train %>% st_drop_geometry())
 # Plot general contribution for all observations
 plot(var_contrib)
 ```
+
+<img src="itsdm-var_contrib_general-1.png" title="plot of chunk var_contrib_general" alt="plot of chunk var_contrib_general" style="display: block; margin: auto;" />

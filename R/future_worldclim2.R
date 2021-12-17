@@ -41,17 +41,15 @@
 #'
 #' @details
 #' \href{https://worldclim.org/data/index.html}{Web page page for this dataset}
-#' @importFrom glue glue
 #' @importFrom sf st_as_sf st_make_valid st_crop
 #' @importFrom stars read_stars write_stars st_set_dimensions
 #' @importFrom utils tail download.file
 #' @importFrom methods is
 #' @export
 #' @examples
-#' \dontrun{
 #' future_worldclim2("tmin", 10, "BCC-CSM2-MR",
-#'   "ssp585", "2021-2040", return_stack = FALSE)
-#'}
+#'   "ssp585", "2021-2040",
+#'   path = tempdir(), return_stack = FALSE)
 #'
 future_worldclim2 <- function(var = "tmin",
                               res = 10,
@@ -111,7 +109,11 @@ future_worldclim2 <- function(var = "tmin",
     ## Download to local
     temp <- tempfile()
     options(timeout = 1e5)
-    download.file(url, temp)
+    dl <- try(download.file(url, temp))
+    if (class(dl) == "try-error") {
+      Sys.sleep(10)
+      download.file(url, temp)
+    }
 
     # Define file number
     n <- ifelse(var == "bioc", 19, 12)
@@ -173,7 +175,7 @@ future_worldclim2 <- function(var = "tmin",
             clip_imgs, 'band', values = paste0(var, 1:n))
         clip_imgs
     } else {
-        message(glue("Files are written to {path}."))
+      message(sprintf("Files are written to %s.", path))
     }
 }
 

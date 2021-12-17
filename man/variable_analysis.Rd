@@ -56,7 +56,7 @@ using the following methods:
 \itemize{
 \item{Jackknife test based on AUC ratio and Pearson correlation between the
 result of model using all variables}
-\item{Shapley Additive Explanations (SHAP) according to Shapley values}}
+\item{SHapley Additive exPlanations (SHAP) according to Shapley values}}
 }
 \details{
 \bold{Jackknife test} of variable importance is reflected as the decrease
@@ -79,7 +79,7 @@ presences falling above a range of thresholds against the proportion of
 cells of the whole area falling above the range of thresholds. This is the
 so called \bold{AUC ratio} that is used in this package.
 
-\bold{Shapley Additive Explanations (SHAP)} uses Shapley values to evaluate the variable importance. The
+\bold{SHapley Additive exPlanations (SHAP)} uses Shapley values to evaluate the variable importance. The
 larger the absolute value of Shapley value, the more important this variable is.
 Positive Shapley values mean positive affect, while negative Shapely values mean
 negative affect. Please check references for more details if you are interested in.

@@ -32,13 +32,11 @@
 #' \href{https://worldclim.org/data/index.html}{Web page page for this dataset}
 #' @importFrom methods is
 #' @importFrom utils download.file tail
-#' @importFrom glue glue
 #' @importFrom sf st_as_sf st_make_valid st_is_valid st_crop
 #' @importFrom stars read_stars write_stars
 #' @importFrom methods is
 #' @export
 #' @examples
-#' \dontrun{
 #' library(sf)
 #' library(itsdm)
 #'
@@ -48,9 +46,8 @@
 #'              c(29.34, -11.72)))) %>%
 #'   st_sfc(crs = 4326)
 #'
-#' bios <- worldclim2(var = "bio", res = 10,
+#' bios <- worldclim2(var = "tmin", res = 10,
 #'   bry = bry, nm_mark = 'tza', path = tempdir())
-#'}
 #'
 worldclim2 <- function(var = "tmin",
                        res = 10,
@@ -102,7 +99,11 @@ worldclim2 <- function(var = "tmin",
     # Download to local
     temp <- tempfile()
     options(timeout = 1e5)
-    download.file(url, temp)
+    dl <- try(download.file(url, temp))
+    if (class(dl) == "try-error") {
+      Sys.sleep(10)
+      download.file(url, temp)
+    }
 
     # Define file number
     n <- ifelse(var == "bio", 19, 12)
@@ -198,7 +199,7 @@ worldclim2 <- function(var = "tmin",
         names(clip_imgs) <- sprintf("wc2.1_%s_%s.tif", res, var)
         clip_imgs
     } else {
-        message(glue("Files are written to {path}."))
+        message(sprintf("Files are written to %s.", path))
     }
 }
 

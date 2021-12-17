@@ -65,7 +65,8 @@ of this dataset is not as stable as Worldclim yet.
 \examples{
 \dontrun{
 library(itsdm)
-future_cmcc_bioclim(esm = 'GFDL-ESM2M', rcp = 45,
+future_cmcc_bioclim(path = tempdir(),
+  esm = 'GFDL-ESM2M', rcp = 45,
   interval = "2040-2079", return_stack = FALSE)
 }
 

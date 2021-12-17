@@ -1,6 +1,6 @@
 #' @title Evaluate variable contributions for targeted observations.
 #' @description Evaluate variable contribution for targeted observations according
-#' to Shapley Additive Explanations (SHAP).
+#' to SHapley Additive exPlanations (SHAP).
 #' @param model (\code{isolation_forest}) The isolation forest SDM.
 #' It could be the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
 #' @param var_occ (`data.frame`, `tibble`) The `data.frame` style table that

@@ -32,7 +32,7 @@
 #' @importFrom raster stack layerStats mask rasterize subset
 #' @importFrom stars st_as_stars
 #' @importFrom dplyr between select
-#' @importFrom purrr is_empty
+#' @importFrom rlang is_empty
 #' @importFrom methods is as
 #' @export
 #' @examples

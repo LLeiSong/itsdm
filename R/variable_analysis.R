@@ -4,7 +4,7 @@
 #' \itemize{
 #' \item{Jackknife test based on AUC ratio and Pearson correlation between the
 #' result of model using all variables}
-#' \item{Shapley Additive Explanations (SHAP) according to Shapley values}}
+#' \item{SHapley Additive exPlanations (SHAP) according to Shapley values}}
 #' @param model (`isolation_forest`) The extended isolation forest SDM. It could be
 #' the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
 #' @param var_occ (`data.frame`, `tibble`) The `data.frame` style table that
@@ -57,7 +57,7 @@
 #' cells of the whole area falling above the range of thresholds. This is the
 #' so called \bold{AUC ratio} that is used in this package.
 #'
-#' \bold{Shapley Additive Explanations (SHAP)} uses Shapley values to evaluate the variable importance. The
+#' \bold{SHapley Additive exPlanations (SHAP)} uses Shapley values to evaluate the variable importance. The
 #' larger the absolute value of Shapley value, the more important this variable is.
 #' Positive Shapley values mean positive affect, while negative Shapely values mean
 #' negative affect. Please check references for more details if you are interested in.

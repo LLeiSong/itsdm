@@ -43,7 +43,7 @@ observations}}
 }
 \description{
 Evaluate variable contribution for targeted observations according
-to Shapley Additive Explanations (SHAP).
+to SHapley Additive exPlanations (SHAP).
 }
 \examples{
 # Using a pseudo presence-only occurrence dataset of

@@ -496,7 +496,6 @@ print.EnvironmentalOutlier <- function(x, ...) {
 #' @importFrom stringr str_pad
 #' @importFrom tidyselect all_of
 #' @importFrom dplyr filter pull across summarise
-#' @importFrom stringr str_pad
 #' @importFrom rlang .data
 #' @export
 #' @examples
