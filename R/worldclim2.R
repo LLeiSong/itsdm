@@ -37,6 +37,7 @@
 #' @importFrom methods is
 #' @export
 #' @examples
+#' \dontrun{
 #' library(sf)
 #' library(itsdm)
 #'
@@ -47,7 +48,8 @@
 #'   st_sfc(crs = 4326)
 #'
 #' bios <- worldclim2(var = "tmin", res = 10,
-#'   bry = bry, nm_mark = 'tza', path = tempdir())
+#'   bry = bry, nm_mark = 'exp', path = tempdir())
+#'}
 #'
 worldclim2 <- function(var = "tmin",
                        res = 10,

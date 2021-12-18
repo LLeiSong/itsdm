@@ -68,9 +68,11 @@ future climatic files with a setting of boundary and a few other options.
 \href{https://worldclim.org/data/index.html}{Web page page for this dataset}
 }
 \examples{
+\dontrun{
 future_worldclim2("tmin", 10, "BCC-CSM2-MR",
   "ssp585", "2021-2040",
   path = tempdir(), return_stack = FALSE)
+}
 
 }
 \references{

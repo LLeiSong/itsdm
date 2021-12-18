@@ -152,7 +152,7 @@
 #' mod_virtual_species <- isotree_po(occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200, sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L)
-#'
+#' \dontrun{
 #' # Check results
 #' ## Evaluation based on training dataset
 #' print(mod_virtual_species$eval_train)
@@ -172,6 +172,7 @@
 #' # Variable importance
 #' mod_virtual_species$variable_analysis
 #' plot(mod_virtual_species$variable_analysis)
+#'}
 #'
 isotree_po <- function(
   # SDM-related inputs

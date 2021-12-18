@@ -47,9 +47,11 @@
 #' @importFrom methods is
 #' @export
 #' @examples
+#' \dontrun{
 #' future_worldclim2("tmin", 10, "BCC-CSM2-MR",
 #'   "ssp585", "2021-2040",
 #'   path = tempdir(), return_stack = FALSE)
+#'}
 #'
 future_worldclim2 <- function(var = "tmin",
                               res = 10,

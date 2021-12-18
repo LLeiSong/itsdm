@@ -1,7 +1,7 @@
 ---
 title: "Using `itsdm` to a real species: Africa savanna elephant"
 author: "Lei Song"
-date: "2021-12-16"
+date: "2021-12-17"
 output:
   rmarkdown::html_document:
     theme: readable

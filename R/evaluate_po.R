@@ -136,6 +136,7 @@
 #' eval_train <- evaluate_po(mod$model,
 #'   occ_pred = mod$pred_train$prediction,
 #'   var_pred = na.omit(as.vector(mod$prediction[[1]])))
+#' print(eval_train)
 #'
 evaluate_po <- function(model,
                         occ_pred,

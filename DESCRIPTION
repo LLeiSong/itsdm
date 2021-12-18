@@ -3,46 +3,53 @@ Title: Isolation Forest-Based Presence-Only Species Distribution Modeling
 Version: 0.1.0
 Author: Lei Song
 Maintainer: Lei Song <lsong@clarku.edu>
-Description: This is a package to do purely presence-only species distribution modeling with isolation forest and variations such as SCiForest and EIF. It also provides functions to make response curves, analyze variable importance, analyze variable dependence and analyze variable contribution. As utilities, the package includes a few functions to download bioclimatic variables including worldclim version 2.0 and CMCC-BioClimInd. There are also functions to detect outliers in the occurrence dataset to do data cleaning.
+Description: This is a package to do purely presence-only species
+    distribution modeling with isolation forest and variations such as
+    SCiForest and EIF. It also provides functions to make response curves,
+    analyze variable importance, analyze variable dependence and analyze
+    variable contribution. As utilities, the package includes a few
+    functions to download bioclimatic variables including worldclim
+    version 2.0 and CMCC-BioClimInd. There are also functions to detect
+    outliers in the occurrence dataset to do data cleaning.
 License: MIT + file LICENSE
+URL: https://github.com/LLeiSong/itsdm
+BugReports: https://github.com/LLeiSong/itsdm/issues
 Depends: 
     R (>= 3.5.0)
 Imports:
-    utils,
-    stats,
+    checkmate,
+    dplyr,
+    ecospat,
+    fastshap,
+    ggplot2,
+    isotree,
     methods,
+    ncdf4,
+    outliertree,
+    patchwork,
+    raster,
+    rlang,
+    ROCit,
     sf,
     stars,
-    raster,
-    dplyr,
-    rlang,
-    ggplot2,
-    patchwork,
-    isotree,
-    outliertree,
-    fastshap,
-    ecospat,
-    ROCit,
-    ncdf4,
+    stats,
+    stringr,
     tidyselect,
-    checkmate,
-    stringr
+    utils
 Suggests: 
-    kableExtra,
-    knitr, 
-    rmarkdown,
-    rgbif,
-    virtualspecies,
     here,
+    kableExtra,
+    knitr,
     lubridate,
-    scrubr
-Remotes:
-    ropensci/scrubr,
-    bgreenwell/fastshap
-URL: https://github.com/LLeiSong/itsdm.git
-BugReports: https://github.com/LLeiSong/itsdm/issues
+    rgbif,
+    rmarkdown,
+    scrubr,
+    virtualspecies
+VignetteBuilder: 
+    knitr
+Additional_repositories: http://packages.ropensci.org
 Encoding: UTF-8
+Language: en-US
+LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
-VignetteBuilder: knitr
-LazyData: true

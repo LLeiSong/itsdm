@@ -51,6 +51,7 @@ with a setting of boundary and a few other options.
 \href{https://worldclim.org/data/index.html}{Web page page for this dataset}
 }
 \examples{
+\dontrun{
 library(sf)
 library(itsdm)
 
@@ -61,7 +62,8 @@ bry <- sf::st_polygon(
   st_sfc(crs = 4326)
 
 bios <- worldclim2(var = "tmin", res = 10,
-  bry = bry, nm_mark = 'tza', path = tempdir())
+  bry = bry, nm_mark = 'exp', path = tempdir())
+}
 
 }
 \references{
