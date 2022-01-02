@@ -72,6 +72,7 @@
 #'   variables = env_vars, ntrees = 200,
 #'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' marginal_responses <- marginal_response(
@@ -90,7 +91,7 @@ marginal_response <- function(model,
   checkmate::assert_data_frame(var_occ)
   checkmate::assert_int(si)
   checkmate::assert_class(variables, 'stars')
-  stopifnot(length(dim(variables)) == 2)
+  stopifnot(length(dim(variables)) <= 2)
   checkmate::assert_logical(visualize)
   bands <- names(variables)
   stopifnot(all(bands %in% colnames(var_occ)))
@@ -101,15 +102,21 @@ marginal_response <- function(model,
   bands_cont <- bands[!isfacor]
   bands_cat <- bands[isfacor]
 
+  # Do full prediction
+  ## Raster
+  var_pred_full <- predict(variables, model)
+  ## Stretch result to be comparable with other results
+  var_pred_full <- 1 - var_pred_full
+
   # Numeric variables
   ## Not limited to data volume, could generate as many as possible
   ## pseudo observations in [min, max], so the function could make
   ## smoother curves.
   if (length(bands_cont) > 0) {
     mins <- sapply(bands_cont, function(nm) {
-      min(variables %>% select(nm) %>% pull, na.rm = T)})
+      min(variables %>% pull(nm), na.rm = T)})
     maxs <- sapply(bands_cont, function(nm) {
-      max(variables %>% select(nm) %>% pull, na.rm = T)})
+      max(variables %>% pull(nm), na.rm = T)})
     vals_cont <- do.call(
       cbind, lapply(1:length(mins), function(m) {
       seq(from = mins[m], to = maxs[m],
@@ -133,7 +140,7 @@ marginal_response <- function(model,
         mutate('{nm}' := vals_cont %>% pull(nm))
       pred_tmp <- predict(model, vals_tmp)
       pred_tmp <- 1 - pred_tmp
-      pred_tmp <- .norm(pred_tmp)
+      pred_tmp <- .stars_stretch(var_pred_full, new_values = pred_tmp)
       data.frame(y = pred_tmp,
                  x = vals_cont %>% pull(nm)) %>%
         setNames(c("y", "x"))
@@ -164,7 +171,7 @@ marginal_response <- function(model,
         mutate('{nm}' := vals_this)
       pred_tmp <- predict(model, means_this)
       pred_tmp <- 1 - pred_tmp
-      pred_tmp <- .norm(pred_tmp)
+      pred_tmp <- .stars_stretch(var_pred_full, new_values = pred_tmp)
       data.frame(y = pred_tmp,
                  x = vals_this) %>%
         setNames(c("y", "x"))

@@ -52,7 +52,7 @@ dim_reduce <- function(img_stack = NULL,
                        samples = NULL) {
     # Check inputs
     stopifnot(is.numeric(threshold) & between(threshold, 0, 1))
-    stopifnot(is(img_stack, 'stars') | is(img_stack, 'raster'))
+    stopifnot(is(img_stack, 'stars') | is(img_stack, 'RasterStack'))
     if (is.null(samples)) {
         message("No samples set, use whole image.")
     } else{

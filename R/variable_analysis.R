@@ -7,10 +7,10 @@
 #' \item{SHapley Additive exPlanations (SHAP) according to Shapley values}}
 #' @param model (`isolation_forest`) The extended isolation forest SDM. It could be
 #' the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
-#' @param var_occ (`data.frame`, `tibble`) The `data.frame` style table that
-#' include values of environmental variables at occurrence locations.
-#' @param var_occ_test (`data.frame`, `tibble`, or `NULL`) The `data.frame` style
-#' table that include values of environmental variables at occurrence locations of test.
+#' @param pts_occ (`sf`) The `sf` style table that
+#' include training occurrence locations.
+#' @param pts_occ_test (`sf`, or `NULL`) The `sf` style
+#' table that include occurrence locations of test.
 #' If `NULL`, it would be set the same as `var_occ`. The default is `NULL`.
 #' @param variables (`stars`) The `stars` of environmental variables. It should have
 #' multiple `attributes` instead of `dims`. If you have `raster` object instead, you
@@ -116,74 +116,86 @@
 #'   variables = env_vars, ntrees = 200,
 #'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' var_analysis <- variable_analysis(
 #'   model = mod$model,
-#'   var_occ = mod$var_train %>% st_drop_geometry(),
-#'   var_occ_test = mod$var_test %>% st_drop_geometry(),
+#'   pts_occ = mod$pts_occ,
+#'   pts_occ_test = mod$pts_occ_test,
 #'   variables = mod$variables)
 #'}
 #'
 variable_analysis <- function(model,
-                              var_occ,
-                              var_occ_test = NULL, # Independent test
+                              pts_occ,
+                              pts_occ_test = NULL, # Independent test
                               variables,
                               shap_nsim = 100,
                               visualize = FALSE,
                               seed = 10) {
   # Check inputs
-  checkmate::assert_data_frame(var_occ)
-  checkmate::assert_data_frame(var_occ_test, null.ok = T)
-  if (is.null(var_occ_test)) {
-    warning(paste0('var_occ_test is NULL, set it to var_occ. ',
+  checkmate::assert_data_frame(pts_occ)
+  checkmate::assert_data_frame(pts_occ_test, null.ok = T)
+  if (is.null(pts_occ_test)) {
+    warning(paste0('pts_occ_test is NULL, set it to pts_occ. ',
                    'The result of train and test would be the same'))
-    var_occ_test <- var_occ
-  }
+    pts_occ_test <- pts_occ}
   checkmate::assert_class(variables, 'stars')
   checkmate::assert_int(shap_nsim)
   checkmate::assert_logical(visualize)
   checkmate::assert_int(seed)
   bands <- names(variables)
-  stopifnot(all(bands %in% colnames(var_occ)))
 
-  # Sampling from the whole image to speed things up.
+  # Background samples
   set.seed(seed)
-  samples <- variables %>% select(bands[1]) %>%
+  n_samples <- nrow(pts_occ) + nrow(pts_occ_test)
+  if_replace <- ifelse(n_samples > length(variables[[1]]),
+                       TRUE, FALSE)
+  samples_bg <- variables %>% select(bands[1]) %>%
     st_xy2sfc(as_points = T) %>% st_as_sf() %>%
     select(.data$geometry) %>%
-    sample_n(min(10000, nrow(.)))
-  vars <- st_extract(x = variables, at = samples) %>%
-    st_drop_geometry()
-  rm(samples, variables)
+    sample_n(nrow(pts_occ) + nrow(pts_occ_test),
+             replace = if_replace)
 
-  # Original prediction
-  ## Predict
-  full_pred_occ <- 1 - predict(model, var_occ)
-  full_pred_occ_test <- 1 - predict(model, var_occ_test)
-  full_pred_var <- 1 - predict(model, vars)
+  # Do full prediction
+  ## Raster
+  var_pred_full <- predict(variables, model)
+  ## Stretch result to be comparable with other results
+  var_pred_full <- 1 - var_pred_full
 
-  ## Stretch to 0 to 1.
-  full_pred_occ <- .stretch(x = full_pred_var,
-                            new_values = full_pred_occ,
-                            minq = 0)
-  full_pred_occ_test <- .stretch(x = full_pred_var,
-                                 new_values = full_pred_occ_test,
-                                 minq = 0)
-  full_pred_var <- .stretch(x = full_pred_var,
-                            minq = 0)
+  # Extract values
+  full_pred_var <- .stars_stretch(var_pred_full)
+  full_pred_occ <- st_extract(
+    x = full_pred_var,
+    at = pts_occ) %>%
+    pull(.data$prediction)
+  full_pred_occ_test <- st_extract(
+    x = full_pred_var,
+    at = pts_occ_test) %>%
+    pull(.data$prediction)
+  full_pred_bg <- st_extract(
+    x = full_pred_var,
+    at = samples_bg) %>%
+    pull(.data$prediction)
 
   ## AUC background and ratio
-  full_auc_train <- .auc_ratio(full_pred_occ, full_pred_var)
-  full_auc_test <- .auc_ratio(full_pred_occ_test, full_pred_var)
+  full_auc_train <- .auc_ratio(na.omit(full_pred_occ),
+                               na.omit(as.vector(full_pred_var[[1]])))
+  full_auc_test <- .auc_ratio(na.omit(full_pred_occ_test),
+                              na.omit(as.vector(full_pred_var[[1]])))
 
   # Process
+  ## Extract values
+  var_occ <- st_extract(x = variables, at = pts_occ) %>%
+    st_as_sf() %>% na.omit() %>% st_drop_geometry()
+  var_occ_test <- st_extract(x = variables, at = pts_occ_test) %>%
+    st_as_sf() %>% na.omit() %>% st_drop_geometry()
+
+  ## Start
   var_each <- do.call(rbind, lapply(bands, function(nm){
     # Model with only this variable
-    ## Subset dataset
     this_var_occ <- var_occ %>% select(all_of(nm))
-    this_var_occ_test <- var_occ_test %>% select(all_of(nm))
-    this_vars <- vars %>% select(all_of(nm))
+    this_vars <- variables %>% select(all_of(nm))
 
     ## Fit model
     this_model <- isolation.forest(
@@ -214,34 +226,51 @@ variable_analysis <- function(model,
       weigh_imp_rows = model$params$weigh_imp_rows)
 
     ## Prediction
-    this_occ_pred <- 1 - predict(this_model, this_var_occ)
-    this_occ_test_pred <- 1 - predict(this_model, this_var_occ_test)
-    this_vars_pred <- 1 - predict(this_model, this_vars)
+    ## Raster
+    this_vars_pred <- predict(this_vars, this_model)
+    ## Stretch result to be comparable with other results
+    this_vars_pred <- 1 - this_vars_pred
+    this_vars_pred <- .stars_stretch(this_vars_pred)
 
-    # Stretch
-    this_occ_pred <- .stretch(x = this_vars_pred,
-                              new_values = this_occ_pred,
-                              minq = 0)
-    this_occ_test_pred <- .stretch(x = this_vars_pred,
-                                   new_values = this_occ_test_pred,
-                                   minq = 0)
-    this_vars_pred <- .stretch(this_vars_pred,
-                               minq = 0)
+    # Extract values
+    this_occ_pred <- st_extract(
+      x = this_vars_pred,
+      at = pts_occ) %>%
+      pull(.data$prediction)
+    this_occ_test_pred <- st_extract(
+      x = this_vars_pred,
+      at = pts_occ_test) %>%
+      pull(.data$prediction)
+
+    # Background values
+    this_pred_bg <- st_extract(
+      x = this_vars_pred,
+      at = samples_bg) %>%
+      pull(.data$prediction)
 
     ## Calculate metrics
-    r_only_train <- cor(full_pred_occ, this_occ_pred,
+    r_only_train <- cor(c(full_pred_occ, full_pred_bg[1:nrow(pts_occ)]),
+                        c(this_occ_pred, this_pred_bg[1:nrow(pts_occ)]),
                         use = 'complete.obs')
-    r_only_test <- cor(full_pred_occ_test, this_occ_test_pred,
+    r_only_test <- cor(c(full_pred_occ_test,
+                         full_pred_bg[(nrow(pts_occ) + 1): n_samples]),
+                       c(this_occ_test_pred,
+                         this_pred_bg[(nrow(pts_occ) + 1): n_samples]),
                        use = 'complete.obs')
-    auc_only_train <- .auc_ratio(this_occ_pred, this_vars_pred)
-    auc_only_test <- .auc_ratio(this_occ_test_pred, this_vars_pred)
+    auc_only_train <- .auc_ratio(na.omit(this_occ_pred),
+                                 na.omit(as.vector(this_vars_pred[[1]])))
+    auc_only_test <- .auc_ratio(na.omit(this_occ_test_pred),
+                                na.omit(as.vector(this_vars_pred[[1]])))
+
+    # Cleaning up
+    rm(this_var_occ, this_vars, this_model, this_occ_pred,
+       this_occ_test_pred, this_vars_pred, this_pred_bg)
 
     # Model with variables except the chosen one
     ## Subset dataset
     nms <- setdiff(bands, nm)
     except_var_occ <- var_occ %>% select(all_of(nms))
-    except_var_occ_test <- var_occ_test %>% select(all_of(nms))
-    except_vars <- vars %>% select(all_of(nms))
+    except_vars <- variables %>% select(all_of(nms))
 
     ## Fit model
     except_model <- isolation.forest(
@@ -273,32 +302,46 @@ variable_analysis <- function(model,
       weigh_imp_rows = model$params$weigh_imp_rows)
 
     ## Prediction
-    except_occ_pred <- 1 - predict(except_model, except_var_occ)
-    except_occ_test_pred <- 1 - predict(except_model, except_var_occ_test)
-    except_vars_pred <- 1 - predict(except_model, except_vars)
+    ## Raster
+    except_vars_pred <- predict(except_vars, except_model)
+    ## Stretch result to be comparable with other results
+    except_vars_pred <- 1 - except_vars_pred
+    except_vars_pred <- .stars_stretch(except_vars_pred)
 
-    ## Stretch
-    except_occ_pred <- .stretch(x = except_vars_pred,
-                                new_values = except_occ_pred,
-                                minq = 0)
-    except_occ_test_pred <- .stretch(x = except_vars_pred,
-                                     new_values = except_occ_test_pred,
-                                     minq = 0)
-    except_vars_pred <- .stretch(except_vars_pred,
-                                 minq = 0)
+    # Extract values
+    except_occ_pred <- st_extract(
+      x = except_vars_pred,
+      at = pts_occ) %>%
+      pull(.data$prediction)
+    except_occ_test_pred <- st_extract(
+      x = except_vars_pred,
+      at = pts_occ_test) %>%
+      pull(.data$prediction)
+
+    # Background values
+    except_pred_bg <- st_extract(
+      x = except_vars_pred,
+      at = samples_bg) %>%
+      pull(.data$prediction)
 
     ## Calculate metrics
-    r_except_train <- cor(full_pred_occ, except_occ_pred,
-                          use = 'complete.obs')
-    r_except_test <- cor(full_pred_occ_test, except_occ_test_pred,
-                          use = 'complete.obs')
-    auc_except_train <- .auc_ratio(except_occ_pred, except_vars_pred)
-    auc_except_test <- .auc_ratio(except_occ_test_pred, except_vars_pred)
+    r_except_train <- cor(c(full_pred_occ, full_pred_bg[1:nrow(pts_occ)]),
+                        c(except_occ_pred, except_pred_bg[1:nrow(pts_occ)]),
+                        use = 'complete.obs')
+    r_except_test <- cor(c(full_pred_occ_test,
+                         full_pred_bg[(nrow(pts_occ) + 1): n_samples]),
+                       c(except_occ_test_pred,
+                         except_pred_bg[(nrow(pts_occ) + 1): n_samples]),
+                       use = 'complete.obs')
+    auc_except_train <- .auc_ratio(na.omit(except_occ_pred),
+                                   na.omit(as.vector(except_vars_pred[[1]])))
+    auc_except_test <- .auc_ratio(na.omit(except_occ_test_pred),
+                                  na.omit(as.vector(except_vars_pred[[1]])))
 
     # Clean up
-    rm(this_var_occ, this_var_occ_test, this_vars, this_model, this_occ_pred,
-       this_occ_test_pred, nms, except_var_occ, except_var_occ_test, except_vars,
-       except_model, except_occ_pred, except_occ_test_pred)
+    rm(nms, except_var_occ, except_vars,
+       except_model, except_occ_pred, except_occ_test_pred,
+       except_vars_pred, except_pred_bg)
 
     # Output
     tibble(variable = rep(nm, 8),
@@ -317,13 +360,27 @@ variable_analysis <- function(model,
   # ALTERNATIVE: SHAP method that use Shapley values according to game theory.
 
   # SHAP feature importance
+  ## Training
+  ### Add background points to balance the average value is around 0.5
+  vars_bg <- st_extract(
+    x = variables,
+    at = samples_bg[1:nrow(pts_occ), ]) %>%
+    st_drop_geometry()
   set.seed(seed)
   shap_train <- explain(model, X = var_occ, nsim = shap_nsim,
+                        newdata = rbind(var_occ, vars_bg),
                         pred_wrapper = .pfun_shap)
+  ## Test
+  ### Add background points to balance the average value is around 0.5
+  vars_bg <- st_extract(
+    x = variables,
+    at = samples_bg[(nrow(pts_occ) + 1): n_samples, ]) %>%
+    st_drop_geometry()
   set.seed(seed)
   shap_test <- explain(model, X = var_occ, nsim = shap_nsim,
-                       newdata = var_occ_test,
+                       newdata = rbind(var_occ_test, vars_bg),
                        pred_wrapper = .pfun_shap)
+  rm(vars_bg, variables, samples_bg, var_occ, var_occ_test)
 
   # Output
   out <- list(variables = bands,

@@ -73,6 +73,7 @@ mod <- isotree_po(
   variables = env_vars, ntrees = 200,
   sample_rate = 0.8, ndim = 3L,
   seed = 123L, response = FALSE,
+  spatial_response = FALSE,
   check_variable = FALSE)
 
 var_contribution <- variable_contrib(

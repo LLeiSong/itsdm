@@ -25,7 +25,7 @@
     if (smooth_span == 0){
       invisible(g_cont <- ggplot(response_df, aes(x = .data$x, y = .data$y)) +
                   geom_line(color = "black") +
-                  scale_y_continuous(limits = c(0, 1.0)) +
+                  #scale_y_continuous(limits = c(0, 1.0)) +
                   facet_wrap(~variable, scales = 'free', ncol = 2) +
                   xlab('Value') + ylab('(Continuous variables)\nStandardized suitability') +
                   theme(axis.text = element_text(size = rel(cex.axis)),
@@ -36,7 +36,7 @@
       invisible(g_cont <- ggplot(response_df, aes(x = .data$x, y = .data$y)) +
                   geom_point(alpha = 0) +
                   stat_smooth(method = 'loess', span = smooth_span, color = "black") +
-                  scale_y_continuous(limits = c(0, 1.0)) +
+                  #scale_y_continuous(limits = c(0, 1.0)) +
                   facet_wrap(~variable, scales = 'free', ncol = 2) +
                   xlab('Value') + ylab('(Continuous variables)\nStandardized suitability') +
                   theme(axis.text = element_text(size = rel(cex.axis)),
@@ -136,6 +136,7 @@
 #'   variables = env_vars, ntrees = 200,
 #'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' marginal_responses <- marginal_response(
@@ -215,6 +216,7 @@ plot.MarginalResponse <- function(x,
 #'   variables = env_vars, ntrees = 200,
 #'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' independent_responses <- independent_response(
@@ -250,8 +252,8 @@ plot.IndependentResponse <- function(x,
 
 #' @title Function to plot variable dependence obtained from SHAP test.
 #' @description Plot variable dependence curves using ggplot2.
-#' @param x (`VariableDependence`) The variable dependence object to plot.
-#' It could be the return of function \code{\link{variable_dependence}}.
+#' @param x (`ShapDependence`) The variable dependence object to plot.
+#' It could be the return of function \code{\link{shap_dependence}}.
 #' @param target_var (`vector` of `character`) The target variable to plot. It could be
 #' `NA`. If it is `NA`, all variables will be plotted.
 #' @param related_var (`character`) The dependent variable to plot together with
@@ -262,7 +264,7 @@ plot.IndependentResponse <- function(x,
 #' @param ... Not used.
 #' @return `ggplot2` figure of dependent curves
 #' @seealso
-#' \code{\link{variable_dependence}}
+#' \code{\link{shap_dependence}}
 #'
 #' @import ggplot2
 #' @importFrom methods is
@@ -301,17 +303,17 @@ plot.IndependentResponse <- function(x,
 #'   seed = 123L, response = FALSE,
 #'   check_variable = FALSE)
 #'
-#' var_dependence <- variable_dependence(
+#' var_dependence <- shap_dependence(
 #'   model = mod$model,
 #'   var_occ = mod$var_train %>% st_drop_geometry())
 #' plot(var_dependence, target_var = 'bio1', related_var = 'bio12')
 #'}
 #'
-plot.VariableDependence <- function(x,
-                                    target_var = NA,
-                                    related_var = NA,
-                                    smooth_span = 0.3,
-                                    ...) {
+plot.ShapDependence <- function(x,
+                                target_var = NA,
+                                related_var = NA,
+                                smooth_span = 0.3,
+                                ...) {
   # Checking
   nms <- names(x$feature_values)
   checkmate::assert_string(related_var, na.ok = T)
@@ -514,6 +516,183 @@ plot.VariableDependence <- function(x,
   }
 }
 
+#' @title Function to plot spatial variable dependence maps.
+#' @description Plot spatial variable dependence maps using ggplot2.
+#' @param x (`SpatialResponse`) The spatial variable dependence object to plot.
+#' It could be the return of function \code{\link{spatial_response}}.
+#' @param target_var (`vector` of `character`) The target variable to plot.
+#' It could be `NA`. If it is `NA`, all variables will be plotted.
+#' @param ... Not used.
+#' @return `ggplot2` figure of dependent maps
+#' @seealso
+#' \code{\link{spatial_response}}
+#'
+#' @import ggplot2
+#' @import patchwork
+#' @importFrom stars st_set_dimensions
+#' @importFrom rlang .data
+#' @export
+#' @examples
+#' \donttest{
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
+#'
+#' data("occ_virtual_species")
+#' occ_virtual_species <- occ_virtual_species %>%
+#'   mutate(id = row_number())
+#'
+#' set.seed(11)
+#' occ <- occ_virtual_species %>% sample_frac(0.7)
+#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
+#' occ <- occ %>% select(-id)
+#' occ_test <- occ_test %>% select(-id)
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_tanzania_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   slice('band', c(1, 5, 12, 16))
+#'
+#' mod <- isotree_po(
+#'   occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200,
+#'   sample_rate = 0.8, ndim = 3L,
+#'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
+#'   check_variable = FALSE)
+#'
+#' spatial_responses <- spatial_response(
+#'   model = mod$model,
+#'   var_occ = mod$var_train %>% st_drop_geometry(),
+#'   variables = mod$variables)
+#' plot(spatial_responses)
+#' plot(spatial_responses, target_var = 'bio1')
+#'}
+#'
+plot.SpatialResponse <- function(x,
+                                 target_var = NA,
+                                 ...) {
+  # Checking
+  nms <- names(x$spatial_marginal_response)
+  checkmate::assert_character(target_var, min.len = 0)
+  if (!all(is.na(target_var))) {
+    stopifnot(all(target_var %in% nms))}
+
+  # Subset
+  if (!all(is.na(target_var))) {
+    x$spatial_marginal_response <- x$spatial_marginal_response[target_var]
+    x$spatial_independent_response <- x$spatial_independent_response[target_var]
+    x$spatial_shap_dependence <- x$spatial_shap_dependence[target_var]}
+
+  if (length(names(x$spatial_marginal_response)) > 1) {
+    # marginal plot
+    m_plot <- ggplot() +
+      geom_stars(
+        data = do.call(c, x$spatial_marginal_response) %>%
+          merge(name = 'band') %>%
+          st_set_dimensions('band',
+                            values = names(x$spatial_marginal_response))) +
+      scale_fill_distiller('Value', palette = "YlOrRd",
+                           direction = 1,
+                           na.value = "transparent") +
+      ggtitle(sprintf('Marginal effect of %s', 'variables')) +
+      coord_equal() +
+      facet_wrap(~band) +
+      theme_void() +
+      theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
+            strip.text.x = element_text(size = 12, face = "bold.italic"))
+
+    # independent plot
+    i_plot <- ggplot() +
+      geom_stars(
+        data = do.call(c, x$spatial_independent_response) %>%
+          merge(name = 'band') %>%
+          st_set_dimensions('band',
+                            values = names(x$spatial_marginal_response))) +
+      scale_fill_distiller('Value', palette = "YlOrRd",
+                           direction = 1,
+                           na.value = "transparent") +
+      ggtitle(sprintf('Independent effect of %s', 'variables')) +
+      coord_equal() +
+      facet_wrap(~band) +
+      theme_void() +
+      theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
+            strip.text.x = element_text(size = 12, face = "bold.italic"))
+
+    # SHAP plot
+    if (!is.null(x$spatial_shap_dependence)) {
+      s_plot <- ggplot() +
+        geom_stars(
+          data = do.call(c, x$spatial_shap_dependence) %>%
+            merge(name = 'band') %>%
+            st_set_dimensions('band',
+                              values = names(x$spatial_marginal_response))) +
+        scale_fill_distiller('Value', palette = "RdYlBu",
+                             na.value = "transparent") +
+        ggtitle(sprintf('SHAP-based effect of %s', 'variables')) +
+        coord_equal() +
+        facet_wrap(~band) +
+        theme_void() +
+        theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
+              strip.text.x = element_text(size = 12, face = "bold.italic"))
+
+      m_plot / i_plot / s_plot
+    } else {
+      m_plot / i_plot
+    }
+  } else {
+    # marginal plot
+    m_plot <- ggplot() +
+      geom_stars(
+        data = do.call(c, x$spatial_marginal_response)) +
+      scale_fill_distiller('Value', palette = "YlOrRd",
+                           direction = 1,
+                           na.value = "transparent") +
+      ggtitle(sprintf('Marginal effect of %s',
+                      names(x$spatial_marginal_response))) +
+      coord_equal() +
+      theme_void() +
+      theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
+            strip.text.x = element_text(size = 12, face = "bold.italic"))
+
+    # independent plot
+    i_plot <- ggplot() +
+      geom_stars(
+        data = do.call(c, x$spatial_independent_response)) +
+      scale_fill_distiller('Value', palette = "YlOrRd",
+                           direction = 1,
+                           na.value = "transparent") +
+      ggtitle(sprintf('Independent effect of %s',
+                      names(x$spatial_marginal_response))) +
+      coord_equal() +
+      theme_void() +
+      theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
+            strip.text.x = element_text(size = 12, face = "bold.italic"))
+
+    # SHAP plot
+    if (!is.null(x$spatial_shap_dependence)) {
+      s_plot <- ggplot() +
+        geom_stars(
+          data = do.call(c, x$spatial_shap_dependence)) +
+        scale_fill_distiller('Value', palette = "RdYlGn",
+                             na.value = "transparent") +
+        ggtitle(sprintf('SHAP-based effect of %s',
+                        names(x$spatial_marginal_response))) +
+        coord_equal() +
+        theme_void() +
+        theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
+              strip.text.x = element_text(size = 12, face = "bold.italic"))
+
+      m_plot / i_plot / s_plot
+    } else {
+      m_plot / i_plot
+    }
+  }
+}
+
 #' @title Function to plot variable contribution for target observations.
 #' @description Plot variable contribution for target observation separately
 #' or together using ggplot2.
@@ -562,6 +741,7 @@ plot.VariableDependence <- function(x,
 #'   variables = env_vars, ntrees = 200,
 #'   sample_rate = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' var_contribution <- variable_contrib(
@@ -699,12 +879,13 @@ plot.VariableContribution <- function(x,
 #'   variables = env_vars, ntrees = 200,
 #'   sample_rate = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' var_analysis <- variable_analysis(
 #'   model = mod$model,
-#'   var_occ = mod$var_train %>% st_drop_geometry(),
-#'   var_occ_test = mod$var_test %>% st_drop_geometry(),
+#'   pts_occ = mod$pts_occ,
+#'   pts_occ_test = mod$pts_occ_test,
 #'   variables = mod$variables)
 #' plot(var_analysis)
 #'}
@@ -975,6 +1156,7 @@ plot.VariableAnalysis <- function(x, ...) {
 #'   variables = env_vars, ntrees = 200,
 #'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' eval_train <- evaluate_po(mod$model,
@@ -1161,6 +1343,7 @@ plot.POEvaluation <- function(x, ...) {
 #'   variables = env_vars, ntrees = 200,
 #'   sample_rate = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' # Threshold conversion

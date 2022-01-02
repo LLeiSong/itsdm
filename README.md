@@ -81,8 +81,5 @@ plot(mod$independent_responses,
   target_var = c('bio1', 'bio12'))
 ```
 
-## Package updates
-[Package news](NEWS.md)
-
 ## Funding
 This package is part of project "Combining Spatially-explicit Simulation of Animal Movement and Earth Observation to Reconcile Agriculture and Wildlife Conservation". This project is funded by NASA FINESST program (award number: 80NSSC20K1640).

@@ -32,13 +32,14 @@ select <- dplyr::select
 
 ## Prepare environmental variables
 
-As an example of a package, we won't use too many complex variables. Here we use:
+As an example of a package, we includes both continuous and categorical variables. But these variables are not necessarily the real explanatory variable. For example, using a proportion of forest cover might be better than categorical land cover maps. Additionally, using general protected area might actually confuse the model.
+
+Here we use:
 
 1. Bioclimatic variables
 2. Protected area and land cover type as categorical variables.
 
-Note that maps of the protected area and land cover types are prepared and provided in this package. You could use
-`system.file` with file names to find them like the following.
+Note that maps of the protected area and land cover types are prepared and provided in this package. You could use `system.file` with file names to find them like the following.
 
 ```{r variables, warning=F, message=F}
 library(stars)
@@ -180,7 +181,9 @@ var_con_rdc
 var_con <- var_con_rdc$img_reduced
 variables <- do.call(c, list(split(var_con, 'band'), var_cat))
 rm(cat_vars, var_cat, var_con, var_con_rdc)
+```
 
+```{r, eval=FALSE}
 # If you really want to merge
 ## At least could ensure the values are the original values
 var_merge <- variables
@@ -212,9 +215,11 @@ Now both occurrence and environmental variables are ready to use for modeling.
 
 At this step, the users could use strategies like grid search and preferred evaluation metrics to find the optimal arguments for the model. As an example, here we use a set of arguments:
 
-- `sample_rate = 1.0`
-- `ndim = 2`
+- `ntrees = 200`
+- `sample_rate = 0.8`
+- `ndim = 3`
 - `categ_cols = c('wdpa', 'landcover')`
+- `max_depth = 80`
 
 ```{r sdm, fig.align='center', fig.width=4, fig.height=3}
 # Do modeling
@@ -222,8 +227,9 @@ it_sdm <- isotree_po(occ = occ_sf,
                      occ_test = occ_test_sf,
                      variables = variables,
                      categ_vars = c('wdpa', 'landcover'),
-                     sample_rate = 1.0,
-                     ndim = 2,
+                     ntrees = 200L,
+                     sample_rate = 0.9,
+                     ndim = 4,
                      seed = 10L)
 ```
 
@@ -252,6 +258,8 @@ Presence-only model evaluation
 it_sdm$eval_test
 plot(it_sdm$eval_test)
 ```
+
+According to the evaluation, the model has a large space to improve. For instance, adding more explanatory features. 
 
 ## Response curves
 

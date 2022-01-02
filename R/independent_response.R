@@ -77,6 +77,7 @@
 #'   variables = env_vars, ntrees = 200,
 #'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' independent_responses <- independent_response(
@@ -95,10 +96,16 @@ independent_response <- function(model,
   checkmate::assert_data_frame(var_occ)
   checkmate::assert_int(si)
   checkmate::assert_class(variables, 'stars')
-  stopifnot(length(dim(variables)) == 2)
+  stopifnot(length(dim(variables)) <= 2)
   checkmate::assert_logical(visualize)
   bands <- names(variables)
   stopifnot(all(bands %in% colnames(var_occ)))
+
+  # Do full prediction
+  ## Raster
+  var_pred_full <- predict(variables, model)
+  ## Stretch result to be comparable with other results
+  var_pred_full <- 1 - var_pred_full
 
   # Reformat data
   ## Make models
@@ -158,7 +165,7 @@ independent_response <- function(model,
       vals_tmp <- vals_cont %>% select(nm)
       pred_tmp <- predict(models[[nm]], vals_tmp)
       pred_tmp <- 1 - pred_tmp
-      pred_tmp <- .norm(pred_tmp)
+      pred_tmp <- .stars_stretch(var_pred_full, new_values = pred_tmp)
       data.frame(y = pred_tmp,
                  x = vals_cont %>% pull(nm)) %>%
         setNames(c("y", "x"))
@@ -178,7 +185,7 @@ independent_response <- function(model,
 
       pred_tmp <- predict(models[[nm]], vals_this)
       pred_tmp <- 1 - pred_tmp
-      pred_tmp <- .norm(pred_tmp)
+      pred_tmp <- .stars_stretch(var_pred_full, new_values = pred_tmp)
       data.frame(y = pred_tmp,
                  x = vals_this %>% pull(nm)) %>%
         setNames(c("y", "x"))

@@ -48,12 +48,13 @@ mod <- isotree_po(
   variables = env_vars, ntrees = 200,
   sample_rate = 0.8, ndim = 3L,
   seed = 123L, response = FALSE,
+  spatial_response = FALSE,
   check_variable = FALSE)
 
 var_analysis <- variable_analysis(
   model = mod$model,
-  var_occ = mod$var_train \%>\% st_drop_geometry(),
-  var_occ_test = mod$var_test \%>\% st_drop_geometry(),
+  pts_occ = mod$pts_occ,
+  pts_occ_test = mod$pts_occ_test,
   variables = mod$variables)
 
 print(variable_analysis)

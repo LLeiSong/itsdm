@@ -6,8 +6,8 @@
 \usage{
 variable_analysis(
   model,
-  var_occ,
-  var_occ_test = NULL,
+  pts_occ,
+  pts_occ_test = NULL,
   variables,
   shap_nsim = 100,
   visualize = FALSE,
@@ -18,11 +18,11 @@ variable_analysis(
 \item{model}{(\code{isolation_forest}) The extended isolation forest SDM. It could be
 the item \code{model} of \code{POIsotree} made by function \code{\link{isotree_po}}.}
 
-\item{var_occ}{(\code{data.frame}, \code{tibble}) The \code{data.frame} style table that
-include values of environmental variables at occurrence locations.}
+\item{pts_occ}{(\code{sf}) The \code{sf} style table that
+include training occurrence locations.}
 
-\item{var_occ_test}{(\code{data.frame}, \code{tibble}, or \code{NULL}) The \code{data.frame} style
-table that include values of environmental variables at occurrence locations of test.
+\item{pts_occ_test}{(\code{sf}, or \code{NULL}) The \code{sf} style
+table that include occurrence locations of test.
 If \code{NULL}, it would be set the same as \code{var_occ}. The default is \code{NULL}.}
 
 \item{variables}{(\code{stars}) The \code{stars} of environmental variables. It should have
@@ -113,12 +113,13 @@ mod <- isotree_po(
   variables = env_vars, ntrees = 200,
   sample_rate = 0.8, ndim = 2L,
   seed = 123L, response = FALSE,
+  spatial_response = FALSE,
   check_variable = FALSE)
 
 var_analysis <- variable_analysis(
   model = mod$model,
-  var_occ = mod$var_train \%>\% st_drop_geometry(),
-  var_occ_test = mod$var_test \%>\% st_drop_geometry(),
+  pts_occ = mod$pts_occ,
+  pts_occ_test = mod$pts_occ_test,
   variables = mod$variables)
 }
 

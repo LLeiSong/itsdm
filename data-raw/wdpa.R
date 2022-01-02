@@ -21,7 +21,7 @@ stars_template <- bios %>% slice('band', 1) %>%
 # Measures (WD-OECM) [Online], November 2021, Cambridge, UK: UNEP-WCMC and IUCN.
 # Available at: www.protectedplanet.net.
 # Download
-urlpath <- file.path('https://d1gam3xoknrgr2.cloudfront.net/current/',
+urlpath <- file.path('https://d1gam3xoknrgr2.cloudfront.net/current',
                      'WDPA_WDOECM_Nov2021_Public_AF_shp.zip')
 temp <- tempfile(); temp_dir <- tempdir()
 options(timeout = 1e5)

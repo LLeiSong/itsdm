@@ -42,12 +42,13 @@
 #'   variables = env_vars, ntrees = 200,
 #'   sample_rate = 0.8, ndim = 3L,
 #'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' var_analysis <- variable_analysis(
 #'   model = mod$model,
-#'   var_occ = mod$var_train %>% st_drop_geometry(),
-#'   var_occ_test = mod$var_test %>% st_drop_geometry(),
+#'   pts_occ = mod$pts_occ,
+#'   pts_occ_test = mod$pts_occ_test,
 #'   variables = mod$variables)
 #'
 #' print(variable_analysis)
@@ -257,6 +258,7 @@ print.VariableAnalysis <- function(x, ...){
 #'   variables = env_vars, ntrees = 200,
 #'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' eval_train <- evaluate_po(mod$model,
@@ -413,6 +415,7 @@ print.ReducedImageStack <- function(x, ...) {
 #'   variables = env_vars, ntrees = 200,
 #'   sample_rate = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' # Threshold conversion
@@ -526,7 +529,8 @@ print.EnvironmentalOutlier <- function(x, ...) {
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 200,
 #'   sample_rate = 0.8, ndim = 1L,
-#'   seed = 123L, response = FALSE)
+#'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE)
 #' print(mod)
 #'}
 #'
@@ -537,6 +541,24 @@ print.POIsotree <- function(x, ...){
   print(x$model)
   cat(sprintf('Variables are: %s.\n',
               paste(names(x$variables), collapse = ', ')))
+  cat(sprintf('Number of training records: %s.\n',
+              nrow(x$pts_occ)))
+  cat(sprintf('Use independent test? %s.\n',
+              !is.null(x$pts_occ_test)))
+  if (!is.null(x$pts_occ_test)) {
+    cat(sprintf('Number of test records: %s.\n',
+                nrow(x$pts_occ_test)))}
+  cat(sprintf('Has marginal responses? %s.\n',
+              !is.null(x$marginal_responses)))
+  cat(sprintf('Has independent responses? %s.\n',
+              !is.null(x$independent_responses)))
+  cat(sprintf('Has Shapley value based responses? %s.\n',
+              !is.null(x$shap_dependences)))
+  cat(sprintf('Has spatial responses? %s.\n',
+              !is.null(x$spatial_responses)))
+  cat(sprintf('Has variable analysis? %s.\n',
+              !is.null(x$variable_analysis)))
+
 
   # Evaluation
   cat(paste0(paste(rep('=', 60), collapse = ''), '\n'))

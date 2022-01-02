@@ -49,10 +49,19 @@
   1 / (1 + exp((orig_values - beta) / alpha))
 }
 
-# Function to get min and max values of a single band stars
+# Functions to get min max, mean and std values of a single band stars
 .min_value <- function(x) min(x[[1]], na.rm = T)
 .max_value <- function(x) max(x[[1]], na.rm = T)
 .mean_value <- function(x) mean(x[[1]], na.rm = T)
+.std_value <- function(x) sd(x[[1]], na.rm = T)
+
+# Function to get erf of a single band stars
+.erf_stars <- function(x) {
+  vals <- x[[1]]
+  vals <- 2 * stats::pnorm(vals * sqrt(2)) - 1
+  x[[1]] <- vals
+  x
+}
 
 # Linear stretch of single-band stars
 #' @importFrom stats quantile
@@ -60,7 +69,7 @@
                            new_values = NULL,
                            minv = 0,
                            maxv = 1,
-                           minq = 0.5,
+                           minq = 0, # 0.5
                            maxq = 1) {
   # Check inputs
   checkmate::assert_class(x, 'stars')
@@ -139,7 +148,8 @@
 #' @importFrom stats predict
 .pfun_shap <- function(X.model, newdata) {
   pred <- 1 - predict(X.model, newdata)
-  .stretch(pred)}
+  #.stretch(pred)
+}
 
 # Functions related to convert_to_pa
 # Calculate quantile of stars

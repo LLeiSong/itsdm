@@ -1,6 +1,6 @@
 #' @title Function to run extended isolation forest as SDM.
 #' @description Call isolation forest and its variations to do
-#' species distribution modeling.
+#' species distribution modeling and optionally do model explanation.
 #' @param occ (`data.frame`, `sf`, `SpatialPointsDataFrame`)
 #' The occurrence dataset for training.
 #' There must be column `x` and `y` for coordinates if
@@ -37,6 +37,10 @@
 #' @param ... Other arguments that \code{\link{isolation.forest}} needs.
 #' @param response (`logical`) If `TRUE`, generate response curves.
 #' The default is `TRUE`.
+#' @param spatial_response (`logical`) If `TRUE`, generate spatial response maps.
+#' The default is `TRUE` because it might be slow. NOTE that here SHAP-based map
+#' is not generated because it is slow. If you want it be mapped, you could call
+#' function \code{\link{spatial_response}} to make it.
 #' @param check_variable (`logical`) If `TRUE`, check the variable importance.
 #' The default is `TRUE`.
 #' @param visualize (`logical`) If `TRUE`, generate the essential figures
@@ -50,8 +54,12 @@
 #' environmental variables}
 #' \item{pts_occ (\code{\link{sf}}) A \code{\link{sf}} of training occurrence
 #' dataset}
+#' \item{pts_bg_occ (\code{\link{sf}}) A \code{\link{sf}} of background points
+#' for training dataset evaluation or SHAP dependence plot}
 #' \item{pts_occ_test (\code{\link{sf}} or `NULL`) A \code{\link{sf}} of test
 #' occurrence dataset}
+#' \item{pts_bg_occ_test (\code{\link{sf}} or `NULL`) A \code{\link{sf}} of
+#' background points for test dataset evaluation or SHAP dependence plot}
 #' \item{var_train (\code{\link{sf}}) A \code{\link{sf}} with values of each
 #' environmental variables for training occurrence}
 #' \item{pred_train (\code{\link{sf}}) A \code{\link{sf}} with values of
@@ -59,31 +67,35 @@
 #' \item{eval_train (`POEvaluation`) A list of presence-only evaluation metrics
 #' based on training dataset. See details of `POEvaluation` in
 #' \code{\link{evaluate_po}}}
-#' \item{var_test (\code{\link{sf}}) A \code{\link{sf}} with values of each
+#' \item{var_test (\code{\link{sf}} or `NULL`) A \code{\link{sf}} with values of each
 #' environmental variables for test occurrence}
-#' \item{pred_test (\code{\link{sf}}) A \code{\link{sf}} with values of
+#' \item{pred_test (\code{\link{sf}} or `NULL`) A \code{\link{sf}} with values of
 #' prediction for test occurrence}
-#' \item{eval_test (`POEvaluation`) A list of presence-only evaluation metrics
+#' \item{eval_test (`POEvaluation` or `NULL`) A list of presence-only evaluation metrics
 #' based on test dataset.
 #' See details of `POEvaluation` in \code{\link{evaluate_po}}}
 #' \item{prediction (`stars`) The predicted environmental suitability}
-#' \item{marginal_responses (`MarginalResponse`) A list of marginal response
+#' \item{marginal_responses (`MarginalResponse` or `NULL`) A list of marginal response
 #' values of each environmental variables.
 #' See details in \code{\link{marginal_response}}}
-#' \item{independent_responses (`IndependentResponse`) A list of independent
+#' \item{independent_responses (`IndependentResponse` or `NULL`) A list of independent
 #' response values of each environmental variables.
 #' See details in \code{\link{independent_response}}}
-#' \item{variable_dependence (`VariableDependence`) A list of variable
+#' \item{shap_dependences (`ShapDependence` or `NULL`) A list of variable
 #' dependence values of each environmental variables.
-#' See details in \code{\link{variable_dependence}}}
-#' \item{variable_analysis (`VariableAnalysis`) A list of variable importance
+#' See details in \code{\link{shap_dependence}}}
+#' \item{spatial_responses (`SpatialResponse` or `NULL`) A list of spatial variable
+#' dependence values of each environmental variables.
+#' See details in \code{\link{shap_dependence}}}
+#' \item{variable_analysis (`VariableAnalysis` or `NULL`) A list of variable importance
 #' analysis based on multiple metrics.
 #' See details in \code{\link{variable_analysis}}}}
 #'
 #' @seealso
 #' \code{\link{evaluate_po}}, \code{\link{marginal_response}},
-#' \code{\link{independent_response}}, \code{\link{variable_dependence}},
-#' \code{\link{variable_analysis}}, \code{\link{isolation.forest}}
+#' \code{\link{independent_response}}, \code{\link{shap_dependence}},
+#' \code{\link{spatial_response}}, \code{\link{variable_analysis}},
+#' \code{\link{isolation.forest}}
 #'
 #' @references
 #' \itemize{
@@ -191,6 +203,7 @@ isotree_po <- function(
   ...,
   # Other general inputs
   response = TRUE, # if generate response curves
+  spatial_response = TRUE, # if generate spatial response maps
   check_variable = TRUE, # if generate var importance
   visualize = FALSE){ # if plot the curves
 
@@ -215,7 +228,7 @@ isotree_po <- function(
     upper = nrow(occ), na.ok = T)
   checkmate::assert_number(
     sample_rate, lower = 0,
-    upper = 1, null.ok = T)
+    upper = 1, na.ok = T)
   if (is(variables, 'RasterStack')) dim_max <- nlayers(variables)
   if (is(variables, 'stars')) {
     if (length(dim(variables)) == 2){
@@ -234,6 +247,7 @@ isotree_po <- function(
     ndim, lower = 1,
     upper = dim_max, na.ok = T)
   checkmate::assert_logical(response)
+  checkmate::assert_logical(spatial_response)
   checkmate::assert_logical(check_variable)
   checkmate::assert_logical(visualize)
 
@@ -328,12 +342,16 @@ isotree_po <- function(
   # Extract values
   occ_mat <- st_extract(x = variables, at = pts_occ) %>%
     st_as_sf() %>% na.omit()
+  # Remove NAs from pts as well
+  pts_occ <- occ_mat %>% select(.data$geometry)
+
+  # Do the same thing to test dataset if there is one
   if (!is.null(occ_test)) {
     occ_test_mat <- st_extract(x = variables, at = pts_occ_test) %>%
       st_as_sf() %>% na.omit()
+    pts_occ_test <- pts_occ_test %>% select(.data$geometry)
   } else {
-    occ_test_mat <- NULL
-  }
+    occ_test_mat <- NULL}
 
   # Sample size
   if (is.na(sample_size)) sample_size <- nrow(occ_mat) * sample_rate
@@ -355,62 +373,16 @@ isotree_po <- function(
   var_pred <- .stars_stretch(var_pred)
 
   ## Training
-  occ_pred <- st_extract(x = var_pred, at = pts_occ) %>% na.omit()
+  ### There should not are any NAs coming from variables
+  occ_pred <- st_extract(x = var_pred, at = pts_occ)
 
   ## Test
   if (!is.null(occ_test)){
-    occ_test_pred <- st_extract(x = var_pred, at = pts_occ_test) %>% na.omit()
+    occ_test_pred <- st_extract(x = var_pred, at = pts_occ_test)
   } else {
-    occ_test_pred <- NULL
-  }
+    occ_test_pred <- NULL}
 
-  # Generate response curves
-  if (response) {
-    marginal_responses <- marginal_response(
-      model = isotree_mod,
-      var_occ = occ_mat %>% st_drop_geometry(),
-      variables = variables,
-      visualize = visualize)
-    independent_responses <- independent_response(
-      model = isotree_mod,
-      var_occ = occ_mat %>% st_drop_geometry(),
-      variables = variables,
-      visualize = visualize)
-    variable_dependences <- variable_dependence(
-      model = isotree_mod,
-      var_occ = occ_mat %>% st_drop_geometry(),
-      visualize = visualize,
-      seed = seed)
-  } else {
-    marginal_responses <- NULL
-    independent_responses <- NULL
-    variable_dependences <- NULL}
-
-  if (check_variable) {
-    if (is.null(occ_test_mat)) {
-      vimp <- variable_analysis(
-        model = isotree_mod,
-        var_occ = occ_mat %>% st_drop_geometry(),
-        var_occ_test = NULL,
-        variables = variables,
-        visualize = visualize,
-        seed = seed)
-    } else {
-      vimp <- variable_analysis(
-        model = isotree_mod,
-        var_occ = occ_mat %>% st_drop_geometry(),
-        var_occ_test = occ_test_mat %>% st_drop_geometry(),
-        variables = variables,
-        visualize = visualize,
-        seed = seed)
-    }
-
-  } else {
-    vimp <- NULL
-  }
-
-  # Make evaluation using presence-only
-  ## Sample points from background
+  # Sample points from background
   set.seed(seed)
   stars_mask <- var_pred
   stars_mask[[1]][!is.na(stars_mask[[1]])] <- 1
@@ -423,9 +395,9 @@ isotree_po <- function(
   occ_bg_pred <- st_extract(x = var_pred, at = pts_bg_occ)
   var_occ_bg <- st_extract(x = variables,
                            at = pts_bg_occ)
-  rm(stars_mask, pts_bg_occ)
+  rm(stars_mask)
 
-  ### Do the same to test if has any
+  ## Do the same to test if has any
   if(!is.null(occ_test)) {
     set.seed(seed)
     stars_mask <- var_pred
@@ -437,41 +409,114 @@ isotree_po <- function(
       st_xy2sfc(as_points = T) %>% st_as_sf() %>%
       sample_n(nrow(pts_occ_test)) %>% select(.data$geometry)
     occ_test_bg_pred <- st_extract(x = var_pred, at = pts_bg_occ_test)
-    var_occ_test_bg <- st_extract(x = variables,
-                                  at = pts_bg_occ_test)
-    rm(stars_mask, pts_bg_occ_test)
-  }
+    rm(stars_mask)
+  } else {
+    pts_bg_occ_test <- NULL
+    occ_test_bg_pred <- NULL}
 
+  # Generate response curves
+  if (response) {
+    # marginal variable dependence
+    marginal_responses <- marginal_response(
+      model = isotree_mod,
+      var_occ = occ_mat %>% st_drop_geometry(),
+      variables = variables,
+      visualize = visualize)
+
+    # independent variable dependence
+    independent_responses <- independent_response(
+      model = isotree_mod,
+      var_occ = occ_mat %>% st_drop_geometry(),
+      variables = variables,
+      visualize = visualize)
+
+    # Shapley value based variable dependence
+    shap_var_occ <- rbind(
+      occ_mat %>% st_drop_geometry(),
+      var_occ_bg %>% st_drop_geometry())
+    shap_dependences <- shap_dependence(
+      model = isotree_mod,
+      var_occ = shap_var_occ,
+      visualize = visualize,
+      seed = seed)
+    rm(var_occ_bg, shap_var_occ)
+  } else {
+    marginal_responses <- NULL
+    independent_responses <- NULL
+    shap_dependences <- NULL}
+
+  # Spatial dependence
+  if (spatial_response) {
+    spatial_responses <- spatial_response(
+      model = isotree_mod,
+      var_occ = occ_mat %>% st_drop_geometry(),
+      variables = variables,
+      shap_nsim = 0,
+      seed = seed,
+      visualize = visualize)
+  } else {
+    spatial_responses <- NULL}
+
+  # Check variable importance
+  if (check_variable) {
+    # If there is just training
+    if (is.null(pts_occ_test)) {
+      vimp <- variable_analysis(
+        model = isotree_mod,
+        pts_occ = pts_occ,
+        pts_occ_test = NULL,
+        variables = variables,
+        visualize = visualize,
+        seed = seed)
+    } else {
+      # If there are both training and test
+      vimp <- variable_analysis(
+        model = isotree_mod,
+        pts_occ = pts_occ,
+        pts_occ_test = pts_occ_test,
+        variables = variables,
+        visualize = visualize,
+        seed = seed)}
+
+  } else {vimp <- NULL}
+
+  # Make evaluation using presence-only
   ## Calculate
   eval_train <- suppressMessages(evaluate_po(isotree_mod,
                             occ_pred$prediction,
                             occ_bg_pred$prediction,
                             na.omit(as.vector(var_pred[[1]])),
                             visualize = visualize))
+  rm(occ_bg_pred)
   if(!is.null(occ_test)){
     eval_test <- suppressMessages(evaluate_po(isotree_mod,
                              occ_test_pred$prediction,
                              occ_test_bg_pred$prediction,
                              na.omit(as.vector(var_pred[[1]])),
                              visualize = visualize))
+    rm(occ_test_bg_pred)
   } else eval_test <- NULL
 
   # Return
-  out <- list(model = isotree_mod,
-              variables = variables, # the formatted stars
-              pts_occ = pts_occ,
-              pts_occ_test = pts_occ_test,
-              var_train = occ_mat,
-              pred_train = occ_pred,
-              eval_train = eval_train,
-              var_test = occ_test_mat,
-              pred_test = occ_test_pred,
-              eval_test = eval_test,
-              prediction = var_pred,
-              marginal_responses = marginal_responses,
-              independent_responses = independent_responses,
-              variable_dependence = variable_dependences,
-              variable_analysis = vimp)
+  out <- list(
+    model = isotree_mod, # model
+    variables = variables, # the formatted stars
+    pts_occ = pts_occ, # clean occurrence points
+    pts_bg_occ = pts_bg_occ, # used background samples paired with training
+    pts_occ_test = pts_occ_test, # clean test points
+    pts_bg_occ_test = pts_bg_occ_test, # used background samples paired with test
+    var_train = occ_mat, # table of training features
+    pred_train = occ_pred, # prediction of training dataset
+    eval_train = eval_train, # evaluation on training dataset
+    var_test = occ_test_mat, # table of test dataset
+    pred_test = occ_test_pred, # prediction of test dataset
+    eval_test = eval_test, # evaluation on test dataset
+    prediction = var_pred, # prediction map
+    marginal_responses = marginal_responses, # marginal response plot
+    independent_responses = independent_responses, # independent response plot
+    shap_dependences = shap_dependences, # Shapley value based response plot
+    spatial_responses = spatial_responses, # spatial response maps
+    variable_analysis = vimp) # variable evaluation
   class(out) <- append("POIsotree", class(out))
 
   # Return

@@ -1,17 +1,19 @@
-#' @title Calculate variable dependence.
-#' @description Calculate the variable dependence based on SHapley Additive exPlanations (SHAP) method using Shapley values.
+#' @title Calculate Shapley value based variable dependence.
+#' @description Calculate the variable dependence using Shapley values.
 #' @param model (\code{isolation_forest}). The isolation forest SDM.
 #' It could be the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
 #' @param var_occ (`data.frame`, `tibble`) The `data.frame` style table that
 #' include values of environmental variables at occurrence locations.
 #' @param shap_nsim (`integer`) The number of Monte Carlo repetitions in SHAP
-#' method to use for estimating each Shapley value. See details in documentation of
+#' method to use for estimating each Shapley value. When the number of variables
+#' is large, a smaller shap_nsim could be used. See details in documentation of
 #' function \code{\link{explain}} in package `fastshap`.
+#' The default is 100.
 #' @param visualize (`logical`) if `TRUE`, plot the variable dependence plots.
 #' The default is `FALSE`.
 #' @param seed (`integer`) The seed for any random progress. The default is `10L`.
 #'
-#' @return (`VariableDependence`) A list of
+#' @return (`ShapDependence`) A list of
 #' \itemize{
 #' \item{dependences_cont (`list`) A list of Shapley values of continuous variables}
 #' \item{dependences_cat (`list`) A list of Shapley values of categorical variables}
@@ -19,7 +21,7 @@
 #' }
 #'
 #' @seealso
-#' \code{\link{plot.VariableDependence}}
+#' \code{\link{plot.ShapDependence}}
 #' \code{\link{explain}} in `fastshap`
 #'
 #' @details
@@ -72,18 +74,19 @@
 #'   variables = env_vars, ntrees = 200,
 #'   sample_rate = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
-#' var_dependence <- variable_dependence(
+#' var_dependence <- shap_dependence(
 #'   model = mod$model,
 #'   var_occ = mod$var_train %>% st_drop_geometry())
 #'}
 #'
-variable_dependence <- function(model,
-                                var_occ,
-                                shap_nsim = 100,
-                                visualize = FALSE,
-                                seed = 10L) {
+shap_dependence <- function(model,
+                            var_occ,
+                            shap_nsim = 100,
+                            visualize = FALSE,
+                            seed = 10L) {
 
   # Check inputs
   checkmate::assert_data_frame(var_occ)
@@ -117,7 +120,7 @@ variable_dependence <- function(model,
   dependences <- list(dependences_cont = dependences_cont,
                       dependences_cat = dependences_cat)
   dependences$feature_values <- var_occ
-  class(dependences) <- append("VariableDependence", class(dependences))
+  class(dependences) <- append("ShapDependence", class(dependences))
 
   # Visualize
   if (visualize) {
@@ -128,4 +131,4 @@ variable_dependence <- function(model,
   return(dependences)
 }
 
-# independent_response end
+# shap_dependence end

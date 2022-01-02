@@ -17,6 +17,7 @@ isotree_po(
   seed = 10L,
   ...,
   response = TRUE,
+  spatial_response = TRUE,
   check_variable = TRUE,
   visualize = FALSE
 )
@@ -70,6 +71,11 @@ integer. The default is \code{10L}.}
 \item{response}{(\code{logical}) If \code{TRUE}, generate response curves.
 The default is \code{TRUE}.}
 
+\item{spatial_response}{(\code{logical}) If \code{TRUE}, generate spatial response maps.
+The default is \code{TRUE} because it might be slow. NOTE that here SHAP-based map
+is not generated because it is slow. If you want it be mapped, you could call
+function \code{\link{spatial_response}} to make it.}
+
 \item{check_variable}{(\code{logical}) If \code{TRUE}, check the variable importance.
 The default is \code{TRUE}.}
 
@@ -85,8 +91,12 @@ function inputs}
 environmental variables}
 \item{pts_occ (\code{\link{sf}}) A \code{\link{sf}} of training occurrence
 dataset}
+\item{pts_bg_occ (\code{\link{sf}}) A \code{\link{sf}} of background points
+for training dataset evaluation or SHAP dependence plot}
 \item{pts_occ_test (\code{\link{sf}} or \code{NULL}) A \code{\link{sf}} of test
 occurrence dataset}
+\item{pts_bg_occ_test (\code{\link{sf}} or \code{NULL}) A \code{\link{sf}} of
+background points for test dataset evaluation or SHAP dependence plot}
 \item{var_train (\code{\link{sf}}) A \code{\link{sf}} with values of each
 environmental variables for training occurrence}
 \item{pred_train (\code{\link{sf}}) A \code{\link{sf}} with values of
@@ -94,30 +104,33 @@ prediction for training occurrence}
 \item{eval_train (\code{POEvaluation}) A list of presence-only evaluation metrics
 based on training dataset. See details of \code{POEvaluation} in
 \code{\link{evaluate_po}}}
-\item{var_test (\code{\link{sf}}) A \code{\link{sf}} with values of each
+\item{var_test (\code{\link{sf}} or \code{NULL}) A \code{\link{sf}} with values of each
 environmental variables for test occurrence}
-\item{pred_test (\code{\link{sf}}) A \code{\link{sf}} with values of
+\item{pred_test (\code{\link{sf}} or \code{NULL}) A \code{\link{sf}} with values of
 prediction for test occurrence}
-\item{eval_test (\code{POEvaluation}) A list of presence-only evaluation metrics
+\item{eval_test (\code{POEvaluation} or \code{NULL}) A list of presence-only evaluation metrics
 based on test dataset.
 See details of \code{POEvaluation} in \code{\link{evaluate_po}}}
 \item{prediction (\code{stars}) The predicted environmental suitability}
-\item{marginal_responses (\code{MarginalResponse}) A list of marginal response
+\item{marginal_responses (\code{MarginalResponse} or \code{NULL}) A list of marginal response
 values of each environmental variables.
 See details in \code{\link{marginal_response}}}
-\item{independent_responses (\code{IndependentResponse}) A list of independent
+\item{independent_responses (\code{IndependentResponse} or \code{NULL}) A list of independent
 response values of each environmental variables.
 See details in \code{\link{independent_response}}}
-\item{variable_dependence (\code{VariableDependence}) A list of variable
+\item{shap_dependences (\code{ShapDependence} or \code{NULL}) A list of variable
 dependence values of each environmental variables.
-See details in \code{\link{variable_dependence}}}
-\item{variable_analysis (\code{VariableAnalysis}) A list of variable importance
+See details in \code{\link{shap_dependence}}}
+\item{spatial_responses (\code{SpatialResponse} or \code{NULL}) A list of spatial variable
+dependence values of each environmental variables.
+See details in \code{\link{shap_dependence}}}
+\item{variable_analysis (\code{VariableAnalysis} or \code{NULL}) A list of variable importance
 analysis based on multiple metrics.
 See details in \code{\link{variable_analysis}}}}
 }
 \description{
 Call isolation forest and its variations to do
-species distribution modeling.
+species distribution modeling and optionally do model explanation.
 }
 \details{
 Please read details of algorithm \code{\link{isolation.forest}} on
@@ -201,6 +214,7 @@ will be listed under their own functions}
 }
 \seealso{
 \code{\link{evaluate_po}}, \code{\link{marginal_response}},
-\code{\link{independent_response}}, \code{\link{variable_dependence}},
-\code{\link{variable_analysis}}, \code{\link{isolation.forest}}
+\code{\link{independent_response}}, \code{\link{shap_dependence}},
+\code{\link{spatial_response}}, \code{\link{variable_analysis}},
+\code{\link{isolation.forest}}
 }

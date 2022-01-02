@@ -131,6 +131,7 @@
 #'   variables = env_vars, ntrees = 200,
 #'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' eval_train <- evaluate_po(mod$model,
@@ -154,6 +155,11 @@ evaluate_po <- function(model,
                              upper = 1, null.ok = T)
   }
   checkmate::assert_logical(visualize)
+
+  # Remove NAs
+  occ_pred <- na.omit(occ_pred)
+  bg_pred <- na.omit(bg_pred)
+  var_pred <- na.omit(var_pred)
 
   ###############################################
   ############## Presence-only #################
