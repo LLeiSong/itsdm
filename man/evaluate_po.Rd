@@ -151,7 +151,7 @@ distributions by environmental-distance geometric mean."
 \emph{Environmental management} 32.5 (2003): 614-623.
 \doi{10.1007/s00267-003-0040-3}}
 \item{Leroy, Boris, et al.
-"Without quality presence–absence data, discrimination metrics such as
+"Without quality presence-absence data, discrimination metrics such as
 TSS can be misleading measures of model performance."
 \emph{Journal of Biogeography} 45.9 (2018): 1994-2002.
 \doi{10.1111/jbi.13402}}

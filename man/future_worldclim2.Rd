@@ -77,7 +77,7 @@ future_worldclim2("tmin", 10, "BCC-CSM2-MR",
 }
 \references{
 Fick, Stephen E., and Robert J.
-Hijmans. "WorldClim 2: new 1‐km spatial resolution climate surfaces for
+Hijmans. "WorldClim 2: new 1-km spatial resolution climate surfaces for
 global land areas." \emph{International journal of climatology}
 37.12 (2017): 4302-4315.\doi{10.1002/joc.5086}
 }

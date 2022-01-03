@@ -140,6 +140,7 @@
 #' @importFrom methods is
 #' @export
 #' @examples
+#' \dontrun{
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -164,10 +165,12 @@
 #'   slice('band', c(1, 5, 12, 16))
 #'
 #' # Modeling
-#' mod_virtual_species <- isotree_po(occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 200, sample_rate = 0.8, ndim = 2L,
+#' mod_virtual_species <- isotree_po(
+#'   occ = occ, occ_test = occ_test,
+#'   variables = env_vars, ntrees = 200,
+#'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L)
-#' \dontrun{
+#'
 #' # Check results
 #' ## Evaluation based on training dataset
 #' print(mod_virtual_species$eval_train)

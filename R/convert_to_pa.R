@@ -86,10 +86,6 @@
 #' # Logistic conversion
 #' pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
 #'   beta = 0.5, alpha = -.05)
-#' pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
-#'   beta = 0.5, species_prevalence = 0.2)
-#' pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
-#'   alpha = -.05, species_prevalence = 0.2)
 #' pa_log
 #' plot(pa_log)
 #'

@@ -35,6 +35,7 @@
 #' @importFrom fastshap explain
 #' @export
 #' @examples
+#'
 #' # Using a pseudo presence-only occurrence dataset of
 #' # virtual species provided in this package
 #' library(dplyr)
@@ -70,13 +71,14 @@
 #'   var_occ = mod$var_train %>% st_drop_geometry(),
 #'   var_occ_analysis = mod$var_train %>%
 #'     st_drop_geometry() %>% slice(1:10))
-#'
+#'\dontrun{
 #' plot(var_contribution,
 #'   num_features = 3,
 #'   plot_each_obs = TRUE)
 #'
 #' # Plot together
 #' plot(var_contribution)
+#'}
 #'
 variable_contrib <- function(model,
                              var_occ, # Training, must set for model
