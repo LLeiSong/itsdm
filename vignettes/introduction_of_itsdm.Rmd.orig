@@ -1,7 +1,7 @@
 ---
 title: "Introduction of `itsdm` with a virtual species"
 author: "Lei Song"
-date: "2022-01-03"
+date: "`r Sys.Date()`"
 output:
   rmarkdown::html_document:
     theme: readable
@@ -11,11 +11,19 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE,
+  dpi = 70,
+  fig.path = "intro-"
+)
+```
 
 ## Set up
-
-```r
+```{r setup, warning=F, message=F, eval=T}
 library(sf, quietly = T)
 library(itsdm, quietly = T)
 library(ggplot2, quietly = T)
@@ -30,8 +38,7 @@ and regions. You can also read your study area boundary for sure. Providing
 your boundary to function `worldclim2` would allow you to download files from worldclim
 version 2 clipping to your area.
 
-
-```r
+```{r bios, eval=T}
 library(stars, quietly = T)
 library(rnaturalearth, quietly = T)
 
@@ -62,8 +69,7 @@ could either reduce the dimension of your environmental variable stack itself or
 to a bunch of observations. It also allows you to set a desirable threshold. Note that it only
 works on numeric variables. Because categorical variables have less risk of having a high correlation with others, we usually prefer to keep categorical variables.
 
-
-```r
+```{r dim_reduction, warning=F, message=F}
 library(stars, quietly = T)
 # An example of reducing dimensions
 ## Here we didn't set samples, so use whole image
@@ -73,39 +79,16 @@ bios_reduce <- dim_reduce(
 
 # Returned ReducedImageStack object
 bios_reduce
-#> Dimension reduction
-#> Correlation threshold: 0.6
-#> Original variables: bio1, bio2, bio3, bio4, bio5, bio6, bio7, bio8, bio9,
-#> bio10, bio11, bio12, bio13, bio14, bio15, bio16, bio17, bio18, bio19
-#> Variables after dimension reduction: bio1, bio12, bio9, bio14, bio15
-#> ================================================================================
-#> Reduced correlations:
-#>        bio1 bio12  bio9 bio14 bio15
-#> bio1   1.00 -0.04  0.50 -0.07  0.44
-#> bio12 -0.04  1.00 -0.03  0.56 -0.16
-#> bio9   0.50 -0.03  1.00  0.01 -0.06
-#> bio14 -0.07  0.56  0.01  1.00 -0.40
-#> bio15  0.44 -0.16 -0.06 -0.40  1.00
 
 # img_reduced of ReducedImageStack is the raster stack
 bios_reduce$img_reduced
-#> stars object with 3 dimensions and 1 attribute
-#> attribute(s):
-#>                Min.  1st Qu.   Median     Mean  3rd Qu. Max.   NA's
-#> reduced_image     0 17.75392 25.91388 154.5419 83.09974 4347 447385
-#> dimension(s):
-#>      from   to offset     delta refsys point         values x/y
-#> x     975 1388   -180  0.166667 WGS 84 FALSE           NULL [x]
-#> y     316  750     90 -0.166667 WGS 84 FALSE           NULL [y]
-#> band    1    5     NA        NA     NA    NA bio1,...,bio15
 ```
 
 ## Creating the virtual species
 
 Using virtual species is a crucial method in ecological studies. First, let's create a virtual species using the package `virtualspecies` to know exactly what is happening.
 
-
-```r
+```{r virtualspecies, fig.align='center', fig.width=7, fig.height=6, warning=F, message=F}
 library(here, quietly = T)
 library(virtualspecies, quietly = T)
 
@@ -142,12 +125,9 @@ my.species <- convertToPA(
 plotResponse(my.species)
 ```
 
-<img src="intro-virtualspecies-1.png" title="plot of chunk virtualspecies" alt="plot of chunk virtualspecies" style="display: block; margin: auto;" />
-
 ## Generate pseudo samples for virtual species
 
-
-```r
+```{r samples, fig.align='center', fig.width=5, fig.height=5}
 # Sampling
 set.seed(10)
 po.points <- sampleOccurrences(
@@ -159,19 +139,11 @@ po_df <- po.points$sample.points %>%
   select(x, y) %>%
   mutate(id = row_number())
 head(po_df)
-#>           x          y id
-#> 1 -6.083333  11.083333  1
-#> 2 -5.750000  10.250000  2
-#> 3 38.750000  -6.750000  3
-#> 4 39.250000 -10.416667  4
-#> 5 26.583333  -8.583333  5
-#> 6  0.250000   9.083333  6
 ```
 
 As we all know, there are commonly sampling bias and observation errors. People use multiple methods to reduce these disturbances in samples. For example, here, we use the function `suspicious_env_outliers` to detect and/or remove possible environmental outliers. This step could be used with other strategies to do sample cleaning.
 
-
-```r
+```{r remove_outliers, fig.align='center', fig.width=5, fig.height=5}
 # Get environmental variable stack
 variables <- bios %>% slice('band', c(1, 5,  12, 15))
 
@@ -181,49 +153,12 @@ occ_outliers <- suspicious_env_outliers(
   variables = variables,
   z_outlier = 5,
   outliers_print = 4L)
-#> Reporting top 4 outliers [out of 6 found]
-#> 
-#> row [463] - suspicious column: [bio5] - suspicious value: [32.78]
-#> 	distribution: 95.714% >= 36.01 - [mean: 37.68] - [sd: 0.66] - [norm. obs: 67]
-#> 	given:
-#> 		[bio1] > [27.31] (value: 27.39)
-#> 		[bio15] <= [102.79] (value: 102.48)
-#> 		[bio12] <= [993.00] (value: 845.00)
-#> 
-#> 
-#> row [1346] - suspicious column: [bio5] - suspicious value: [32.96]
-#> 	distribution: 95.714% >= 36.01 - [mean: 37.68] - [sd: 0.66] - [norm. obs: 67]
-#> 	given:
-#> 		[bio1] > [27.31] (value: 27.41)
-#> 		[bio15] <= [102.79] (value: 102.34)
-#> 		[bio12] <= [993.00] (value: 855.00)
-#> 
-#> 
-#> row [1728] - suspicious column: [bio5] - suspicious value: [33.42]
-#> 	distribution: 95.714% >= 36.01 - [mean: 37.68] - [sd: 0.66] - [norm. obs: 67]
-#> 	given:
-#> 		[bio1] > [27.31] (value: 27.44)
-#> 		[bio15] <= [102.79] (value: 66.08)
-#> 		[bio12] <= [993.00] (value: 958.00)
-#> 
-#> 
-#> row [821] - suspicious column: [bio5] - suspicious value: [31.90]
-#> 	distribution: 98.333% >= 34.51 - [mean: 36.25] - [sd: 0.84] - [norm. obs: 59]
-#> 	given:
-#> 		[bio1] between (24.12, 25.70] (value: 24.70)
-#> 		[bio15] > [113.08] (value: 128.18)
-#> 		[bio12] <= [996.00] (value: 658.00)
 
 # Check result
 # You could also plot samples overlap with a raster
 # plot(occ_outliers,
 #      overlay_raster = variables %>% slice('band', 6))
 plot(occ_outliers)
-```
-
-<img src="intro-remove_outliers-1.png" title="plot of chunk remove_outliers" alt="plot of chunk remove_outliers" style="display: block; margin: auto;" />
-
-```r
 
 # Remove outliers if necessary
 occ_outliers <- suspicious_env_outliers(
@@ -252,17 +187,6 @@ occ_test_sf <- occ_test_sf %>% select(-id)
 
 # Recheck the variable correlation
 dim_reduce(variables, threshold = 1.0, samples = occ_sf)
-#> Dimension reduction
-#> Correlation threshold: 1
-#> Original variables: bio1, bio5, bio12, bio15
-#> Variables after dimension reduction: bio1, bio5, bio12, bio15
-#> ================================================================================
-#> Reduced correlations:
-#>        bio1  bio5 bio12 bio15
-#> bio1   1.00  0.69  0.19 -0.22
-#> bio5   0.69  1.00 -0.03  0.20
-#> bio12  0.19 -0.03  1.00 -0.37
-#> bio15 -0.22  0.20 -0.37  1.00
 ```
 
 Unfortunately, bio1 and bio5 have strong correlation with each other. This might affect the model explanation later.
@@ -271,8 +195,7 @@ Unfortunately, bio1 and bio5 have strong correlation with each other. This might
 
 Here we build a SDM using extended isolation forest (with `ndim = 2`) and a sample rate of 0.8.
 
-
-```r
+```{r sdm, fig.align='center', fig.width=4, fig.height=3}
 # Do modeling
 it_sdm <- isotree_po(occ = occ_sf,
                      occ_test = occ_test_sf,
@@ -283,134 +206,59 @@ it_sdm <- isotree_po(occ = occ_sf,
 
 Let's compare the predicted suitability with real suitability.
 
-<img src="intro-prediction-1.png" title="plot of chunk prediction" alt="plot of chunk prediction" style="display: block; margin: auto;" />
+```{r prediction, echo = F, fig.align='center', fig.width=5.3, fig.height=4.3}
+# Compare with virtual species
+ggplot() +
+  geom_stars(data = it_sdm$prediction) +
+  scale_fill_viridis_c('Predicted suitability',
+                       na.value = 'transparent') +
+  coord_equal() +
+  theme_linedraw()
+```
 
-<img src="intro-raw_suit-1.png" title="plot of chunk raw_suit" alt="plot of chunk raw_suit" style="display: block; margin: auto;" />
+```{r raw_suit, echo = F, fig.align='center', fig.width=5, fig.height=4}
+ggplot() +
+  geom_raster(data = as.data.frame(my.species$suitab.raster, xy = T),
+              aes(x = x, y = y, fill = layer)) +
+  scale_fill_viridis_c('Real suitability',
+                       na.value = 'transparent') +
+  coord_equal() +
+  theme_linedraw()
+```
 
 Let's do model evaluation using multiple presence-only metrics. In this package, we implement both presence-only and presence-background evaluation metrics. The model calculated evaluation on both training and test datasets. Here we just display evaluation on test dataset. You could check `it_sdm$eval_train` the same way as `it_sdm$eval_test`.
 
-
-```r
+```{r evaluation, fig.align='center', fig.width=7, fig.height=7}
 # Metrics based on test dataset
 it_sdm$eval_test
-#> ===================================
-#> Presence-only evaluation:
-#> CVI with 0.25 threshold:      0.614
-#> CVI with 0.5 threshold:       0.810
-#> CVI with 0.75 threshold:      0.693
-#> CBI:                          0.998
-#> AUC (ratio)                   0.942
-#> ===================================
-#> Presence-background evaluation:
-#> Sensitivity:                  0.973
-#> Specificity:                  0.870
-#> TSS:                          0.843
-#> AUC:                          0.946
-#> Similarity indices:
-#> Jaccard's similarity index:   0.861
-#> Sørensen's similarity index:  0.925
-#> Overprediction rate:          0.118
-#> Underprediction rate:         0.027
 plot(it_sdm$eval_test)
 ```
 
-<img src="intro-evaluation-1.png" title="plot of chunk evaluation" alt="plot of chunk evaluation" style="display: block; margin: auto;" />
-
 The result of `isotree_po` has options to generate response curves and variable analysis together. The response curves include marginal response curves, independent response curves, and Shapley value-based dependence. The variable analysis consists of the Jackknife of Pearson correlation with the result of the full model with all variables and AUC_ratio and variable dependence with SHAP test.
 
-
-```r
+```{r marginal_responses, fig.align='center', fig.width=7, fig.height=3}
 # Plot response curves
 ## Marginal response curves of bio5 and bio6
 plot(it_sdm$marginal_responses, target_var = c('bio1', 'bio5'))
 ```
 
-<img src="intro-marginal_responses-1.png" title="plot of chunk marginal_responses" alt="plot of chunk marginal_responses" style="display: block; margin: auto;" />
-
-
-```r
+```{r independent_responses, fig.align='center', fig.width=7, fig.height=3}
 ## Independent response curves of variable bio1 and bio12.
 plot(it_sdm$independent_responses, target_var = c('bio1', 'bio12'))
 ```
 
-<img src="intro-independent_responses-1.png" title="plot of chunk independent_responses" alt="plot of chunk independent_responses" style="display: block; margin: auto;" />
-
-
-```r
+```{r variable_dependence, fig.align='center', fig.width=7, fig.height=7}
 ## Variable dependence scatter points with fitted curves made by SHAP test
 plot(it_sdm$shap_dependence, smooth_span = 0)
 ```
 
-<img src="intro-variable_dependence-1.png" title="plot of chunk variable_dependence" alt="plot of chunk variable_dependence" style="display: block; margin: auto;" />
-
-
-```r
+```{r variable_analysis, fig.align='center', fig.width=9, fig.height=8}
 # Printing variable analysis could give you enough info of variable importance
 it_sdm$variable_analysis
-#> Relative variable importance
-#> ===================================
-#> Methods: Jackknife test and SHAP
-#> Numer of variables: 4
-#> ===================================
-#> Jackknife test
-#> Based on Pearson correlation (Max value is 1)
-#> [Training dataset]:
-#> bio12 With only: ####################################### 0.875
-#>       Without  : ########################################## 0.941
-#> bio15 With only: ############################### 0.696
-#>       Without  : ############################################ 0.972
-#> bio5  With only: ############################### 0.687
-#>       Without  : ############################################ 0.983
-#> bio1  With only: ######################### 0.564
-#>       Without  : ############################################ 0.978
-#> [Test dataset]:
-#> bio12 With only: ####################################### 0.866
-#>       Without  : ########################################## 0.937
-#> bio5  With only: ################################ 0.704
-#>       Without  : ############################################ 0.983
-#> bio15 With only: ############################### 0.69
-#>       Without  : ############################################ 0.974
-#> bio1  With only: ######################### 0.555
-#>       Without  : ############################################ 0.979
-#> ======================================================================
-#> Jackknife test
-#> Based on AUC ratio (Max value of traing and test are 0.946 and 0.942)
-#> [Training dataset]:
-#> bio12 With only: ######################################## 0.898
-#>       Without  : ######################################### 0.922
-#> bio5  With only: ##################################### 0.82
-#>       Without  : ########################################## 0.94
-#> bio15 With only: #################################### 0.8
-#>       Without  : ########################################## 0.94
-#> bio1  With only: ################################## 0.761
-#>       Without  : ########################################## 0.942
-#> [Test dataset]:
-#> bio12 With only: ######################################## 0.878
-#>       Without  : ######################################### 0.919
-#> bio5  With only: #################################### 0.793
-#>       Without  : ########################################## 0.936
-#> bio15 With only: ################################### 0.774
-#>       Without  : ########################################## 0.936
-#> bio1  With only: ################################# 0.735
-#>       Without  : ########################################## 0.937
-#> ======================================================================
-#> SHAP (mean(|Shapley value|))
-#> [Training dataset]:
-#> bio12 : ############################################ 0.054
-#> bio15 : ########################## 0.032
-#> bio5  : ######################### 0.031
-#> bio1  : ###################### 0.026
-#> [Test dataset]:
-#> bio12 : ############################################# 0.055
-#> bio15 : ########################## 0.032
-#> bio5  : ########################## 0.032
-#> bio1  : ##################### 0.026
 
 # We also could plot variable importance out
 plot(it_sdm$variable_analysis)
 ```
-
-<img src="intro-variable_analysis-1.png" title="plot of chunk variable_analysis" alt="plot of chunk variable_analysis" style="display: block; margin: auto;" />
 
 According to the analysis, all explanatory variables contribute significantly to the model. This is predictable because the virtual species is made by these four variables. bio12 is the most important variable. 
 
@@ -418,8 +266,7 @@ Besides the regular response curves, `itsdm` also makes spatially partial depend
 
 Note that a very large raster stack of environmental variables might cause memory failure or super slow computation when calculating Shapely value-based spatially dependence maps. So use it based on your own knowledge of your data. Shapley value-based dependence map will give you a bit more information of the value pushing the prediction higher or lower than average.
 
-
-```r
+```{r spatial_response, fig.width=9, fig.height=10}
 # Generate spatially partial dependence maps including Shapley value-based one
 ## Larger shap_nsim value could make smoother map but takes longer time as a
 ## trade-off
@@ -433,14 +280,11 @@ spatial_responses_all <- spatial_response(
 plot(spatial_responses_all, target_var = c('bio1', 'bio12'))
 ```
 
-![plot of chunk spatial_response](intro-spatial_response-1.png)
-
 Marginal and independent effects only indicate the difference comparing the variable itself. And Shapley value based effect additionally show the relative contribution of one variable comparing to to other variables. For example, SHAP-based effect of bio1 shows that bio1 does not contribute much to the model over some areas even though it is an decisive variable.
 
 The direct result of function `isotree_po` is environmental suitability. We could use function `convert_to_pa` to convert suitability to presence-absence based on different methods: threshold, logistic, and linear conversion, and/or a desirable species prevalence.
 
-
-```r
+```{r pa, fig.align='center', fig.width=8, fig.height=8}
 # An example of converting to presence-absence map
 ## Use logistic conversion with alpha = -0.05, beta = 0.5
 ## and not set species prevalence
@@ -449,20 +293,13 @@ pa_map <- convert_to_pa(it_sdm$prediction,
                         beta = 0.7, # the same with virtual species
                         alpha = -.05)
 pa_map; plot(pa_map)
-#> Logistic conversion
-#> beta = 0.7
-#> alpha = -0.05
-#> species prevalence = 0.105415337755068
 ```
-
-<img src="intro-pa-1.png" title="plot of chunk pa" alt="plot of chunk pa" style="display: block; margin: auto;" />
 
 ## Analyze vairable dependence
 
 It is always helpful to understand the dependence among variables. The result of function `shap_dependence` or `it_sdm$shap_dependence` can be used to analyze variable dependence with each other.
 
-
-```r
+```{r var_inter_dependence, fig.align='center', fig.width=7, fig.height=3}
 var_dependence <- shap_dependence(
   it_sdm$model,
   it_sdm$var_train %>% st_drop_geometry())
@@ -474,16 +311,13 @@ plot(var_dependence,
      related_var = 'bio5', smooth_span = 0)
 ```
 
-<img src="intro-var_inter_dependence-1.png" title="plot of chunk var_inter_dependence" alt="plot of chunk var_inter_dependence" style="display: block; margin: auto;" />
-
 Above figure shows bio1 and bio5 have strong correlations.
 
 ## Analyze variable contribution
 
 Sometimes, we are interested in some observations, for instance, the outliers. `variable_contrib` is such function that allows you to analyze the contribution of each variable. It relies on Shapley values.
 
-
-```r
+```{r var_contrib, fig.align='center', fig.width=7, fig.height=4}
 ## Analyze variable contribution for interested observations.
 ## For example, outliers.
 var_contrib <- variable_contrib(
@@ -497,12 +331,9 @@ var_contrib <- variable_contrib(
 plot(var_contrib, plot_each_obs = T, num_features = 4)
 ```
 
-<img src="intro-var_contrib-1.png" title="plot of chunk var_contrib" alt="plot of chunk var_contrib" style="display: block; margin: auto;" />
-
 For example, No.2 observation is decided largely by bio15 and bio5 negatively. Let's check it with spatial response map together.
 
-
-```r
+```{r var_contrib_plot, fig.align='center', fig.width=5, fig.height=5}
 ggplot() +
   geom_stars(data = spatial_responses_all$spatial_shap_dependence$bio15) + 
   scale_fill_distiller('SHAP-based effect', palette = "RdYlBu",
@@ -511,5 +342,3 @@ ggplot() +
           color = 'blue', pch = 1) +
   theme_linedraw()
 ```
-
-<img src="intro-var_contrib_plot-1.png" title="plot of chunk var_contrib_plot" alt="plot of chunk var_contrib_plot" style="display: block; margin: auto;" />

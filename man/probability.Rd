@@ -4,7 +4,7 @@
 \alias{probability}
 \title{Estimate suitability on stars object using trained \code{isolation.forest} model.}
 \usage{
-probability(x, vars, convert = "linear", pts_train = NULL, seed = 10)
+probability(x, vars, offset = 0)
 }
 \arguments{
 \item{x}{(\code{isolation_forest}). It could
@@ -13,13 +13,16 @@ be the item \code{model} of \code{POIsotree} made by function \code{\link{isotre
 \item{vars}{(\code{stars}) The stack of environmental variables. More specifically,
 make sure it has x and y dimensions only, and distribute variables to
 attributes of this \code{stars}. Otherwise, the function would stop.}
+
+\item{offset}{(\code{numeric}) The offset to adjust fitted suitability. The default
+is zero. Highly recommend to leave it as default.}
 }
 \value{
 a \code{stars} of predicted habitat suitability
 }
 \description{
 Apply an \code{isolation.forest} model on a stars object to calculate
-environmental suitability and do quantile stretch to \link{0, 1}.
+environmental suitability and do quantile stretch to \verb{[0, 1]}.
 }
 \examples{
 \dontrun{
@@ -50,8 +53,8 @@ env_vars <- system.file(
 mod_virtual_species <- isotree_po(occ = occ, occ_test = occ_test,
   variables = env_vars, ntrees = 200, sample_rate = 0.8, ndim = 2L,
   seed = 123L)
-suit <- probability(mod_virtual_species$variables,
-  mod_virtual_species$model)
+suit <- probability(mod_virtual_species$model,
+  mod_virtual_species$variables)
 }
 
 }

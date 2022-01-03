@@ -6,9 +6,9 @@ Maintainer: Lei Song <lsong@clarku.edu>
 Description: This is a package to do purely presence-only species
     distribution modeling with isolation forest and variations such as
     SCiForest and EIF. It also provides functions to make response curves,
-    analyze variable importance, analyze spatial dependence of variables and 
-    analyze variable contribution. As utilities, the package includes a few
-    functions to download bioclimatic variables including worldclim
+    analyze variable importance, analyze spatial dependence of variables
+    and analyze variable contribution. As utilities, the package includes
+    a few functions to download bioclimatic variables including worldclim
     version 2.0 and CMCC-BioClimInd. There are also functions to detect
     outliers in the occurrence dataset to do data cleaning.
 License: MIT + file LICENSE

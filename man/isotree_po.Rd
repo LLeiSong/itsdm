@@ -12,10 +12,11 @@ isotree_po(
   categ_vars = NULL,
   ntrees = 100L,
   sample_size = NA,
-  sample_rate = NA,
+  sample_rate = 1,
   ndim = 1L,
   seed = 10L,
   ...,
+  offset = 0,
   response = TRUE,
   spatial_response = TRUE,
   check_variable = TRUE,
@@ -68,6 +69,9 @@ integer. The default is \code{10L}.}
 
 \item{...}{Other arguments that \code{\link{isolation.forest}} needs.}
 
+\item{offset}{(\code{numeric}) The offset to adjust fitted suitability. The default
+is zero. Highly recommend to leave it as default.}
+
 \item{response}{(\code{logical}) If \code{TRUE}, generate response curves.
 The default is \code{TRUE}.}
 
@@ -115,6 +119,7 @@ See details of \code{POEvaluation} in \code{\link{evaluate_po}}}
 \item{marginal_responses (\code{MarginalResponse} or \code{NULL}) A list of marginal response
 values of each environmental variables.
 See details in \code{\link{marginal_response}}}
+\item{offset (\code{numeric}) The offset value set as inputs.}
 \item{independent_responses (\code{IndependentResponse} or \code{NULL}) A list of independent
 response values of each environmental variables.
 See details in \code{\link{independent_response}}}

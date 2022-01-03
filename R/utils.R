@@ -53,6 +53,9 @@
 .min_value <- function(x) min(x[[1]], na.rm = T)
 .max_value <- function(x) max(x[[1]], na.rm = T)
 .mean_value <- function(x) mean(x[[1]], na.rm = T)
+
+# Function to get sd
+#' @importFrom stats sd
 .std_value <- function(x) sd(x[[1]], na.rm = T)
 
 # Function to get erf of a single band stars
@@ -173,26 +176,17 @@
 # Function for a line with intercept (b) and slope (a)
 .lab <- function(x, b, a) a * x + b
 
-# Function to find solutions
-#' @importFrom stats runif
-#' @importFrom raster ncell
-.quick_bernoulli_trial <- function(suitability,
-                                   seed = 1,
-                                   ...) {
-  # Raster of same dimensions than the  probability raster
-  random_numbers <- suitability
-  # Generate random numbers between 0 and 1 from uniform distribution
-  set.seed(seed)
-  random_numbers <- random_numbers %>%
-    mutate(prediction = runif(ncell(suitability), 0, 1))
-  # Attribute presence or absence on the basis of whether the random number
-  # is above or below the probability of occurrence
-  suitability > random_numbers
+# Function to convert
+.binary_convert <- function(prob_of_occurrence,
+                            threshold = 0.5,
+                            ...) {
+  # Make binary
+  prob_of_occurrence >= threshold
 }
 
 .find_linear_conversion <- function(suitability,
-                                   target_prevalence,
-                                   seed = 1) {
+                                    target_prevalence,
+                                    threshold = 0.5) {
   suit_max <- .max_value(suitability)
   suit_mean <- .mean_value(suitability)
   suit_min <- .min_value(suitability)
@@ -222,7 +216,7 @@
 
   # Calculate the resulting prevalence:
   new_suit <- AB$a[I] * suitability + AB$b[I]
-  distr <- .quick_bernoulli_trial(new_suit, seed = seed)
+  distr <- .binary_convert(new_suit, threshold = threshold)
   prev <- .mean_value(distr)
 
   return(list(a = AB$a[I],

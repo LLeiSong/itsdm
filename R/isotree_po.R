@@ -35,6 +35,8 @@
 #' @param seed (`integer`) The random seed used in the modeling. It should be an
 #' integer. The default is `10L`.
 #' @param ... Other arguments that \code{\link{isolation.forest}} needs.
+#' @param offset (`numeric`) The offset to adjust fitted suitability. The default
+#' is zero. Highly recommend to leave it as default.
 #' @param response (`logical`) If `TRUE`, generate response curves.
 #' The default is `TRUE`.
 #' @param spatial_response (`logical`) If `TRUE`, generate spatial response maps.
@@ -78,6 +80,7 @@
 #' \item{marginal_responses (`MarginalResponse` or `NULL`) A list of marginal response
 #' values of each environmental variables.
 #' See details in \code{\link{marginal_response}}}
+#' \item{offset (`numeric`) The offset value set as inputs.}
 #' \item{independent_responses (`IndependentResponse` or `NULL`) A list of independent
 #' response values of each environmental variables.
 #' See details in \code{\link{independent_response}}}
@@ -196,11 +199,13 @@ isotree_po <- function(
   # Isotree-related inputs
   ntrees = 100L, # number of trees
   sample_size = NA, # sample size
-  sample_rate = NA, # sample rate
+  sample_rate = 1.0, # sample rate
   ndim = 1L, # extension level
   seed = 10L, # random seed, must be integer
   # Other arguments of isolation.forest
   ...,
+  # Probability conversion
+  offset = 0.0,
   # Other general inputs
   response = TRUE, # if generate response curves
   spatial_response = TRUE, # if generate spatial response maps
@@ -354,7 +359,7 @@ isotree_po <- function(
     occ_test_mat <- NULL}
 
   # Sample size
-  if (is.na(sample_size)) sample_size <- nrow(occ_mat) * sample_rate
+  if (is.na(sample_size)) sample_size <- round(nrow(occ_mat) * sample_rate)
 
   # Train the model
   isotree_mod <- isolation.forest(
@@ -367,10 +372,7 @@ isotree_po <- function(
 
   # Do prediction
   ## Raster
-  var_pred <- predict(variables, isotree_mod)
-  # Stretch result to be comparable with other results
-  var_pred <- 1 - var_pred
-  var_pred <- .stars_stretch(var_pred)
+  var_pred <- probability(isotree_mod, variables, offset = offset)
 
   ## Training
   ### There should not are any NAs coming from variables
@@ -512,6 +514,7 @@ isotree_po <- function(
     pred_test = occ_test_pred, # prediction of test dataset
     eval_test = eval_test, # evaluation on test dataset
     prediction = var_pred, # prediction map
+    offset = offset, # the offset to adjust result
     marginal_responses = marginal_responses, # marginal response plot
     independent_responses = independent_responses, # independent response plot
     shap_dependences = shap_dependences, # Shapley value based response plot

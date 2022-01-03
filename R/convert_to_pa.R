@@ -18,6 +18,8 @@
 #' It is the species prevalence to classify suitability map.
 #' It could be `NA`, when the will be calculated automatically
 #' based on other arguments. The default is `NA`.
+#' @param threshold (`numeric`) The threshold used to convert probability of
+#' occurrence to presence-absence map. It ranges in `[0, 1]`. The default is 0.5.
 #' @param seed (`integer`) The seed for random progress. The default is `10L`
 #' @param visualize (`logical`) If `TRUE`, plot map of suitability,
 #' probability of occurrence, and presence-absence together.
@@ -104,6 +106,7 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
                           a = 1, # for linear
                           b = 0, # for linear
                           species_prevalence = NA,  # could be NA, for all
+                          threshold = 0.5, # threshold to convert to PA
                           seed = 10L,
                           visualize = TRUE) {
   # Check inputs - level 1
@@ -124,6 +127,7 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
   checkmate::assert_number(b, na.ok = T)
   checkmate::assert_number(species_prevalence, lower = 0,
                            upper = 1, na.ok = T)
+  checkmate::assert_number(threshold,  lower = 0, upper = 1)
   checkmate::assert_int(seed)
   checkmate::assert_logical(visualize)
 
@@ -239,7 +243,7 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
             if(alpha > 0) alpha <- -alpha
             prob_of_occurrence <- .logistic(
               suitability, beta = beta, alpha = alpha)
-            pa_map <- .quick_bernoulli_trial(prob_of_occurrence)
+            pa_map <- .binary_convert(prob_of_occurrence, threshold = threshold)
             c(alpha, .mean_value(pa_map))}))
         epsilon <- species_prevalence - alpha_test[, 2]
         if(all(epsilon > 0)){
@@ -267,7 +271,7 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
             alpha <- (alpha_test[which(epsilon == max(epsilon[epsilon < 0])), 1] +
                         alpha_test[which(epsilon == min(epsilon[epsilon > 0])), 1]) / 2
             prob_of_occurrence <- .logistic(suitability, beta = beta, alpha = alpha)
-            pa_map <- .quick_bernoulli_trial(prob_of_occurrence)
+            pa_map <- .binary_convert(prob_of_occurrence, threshold = threshold)
             alpha_test <- rbind(alpha_test, c(alpha, .mean_value(pa_map)))
 
             epsilon <- species_prevalence - alpha_test[, 2]
@@ -285,7 +289,7 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
         beta_test <- do.call(rbind, lapply(c(aa, bb), function(beta) {
           prob_of_occurrence <- .logistic(suitability,
                                           beta = beta, alpha = alpha)
-          pa_map <- .quick_bernoulli_trial(prob_of_occurrence)
+          pa_map <- .binary_convert(prob_of_occurrence, threshold = threshold)
           c(beta, .mean_value(pa_map))}))
 
         epsilon <- data.frame(epsi = species_prevalence - beta_test[, 2],
@@ -319,7 +323,7 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
             beta <- (beta_test[which(epsilon$epsi == max(epsilon$epsi[epsilon$epsi < 0])), 1][1] +
                        beta_test[which(epsilon$epsi == min(epsilon$epsi[epsilon$epsi > 0])), 1][1]) / 2
             prob_of_occurrence <- .logistic(suitability, beta = beta, alpha = alpha)
-            pa_map <- .quick_bernoulli_trial(prob_of_occurrence)
+            pa_map <- .binary_convert(prob_of_occurrence, threshold = threshold)
 
             beta_test <- rbind(beta_test, c(beta, .mean_value(pa_map)))
             epsilon <- data.frame(epsi = species_prevalence - beta_test[, 2],
@@ -331,13 +335,13 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
 
     # Convert
     prob_of_occurrence <- .logistic(suitability, beta = beta, alpha = alpha)
-    pa_map <- .quick_bernoulli_trial(prob_of_occurrence)
+    pa_map <- .binary_convert(prob_of_occurrence, threshold = threshold)
 
     # Adjust result for very low prevalence
     if (.max_value(suitability) == 0){
       while (.max_value(suitability) == 0) {
         prob_of_occurrence <- .logistic(suitability, beta = beta, alpha = alpha)
-        pa_map <- .quick_bernoulli_trial(prob_of_occurrence)
+        pa_map <- .binary_convert(prob_of_occurrence, threshold = threshold)
       }
     }
   }
@@ -347,14 +351,14 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
     if (!is.na(species_prevalence)) {
       tmp <- .find_linear_conversion(
         suitability, species_prevalence,
-        seed)
+        threshold)
       a <- tmp$a
       b <- tmp$b
       prob_of_occurrence <- tmp$prob_of_occurrence
       pa_map <- tmp$distribution
     } else {
       prob_of_occurrence <- .linear_convert(suitability, c(a, b))
-      pa_map <- .quick_bernoulli_trial(prob_of_occurrence)
+      pa_map <- .binary_convert(prob_of_occurrence, threshold = threshold)
     }
   }
 

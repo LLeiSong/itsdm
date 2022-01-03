@@ -1,6 +1,10 @@
-.Rproj.user
+.Rproj.user/
+.Ruserdata
 .Rbuildignore
+.Rapp.history
 .Rhistory
+.RData
+*-Ex.R
 itsdm.Rproj
 .idea/
 .DS_Store
@@ -8,3 +12,13 @@ itsdm.Rproj
 wc2.1
 inst/doc
 docs
+/*.tar.gz
+/*.Rcheck/
+vignettes/*.html
+vignettes/*.pdf
+.httr-oauth
+*_cache/
+/cache/
+*.utf8.md
+*.knit.md
+.Renviron

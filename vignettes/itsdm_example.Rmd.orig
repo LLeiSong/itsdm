@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   warning = FALSE,
   message = FALSE,
-  dpi = 80,
+  dpi = 70,
   fig.path = "itsdm-"
 )
 ```
@@ -32,9 +32,9 @@ select <- dplyr::select
 
 ## Prepare environmental variables
 
-As an example of a package, we includes both continuous and categorical variables. But these variables are not necessarily the real explanatory variable. For example, using a proportion of forest cover might be better than categorical land cover maps. Additionally, using general protected area might actually confuse the model.
+The objective of this vignette is to provide an example of how to use categorical variables in `itsdm` and show a reasonable workflow of SDM, not to create an optimal model.
 
-Here we use:
+Before building a formal good model, we should try something as a start. Here we use the variables listed below to create a primary model.
 
 1. Bioclimatic variables
 2. Protected area and land cover type as categorical variables.
@@ -105,7 +105,7 @@ Even though the occurrence dataset obtained from GBIF has high quality and its A
 ```{r cleaning}
 library(scrubr, quietly = T)
 
-# Basic Geo-cleaning on occurrence
+# Step1: Basic Geo-cleaning on occurrence
 occ_clean <- occ$data %>%
   select(name, decimalLongitude,
          decimalLatitude, eventDate, key) %>%
@@ -119,7 +119,7 @@ occ_clean <- occ$data %>%
   # Will remove more duplicates according to raster resolution
   dedup()
 
-# Range-cleaning on occurrence
+# Step2: Range-cleaning on occurrence
 ## For example, Africa savanna elephant only could appear in Africa
 data("mainland_africa")
 occ_clean_sf <- occ_clean %>%
@@ -127,7 +127,7 @@ occ_clean_sf <- occ_clean %>%
            crs = 4326)
 occ_clean_sf <- st_intersection(mainland_africa, occ_clean_sf)
 
-# Spatial deduction
+# Step3: Spatial deduction
 occ_clean_sf <- st_rasterize(
   occ_clean_sf,
   template = variables %>% select('bio1') %>%
@@ -142,7 +142,7 @@ rm(start_year, year, nm_search, occ, occ_clean, mainland_africa)
 ```
 
 ```{r outliers, fig.align='center', fig.width=5, fig.height=5}
-# Environmental-cleaning on occurrence
+# Step4: Environmental-cleaning on occurrence
 ## We used a very high z_outliers
 ## It is tricky to remove environmental outliers
 ## because it is hard to tell if they are outliers or
@@ -166,8 +166,6 @@ rm(occ_clean_sf)
 
 Function `dim_reduce` in this package allows the user to reduce the dimensions arbitrarily for numeric environmental variables based on their correlation. Thus, here we do such thing to numeric ones of `variables` and keep the categorical ones.
 
-It is highly not recommended to merge `attributes` of `variables` to `band ` or any other dimension if there are any categorical layers in it unless you know pretty well about what you are doing. Because merging will force categorical values to change to numeric ones, you know that it is tricky to convert between factors and numbers in R.
-
 ```{r var_clean, warning=F, message=F}
 # Split continuous and categorical variables
 # and reduce dimensions for continuous ones
@@ -182,6 +180,8 @@ var_con <- var_con_rdc$img_reduced
 variables <- do.call(c, list(split(var_con, 'band'), var_cat))
 rm(cat_vars, var_cat, var_con, var_con_rdc)
 ```
+
+It is highly not recommended to merge `attributes` of `variables` to `band ` or any other dimension if there are any categorical layers in it unless you know pretty well about what you are doing. Because merging will force categorical values to change to numeric ones, you know that it is tricky to convert between factors and numbers in R.
 
 ```{r, eval=FALSE}
 # If you really want to merge
@@ -216,10 +216,9 @@ Now both occurrence and environmental variables are ready to use for modeling.
 At this step, the users could use strategies like grid search and preferred evaluation metrics to find the optimal arguments for the model. As an example, here we use a set of arguments:
 
 - `ntrees = 200`
-- `sample_rate = 0.8`
-- `ndim = 3`
+- `sample_rate = 0.9`
+- `ndim = 4` because we includes 2 categorical variables
 - `categ_cols = c('wdpa', 'landcover')`
-- `max_depth = 80`
 
 ```{r sdm, fig.align='center', fig.width=4, fig.height=3}
 # Do modeling
@@ -238,7 +237,6 @@ it_sdm <- isotree_po(occ = occ_sf,
 Predicted environmental suitability
 
 ```{r prediction, echo = F, fig.align='center', fig.width=5.3, fig.height=4.3}
-# Compare with virtual species
 ggplot() +
   geom_stars(data = it_sdm$prediction) +
   scale_fill_viridis_c('Predicted suitability',
@@ -246,6 +244,8 @@ ggplot() +
   coord_equal() +
   theme_linedraw()
 ```
+
+This indicates African savanna elephants have a very large potential habitat on this continent. Like more explicit field research indicates that the potential range of African elephants could be more than five times larger than its current extent (https://scitechdaily.com/african-elephants-have-plenty-of-habitat-if-spared-from-the-ivory-trade/). As a mega-mammal, elephants could adapt themselves to survive harsh environments.
 
 Presence-only model evaluation
 
@@ -259,7 +259,7 @@ it_sdm$eval_test
 plot(it_sdm$eval_test)
 ```
 
-According to the evaluation, the model has a large space to improve. For instance, adding more explanatory features. 
+According to the evaluation, the model has the potential to improve, for instance, by adding more explanatory features: forest cover, distance to water, elevation, slope, human influence, etc. According to the continuous Boyce index and TSS curve, the model overestimates some "completely" unsuitable areas, for example, Sahara (see above suitability map). One assumption is that several occurrence data locate in the Namib desert. And land cover map reflects this information to Sahara. But Namib desert is very narrow and close to natural resources, which makes it suitable for elephants. However, deep Sahara is not the same story. So, including a feature describing the distance to water could be helpful to improve the model.
 
 ## Response curves
 
@@ -267,23 +267,33 @@ Response curves of environmental variables show how the suitability of a variabl
 
 Marginal response curves
 
-```{r marginal_responses, fig.align='center', fig.width=8, fig.height=8}
+```{r marginal_responses, fig.align='center', fig.width=8, fig.height=4}
 # Plot response curves
-plot(it_sdm$marginal_responses)
+plot(it_sdm$marginal_responses, target_var = c('bio1', 'bio12'))
 ```
+
+We checked the marginal response curves of two bioclimatic variables. The response curve of bio1 and bio12 are very reasonable and indicate the preferred temperature and precipitation conditions.
 
 Independent response curves
 
-```{r independent_responses, fig.align='center', fig.width=7, fig.height=5}
-plot(it_sdm$independent_responses, target_var = c('bio1', 'bio3', 'landcover'))
+```{r independent_responses, fig.align='center', fig.width=8, fig.height=4}
+plot(it_sdm$independent_responses, target_var = c('landcover', 'wdpa'))
 ```
 
-Single variable dependence curves
+According to the figure above, elephants go beyond protected areas often. This matches with the previous study related to elephant movement. Thus, the binary protected area is not a good modeling variable. Distance to the protected area might be, however. Because usually, there are plenty of natural resources (food, water, etc.) within the protected area. Elephants might like to stay around these protected areas.
+The response of land cover indicates that elephants strongly prefer to stay in some landscape, such as forest, shrub, wetland, cropland, and built-up. Here is some useful information: 
 
-```{r variable_dependence, fig.align='center', fig.width=7, fig.height=7}
+1. Forest/shrub cover ratio may be another helpful feature regarding land cover.
+2. Distance to human residential (e.g., village) may be helpful.
+
+Shapley value based dependence curves
+
+```{r variable_dependence, fig.align='center', fig.width=8, fig.height=8}
 ## Variable dependence scatter points with fitted curves made by SHAP test
-plot(it_sdm$variable_dependence, smooth_span = 0.7)
+plot(it_sdm$shap_dependences, smooth_span = 0)
 ```
+
+Now, let's overview all variable responses made by Shapley values. All variables seem to be the environmental features of elephants. Precipitation seems like a solid decisive factor. We could analyze feature importance further to diagnose the contribution of each variable.
 
 ## Variable importance
 
@@ -293,17 +303,36 @@ Variable importance analysis is another way to understand the relationship betwe
 it_sdm$variable_analysis
 ```
 
+From the text above, annual precipitation is the most important decisive factor. Because precipitation decides the supply of food and water. Temperature is not a very critical constraint to elephants. It indicates that compared to food/water, elephants could tolerate the extreme temperature. Bio14 (Precipitation of Driest Month) is a not-important variable agreed by the Jackknife test and SHAP test. One assumption is that all animals must deal with limited precipitation over the driest month, common in the African savanna. In the Jackknife test, landcover has a relatively high contribution when working alone. But the model performs very well without it. The same to wdpa. In the Shapley value-based test, these two variables are judged as less important. It indicates that landcover and wdpa strongly correlate with some other variables. Changing the way to use them might be necessary to improve the model performance.
+
+Shapley value summary plot is another way to interpret variable contribution.
+
+```{r var_contrib_general, fig.align='center', fig.width=6, fig.height=5}
+var_contrib <- variable_contrib(
+  it_sdm$model,
+  it_sdm$var_train %>% st_drop_geometry(),
+  it_sdm$var_train %>% st_drop_geometry())
+# Plot general contribution for all observations
+plot(var_contrib)
+```
+
 ## Presence-absence map
 
-Use function `convert_to_pa` to convert suitability to presence-absence map.
+Use function `convert_to_pa` to convert suitability to probability of occurrence.
 
-```{r pa, fig.align='center', fig.width=8, fig.height=8}
+```{r pa, fig.align='center', fig.width=5.3, fig.height=4.3}
 # Convert to presence-absence map
 pa_map <- convert_to_pa(it_sdm$prediction,
                         method = "logistic",
                         beta = 0.2,
-                        species_prevalence = 0.2)
-pa_map; plot(pa_map)
+                        species_prevalence = 0.2,
+                        threshold = 0.5)
+ggplot() +
+  geom_stars(data = pa_map$probability_of_occurrence) +
+  scale_fill_viridis_c('Probability of occurrence',
+                       na.value = 'transparent') +
+  coord_equal() +
+  theme_linedraw()
 ```
 
 ## Analyze variable dependence
@@ -311,10 +340,12 @@ pa_map; plot(pa_map)
 Randomly check variable dependence with each other.
 
 ```{r var_inter_dependence, fig.align='center', fig.width=7, fig.height=5}
-plot(it_sdm$variable_dependence,
+plot(it_sdm$shap_dependences,
      target_var = c('bio1', 'bio12', 'landcover'),
      related_var = 'bio3', smooth_span = 0)
 ```
+
+Bio3 has a strong correlation with bio12. We could check variable dependence one by one to exclude some in the final model.
 
 ## Analyze variable contribution
 
@@ -337,13 +368,17 @@ var_contrib_outliers <- variable_contrib(
 plot(var_contrib_outliers, plot_each_obs = T)
 ```
 
-Let's take a look at the general variable contribution.
+According to feature response curves and this figure, some detected outliers could be removed from training. For example, some features have a strongly negative contribution to observations No.1, No.6, No.8, No.10, and No.15 and they could be excluded.
 
-```{r var_contrib_general, fig.align='center', fig.width=6, fig.height=5}
-var_contrib <- variable_contrib(
-  it_sdm$model,
-  it_sdm$var_train %>% st_drop_geometry(),
-  it_sdm$var_train %>% st_drop_geometry())
-# Plot general contribution for all observations
-plot(var_contrib)
-```
+## Conclusion
+
+With a primary analysis, we found a few obvious things to do to improve model performance:
+
+1. Add more explanatory features, such as vegetation, distance to water, elevation, slope, human influence (e.g., distance to human residential, population density, and distance to roads), etc.
+2. Since precipitation is more important than others to determine where elephants go. Add more bioclimatic variables related to rainfall.
+2. Change the way of using land cover categorical map and protected area binary map. Use ratio or distance instead.
+3. Delete some outliers from the occurrence dataset.
+4. Probably tune one or two parameters in `isotree_po`. When the distribution of elephants is well studied, the model only translate the information to machine language. A good model can explain clearly and concisely but cannot tell you the knowledge that it is not taught.
+
+The interested user could try it on their own.
+

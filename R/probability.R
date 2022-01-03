@@ -1,16 +1,18 @@
 #' @title Estimate suitability on stars object using trained `isolation.forest` model.
 #' @description Apply an `isolation.forest` model on a stars object to calculate
-#' environmental suitability and do quantile stretch to [0, 1].
+#' environmental suitability and do quantile stretch to `[0, 1]`.
 #' @param x (`isolation_forest`). It could
 #' be the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
 #' @param vars (`stars`) The stack of environmental variables. More specifically,
 #' make sure it has x and y dimensions only, and distribute variables to
 #' attributes of this `stars`. Otherwise, the function would stop.
+#' @param offset (`numeric`) The offset to adjust fitted suitability. The default
+#' is zero. Highly recommend to leave it as default.
 #'
 #' @return a `stars` of predicted habitat suitability
 #' @seealso \code{\link{isotree_po}}
 #' @import checkmate
-#' @importFrom stats predict
+#' @importFrom stats predict sd
 #' @export
 #' @examples
 #' \dontrun{
@@ -47,9 +49,11 @@
 #'
 probability <- function(x,
                         vars,
-                        convert = 'linear',
-                        pts_train = NULL,
-                        seed = 10) {
+                        offset = 0) {
+  # For later extension
+  convert <- 'linear'
+  pts_train <- NULL
+
   # Check inputs
   checkmate::assert_class(x, 'isolation_forest')
   checkmate::assert_class(vars, 'stars')
@@ -86,13 +90,8 @@ probability <- function(x,
   var_pred <- predict(vars, x)
 
   if (convert == 'unify') {
-    set.seed(seed)
-    pred_abc <- var_pred %>%
-      st_xy2sfc(as_points = T) %>% st_as_sf() %>%
-      sample_n(nrow(pts_train))
     pred_train <- st_extract(var_pred, pts_train)$prediction
-    pred_train <- c(pred_train, pred_abc$prediction)
-    # Convert score to probability
+    # Convert score to probability using unify
     mu <- mean(pred_train)
     sigma <- sd(pred_train)
     pred_erf <- (var_pred - mu) / (sigma * sqrt(2))
@@ -101,9 +100,10 @@ probability <- function(x,
     pred_erf[pred_erf > 1] <- 1
 
     1 - pred_erf
+    # linear conversion with a defined offset
   } else if (convert == 'linear') {
     var_pred <- 1 - var_pred
     .stars_stretch(var_pred, minv = 0, maxv = 1,
-                   minq = 0, maxq = 1)
+                   minq = offset, maxq = 1)
   }
 }

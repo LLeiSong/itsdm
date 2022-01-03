@@ -12,6 +12,7 @@ convert_to_pa(
   a = 1,
   b = 0,
   species_prevalence = NA,
+  threshold = 0.5,
   seed = 10L,
   visualize = TRUE
 )
@@ -40,6 +41,9 @@ It is the intercept of the line. The default is \code{0}.}
 It is the species prevalence to classify suitability map.
 It could be \code{NA}, when the will be calculated automatically
 based on other arguments. The default is \code{NA}.}
+
+\item{threshold}{(\code{numeric}) The threshold used to convert probability of
+occurrence to presence-absence map. It ranges in \verb{[0, 1]}. The default is 0.5.}
 
 \item{seed}{(\code{integer}) The seed for random progress. The default is \code{10L}}
 
