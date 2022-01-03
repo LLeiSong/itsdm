@@ -35,8 +35,6 @@ jobs:
           brew install proj
           brew install geos
           brew install gdal
-      - name: Install scrubr
-        run: Rscript -e "options(repos = c(ropensci = 'https://ropensci.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages('scrubr')"
 
       - uses: actions/checkout@v2
 
@@ -47,6 +45,8 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
+      - name: Install scrubr
+        run: Rscript -e "options(repos = c(ropensci = 'https://ropensci.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages('scrubr')"
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
