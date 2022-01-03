@@ -45,11 +45,12 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-      - name: Install scrubr
-        run: Rscript -e "options(repos = c(ropensci = 'https://ropensci.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages('scrubr')"
+
+      - name: Set up pak
+        run: Run Rscript -e "install.packages('pak'); pak::repo_add('http://packages.ropensci.org')"
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
-          extra-packages: rcmdcheck, remotes
+          extra-packages: rcmdcheck
 
       - uses: r-lib/actions/check-r-package@v1
