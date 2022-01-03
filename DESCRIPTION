@@ -47,7 +47,7 @@ Suggests:
     virtualspecies
 VignetteBuilder: 
     knitr
-Additional_repositories: http://packages.ropensci.org
+Additional_repositories: https://ropensci.r-universe.dev
 Encoding: UTF-8
 Language: en-US
 LazyData: true
