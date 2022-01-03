@@ -37,17 +37,10 @@ Imports:
     tidyselect,
     utils
 Suggests: 
-    here,
-    kableExtra,
     knitr,
-    lubridate,
-    rgbif,
-    scrubr,
-    rmarkdown,
-    virtualspecies
+    rmarkdown
 VignetteBuilder: 
     knitr
-Additional_repositories: http://packages.ropensci.org
 Encoding: UTF-8
 Language: en-US
 LazyData: true

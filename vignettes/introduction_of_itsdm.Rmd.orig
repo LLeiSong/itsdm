@@ -23,6 +23,15 @@ knitr::opts_chunk$set(
 ```
 
 ## Set up
+
+Install your missing packages
+
+```{r, warning=F, message=F, eval=FALSE}
+install.packages('rnaturalearth')
+install.packages('here')
+install.packages('virtualspecies')
+```
+
 ```{r setup, warning=F, message=F, eval=T}
 library(sf, quietly = T)
 library(itsdm, quietly = T)
@@ -260,7 +269,7 @@ it_sdm$variable_analysis
 plot(it_sdm$variable_analysis)
 ```
 
-According to the analysis, all explanatory variables contribute significantly to the model. This is predictable because the virtual species is made by these four variables. bio12 is the most important variable. 
+According to the analysis, all explanatory variables contribute significantly to the model. This is predictable because the virtual species is made by these four variables. bio12 is the most important variable.
 
 Besides the regular response curves, `itsdm` also makes spatially partial dependence maps. By default in `isotree_po`, Shapley value-based spatial dependence maps are not generated because of the computational efficiency. The user could generate these maps by calling function `spatial_response` later after getting the model done.
 
@@ -335,10 +344,10 @@ For example, No.2 observation is decided largely by bio15 and bio5 negatively. L
 
 ```{r var_contrib_plot, fig.align='center', fig.width=5, fig.height=5}
 ggplot() +
-  geom_stars(data = spatial_responses_all$spatial_shap_dependence$bio15) + 
+  geom_stars(data = spatial_responses_all$spatial_shap_dependence$bio15) +
   scale_fill_distiller('SHAP-based effect', palette = "RdYlBu",
                        na.value = "transparent") +
-  geom_sf(data = it_sdm$var_test %>% slice(2), 
+  geom_sf(data = it_sdm$var_test %>% slice(2),
           color = 'blue', pch = 1) +
   theme_linedraw()
 ```

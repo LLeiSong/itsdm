@@ -15,6 +15,18 @@ vignette: >
 
 ## Set up
 
+Install your missing packages
+
+```r
+install.packages("rnaturalearth")
+install.packages("rgbif")
+install.packages("lubridate")
+options(repos = c(
+  ropensci = 'https://ropensci.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'))
+install.packages('scrubr')
+```
+
 ```r
 library(itsdm, quietly = T)
 library(ggplot2, quietly = T)

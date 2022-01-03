@@ -15,6 +15,14 @@ vignette: >
 
 ## Set up
 
+Install your missing packages
+
+```r
+install.packages('rnaturalearth')
+install.packages('here')
+install.packages('virtualspecies')
+```
+
 ```r
 library(sf, quietly = T)
 library(itsdm, quietly = T)

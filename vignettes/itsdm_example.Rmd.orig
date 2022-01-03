@@ -23,6 +23,19 @@ knitr::opts_chunk$set(
 ```
 
 ## Set up
+
+Install your missing packages
+
+```{r , warning=F, message=F, eval=FALSE}
+install.packages("rnaturalearth")
+install.packages("rgbif")
+install.packages("lubridate")
+options(repos = c(
+  ropensci = 'https://ropensci.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'))
+install.packages('scrubr')
+```
+
 ```{r setup, warning=F, message=F, eval=T}
 library(itsdm, quietly = T)
 library(ggplot2, quietly = T)
@@ -281,7 +294,7 @@ plot(it_sdm$independent_responses, target_var = c('landcover', 'wdpa'))
 ```
 
 According to the figure above, elephants go beyond protected areas often. This matches with the previous study related to elephant movement. Thus, the binary protected area is not a good modeling variable. Distance to the protected area might be, however. Because usually, there are plenty of natural resources (food, water, etc.) within the protected area. Elephants might like to stay around these protected areas.
-The response of land cover indicates that elephants strongly prefer to stay in some landscape, such as forest, shrub, wetland, cropland, and built-up. Here is some useful information: 
+The response of land cover indicates that elephants strongly prefer to stay in some landscape, such as forest, shrub, wetland, cropland, and built-up. Here is some useful information:
 
 1. Forest/shrub cover ratio may be another helpful feature regarding land cover.
 2. Distance to human residential (e.g., village) may be helpful.
