@@ -38,7 +38,6 @@ Imports:
     utils
 Suggests: 
     here,
-    remotes,
     kableExtra,
     knitr,
     lubridate,
