@@ -12,7 +12,8 @@ Description: This is a package to do purely presence-only species
     version 2.0 and CMCC-BioClimInd. There are also functions to detect
     outliers in the occurrence dataset to do data cleaning.
 License: MIT + file LICENSE
-URL: https://github.com/LLeiSong/itsdm
+URL: https://github.com/LLeiSong/itsdm,
+    https://lleisong.github.io/itsdm/
 BugReports: https://github.com/LLeiSong/itsdm/issues
 Depends: 
     R (>= 3.5.0)
