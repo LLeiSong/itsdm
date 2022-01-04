@@ -21,11 +21,8 @@
 
 ## Installation
 
-Install the CRAN release of `itsdm` with
+Install the CRAN release of `itsdm` with (coming soon)
 
-```r
-install.packages('itsdm')
-```
 
 You can install the development version of itsdm from GitHub with:
 

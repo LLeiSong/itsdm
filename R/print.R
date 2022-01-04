@@ -39,7 +39,7 @@
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 200,
+#'   variables = env_vars, ntrees = 50,
 #'   sample_rate = 0.8, ndim = 3L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
@@ -255,7 +255,7 @@ print.VariableAnalysis <- function(x, ...){
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 200,
+#'   variables = env_vars, ntrees = 50,
 #'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
@@ -412,7 +412,7 @@ print.ReducedImageStack <- function(x, ...) {
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 200,
+#'   variables = env_vars, ntrees = 50,
 #'   sample_rate = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
@@ -527,7 +527,7 @@ print.EnvironmentalOutlier <- function(x, ...) {
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 200,
+#'   variables = env_vars, ntrees = 50,
 #'   sample_rate = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE)

@@ -133,7 +133,7 @@
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 200,
+#'   variables = env_vars, ntrees = 50,
 #'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
@@ -213,7 +213,7 @@ plot.MarginalResponse <- function(x,
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 200,
+#'   variables = env_vars, ntrees = 50,
 #'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
@@ -298,7 +298,7 @@ plot.IndependentResponse <- function(x,
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 200,
+#'   variables = env_vars, ntrees = 50,
 #'   sample_rate = 0.8, ndim = 3L,
 #'   seed = 123L, response = FALSE,
 #'   check_variable = FALSE)
@@ -558,7 +558,7 @@ plot.ShapDependence <- function(x,
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 200,
+#'   variables = env_vars, ntrees = 50,
 #'   sample_rate = 0.8, ndim = 3L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
@@ -738,7 +738,7 @@ plot.SpatialResponse <- function(x,
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 200,
+#'   variables = env_vars, ntrees = 50,
 #'   sample_rate = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
@@ -876,7 +876,7 @@ plot.VariableContribution <- function(x,
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 200,
+#'   variables = env_vars, ntrees = 50,
 #'   sample_rate = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
@@ -1153,7 +1153,7 @@ plot.VariableAnalysis <- function(x, ...) {
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 200,
+#'   variables = env_vars, ntrees = 50,
 #'   sample_rate = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
@@ -1340,7 +1340,7 @@ plot.POEvaluation <- function(x, ...) {
 #'
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 200,
+#'   variables = env_vars, ntrees = 50,
 #'   sample_rate = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
