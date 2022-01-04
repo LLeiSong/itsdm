@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2021--11--21-yellowgreen.svg)](/commits/main)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2022--01--04-yellowgreen.svg)](/commits/main)
 [![R-CMD-check](https://github.com/LLeiSong/itsdm/workflows/R-CMD-check/badge.svg)](https://github.com/LLeiSong/itsdm/actions)
 <!-- badges: end -->
 
