@@ -121,6 +121,7 @@ var_analysis <- variable_analysis(
   pts_occ = mod$pts_occ,
   pts_occ_test = mod$pts_occ_test,
   variables = mod$variables)
+plot(var_analysis)
 }
 
 }

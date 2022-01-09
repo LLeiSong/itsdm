@@ -46,9 +46,6 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - name: Set up pak
-        run: Rscript -e "install.packages('pak'); pak::repo_add('http://packages.ropensci.org')"
-
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
           extra-packages: rcmdcheck

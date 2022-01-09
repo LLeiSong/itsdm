@@ -50,6 +50,10 @@ with a setting of boundary and a few other options.
 \details{
 \href{https://worldclim.org/data/index.html}{Web page page for this dataset}
 }
+\note{
+If it fails due to slow internet, try to set a larger timeout option,
+e.g., using \code{options(timeout = 1e3)}.
+}
 \examples{
 \dontrun{
 library(sf)

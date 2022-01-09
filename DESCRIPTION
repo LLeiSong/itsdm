@@ -4,16 +4,30 @@ Version: 0.1.0
 Author: Lei Song
 Maintainer: Lei Song <lsong@clarku.edu>
 Description: This is a package to do purely presence-only species
-    distribution modeling with isolation forest and variations such as
-    SCiForest and EIF. It also provides functions to make response curves,
-    analyze variable importance, analyze spatial dependence of variables
-    and analyze variable contribution. As utilities, the package includes
-    a few functions to download bioclimatic variables including worldclim
-    version 2.0 and CMCC-BioClimInd. There are also functions to detect
-    outliers in the occurrence dataset to do data cleaning.
+    distribution modeling with isolation forest (iForest) and its
+    variations such as Extended isolation forest and SCiForest. See the
+    details of these methods in references: Liu, F.T., Ting, K.M. and
+    Zhou, Z.H. (2008) <doi:10.1109/ICDM.2008.17>, Hariri, S., Kind, M.C.
+    and Brunner, R.J. (2019) <doi:10.1109/TKDE.2019.2947676>, Liu, F.T.,
+    Ting, K.M. and Zhou, Z.H. (2010) <doi:10.1007/978-3-642-15883-4_18>,
+    Guha, S., Mishra, N., Roy, G. and Schrijvers, O. (2016)
+    <https://proceedings.mlr.press/v48/guha16.html>, Cortes, D.
+    (2021) <arXiv:2110.13402>. Additionally, Shapley values are used
+    to explain model inputs and outputs. See details in references:
+    Shapley, L.S.  (1953) <doi:10.1515/9781400881970-018>, Lundberg, S.M.
+    and Lee, S.I. (2017)
+    <https://dl.acm.org/doi/abs/10.5555/3295222.3295230>, Molnar, C.
+    (2020) <ISBN:978-0-244-76852-2>, Štrumbelj, E. and Kononenko, I.
+    (2014) <doi:10.1007/s10115-013-0679-x>. itsdm also provides functions
+    to diagnose variable response, analyze variable importance, draw
+    spatial dependence of variables and examine variable contribution. As
+    utilities, the package includes a few functions to download
+    bioclimatic variables including 'WorldClim' version 2.0 (see Fick,
+    S.E. and Hijmans, R.J. (2017) <doi:10.1002/joc.5086>) and
+    'CMCC-BioClimInd' (see Noce, S., Caporaso, L.  and Santini, M. (2020)
+    <doi:10.1038/s41597-020-00726-5>.
 License: MIT + file LICENSE
-URL: https://github.com/LLeiSong/itsdm,
-    https://lleisong.github.io/itsdm/
+URL: https://github.com/LLeiSong/itsdm, https://lleisong.github.io/itsdm/
 BugReports: https://github.com/LLeiSong/itsdm/issues
 Depends: 
     R (>= 3.5.0)

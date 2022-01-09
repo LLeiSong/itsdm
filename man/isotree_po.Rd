@@ -143,7 +143,7 @@ Please read details of algorithm \code{\link{isolation.forest}} on
 the R documentation of function \code{\link{isolation.forest}}.
 }
 \examples{
-\dontrun{
+\donttest{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
 library(dplyr)
@@ -165,13 +165,13 @@ occ_test <- occ_test \%>\% select(-id)
 env_vars <- system.file(
   'extdata/bioclim_tanzania_10min.tif',
   package = 'itsdm') \%>\% read_stars() \%>\%
-  slice('band', c(1, 5, 12, 16))
+  slice('band', c(1, 5, 12))
 
 # Modeling
 mod_virtual_species <- isotree_po(
   occ = occ, occ_test = occ_test,
-  variables = env_vars, ntrees = 50,
-  sample_rate = 0.8, ndim = 2L,
+  variables = env_vars, ntrees = 10,
+  sample_rate = 0.6, ndim = 1L,
   seed = 123L)
 
 # Check results
@@ -182,13 +182,13 @@ plot(mod_virtual_species$eval_train)
 ## Response curves
 plot(mod_virtual_species$marginal_responses)
 plot(mod_virtual_species$independent_responses,
-  target_var = c('bio1', 'bio5', 'bio12'))
-plot(mod_virtual_species$variable_dependence)
+  target_var = c('bio1', 'bio5'))
+plot(mod_virtual_species$shap_dependence)
 
 ## Relationships between target var and related var
-plot(mod_virtual_species$variable_dependence,
-  target_var = c('bio1', 'bio5', 'bio12'),
-  related_var = 'bio16', smooth_span = 0)
+plot(mod_virtual_species$shap_dependence,
+  target_var = c('bio1', 'bio5'),
+  related_var = 'bio12', smooth_span = 0)
 
 # Variable importance
 mod_virtual_species$variable_analysis

@@ -66,7 +66,6 @@ independent dependence maps, SHAP-based maps are way more informative because
 SHAP-based dependence explain the contribution of each variable to final result.
 }
 \examples{
-\dontrun{
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
 library(dplyr)
@@ -87,11 +86,11 @@ occ_test <- occ_test \%>\% select(-id)
 env_vars <- system.file(
   'extdata/bioclim_tanzania_10min.tif',
   package = 'itsdm') \%>\% read_stars() \%>\%
-  slice('band', c(1, 5, 12, 16))
+  slice('band', c(1, 5, 12))
 
 mod <- isotree_po(
   occ = occ, occ_test = occ_test,
-  variables = env_vars, ntrees = 50,
+  variables = env_vars, ntrees = 20,
   sample_rate = 0.8, ndim = 2L,
   seed = 123L, response = FALSE,
   spatial_response = FALSE,
@@ -100,9 +99,9 @@ mod <- isotree_po(
 spatial_responses <- spatial_response(
   model = mod$model,
   var_occ = mod$var_train \%>\% st_drop_geometry(),
-  variables = mod$variables)
+  variables = mod$variables,
+  shap_nsim = 1)
 plot(spatial_responses)
-}
 
 }
 \seealso{

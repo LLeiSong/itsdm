@@ -41,6 +41,11 @@
 #'
 #' @details
 #' \href{https://worldclim.org/data/index.html}{Web page page for this dataset}
+#'
+#' @note
+#' If it fails due to slow internet, try to set a larger timeout option,
+#' e.g., using `options(timeout = 1e3)`.
+#'
 #' @importFrom sf st_as_sf st_make_valid st_crop
 #' @importFrom stars read_stars write_stars st_set_dimensions
 #' @importFrom utils tail download.file
@@ -110,7 +115,6 @@ future_worldclim2 <- function(var = "tmin",
 
     ## Download to local
     temp <- tempfile()
-    options(timeout = 1e5)
     dl <- try(download.file(url, temp))
     if (class(dl) == "try-error") {
       Sys.sleep(10)

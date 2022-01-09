@@ -22,3 +22,4 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 .Renviron
+CRAN-SUBMISSION

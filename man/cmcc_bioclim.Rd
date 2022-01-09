@@ -41,7 +41,9 @@ page page for this dataset}
 }
 \note{
 The function is experimental at the moment, because the download server
-of this dataset is not as stable as Worldclim yet.
+of this dataset is not as stable as Worldclim yet. If it fails due to slow
+internet, try to set a larger timeout option,
+e.g., using \code{options(timeout = 1e3)}.
 }
 \examples{
 \dontrun{

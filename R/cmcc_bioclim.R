@@ -29,7 +29,10 @@
 #' page page for this dataset}
 #'
 #' @note The function is experimental at the moment, because the download server
-#' of this dataset is not as stable as Worldclim yet.
+#' of this dataset is not as stable as Worldclim yet. If it fails due to slow
+#' internet, try to set a larger timeout option,
+#' e.g., using `options(timeout = 1e3)`.
+#'
 #' @import ncdf4
 #' @importFrom raster stack
 #' @importFrom sf st_as_sf st_make_valid st_crop
@@ -90,7 +93,6 @@ cmcc_bioclim <- function(bry = NULL,
 
              # Download to local
              temp <- tempfile()
-             options(timeout = 1e5)
              dl <- try(download.file(url, temp))
              if (class(dl) == "try-error") {
                Sys.sleep(10)
