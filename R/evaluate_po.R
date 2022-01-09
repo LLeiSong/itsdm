@@ -182,7 +182,10 @@ evaluate_po <- function(model,
   # CBI
   boy <- ecospat.boyce(fit = var_pred,
                        obs = occ_pred,
-                       PEplot = F)
+                       PEplot = F,
+                       method = 'spearman')
+  if (is.null(boy$Spearman.cor))
+    boy$Spearman.cor <- boy$cor
   cbi <- boy$Spearman.cor
 
   # AUC_ratio
