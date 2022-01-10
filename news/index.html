@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">itsdm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
       </span>
     </div>
 
@@ -60,6 +60,15 @@
       <small>Source: <a href="https://github.com/LLeiSong/itsdm/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.1" id="itsdm-011">itsdm 0.1.1<a class="anchor" aria-label="anchor" href="#itsdm-011"></a></h2>
+<div class="section level3">
+<h3 id="changes-0-1-1">Changes<a class="anchor" aria-label="anchor" href="#changes-0-1-1"></a></h3>
+<ul><li>Updated lines in function <code>evaluate_po</code>, <code>plot.POEvaluation</code>, and <code>print.POEvaluation</code> related to dependency <code>ecospat 3.2.1</code>. Because now function <code>ecospat.boyce</code> supports Kendall method, <code>itsdm</code> changed to use Kendall method to calculate CBI.</li>
+<li>Merge the pull request made by David Cortes who is the author of package <code>isotree</code> to use more flexible way for argument passing of <code>isolation.forest</code>.</li>
+<li>According to David Cortes’ reminder, remove argument <code>sample_rate</code> from <code>isotree_po</code>. Only use <code>sample_size</code> for sub-sampling.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0" id="itsdm-010">itsdm 0.1.0<small>2022-01-07</small><a class="anchor" aria-label="anchor" href="#itsdm-010"></a></h2>
 <p>This is the first release. It includes all planned features.</p>

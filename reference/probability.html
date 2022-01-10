@@ -18,7 +18,7 @@ environmental suitability and do quantile stretch to [0, 1]."><!-- mathjax --><s
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">itsdm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
       </span>
     </div>
 
@@ -121,7 +121,7 @@ is zero. Highly recommend to leave it as default.</p></dd>
 
 <span class="co"># Modeling</span>
 <span class="va">mod_virtual_species</span> <span class="op">&lt;-</span> <span class="fu"><a href="isotree_po.html">isotree_po</a></span><span class="op">(</span>occ <span class="op">=</span> <span class="va">occ</span>, occ_test <span class="op">=</span> <span class="va">occ_test</span>,
-  variables <span class="op">=</span> <span class="va">env_vars</span>, ntrees <span class="op">=</span> <span class="fl">50</span>, sample_rate <span class="op">=</span> <span class="fl">0.8</span>, ndim <span class="op">=</span> <span class="fl">2L</span>,
+  variables <span class="op">=</span> <span class="va">env_vars</span>, ntrees <span class="op">=</span> <span class="fl">50</span>, sample_size <span class="op">=</span> <span class="fl">0.8</span>, ndim <span class="op">=</span> <span class="fl">2L</span>,
   seed <span class="op">=</span> <span class="fl">123L</span><span class="op">)</span>
 <span class="va">suit</span> <span class="op">&lt;-</span> <span class="fu">probability</span><span class="op">(</span><span class="va">mod_virtual_species</span><span class="op">$</span><span class="va">model</span>,
   <span class="va">mod_virtual_species</span><span class="op">$</span><span class="va">variables</span><span class="op">)</span>

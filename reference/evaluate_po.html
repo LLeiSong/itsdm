@@ -22,7 +22,7 @@ extracting background points as pseudo absence observations."><!-- mathjax --><s
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">itsdm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
       </span>
     </div>
 
@@ -144,6 +144,8 @@ or F-measure</p></li>
 a threshold (<code>0.5</code> for example) habitat suitability index minus
 the proportion of cells within this range of threshold of the model.
 Here we used varied thresholds: <code>0.25</code>, <code>0.5</code>, and <code>0.75</code>.</p></li>
+<li><p><b>continuous Boyce index (CBI)</b> is made with a 100 resolution of
+moving windows and Kendall method.</p></li>
 <li><p><b>ROC_ratio</b> curve plots the proportion of presences falling above a
 range of thresholds against the proportion of cells falling
 above the range of thresholds. The area under the modified
@@ -212,7 +214,7 @@ doi: <a href="https://doi.org/10.1111/jbi.13402" class="external-link">10.1111/j
 <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="isotree_po.html">isotree_po</a></span><span class="op">(</span>
   occ <span class="op">=</span> <span class="va">occ</span>, occ_test <span class="op">=</span> <span class="va">occ_test</span>,
   variables <span class="op">=</span> <span class="va">env_vars</span>, ntrees <span class="op">=</span> <span class="fl">50</span>,
-  sample_rate <span class="op">=</span> <span class="fl">0.8</span>, ndim <span class="op">=</span> <span class="fl">2L</span>,
+  sample_size <span class="op">=</span> <span class="fl">0.8</span>, ndim <span class="op">=</span> <span class="fl">2L</span>,
   seed <span class="op">=</span> <span class="fl">123L</span>, response <span class="op">=</span> <span class="cn">FALSE</span>,
   spatial_response <span class="op">=</span> <span class="cn">FALSE</span>,
   check_variable <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
@@ -221,6 +223,7 @@ doi: <a href="https://doi.org/10.1111/jbi.13402" class="external-link">10.1111/j
   occ_pred <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">pred_train</span><span class="op">$</span><span class="va">prediction</span>,
   var_pred <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">prediction</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">eval_train</span><span class="op">)</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">eval_train</span><span class="op">)</span>
 
 </code></pre></div>
     </div>

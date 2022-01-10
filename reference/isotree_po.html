@@ -18,7 +18,7 @@ species distribution modeling and optionally do model explanation."><!-- mathjax
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">itsdm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
       </span>
     </div>
 
@@ -75,8 +75,7 @@ species distribution modeling and optionally do model explanation.</p>
   <span class="va">variables</span>,
   categ_vars <span class="op">=</span> <span class="cn">NULL</span>,
   ntrees <span class="op">=</span> <span class="fl">100L</span>,
-  sample_size <span class="op">=</span> <span class="cn">NA</span>,
-  sample_rate <span class="op">=</span> <span class="fl">1</span>,
+  sample_size <span class="op">=</span> <span class="fl">1</span>,
   ndim <span class="op">=</span> <span class="fl">1L</span>,
   seed <span class="op">=</span> <span class="fl">10L</span>,
   <span class="va">...</span>,
@@ -115,15 +114,8 @@ variables. Must be the same as the names in <code>variables</code>.</p></dd>
 be integer, which you could use function <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></code> to convert to.
 The default is <code>100L</code>.</p></dd>
 <dt>sample_size</dt>
-<dd><p>(<code>integer</code> or <code>NULL</code>) Alternative argument for <code>sample_rate</code>.
-If not <code>NULL</code>, it should be a number for sampling size in <code>[2, nrow(occ)]</code>.
-It must be integer, which you could use function <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></code> to
-convert to. The default is <code>NULL</code>.
-Only set either <code>sample_size</code> or <code>sample_rate</code>.</p></dd>
-<dt>sample_rate</dt>
-<dd><p>(<code>numeric</code> or <code>NULL</code>) Alternative argument for <code>sample_size</code>.
-If not <code>NULL</code>, it should be a rate for sampling size in <code>[0, 1]</code>.
-The default is <code>NULL</code>. Only set either <code>sample_size</code> or <code>sample_rate</code>.</p></dd>
+<dd><p>(<code>numeric</code>) It should be a rate for sampling size in <code>[0, 1]</code>.
+The default is <code>1.0</code>.</p></dd>
 <dt>ndim</dt>
 <dd><p>(<code>integer</code>) ExtensionLevel for isolation forest. It must
 be integer, which you could use function <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></code> to convert
@@ -267,7 +259,7 @@ will be listed under their own functions</p></li>
 <span class="va">mod_virtual_species</span> <span class="op">&lt;-</span> <span class="fu">isotree_po</span><span class="op">(</span>
   occ <span class="op">=</span> <span class="va">occ</span>, occ_test <span class="op">=</span> <span class="va">occ_test</span>,
   variables <span class="op">=</span> <span class="va">env_vars</span>, ntrees <span class="op">=</span> <span class="fl">10</span>,
-  sample_rate <span class="op">=</span> <span class="fl">0.6</span>, ndim <span class="op">=</span> <span class="fl">1L</span>,
+  sample_size <span class="op">=</span> <span class="fl">0.6</span>, ndim <span class="op">=</span> <span class="fl">1L</span>,
   seed <span class="op">=</span> <span class="fl">123L</span><span class="op">)</span>
 
 <span class="co"># Check results</span>
