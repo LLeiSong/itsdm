@@ -1210,7 +1210,7 @@ plot.POEvaluation <- function(x, ...) {
     geom_hline(yintercept = 1, color = 'red', size = 0.8) +
     scale_x_continuous(n.breaks = 9) +
     geom_text(x = 0.2, y = max(cbi_bins$f_ratio),
-              label = sprintf("CBI: %s", round(po_eval$boyce$Spearman.cor, 3))) +
+              label = sprintf("CBI: %s", round(po_eval$boyce$cor, 3))) +
     labs(y = "P/E ratio",
          x = "Suitability") +
     ggtitle("Continuous boyces index") +

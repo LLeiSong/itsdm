@@ -1,7 +1,7 @@
 ---
 title: "Introduction of `itsdm` with a virtual species"
 author: "Lei Song"
-date: "2022-01-03"
+date: "2022-01-09"
 output:
   rmarkdown::html_document:
     theme: readable
@@ -17,11 +17,13 @@ vignette: >
 
 Install your missing packages
 
+
 ```r
 install.packages('rnaturalearth')
 install.packages('here')
 install.packages('virtualspecies')
 ```
+
 
 ```r
 library(sf, quietly = T)
@@ -306,7 +308,7 @@ it_sdm$eval_test
 #> CVI with 0.25 threshold:      0.614
 #> CVI with 0.5 threshold:       0.810
 #> CVI with 0.75 threshold:      0.693
-#> CBI:                          0.998
+#> CBI:                          0.978
 #> AUC (ratio)                   0.942
 #> ===================================
 #> Presence-background evaluation:
@@ -420,7 +422,7 @@ plot(it_sdm$variable_analysis)
 
 <img src="intro-variable_analysis-1.png" title="plot of chunk variable_analysis" alt="plot of chunk variable_analysis" style="display: block; margin: auto;" />
 
-According to the analysis, all explanatory variables contribute significantly to the model. This is predictable because the virtual species is made by these four variables. bio12 is the most important variable. 
+According to the analysis, all explanatory variables contribute significantly to the model. This is predictable because the virtual species is made by these four variables. bio12 is the most important variable.
 
 Besides the regular response curves, `itsdm` also makes spatially partial dependence maps. By default in `isotree_po`, Shapley value-based spatial dependence maps are not generated because of the computational efficiency. The user could generate these maps by calling function `spatial_response` later after getting the model done.
 
@@ -512,10 +514,10 @@ For example, No.2 observation is decided largely by bio15 and bio5 negatively. L
 
 ```r
 ggplot() +
-  geom_stars(data = spatial_responses_all$spatial_shap_dependence$bio15) + 
+  geom_stars(data = spatial_responses_all$spatial_shap_dependence$bio15) +
   scale_fill_distiller('SHAP-based effect', palette = "RdYlBu",
                        na.value = "transparent") +
-  geom_sf(data = it_sdm$var_test %>% slice(2), 
+  geom_sf(data = it_sdm$var_test %>% slice(2),
           color = 'blue', pch = 1) +
   theme_linedraw()
 ```
