@@ -277,7 +277,7 @@ print.POEvaluation <- function(x, ...){
   cvi75 <- po_eval$cvi$`cvi with 0.75`
 
   # CBI with 100 moving windows
-  cbi <- po_eval$boyce$Spearman.cor
+  cbi <- po_eval$boyce$cor
 
   # AUC_ratio
   auc_r <- po_eval$roc_ratio$auc_ratio

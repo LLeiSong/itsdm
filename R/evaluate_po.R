@@ -61,6 +61,8 @@
 #' a threshold (`0.5` for example) habitat suitability index minus
 #' the proportion of cells within this range of threshold of the model.
 #' Here we used varied thresholds: `0.25`, `0.5`, and `0.75`.}
+#' \item{\bold{continuous Boyce index (CBI)} is made with a 100 resolution of
+#' moving windows and Kendall method.}
 #' \item{
 #' \bold{ROC_ratio} curve plots the proportion of presences falling above a
 #' range of thresholds against the proportion of cells falling
@@ -138,6 +140,7 @@
 #'   occ_pred = mod$pred_train$prediction,
 #'   var_pred = na.omit(as.vector(mod$prediction[[1]])))
 #' print(eval_train)
+#' plot(eval_train)
 #'
 evaluate_po <- function(model,
                         occ_pred,
@@ -182,11 +185,8 @@ evaluate_po <- function(model,
   # CBI
   boy <- ecospat.boyce(fit = var_pred,
                        obs = occ_pred,
-                       PEplot = F,
-                       method = 'spearman')
-  if (is.null(boy$Spearman.cor))
-    boy$Spearman.cor <- boy$cor
-  cbi <- boy$Spearman.cor
+                       method = 'kendall',
+                       PEplot = F)
 
   # AUC_ratio
   roc_r <- .roc_ratio(occ_pred, var_pred)
