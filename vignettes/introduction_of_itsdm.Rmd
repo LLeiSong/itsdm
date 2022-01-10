@@ -467,7 +467,7 @@ pa_map; plot(pa_map)
 
 <img src="intro-pa-1.png" title="plot of chunk pa" alt="plot of chunk pa" style="display: block; margin: auto;" />
 
-## Analyze vairable dependence
+## Analyze variable dependence
 
 It is always helpful to understand the dependence among variables. The result of function `shap_dependence` or `it_sdm$shap_dependence` can be used to analyze variable dependence with each other.
 

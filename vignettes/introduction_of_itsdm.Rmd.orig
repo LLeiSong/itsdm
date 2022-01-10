@@ -304,7 +304,7 @@ pa_map <- convert_to_pa(it_sdm$prediction,
 pa_map; plot(pa_map)
 ```
 
-## Analyze vairable dependence
+## Analyze variable dependence
 
 It is always helpful to understand the dependence among variables. The result of function `shap_dependence` or `it_sdm$shap_dependence` can be used to analyze variable dependence with each other.
 
