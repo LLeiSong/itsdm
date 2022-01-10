@@ -51,7 +51,7 @@ env_vars <- system.file(
 
 # Modeling
 mod_virtual_species <- isotree_po(occ = occ, occ_test = occ_test,
-  variables = env_vars, ntrees = 50, sample_rate = 0.8, ndim = 2L,
+  variables = env_vars, ntrees = 50, sample_size = 0.8, ndim = 2L,
   seed = 123L)
 suit <- probability(mod_virtual_species$model,
   mod_virtual_species$variables)

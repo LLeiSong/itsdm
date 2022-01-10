@@ -70,7 +70,7 @@
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 50,
-#'   sample_rate = 0.8, ndim = 2L,
+#'   sample_size = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
 #'   check_variable = FALSE)

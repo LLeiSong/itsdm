@@ -209,7 +209,7 @@ Here we build a SDM using extended isolation forest (with `ndim = 2`) and a samp
 it_sdm <- isotree_po(occ = occ_sf,
                      occ_test = occ_test_sf,
                      variables = variables,
-                     sample_rate = 0.8,
+                     sample_size = 0.8,
                      ndim = 2)
 ```
 

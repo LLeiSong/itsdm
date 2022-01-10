@@ -11,8 +11,7 @@ isotree_po(
   variables,
   categ_vars = NULL,
   ntrees = 100L,
-  sample_size = NA,
-  sample_rate = 1,
+  sample_size = 1,
   ndim = 1L,
   seed = 10L,
   ...,
@@ -48,15 +47,8 @@ variables. Must be the same as the names in \code{variables}.}
 be integer, which you could use function \code{\link{as.integer}} to convert to.
 The default is \code{100L}.}
 
-\item{sample_size}{(\code{integer} or \code{NULL}) Alternative argument for \code{sample_rate}.
-If not \code{NULL}, it should be a number for sampling size in \verb{[2, nrow(occ)]}.
-It must be integer, which you could use function \code{\link{as.integer}} to
-convert to. The default is \code{NULL}.
-Only set either \code{sample_size} or \code{sample_rate}.}
-
-\item{sample_rate}{(\code{numeric} or \code{NULL}) Alternative argument for \code{sample_size}.
-If not \code{NULL}, it should be a rate for sampling size in \verb{[0, 1]}.
-The default is \code{NULL}. Only set either \code{sample_size} or \code{sample_rate}.}
+\item{sample_size}{(\code{numeric}) It should be a rate for sampling size in \verb{[0, 1]}.
+The default is \code{1.0}.}
 
 \item{ndim}{(\code{integer}) ExtensionLevel for isolation forest. It must
 be integer, which you could use function \code{\link{as.integer}} to convert
@@ -171,7 +163,7 @@ env_vars <- system.file(
 mod_virtual_species <- isotree_po(
   occ = occ, occ_test = occ_test,
   variables = env_vars, ntrees = 10,
-  sample_rate = 0.6, ndim = 1L,
+  sample_size = 0.6, ndim = 1L,
   seed = 123L)
 
 # Check results

@@ -134,7 +134,7 @@
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 50,
-#'   sample_rate = 0.8, ndim = 2L,
+#'   sample_size = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
 #'   check_variable = FALSE)
@@ -214,7 +214,7 @@ plot.MarginalResponse <- function(x,
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 50,
-#'   sample_rate = 0.8, ndim = 2L,
+#'   sample_size = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
 #'   check_variable = FALSE)
@@ -299,7 +299,7 @@ plot.IndependentResponse <- function(x,
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 50,
-#'   sample_rate = 0.8, ndim = 3L,
+#'   sample_size = 0.8, ndim = 3L,
 #'   seed = 123L, response = FALSE,
 #'   check_variable = FALSE)
 #'
@@ -559,7 +559,7 @@ plot.ShapDependence <- function(x,
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 50,
-#'   sample_rate = 0.8, ndim = 3L,
+#'   sample_size = 0.8, ndim = 3L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
 #'   check_variable = FALSE)
@@ -739,7 +739,7 @@ plot.SpatialResponse <- function(x,
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 50,
-#'   sample_rate = 0.8, ndim = 1L,
+#'   sample_size = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
 #'   check_variable = FALSE)
@@ -877,7 +877,7 @@ plot.VariableContribution <- function(x,
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 50,
-#'   sample_rate = 0.8, ndim = 1L,
+#'   sample_size = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
 #'   check_variable = FALSE)
@@ -1154,7 +1154,7 @@ plot.VariableAnalysis <- function(x, ...) {
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 50,
-#'   sample_rate = 0.8, ndim = 2L,
+#'   sample_size = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
 #'   check_variable = FALSE)
@@ -1202,8 +1202,6 @@ plot.POEvaluation <- function(x, ...) {
           legend.position = 'top')
 
   ## CBI
-  if (is.null(po_eval$boyce$Spearman.cor))
-    po_eval$boyce$Spearman.cor <- po_eval$boyce$cor
   cbi_bins <- data.frame(f_ratio = po_eval$boyce$F.ratio,
                          hs = po_eval$boyce$HS)
   p_boy <- ggplot(cbi_bins, aes(y = .data$f_ratio,
@@ -1343,7 +1341,7 @@ plot.POEvaluation <- function(x, ...) {
 #' mod <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 50,
-#'   sample_rate = 0.8, ndim = 1L,
+#'   sample_size = 0.8, ndim = 1L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
 #'   check_variable = FALSE)

@@ -1,3 +1,25 @@
+## Update (version 0.1.1)
+
+Changes to this version are minor and can be found in `NEWS.md`.
+
+## Test environments
+
+1. Local macOS Monterey 12.1, R version 4.0.2
+
+2. Github actions
+
+- Microsoft Windows Server 2019 10.0.17763, R version 4.1.2 (2021-11-01)
+- Ubuntu 20.04.3 LTS, R version 4.1.2 (2021-11-01)
+- Ubuntu 20.04.3 LTS, R Under development (unstable) (2022-01-01 r81419)
+- Ubuntu 20.04.3 LTS, R version 4.0.5 (2021-03-31)
+
+3. `devtools` check
+
+- Windows, R Under development, `devtools::check_win_devel()`
+- Windows, R version 4.1.2, `devtools::check_win_release()`
+- Windows, R version 4.0.5, `devtools::check_win_oldrelease()`
+- Linux, `devtools::check_rhub()`
+
 ## Resubmission
 
 This is a resubmission. Thanks very much for the comments from Gregor Seyer. The issues pointed out are fixed. The responses are as follows:

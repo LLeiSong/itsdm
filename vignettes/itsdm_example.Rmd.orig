@@ -240,7 +240,7 @@ it_sdm <- isotree_po(occ = occ_sf,
                      variables = variables,
                      categ_vars = c('wdpa', 'landcover'),
                      ntrees = 200L,
-                     sample_rate = 0.9,
+                     sample_size = 0.9,
                      ndim = 4,
                      seed = 10L)
 ```

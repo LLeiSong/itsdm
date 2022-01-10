@@ -19,14 +19,8 @@
 #' @param ntrees (`integer`) The number of trees for the isolation forest. It must
 #' be integer, which you could use function \code{\link{as.integer}} to convert to.
 #' The default is `100L`.
-#' @param sample_size (`integer` or `NULL`) Alternative argument for `sample_rate`.
-#' If not `NULL`, it should be a number for sampling size in `[2, nrow(occ)]`.
-#' It must be integer, which you could use function \code{\link{as.integer}} to
-#' convert to. The default is `NULL`.
-#' Only set either `sample_size` or `sample_rate`.
-#' @param sample_rate (`numeric` or `NULL`) Alternative argument for `sample_size`.
-#' If not `NULL`, it should be a rate for sampling size in `[0, 1]`.
-#' The default is `NULL`. Only set either `sample_size` or `sample_rate`.
+#' @param sample_size (`numeric`) It should be a rate for sampling size in `[0, 1]`.
+#' The default is `1.0`.
 #' @param ndim (`integer`) ExtensionLevel for isolation forest. It must
 #' be integer, which you could use function \code{\link{as.integer}} to convert
 #' to. Also, it must be no smaller than the dimension of environmental variables.
@@ -168,7 +162,7 @@
 #' mod_virtual_species <- isotree_po(
 #'   occ = occ, occ_test = occ_test,
 #'   variables = env_vars, ntrees = 10,
-#'   sample_rate = 0.6, ndim = 1L,
+#'   sample_size = 0.6, ndim = 1L,
 #'   seed = 123L)
 #'
 #' # Check results
@@ -201,8 +195,7 @@ isotree_po <- function(
   categ_vars = NULL, # categorical variables
   # Isotree-related inputs
   ntrees = 100L, # number of trees
-  sample_size = NA, # sample size
-  sample_rate = 1.0, # sample rate
+  sample_size = 1.0, # sample size
   ndim = 1L, # extension level
   seed = 10L, # random seed, must be integer
   # Other arguments of isolation.forest
@@ -231,11 +224,8 @@ isotree_po <- function(
     variables, c('RasterStack', 'stars'))
   checkmate::assert_vector(categ_vars, null.ok = T)
   checkmate::assert_int(ntrees)
-  checkmate::assert_int(
-    sample_size, lower = 2,
-    upper = nrow(occ), na.ok = T)
   checkmate::assert_number(
-    sample_rate, lower = 0,
+    sample_size, lower = 0,
     upper = 1, na.ok = T)
   if (is(variables, 'RasterStack')) dim_max <- nlayers(variables)
   if (is(variables, 'stars')) {
@@ -273,12 +263,6 @@ isotree_po <- function(
       (!is(occ_test, 'Spatial'))) {
     if(!all(c("x", "y") %in% colnames(occ_test))){
       stop("There must be x and y column in occ_test.")}}
-  if (!is.na(sample_size) & !is.na(sample_rate)){
-    stop('Only set sample_size or sample_rate.')
-  } else if (is.na(sample_size) & is.na(sample_rate)) {
-    warning('No sample_size or sample_rate set. Use full sample.')
-    sample_rate <- 1.0
-  }
 
   # Reformat the inputs
   # Variables
@@ -360,9 +344,6 @@ isotree_po <- function(
     pts_occ_test <- pts_occ_test %>% select(.data$geometry)
   } else {
     occ_test_mat <- NULL}
-
-  # Sample size
-  if (is.na(sample_size)) sample_size <- round(nrow(occ_mat) * sample_rate)
 
   # Train the model
   isotree_mod <- isolation.forest(
