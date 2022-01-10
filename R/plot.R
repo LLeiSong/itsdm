@@ -1202,6 +1202,8 @@ plot.POEvaluation <- function(x, ...) {
           legend.position = 'top')
 
   ## CBI
+  if (is.null(po_eval$boyce$Spearman.cor))
+    po_eval$boyce$Spearman.cor <- po_eval$boyce$cor
   cbi_bins <- data.frame(f_ratio = po_eval$boyce$F.ratio,
                          hs = po_eval$boyce$HS)
   p_boy <- ggplot(cbi_bins, aes(y = .data$f_ratio,

@@ -114,32 +114,16 @@ independent_response <- function(model,
     # Remove and modify some arguments not works
     # for single-variable model, other arguments
     # inherit from model object.
-    isolation.forest(
-      ind_var_occ,
-      ntrees = model$params$ntrees,
-      sample_size = model$params$sample_size,
-      ndim = 1,
-      ntry = model$params$ntry,
-      max_depth = model$params$max_depth,
-      prob_pick_avg_gain = model$params$prob_pick_avg_gain,
-      prob_pick_pooled_gain = model$params$prob_pick_pooled_gain,
-      prob_split_avg_gain = model$params$prob_split_avg_gain,
-      prob_split_pooled_gain = model$params$prob_split_pooled_gain,
-      min_gain = model$params$min_gain,
-      missing_action = model$params$missing_action,
-      categ_split_type = model$params$categ_split_type,
-      all_perm = model$params$all_perm,
-      coef_by_prop = model$params$coef_by_prop,
-      weights_as_sample_prob = model$params$weights_as_sample_prob,
-      sample_with_replacement = model$params$sample_with_replacement,
-      penalize_range = model$params$penalize_range,
-      weigh_by_kurtosis = model$params$weigh_by_kurtosis,
-      coefs = model$params$coefs,
-      assume_full_distr = model$params$assume_full_distr,
-      build_imputer = model$params$build_imputer,
-      min_imp_obs = model$params$min_imp_obs,
-      depth_imp = model$params$depth_imp,
-      weigh_imp_rows = model$params$weigh_imp_rows)}) %>%
+    args_iforest <- c(
+      list(data=ind_var_occ, seed=model$random_seed, nthreads=model$nthreads),
+      model$params
+    )
+    args_iforest$ndim <- 1
+    args_iforest$ncols_per_tree <- min(ncol(args_iforest$data), args_iforest$ncols_per_tree)
+    if (args_iforest$new_categ_action == "impute") {
+      args_iforest$new_categ_action <- "weighted"
+    }
+    do.call(isolation.forest, args_iforest)}) %>%
     setNames(bands)
 
   ## Split numeric and categorical

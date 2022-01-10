@@ -199,32 +199,16 @@ variable_analysis <- function(model,
     this_vars <- variables %>% select(all_of(nm))
 
     ## Fit model
-    this_model <- isolation.forest(
-      this_var_occ,
-      ntrees = model$params$ntrees,
-      sample_size = model$params$sample_size,
-      ndim = 1,
-      ntry = model$params$ntry,
-      max_depth = model$params$max_depth,
-      prob_pick_avg_gain = model$params$prob_pick_avg_gain,
-      prob_pick_pooled_gain = model$params$prob_pick_pooled_gain,
-      prob_split_avg_gain = model$params$prob_split_avg_gain,
-      prob_split_pooled_gain = model$params$prob_split_pooled_gain,
-      min_gain = model$params$min_gain,
-      missing_action = model$params$missing_action,
-      categ_split_type = model$params$categ_split_type,
-      all_perm = model$params$all_perm,
-      coef_by_prop = model$params$coef_by_prop,
-      weights_as_sample_prob = model$params$weights_as_sample_prob,
-      sample_with_replacement = model$params$sample_with_replacement,
-      penalize_range = model$params$penalize_range,
-      weigh_by_kurtosis = model$params$weigh_by_kurtosis,
-      coefs = model$params$coefs,
-      assume_full_distr = model$params$assume_full_distr,
-      build_imputer = model$params$build_imputer,
-      min_imp_obs = model$params$min_imp_obs,
-      depth_imp = model$params$depth_imp,
-      weigh_imp_rows = model$params$weigh_imp_rows)
+    args_iforest <- c(
+      list(data=this_var_occ, seed=model$random_seed, nthreads=model$nthreads),
+      model$params
+    )
+    args_iforest$ndim <- 1
+    args_iforest$ncols_per_tree <- min(ncol(args_iforest$data), args_iforest$ncols_per_tree)
+    if (args_iforest$new_categ_action == "impute") {
+      args_iforest$new_categ_action <- "weighted"
+    }
+    this_model <- do.call(isolation.forest, args_iforest)
 
     ## Prediction
     ## Raster
@@ -274,33 +258,25 @@ variable_analysis <- function(model,
     except_vars <- variables %>% select(all_of(nms))
 
     ## Fit model
-    except_model <- isolation.forest(
-      except_var_occ,
-      ntrees = model$params$ntrees,
-      sample_size = model$params$sample_size,
-      ndim = ifelse(ncol(except_var_occ) >= model$params$ndim,
-                    model$params$ndim, ncol(except_var_occ)),
-      ntry = model$params$ntry,
-      max_depth = model$params$max_depth,
-      prob_pick_avg_gain = model$params$prob_pick_avg_gain,
-      prob_pick_pooled_gain = model$params$prob_pick_pooled_gain,
-      prob_split_avg_gain = model$params$prob_split_avg_gain,
-      prob_split_pooled_gain = model$params$prob_split_pooled_gain,
-      min_gain = model$params$min_gain,
-      missing_action = model$params$missing_action,
-      categ_split_type = model$params$categ_split_type,
-      all_perm = model$params$all_perm,
-      coef_by_prop = model$params$coef_by_prop,
-      weights_as_sample_prob = model$params$weights_as_sample_prob,
-      sample_with_replacement = model$params$sample_with_replacement,
-      penalize_range = model$params$penalize_range,
-      weigh_by_kurtosis = model$params$weigh_by_kurtosis,
-      coefs = model$params$coefs,
-      assume_full_distr = model$params$assume_full_distr,
-      build_imputer = model$params$build_imputer,
-      min_imp_obs = model$params$min_imp_obs,
-      depth_imp = model$params$depth_imp,
-      weigh_imp_rows = model$params$weigh_imp_rows)
+    args_iforest <- c(
+      list(data=except_var_occ, seed=model$random_seed, nthreads=model$nthreads),
+      model$params
+    )
+    args_iforest$ndim <- min(ncol(args_iforest$data), args_iforest$ndim)
+    args_iforest$ncols_per_tree <- min(ncol(args_iforest$data), args_iforest$ncols_per_tree)
+    if (args_iforest$ndim == 1) {
+      if (args_iforest$new_categ_action == "impute") {
+        args_iforest$new_categ_action <- "weighted"
+      }
+    } else {
+      if (args_iforest$missing_action == "divide") {
+        args_iforest$missing_action <- "impute"
+      }
+      if (args_iforest$missing_action == "weighted") {
+        args_iforest$missing_action <- "impute"
+      }
+    }
+    except_model <- do.call(isolation.forest, args_iforest)
 
     ## Prediction
     ## Raster
