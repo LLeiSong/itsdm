@@ -1,8 +1,8 @@
 ## Update (version 0.1.1)
 
-Changes to this version are minor and can be found in `NEWS.md`.
+Changes to this version are minor and can be found in `NEWS.md`. Because there is an update in dependency `ecospat` that will break some functions. Additionally, the author of the dependency `isotree` suggests some updates. A new submission would be necessary to keep `isotree` updating smoothly.
 
-## Test environments
+### Test environments
 
 1. Local macOS Monterey 12.1, R version 4.0.2
 
