@@ -11,7 +11,7 @@ Authors@R:
              family = "Estes",
              role = "ths",
              email = "lestes@clarku.edu"))
-Description: This is a package to do purely presence-only species
+Description: Collection of R functions to do purely presence-only species
     distribution modeling with isolation forest (iForest) and its
     variations such as Extended isolation forest and SCiForest. See the
     details of these methods in references: Liu, F.T., Ting, K.M. and
