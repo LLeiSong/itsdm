@@ -26,7 +26,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -74,26 +74,37 @@
     <dl><dt>model</dt>
 <dd><p>(Any predictive model). In this package, it is <code>isolation_forest</code>.
 It could be the item <code>model</code> of <code>POIsotree</code> made by function <code><a href="isotree_po.html">isotree_po</a></code>.</p></dd>
+
+
 <dt>var_occ</dt>
 <dd><p>(<code>data.frame</code>, <code>tibble</code>) The <code>data.frame</code> style table that
 include values of environmental variables at occurrence locations.</p></dd>
+
+
 <dt>variables</dt>
 <dd><p>(<code>stars</code>) The <code>stars</code> of environmental variables. It should have
 multiple <code>attributes</code> instead of <code>dims</code>. If you have <code>raster</code> object instead, you
 could use <code><a href="https://r-spatial.github.io/stars/reference/st_as_stars.html" class="external-link">st_as_stars</a></code> to convert it to <code>stars</code> or use
 <code><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">read_stars</a></code> directly read source data as a <code>stars</code>. You also could
 use item <code>variables</code> of <code>POIsotree</code> made by function <code><a href="isotree_po.html">isotree_po</a></code>.</p></dd>
+
+
 <dt>si</dt>
 <dd><p>(<code>integer</code>) The number of samples to generate response curves.
 If it is too small, the response curves might be biased.
 The default value is <code>1000</code>.</p></dd>
+
+
 <dt>visualize</dt>
 <dd><p>(<code>logical</code>) if <code>TRUE</code>, plot the response curves.
 The default is <code>FALSE</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>(<code>MarginalResponse</code>) A nested list of</p><ul><li><p>responses_cont (<code>list</code>) A list of response values of continuous variables</p></li>
+    
+
+<p>(<code>MarginalResponse</code>) A nested list of</p><ul><li><p>responses_cont (<code>list</code>) A list of response values of continuous variables</p></li>
 <li><p>responses_cat (<code>list</code>) A list of response values of categorical variables</p></li>
 </ul></div>
     <div id="details">
@@ -111,7 +122,7 @@ the strong correlation from original environmental variable stack.</p>
 <ul><li><p>Elith, Jane,
 et al. "The evaluation strip: a new and robust method for plotting predicted
 responses from species distribution models." <em>Ecological modelling</em>
-186.3 (2005): 280-289.doi: <a href="https://doi.org/10.1016/j.ecolmodel.2004.12.007" class="external-link">10.1016/j.ecolmodel.2004.12.007</a></p></li>
+186.3 (2005): 280-289.<a href="https://doi.org/10.1016/j.ecolmodel.2004.12.007" class="external-link">doi:10.1016/j.ecolmodel.2004.12.007</a></p></li>
 </ul></div>
     <div id="see-also">
     <h2>See also</h2>
@@ -170,7 +181,7 @@ responses from species distribution models." <em>Ecological modelling</em>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

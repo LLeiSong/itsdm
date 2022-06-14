@@ -28,7 +28,7 @@ does not work on categorical variables."><!-- mathjax --><script src="https://cd
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -83,10 +83,14 @@ does not work on categorical variables.</p>
     <dl><dt>img_stack</dt>
 <dd><p>(<code>stars</code> or <code>RasterStack</code>)
 The image stack to work on.</p></dd>
+
+
 <dt>threshold</dt>
 <dd><p>(<code>numeric</code>) The threshold number of Pearson
 correlation that indicates two variables are strongly correlated.
 The default is 0.5.</p></dd>
+
+
 <dt>preferred_vars</dt>
 <dd><p>(<code>vector</code> of <code>character</code>) The preferred
 variables <b>in order</b> in dimension reduction. The preferred variables
@@ -94,6 +98,8 @@ will move to the beginning before the reduction. So make sure they are
 placed in order. Furthermore, setting preferred_vars does not guarantee
 they can survive. For example, one preferred variable that is placed later
 has strong correlation with former preferred variable.</p></dd>
+
+
 <dt>samples</dt>
 <dd><p>(<code><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf</a></code> or <code>sp</code>) The samples to reduce
 dimension.
@@ -101,10 +107,13 @@ If not <code>NULL</code>, it can take <code><a href="https://r-spatial.github.io
 <code>SpatialPointsDataFrame</code>, <code>SpatialPoints</code>, etc.
 If <code>NULL</code>, the whole raster stack would be used.
 The default is <code>NULL</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>(<code>ReducedImageStack</code>) A list of</p><ul><li><p>threshold (<code>numeric</code>) The threshold set in function inputs</p></li>
+    
+
+<p>(<code>ReducedImageStack</code>) A list of</p><ul><li><p>threshold (<code>numeric</code>) The threshold set in function inputs</p></li>
 <li><p>img_reduced (<code>stars</code>) The image stack after dimension reduction</p></li>
 <li><p>cors_original (<code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code>) A table of Pearson
 correlations between all variables.</p></li>
@@ -138,7 +147,7 @@ correlations between variables after dimension reduction.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

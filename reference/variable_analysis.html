@@ -32,7 +32,7 @@ SHapley Additive exPlanations (SHAP) according to Shapley values
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -91,31 +91,46 @@ result of model using all variables</p></li>
     <dl><dt>model</dt>
 <dd><p>(<code>isolation_forest</code>) The extended isolation forest SDM. It could be
 the item <code>model</code> of <code>POIsotree</code> made by function <code><a href="isotree_po.html">isotree_po</a></code>.</p></dd>
+
+
 <dt>pts_occ</dt>
 <dd><p>(<code>sf</code>) The <code>sf</code> style table that
 include training occurrence locations.</p></dd>
+
+
 <dt>pts_occ_test</dt>
 <dd><p>(<code>sf</code>, or <code>NULL</code>) The <code>sf</code> style
 table that include occurrence locations of test.
 If <code>NULL</code>, it would be set the same as <code>var_occ</code>. The default is <code>NULL</code>.</p></dd>
+
+
 <dt>variables</dt>
 <dd><p>(<code>stars</code>) The <code>stars</code> of environmental variables. It should have
 multiple <code>attributes</code> instead of <code>dims</code>. If you have <code>raster</code> object instead, you
 could use <code><a href="https://r-spatial.github.io/stars/reference/st_as_stars.html" class="external-link">st_as_stars</a></code> to convert it to <code>stars</code> or use
 <code><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">read_stars</a></code> directly read source data as a <code>stars</code>.</p></dd>
+
+
 <dt>shap_nsim</dt>
 <dd><p>(<code>integer</code>) The number of Monte Carlo repetitions in SHAP
 method to use for estimating each Shapley value. See details in documentation of
 function <code><a href="https://dplyr.tidyverse.org/reference/explain.html" class="external-link">explain</a></code> in package <code>fastshap</code>.</p></dd>
+
+
 <dt>visualize</dt>
 <dd><p>(<code>logical</code>) If <code>TRUE</code>, plot the analysis figures.
 The default is <code>FALSE</code>.</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>(<code>integer</code>) The seed for any random progress. The default is <code>10L</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>(<code>VariableAnalysis</code>) A list of</p><ul><li><p>variables (<code>vector</code> of <code>character</code>) The names of environmental variables</p></li>
+    
+
+<p>(<code>VariableAnalysis</code>) A list of</p><ul><li><p>variables (<code>vector</code> of <code>character</code>) The names of environmental variables</p></li>
 <li><p>pearson_correlation (<code>tibble</code>) A table of Jackknife test based on Pearson correlation</p></li>
 <li><p>full_AUC_ratio (<code>tibble</code>) A table of AUC ratio of training and test dataset using all variables,
 that act as references for Jackknife test</p></li>
@@ -152,11 +167,11 @@ negative affect. Please check references for more details if you are interested 
 <ul><li><p>Peterson,
 A. Townsend, Monica Papeş, and Jorge Soberón. "Rethinking receiver operating
 characteristic analysis applications in ecological niche modeling."
-<em>Ecological modelling</em> 213.1 (2008): 63-72.doi: <a href="https://doi.org/10.1016/j.ecolmodel.2007.11.008" class="external-link">10.1016/j.ecolmodel.2007.11.008</a></p></li>
+<em>Ecological modelling</em> 213.1 (2008): 63-72.<a href="https://doi.org/10.1016/j.ecolmodel.2007.11.008" class="external-link">doi:10.1016/j.ecolmodel.2007.11.008</a></p></li>
 <li><p>Strumbelj, Erik,
 and Igor Kononenko. "Explaining prediction models and individual predictions
 with feature contributions." <em>Knowledge and information systems</em>
-41.3 (2014): 647-665.doi: <a href="https://doi.org/10.1007/s10115-013-0679-x" class="external-link">10.1007/s10115-013-0679-x</a></p></li>
+41.3 (2014): 647-665.<a href="https://doi.org/10.1007/s10115-013-0679-x" class="external-link">doi:10.1007/s10115-013-0679-x</a></p></li>
 <li><p><a href="http://proceedings.mlr.press/v119/sundararajan20b.html" class="external-link">Sundara
 rajan, Mukund, and Amir Najmi. "The many Shapley values for model explanation
 ." <em>International Conference on Machine Learning</em>. PMLR, 2020.</a></p></li>
@@ -224,7 +239,7 @@ rajan, Mukund, and Amir Najmi. "The many Shapley values for model explanation
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

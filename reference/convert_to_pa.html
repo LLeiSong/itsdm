@@ -27,7 +27,7 @@ convert predicted suitability map to presence-absence map."><!-- mathjax --><scr
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -86,41 +86,62 @@ convert predicted suitability map to presence-absence map.</p>
     <h2>Arguments</h2>
     <dl><dt>suitability</dt>
 <dd><p>(<code>stars</code> or <code>RasterLayer</code>) The suitability raster.</p></dd>
+
+
 <dt>method</dt>
 <dd><p>(<code>character</code>) The conversion method, must be one of
 'threshold', 'logistic', and 'linear'. The default is 'logistic'.</p></dd>
+
+
 <dt>beta</dt>
 <dd><p>(<code>numeric</code>) Works for 'threshold' or 'logistic' method.
 If <code>method</code> is threshold, then <code>beta</code> is the threshold value to cutoff.
 If <code>method</code> is logistic, it is the sigmoid midpoint. The default is <code>0.5</code>.</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>(<code>numeric</code>) Works for logistic method.
 It is the logistic growth rate or steepness of the curve.
 The default is <code>-.05</code>.</p></dd>
+
+
 <dt>a</dt>
 <dd><p>(<code>numeric</code>) Works for linear method. It is the slope of the line.
 The default is <code>1</code>.</p></dd>
+
+
 <dt>b</dt>
 <dd><p>(<code>numeric</code>) Works for linear method.
 It is the intercept of the line. The default is <code>0</code>.</p></dd>
+
+
 <dt>species_prevalence</dt>
 <dd><p>(<code>numeric</code> or <code>NA</code>) Works for all three methods.
 It is the species prevalence to classify suitability map.
 It could be <code>NA</code>, when the will be calculated automatically
 based on other arguments. The default is <code>NA</code>.</p></dd>
+
+
 <dt>threshold</dt>
 <dd><p>(<code>numeric</code>) The threshold used to convert probability of
 occurrence to presence-absence map. It ranges in <code>[0, 1]</code>. The default is 0.5.</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>(<code>integer</code>) The seed for random progress. The default is <code>10L</code></p></dd>
+
+
 <dt>visualize</dt>
 <dd><p>(<code>logical</code>) If <code>TRUE</code>, plot map of suitability,
 probability of occurrence, and presence-absence together.
 The default is <code>TRUE</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>(<code>PAConversion</code>) A list of</p><ul><li><p>suitability (<code>stars</code>) The input suitability map</p></li>
+    
+
+<p>(<code>PAConversion</code>) A list of</p><ul><li><p>suitability (<code>stars</code>) The input suitability map</p></li>
 <li><p>probability_of_occurrence (<code>stars</code>) The map of occurrence probability</p></li>
 <li><p>pa_conversion (<code>list</code>) A list of conversion arguments</p></li>
 <li><p>pa_map (<code>stars</code>) The presence-absence map</p></li>
@@ -200,7 +221,7 @@ onvertToPA in package <code>virtualspecies</code></a></p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

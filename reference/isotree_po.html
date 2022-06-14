@@ -27,7 +27,7 @@ species distribution modeling and optionally do model explanation."><!-- mathjax
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -94,60 +94,91 @@ species distribution modeling and optionally do model explanation.</p>
 The occurrence dataset for training.
 There must be column <code>x</code> and <code>y</code> for coordinates if
 it is a regular <code>data.frame</code>.</p></dd>
+
+
 <dt>occ_test</dt>
 <dd><p>(<code>data.frame</code>, <code>sf</code>, <code>SpatialPointsDataFrame</code>, or <code>NULL</code>)
 The occurrence dataset for independent test. The same structure as <code>occ</code>.
 If not <code>NULL</code>, there must be column <code>x</code> and <code>y</code> for coordinates when it is a
 regular <code>data.frame</code>. If <code>NULL</code>, no independent test will be used.
 The default is <code>NULL</code>.</p></dd>
+
+
 <dt>occ_crs</dt>
 <dd><p>(<code>numeric</code> or <code>crs</code>) The EPSG number or
 <code>crs</code> object of occurrence CRS.
 The default value is <code>4326</code>, which is the geographic coordinate system.</p></dd>
+
+
 <dt>variables</dt>
 <dd><p>(<code>RasterStack</code> or <code>stars</code>) The stack of environmental variables.</p></dd>
+
+
 <dt>categ_vars</dt>
 <dd><p>(<code>vector</code> of <code>character</code> or <code>NULL</code>) The names of categorical
 variables. Must be the same as the names in <code>variables</code>.</p></dd>
+
+
 <dt>ntrees</dt>
 <dd><p>(<code>integer</code>) The number of trees for the isolation forest. It must
 be integer, which you could use function <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></code> to convert to.
 The default is <code>100L</code>.</p></dd>
+
+
 <dt>sample_size</dt>
 <dd><p>(<code>numeric</code>) It should be a rate for sampling size in <code>[0, 1]</code>.
 The default is <code>1.0</code>.</p></dd>
+
+
 <dt>ndim</dt>
 <dd><p>(<code>integer</code>) ExtensionLevel for isolation forest. It must
 be integer, which you could use function <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></code> to convert
 to. Also, it must be no smaller than the dimension of environmental variables.
 When it is 1, the model is a traditional isolation forest, otherwise the model
 is an extended isolation forest. The default is 1.</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>(<code>integer</code>) The random seed used in the modeling. It should be an
 integer. The default is <code>10L</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Other arguments that <code>isolation.forest</code> needs.</p></dd>
+
+
 <dt>offset</dt>
 <dd><p>(<code>numeric</code>) The offset to adjust fitted suitability. The default
 is zero. Highly recommend to leave it as default.</p></dd>
+
+
 <dt>response</dt>
 <dd><p>(<code>logical</code>) If <code>TRUE</code>, generate response curves.
 The default is <code>TRUE</code>.</p></dd>
+
+
 <dt>spatial_response</dt>
 <dd><p>(<code>logical</code>) If <code>TRUE</code>, generate spatial response maps.
 The default is <code>TRUE</code> because it might be slow. NOTE that here SHAP-based map
 is not generated because it is slow. If you want it be mapped, you could call
 function <code><a href="spatial_response.html">spatial_response</a></code> to make it.</p></dd>
+
+
 <dt>check_variable</dt>
 <dd><p>(<code>logical</code>) If <code>TRUE</code>, check the variable importance.
 The default is <code>TRUE</code>.</p></dd>
+
+
 <dt>visualize</dt>
 <dd><p>(<code>logical</code>) If <code>TRUE</code>, generate the essential figures
 related to the model. The default is <code>FALSE</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>(<code>POIsotree</code>) A list of</p><ul><li><p>model (<code>isolation.forest</code>) The threshold set in
+    
+
+<p>(<code>POIsotree</code>) A list of</p><ul><li><p>model (<code>isolation.forest</code>) The threshold set in
 function inputs</p></li>
 <li><p>variables (<code>stars</code>) The formatted image stack of
 environmental variables</p></li>
@@ -203,20 +234,20 @@ the R documentation of function <code>isolation.forest</code>.</p>
 <ul><li><p>Liu, Fei
 Tony, Kai Ming Ting, and Zhi-Hua Zhou. "Isolation forest."
 <em>2008 eighth ieee international conference on data mining</em>.IEEE, 2008.
-doi: <a href="https://doi.org/10.1109/ICDM.2008.17" class="external-link">10.1109/ICDM.2008.17</a></p></li>
+<a href="https://doi.org/10.1109/ICDM.2008.17" class="external-link">doi:10.1109/ICDM.2008.17</a></p></li>
 <li><p>Liu, Fei Tony, Kai Ming
 Ting, and Zhi-Hua Zhou. "Isolation-based anomaly detection."
 <em>ACM Transactions on Knowledge Discovery from Data (TKDD)</em> 6.1 (2012): 1-39.
-doi: <a href="https://doi.org/10.1145/2133360.2133363" class="external-link">10.1145/2133360.2133363</a></p></li>
+<a href="https://doi.org/10.1145/2133360.2133363" class="external-link">doi:10.1145/2133360.2133363</a></p></li>
 <li><p>Liu, Fei Tony,
 Kai Ming Ting, and Zhi-Hua Zhou. "On detecting clustered anomalies using
 SCiForest." <em>Joint European Conference on Machine Learning and
 Knowledge Discovery in Databases</em>. Springer, Berlin, Heidelberg, 2010.
-doi: <a href="https://doi.org/10.1007/978-3-642-15883-4_18" class="external-link">10.1007/978-3-642-15883-4_18</a></p></li>
+<a href="https://doi.org/10.1007/978-3-642-15883-4_18" class="external-link">doi:10.1007/978-3-642-15883-4_18</a></p></li>
 <li><p>Ha
 riri, Sahand, Matias Carrasco Kind, and Robert J. Brunner. "Extended
 isolation forest." <em>IEEE Transactions on Knowledge and Data Engineering (2019)</em>.
-doi: <a href="https://doi.org/10.1109/TKDE.2019.2947676" class="external-link">10.1109/TKDE.2019.2947676</a></p></li>
+<a href="https://doi.org/10.1109/TKDE.2019.2947676" class="external-link">doi:10.1109/TKDE.2019.2947676</a></p></li>
 <li><p><a href="https://github.com/david-cortes/isotree" class="external-link">https://github.com/david-cortes/isotree</a></p></li>
 <li><p>References of related feature such as response curves and variable importance
 will be listed under their own functions</p></li>
@@ -297,7 +328,7 @@ will be listed under their own functions</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
