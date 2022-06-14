@@ -94,7 +94,7 @@ cmcc_bioclim <- function(bry = NULL,
              # Download to local
              temp <- tempfile()
              dl <- try(download.file(url, temp))
-             if (class(dl) == "try-error") {
+             if (inherits(dl, "try-error")) {
                Sys.sleep(10)
                download.file(url, temp)
              }
