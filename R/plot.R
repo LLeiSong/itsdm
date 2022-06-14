@@ -1242,12 +1242,12 @@ plot.POEvaluation <- function(x, ...) {
       scale_color_manual(
         '',
         values = c('roc' = 'black', 'chance' = 'grey'),
-        labels = c(expression('Empirical ROC'['ratio']~'curve'),
+        labels = c('Empirical ROC curve',
                    'Chance line')) +
       scale_linetype_manual(
         '',
         values = c('roc' = 'solid', 'chance' = 'dashed'),
-        labels = c(expression('Empirical ROC'['ratio']~'curve'),
+        labels = c('Empirical ROC curve',
                    'Chance line')) +
       theme_minimal() +
       theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),

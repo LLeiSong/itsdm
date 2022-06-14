@@ -1,7 +1,7 @@
 ---
 title: "Using `itsdm` to a real species: Africa savanna elephant"
 author: "Lei Song"
-date: "2022-01-10"
+date: "2022-06-13"
 output:
   rmarkdown::html_document:
     theme: readable
@@ -159,33 +159,34 @@ occ_outliers <- suspicious_env_outliers(
   variables = variables,
   z_outlier = 16,
   outliers_print = 4L)
-#> Reporting top 4 outliers [out of 19 found]
+#> Reporting top 4 outliers [out of 27 found]
 #> 
 #> row [122] - suspicious column: [bio14] - suspicious value: [1.00]
-#> 	distribution: 98.718% <= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 77]
+#> 	distribution: 98.701% <= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 76]
 #> 	given:
 #> 		[bio11] > [25.71] (value: 26.22)
 #> 
 #> 
 #> row [1] - suspicious column: [bio17] - suspicious value: [1.00]
-#> 	distribution: 96.154% <= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 25]
+#> 	distribution: 96.000% <= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 24]
 #> 	given:
 #> 		[bio14] <= [1.00] (value: 0.00)
 #> 		[bio5] > [39.79] (value: 41.24)
 #> 
 #> 
-#> row [44] - suspicious column: [bio17] - suspicious value: [1.00]
-#> 	distribution: 92.000% <= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 23]
+#> row [520] - suspicious column: [bio19] - suspicious value: [36.00]
+#> 	distribution: 97.222% >= 509.00 - [mean: 614.97] - [sd: 40.52] - [norm. obs: 35]
 #> 	given:
-#> 		[bio14] <= [1.00] (value: 0.00)
-#> 		[bio10] > [32.05] (value: 32.09)
+#> 		[bio17] > [2.00] (value: 27.00)
+#> 		[bio5] > [35.53] (value: 36.72)
 #> 
 #> 
-#> row [98] - suspicious column: [bio14] - suspicious value: [1.00]
-#> 	distribution: 98.790% <= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 245]
+#> row [12] - suspicious column: [wdpa] - suspicious value: [1.00]
+#> 	distribution: 96.667% >= 2.00 - [mean: 2.00] - [sd: 0.00] - [norm. obs: 29]
 #> 	given:
-#> 		[bio17] <= [8.00] (value: 6.00)
-#> 		[bio18] <= [145.00] (value: 99.00)
+#> 		[bio1] > [20.48] (value: 28.85)
+#> 		[bio2] > [12.75] (value: 13.08)
+#> 		[bio15] > [123.23] (value: 124.89)
 plot(occ_outliers)
 ```
 
@@ -221,14 +222,14 @@ var_con_rdc
 #> ================================================================================
 #> Reduced correlations:
 #>        bio1  bio2  bio3  bio6 bio12 bio14 bio18 bio19
-#> bio1   1.00  0.02 -0.22  0.64  0.05 -0.40 -0.41  0.28
-#> bio2   0.02  1.00 -0.43 -0.66 -0.54 -0.47 -0.34 -0.29
-#> bio3  -0.22 -0.43  1.00  0.43  0.33  0.42  0.24  0.22
-#> bio6   0.64 -0.66  0.43  1.00  0.45  0.10 -0.08  0.48
-#> bio12  0.05 -0.54  0.33  0.45  1.00  0.59  0.50  0.54
-#> bio14 -0.40 -0.47  0.42  0.10  0.59  1.00  0.44  0.29
-#> bio18 -0.41 -0.34  0.24 -0.08  0.50  0.44  1.00 -0.06
-#> bio19  0.28 -0.29  0.22  0.48  0.54  0.29 -0.06  1.00
+#> bio1   1.00  0.02 -0.22  0.64  0.06 -0.39 -0.41  0.28
+#> bio2   0.02  1.00 -0.43 -0.66 -0.55 -0.46 -0.34 -0.29
+#> bio3  -0.22 -0.43  1.00  0.44  0.33  0.44  0.23  0.22
+#> bio6   0.64 -0.66  0.44  1.00  0.46  0.11 -0.09  0.48
+#> bio12  0.06 -0.55  0.33  0.46  1.00  0.59  0.49  0.54
+#> bio14 -0.39 -0.46  0.44  0.11  0.59  1.00  0.43  0.30
+#> bio18 -0.41 -0.34  0.23 -0.09  0.49  0.43  1.00 -0.07
+#> bio19  0.28 -0.29  0.22  0.48  0.54  0.30 -0.07  1.00
 
 # Put together
 var_con <- var_con_rdc$img_reduced
@@ -310,22 +311,22 @@ Presence-only model evaluation
 it_sdm$eval_test
 #> ===================================
 #> Presence-only evaluation:
-#> CVI with 0.25 threshold:      0.018
-#> CVI with 0.5 threshold:       0.252
-#> CVI with 0.75 threshold:      0.557
-#> CBI:                          0.639
-#> AUC (ratio)                   0.871
+#> CVI with 0.25 threshold:      0.013
+#> CVI with 0.5 threshold:       0.132
+#> CVI with 0.75 threshold:      0.576
+#> CBI:                          0.600
+#> AUC (ratio)                   0.873
 #> ===================================
 #> Presence-background evaluation:
-#> Sensitivity:                  0.805
-#> Specificity:                  0.766
-#> TSS:                          0.571
-#> AUC:                          0.859
+#> Sensitivity:                  0.749
+#> Specificity:                  0.838
+#> TSS:                          0.587
+#> AUC:                          0.862
 #> Similarity indices:
-#> Jaccard's similarity index:   0.652
-#> Sørensen's similarity index:  0.789
-#> Overprediction rate:          0.226
-#> Underprediction rate:         0.195
+#> Jaccard's similarity index:   0.644
+#> Sørensen's similarity index:  0.784
+#> Overprediction rate:          0.179
+#> Underprediction rate:         0.251
 plot(it_sdm$eval_test)
 ```
 
@@ -391,116 +392,116 @@ it_sdm$variable_analysis
 #> Jackknife test
 #> Based on Pearson correlation (Max value is 1)
 #> [Training dataset]:
-#> bio12     With only: #################################### 0.806
-#>           Without  : ############################################ 0.967
-#> bio18     With only: ############################## 0.674
-#>           Without  : ############################################ 0.98
-#> bio3      With only: ############################# 0.643
-#>           Without  : ############################################ 0.976
+#> bio12     With only: ################################## 0.764
+#>           Without  : ############################################ 0.975
+#> bio18     With only: ############################ 0.617
+#>           Without  : ############################################ 0.983
 #> landcover With only: ########################### 0.604
-#>           Without  : ############################################# 0.99
-#> bio6      With only: ######################## 0.54
-#>           Without  : ############################################ 0.984
-#> bio19     With only: ####################### 0.501
-#>           Without  : ########################################### 0.964
-#> wdpa      With only: ################### 0.429
-#>           Without  : ############################################ 0.988
-#> bio1      With only: ################### 0.427
-#>           Without  : ############################################ 0.98
-#> bio2      With only: ################ 0.364
-#>           Without  : ############################################ 0.975
-#> bio14     With only: ############### 0.337
 #>           Without  : ############################################ 0.987
-#> [Test dataset]:
-#> bio12     With only: #################################### 0.802
-#>           Without  : ########################################### 0.966
-#> bio3      With only: ############################# 0.636
+#> bio3      With only: ########################### 0.603
 #>           Without  : ############################################ 0.978
-#> bio18     With only: ########################### 0.604
-#>           Without  : ############################################ 0.981
-#> landcover With only: ######################### 0.565
-#>           Without  : ############################################# 0.989
-#> bio19     With only: ######################## 0.539
-#>           Without  : ########################################### 0.96
-#> bio6      With only: ###################### 0.492
+#> bio6      With only: ######################## 0.533
 #>           Without  : ############################################ 0.982
-#> wdpa      With only: ################### 0.413
-#>           Without  : ############################################ 0.988
-#> bio1      With only: ################## 0.407
-#>           Without  : ############################################ 0.981
-#> bio14     With only: ################ 0.356
+#> bio19     With only: ####################### 0.506
+#>           Without  : ########################################### 0.966
+#> bio1      With only: #################### 0.454
+#>           Without  : ############################################ 0.982
+#> wdpa      With only: #################### 0.453
 #>           Without  : ############################################ 0.986
-#> bio2      With only: ############### 0.328
-#>           Without  : ############################################ 0.975
+#> bio14     With only: ################# 0.368
+#>           Without  : ############################################ 0.979
+#> bio2      With only: ############## 0.321
+#>           Without  : ############################################ 0.985
+#> [Test dataset]:
+#> bio12     With only: ################################### 0.78
+#>           Without  : ############################################ 0.972
+#> bio3      With only: ########################### 0.6
+#>           Without  : ############################################ 0.977
+#> landcover With only: ########################## 0.589
+#>           Without  : ############################################ 0.988
+#> bio18     With only: ########################## 0.575
+#>           Without  : ############################################ 0.985
+#> bio19     With only: ######################## 0.535
+#>           Without  : ########################################### 0.964
+#> bio6      With only: ###################### 0.48
+#>           Without  : ############################################ 0.982
+#> wdpa      With only: #################### 0.438
+#>           Without  : ############################################ 0.985
+#> bio1      With only: ################## 0.407
+#>           Without  : ############################################ 0.98
+#> bio14     With only: ################ 0.363
+#>           Without  : ############################################ 0.98
+#> bio2      With only: ########### 0.252
+#>           Without  : ############################################ 0.986
 #> ======================================================================
 #> Jackknife test
-#> Based on AUC ratio (Max value of traing and test are 0.877 and 0.871)
+#> Based on AUC ratio (Max value of traing and test are 0.877 and 0.873)
 #> [Training dataset]:
-#> bio12     With only: ###################################### 0.847
-#>           Without  : ###################################### 0.838
-#> bio18     With only: #################################### 0.795
-#>           Without  : ####################################### 0.867
-#> bio3      With only: ################################## 0.758
-#>           Without  : ######################################## 0.883
-#> bio6      With only: ################################# 0.727
-#>           Without  : ####################################### 0.872
-#> landcover With only: ################################ 0.719
-#>           Without  : ######################################## 0.879
-#> bio1      With only: ################################ 0.701
-#>           Without  : ####################################### 0.87
-#> wdpa      With only: ############################## 0.677
-#>           Without  : ####################################### 0.875
-#> bio2      With only: ############################## 0.662
-#>           Without  : ####################################### 0.857
-#> bio19     With only: ######################## 0.526
-#>           Without  : ######################################## 0.88
-#> bio14     With only: ############## 0.317
-#>           Without  : ######################################## 0.888
-#> [Test dataset]:
-#> bio12     With only: ##################################### 0.816
-#>           Without  : ##################################### 0.831
-#> bio18     With only: ################################## 0.761
-#>           Without  : ####################################### 0.866
-#> bio3      With only: ################################## 0.756
-#>           Without  : ####################################### 0.876
-#> landcover With only: ############################### 0.699
-#>           Without  : ####################################### 0.876
-#> bio6      With only: ############################### 0.69
-#>           Without  : ####################################### 0.871
-#> bio1      With only: ############################### 0.685
-#>           Without  : ####################################### 0.865
-#> wdpa      With only: ############################### 0.678
+#> bio12     With only: ###################################### 0.843
+#>           Without  : ###################################### 0.845
+#> bio18     With only: #################################### 0.799
 #>           Without  : ####################################### 0.869
-#> bio2      With only: ########################### 0.592
-#>           Without  : ####################################### 0.857
-#> bio19     With only: ######################## 0.535
-#>           Without  : ####################################### 0.874
-#> bio14     With only: ############## 0.315
+#> bio3      With only: ################################## 0.763
 #>           Without  : ######################################## 0.881
+#> bio6      With only: ################################# 0.724
+#>           Without  : ####################################### 0.866
+#> bio1      With only: ############################### 0.698
+#>           Without  : ######################################## 0.881
+#> wdpa      With only: ############################### 0.679
+#>           Without  : ####################################### 0.864
+#> landcover With only: ############################## 0.677
+#>           Without  : ######################################## 0.884
+#> bio2      With only: ############################# 0.654
+#>           Without  : ######################################## 0.878
+#> bio19     With only: ######################## 0.528
+#>           Without  : ######################################## 0.88
+#> bio14     With only: ############## 0.312
+#>           Without  : ######################################## 0.891
+#> [Test dataset]:
+#> bio12     With only: ##################################### 0.824
+#>           Without  : ###################################### 0.841
+#> bio18     With only: ################################## 0.758
+#>           Without  : ####################################### 0.865
+#> bio3      With only: ################################# 0.732
+#>           Without  : ####################################### 0.875
+#> landcover With only: ############################### 0.689
+#>           Without  : ####################################### 0.873
+#> bio1      With only: ############################### 0.684
+#>           Without  : ####################################### 0.875
+#> bio6      With only: ############################## 0.674
+#>           Without  : ####################################### 0.862
+#> wdpa      With only: ############################## 0.666
+#>           Without  : ####################################### 0.858
+#> bio2      With only: ########################### 0.591
+#>           Without  : ####################################### 0.873
+#> bio19     With only: ######################## 0.525
+#>           Without  : ####################################### 0.875
+#> bio14     With only: ############## 0.31
+#>           Without  : ######################################## 0.884
 #> ======================================================================
 #> SHAP (mean(|Shapley value|))
 #> [Training dataset]:
-#> bio12     : ############################################ 0.017
-#> bio19     : ####################################### 0.015
-#> bio3      : ################################## 0.013
-#> bio18     : ################################ 0.012
-#> bio1      : ######################### 0.009
-#> bio6      : ####################### 0.009
-#> bio2      : ##################### 0.008
-#> bio14     : ##################### 0.008
-#> landcover : ############## 0.005
-#> wdpa      : ############ 0.005
-#> [Test dataset]:
-#> bio12     : ############################################# 0.017
-#> bio19     : ########################################## 0.016
+#> bio12     : ########################################### 0.016
+#> bio19     : ################################# 0.012
 #> bio3      : ################################ 0.012
-#> bio18     : ############################## 0.011
-#> bio1      : ######################### 0.009
-#> bio6      : ####################### 0.008
+#> bio18     : ########################### 0.01
+#> bio1      : ######################## 0.009
 #> bio14     : ###################### 0.008
+#> bio6      : ##################### 0.008
 #> bio2      : ##################### 0.008
-#> landcover : ############## 0.005
-#> wdpa      : ############ 0.005
+#> landcover : ################### 0.007
+#> wdpa      : ################## 0.006
+#> [Test dataset]:
+#> bio12     : ############################################# 0.016
+#> bio19     : #################################### 0.013
+#> bio3      : ################################ 0.012
+#> bio18     : ######################### 0.009
+#> bio1      : ######################## 0.009
+#> bio14     : ###################### 0.008
+#> bio6      : #################### 0.007
+#> bio2      : #################### 0.007
+#> landcover : ################## 0.007
+#> wdpa      : ################## 0.007
 ```
 
 From the text above, annual precipitation is the most important decisive factor. Because precipitation decides the supply of food and water. Temperature is not a very critical constraint to elephants. It indicates that compared to food/water, elephants could tolerate the extreme temperature. Bio14 (Precipitation of Driest Month) is a not-important variable agreed by the Jackknife test and SHAP test. One assumption is that all animals must deal with limited precipitation over the driest month, common in the African savanna. In the Jackknife test, landcover has a relatively high contribution when working alone. But the model performs very well without it. The same to wdpa. In the Shapley value-based test, these two variables are judged as less important. It indicates that landcover and wdpa strongly correlate with some other variables. Changing the way to use them might be necessary to improve the model performance.
@@ -576,9 +577,9 @@ var_contrib_outliers <- variable_contrib(
 ## By default, it only plot the most 5 important variables for each observation
 ## You could change `num_features` to show more variables
 plot(var_contrib_outliers, plot_each_obs = T)
+#> Error in plot.VariableContribution(var_contrib_outliers, plot_each_obs = T): Too many observations in VariableContribution to plot separately. 
+#> Consider to use less observations in VariableContribution or set plot_each_obs to FALSE.
 ```
-
-<img src="itsdm-var_contrib-1.png" title="plot of chunk var_contrib" alt="plot of chunk var_contrib" style="display: block; margin: auto;" />
 
 According to feature response curves and this figure, some detected outliers could be removed from training. For example, some features have a strongly negative contribution to observations No.1, No.6, No.8, No.10, and No.15 and they could be excluded.
 
