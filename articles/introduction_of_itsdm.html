@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">itsdm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
       <h1 data-toc-skip>Introduction of <code>itsdm</code> with a virtual species</h1>
                         <h4 data-toc-skip class="author">Lei Song</h4>
             
-            <h4 data-toc-skip class="date">2022-01-10</h4>
+            <h4 data-toc-skip class="date">2022-06-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/LLeiSong/itsdm/blob/HEAD/vignettes/introduction_of_itsdm.Rmd" class="external-link"><code>vignettes/introduction_of_itsdm.Rmd</code></a></small>
       <div class="hidden name"><code>introduction_of_itsdm.Rmd</code></div>
@@ -347,22 +347,22 @@
 <span class="va">it_sdm</span><span class="op">$</span><span class="va">eval_test</span>
 <span class="co">#&gt; ===================================</span>
 <span class="co">#&gt; Presence-only evaluation:</span>
-<span class="co">#&gt; CVI with 0.25 threshold:      0.614</span>
-<span class="co">#&gt; CVI with 0.5 threshold:       0.810</span>
-<span class="co">#&gt; CVI with 0.75 threshold:      0.693</span>
-<span class="co">#&gt; CBI:                          0.978</span>
+<span class="co">#&gt; CVI with 0.25 threshold:      0.640</span>
+<span class="co">#&gt; CVI with 0.5 threshold:       0.809</span>
+<span class="co">#&gt; CVI with 0.75 threshold:      0.704</span>
+<span class="co">#&gt; CBI:                          0.986</span>
 <span class="co">#&gt; AUC (ratio)                   0.942</span>
 <span class="co">#&gt; ===================================</span>
 <span class="co">#&gt; Presence-background evaluation:</span>
-<span class="co">#&gt; Sensitivity:                  0.973</span>
-<span class="co">#&gt; Specificity:                  0.870</span>
-<span class="co">#&gt; TSS:                          0.843</span>
-<span class="co">#&gt; AUC:                          0.946</span>
+<span class="co">#&gt; Sensitivity:                  0.972</span>
+<span class="co">#&gt; Specificity:                  0.865</span>
+<span class="co">#&gt; TSS:                          0.836</span>
+<span class="co">#&gt; AUC:                          0.947</span>
 <span class="co">#&gt; Similarity indices:</span>
-<span class="co">#&gt; Jaccard's similarity index:   0.861</span>
-<span class="co">#&gt; Sørensen's similarity index:  0.925</span>
-<span class="co">#&gt; Overprediction rate:          0.118</span>
-<span class="co">#&gt; Underprediction rate:         0.027</span>
+<span class="co">#&gt; Jaccard's similarity index:   0.856</span>
+<span class="co">#&gt; Sørensen's similarity index:  0.922</span>
+<span class="co">#&gt; Overprediction rate:          0.122</span>
+<span class="co">#&gt; Underprediction rate:         0.028</span>
 <span class="fu"><a href="https://r-spatial.github.io/stars/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">eval_test</span><span class="op">)</span></code></pre></div>
 <p><img src="intro-evaluation-1.png" title="plot of chunk evaluation" alt="plot of chunk evaluation" style="display: block; margin: auto;"></p>
 <p>The result of <code>isotree_po</code> has options to generate response curves and variable analysis together. The response curves include marginal response curves, independent response curves, and Shapley value-based dependence. The variable analysis consists of the Jackknife of Pearson correlation with the result of the full model with all variables and AUC_ratio and variable dependence with SHAP test.</p>
@@ -390,35 +390,35 @@
 <span class="co">#&gt; Jackknife test</span>
 <span class="co">#&gt; Based on Pearson correlation (Max value is 1)</span>
 <span class="co">#&gt; [Training dataset]:</span>
-<span class="co">#&gt; bio12 With only: ####################################### 0.875</span>
-<span class="co">#&gt;       Without  : ########################################## 0.941</span>
-<span class="co">#&gt; bio15 With only: ############################### 0.696</span>
-<span class="co">#&gt;       Without  : ############################################ 0.973</span>
-<span class="co">#&gt; bio5  With only: ############################### 0.687</span>
-<span class="co">#&gt;       Without  : ############################################ 0.984</span>
-<span class="co">#&gt; bio1  With only: ######################### 0.562</span>
-<span class="co">#&gt;       Without  : ############################################ 0.977</span>
-<span class="co">#&gt; [Test dataset]:</span>
-<span class="co">#&gt; bio12 With only: ####################################### 0.865</span>
-<span class="co">#&gt;       Without  : ########################################## 0.938</span>
-<span class="co">#&gt; bio5  With only: ################################ 0.703</span>
-<span class="co">#&gt;       Without  : ############################################ 0.984</span>
-<span class="co">#&gt; bio15 With only: ############################### 0.69</span>
+<span class="co">#&gt; bio12 With only: ######################################## 0.885</span>
+<span class="co">#&gt;       Without  : ########################################## 0.937</span>
+<span class="co">#&gt; bio15 With only: ################################ 0.71</span>
 <span class="co">#&gt;       Without  : ############################################ 0.974</span>
-<span class="co">#&gt; bio1  With only: ######################### 0.554</span>
-<span class="co">#&gt;       Without  : ############################################ 0.978</span>
+<span class="co">#&gt; bio5  With only: ############################### 0.692</span>
+<span class="co">#&gt;       Without  : ############################################ 0.983</span>
+<span class="co">#&gt; bio1  With only: ######################## 0.543</span>
+<span class="co">#&gt;       Without  : ############################################ 0.983</span>
+<span class="co">#&gt; [Test dataset]:</span>
+<span class="co">#&gt; bio12 With only: ####################################### 0.878</span>
+<span class="co">#&gt;       Without  : ########################################## 0.934</span>
+<span class="co">#&gt; bio5  With only: ################################ 0.705</span>
+<span class="co">#&gt;       Without  : ############################################ 0.983</span>
+<span class="co">#&gt; bio15 With only: ################################ 0.703</span>
+<span class="co">#&gt;       Without  : ############################################ 0.976</span>
+<span class="co">#&gt; bio1  With only: ######################## 0.536</span>
+<span class="co">#&gt;       Without  : ############################################ 0.983</span>
 <span class="co">#&gt; ======================================================================</span>
 <span class="co">#&gt; Jackknife test</span>
 <span class="co">#&gt; Based on AUC ratio (Max value of traing and test are 0.946 and 0.942)</span>
 <span class="co">#&gt; [Training dataset]:</span>
 <span class="co">#&gt; bio12 With only: ######################################## 0.898</span>
-<span class="co">#&gt;       Without  : ######################################### 0.922</span>
+<span class="co">#&gt;       Without  : ######################################### 0.921</span>
 <span class="co">#&gt; bio5  With only: ##################################### 0.82</span>
 <span class="co">#&gt;       Without  : ########################################## 0.941</span>
 <span class="co">#&gt; bio15 With only: #################################### 0.801</span>
 <span class="co">#&gt;       Without  : ########################################## 0.94</span>
 <span class="co">#&gt; bio1  With only: ################################## 0.761</span>
-<span class="co">#&gt;       Without  : ########################################## 0.942</span>
+<span class="co">#&gt;       Without  : ########################################## 0.943</span>
 <span class="co">#&gt; [Test dataset]:</span>
 <span class="co">#&gt; bio12 With only: ######################################## 0.878</span>
 <span class="co">#&gt;       Without  : ######################################### 0.919</span>
@@ -427,18 +427,18 @@
 <span class="co">#&gt; bio15 With only: ################################### 0.773</span>
 <span class="co">#&gt;       Without  : ########################################## 0.936</span>
 <span class="co">#&gt; bio1  With only: ################################# 0.735</span>
-<span class="co">#&gt;       Without  : ########################################## 0.937</span>
+<span class="co">#&gt;       Without  : ########################################## 0.938</span>
 <span class="co">#&gt; ======================================================================</span>
 <span class="co">#&gt; SHAP (mean(|Shapley value|))</span>
 <span class="co">#&gt; [Training dataset]:</span>
 <span class="co">#&gt; bio12 : ############################################ 0.054</span>
-<span class="co">#&gt; bio15 : ########################## 0.032</span>
-<span class="co">#&gt; bio5  : ######################### 0.031</span>
-<span class="co">#&gt; bio1  : ###################### 0.026</span>
+<span class="co">#&gt; bio15 : ######################### 0.031</span>
+<span class="co">#&gt; bio5  : ######################### 0.03</span>
+<span class="co">#&gt; bio1  : ##################### 0.026</span>
 <span class="co">#&gt; [Test dataset]:</span>
 <span class="co">#&gt; bio12 : ############################################# 0.055</span>
-<span class="co">#&gt; bio15 : ########################## 0.032</span>
 <span class="co">#&gt; bio5  : ########################## 0.032</span>
+<span class="co">#&gt; bio15 : ######################### 0.031</span>
 <span class="co">#&gt; bio1  : ##################### 0.026</span>
 
 <span class="co"># We also could plot variable importance out</span>
@@ -476,7 +476,7 @@
 <span class="co">#&gt; Logistic conversion</span>
 <span class="co">#&gt; beta = 0.7</span>
 <span class="co">#&gt; alpha = -0.05</span>
-<span class="co">#&gt; species prevalence = 0.105415337755068</span></code></pre></div>
+<span class="co">#&gt; species prevalence = 0.105503625307627</span></code></pre></div>
 <p><img src="intro-pa-1.png" title="plot of chunk pa" alt="plot of chunk pa" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
