@@ -128,9 +128,7 @@ occ_clean <- occ$data %>%
   dframe() %>%
   coord_impossible() %>%
   coord_incomplete() %>%
-  coord_unlikely() %>%
-  # Will remove more duplicates according to raster resolution
-  dedup()
+  coord_unlikely()
 
 # Step2: Range-cleaning on occurrence
 ## For example, Africa savanna elephant only could appear in Africa
@@ -366,10 +364,13 @@ Sometimes, we are interested in some observations, for instance, the outliers de
 
 ```{r var_contrib, fig.align='center', fig.width=7, fig.height=9}
 ## Analyze variable contribution for interested observations.
-## For example, outliers.
+## For example, the first 10 outliers detected.
 var_occ <- it_sdm$var_train %>% st_drop_geometry()
 var_analysis <- var_occ %>%
-  slice(occ_outliers$outliers %>% pull(suspious_row))
+  slice(occ_outliers$outliers %>%
+          arrange(-outlier_score) %>%
+          slice(1:10) %>%
+          pull(suspious_row))
 var_contrib_outliers <- variable_contrib(
   it_sdm$model,
   var_occ,
@@ -381,7 +382,7 @@ var_contrib_outliers <- variable_contrib(
 plot(var_contrib_outliers, plot_each_obs = T)
 ```
 
-According to feature response curves and this figure, some detected outliers could be removed from training. For example, some features have a strongly negative contribution to observations No.1, No.6, No.8, No.10, and No.15 and they could be excluded.
+According to feature response curves and this figure, some detected outliers could be removed from training. For example, some features have a strongly negative contribution to observations No.2, No.4, and No.6 and they could be excluded.
 
 ## Conclusion
 
