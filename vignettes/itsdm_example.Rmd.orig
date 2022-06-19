@@ -262,7 +262,7 @@ This indicates African savanna elephants have a very large potential habitat on 
 
 Presence-only model evaluation
 
-```{r eval, fig.align='center', fig.width=6, fig.height=6}
+```{r eval, fig.align='center', fig.width=7, fig.height=7}
 # According to training dataset
 # it_sdm$eval_train
 # plot(it_sdm$eval_train)

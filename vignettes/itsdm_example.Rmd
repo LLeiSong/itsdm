@@ -1,7 +1,7 @@
 ---
 title: "Using `itsdm` to a real species: Africa savanna elephant"
 author: "Lei Song"
-date: "2022-06-13"
+date: "2022-06-19"
 output:
   rmarkdown::html_document:
     theme: readable
@@ -314,7 +314,7 @@ it_sdm$eval_test
 #> CVI with 0.25 threshold:      0.013
 #> CVI with 0.5 threshold:       0.132
 #> CVI with 0.75 threshold:      0.576
-#> CBI:                          0.600
+#> CBI:                          0.602
 #> AUC (ratio)                   0.873
 #> ===================================
 #> Presence-background evaluation:

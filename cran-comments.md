@@ -1,3 +1,55 @@
+## Update (version 0.1.2)
+
+Changes to this version are minor and can be found in `NEWS.md`. There was an CRAN check warning: *Required orphaned package: `gtools`* in one of the dependencies. Not sure how long the maintainer would fix the issue, so decide to remove the dependency and include an independent function to do the work.
+
+### Test environments
+
+1. Local macOS Monterey 12.4, R version 4.0.4
+
+2. Github actions
+
+- Windows Server x64 (build 20348), R version 4.2.0 (2022-04-22 ucrt)
+- Ubuntu 20.04.4 LTS, R version 4.2.0 (2022-04-22)
+- Ubuntu 20.04.4 LTS, R Under development (unstable) (2022-06-18 r82503)
+- Ubuntu 20.04.4 LTS, R version 4.1.3 (2022-03-10)
+- macOS Big Sur/Monterey 10.16, R version 4.2.0 (2022-04-22)
+
+3. `devtools` check
+
+- Windows, R Under development (unstable) (2022-06-18 r82503 ucrt), `devtools::check_win_devel()`
+- Windows, R version 4.2.0 (2022-04-22 ucrt), `devtools::check_win_release()`
+- Windows, R version 4.1.3 (2022-03-10), `devtools::check_win_oldrelease()`
+- Linux, `devtools::check_rhub()`
+
+### R CMD check
+
+There is no error or warning. It got notes related some URLs:
+
+```
+Found the following (possibly) invalid URLs:
+  URL: https://doi.org/10.1002/joc.5086
+    From: man/future_worldclim2.Rd
+          man/worldclim2.Rd
+    Status: 503
+    Message: Service Unavailable
+  URL: https://doi.org/10.1111/jbi.13402
+    From: man/evaluate_po.Rd
+    Status: 503
+    Message: Service Unavailable
+
+Found the following (possibly) invalid file URI:
+  URI: lsong@clarku.edu
+    From: README.md
+
+Found the following (possibly) invalid DOIs:
+  DOI: 10.1002/joc.5086
+    From: DESCRIPTION
+    Status: Service Unavailable
+    Message: 503
+```
+
+I manually check these links and all of them seem still available. One of them is my email address. So I believe these are okay.
+
 ## Resubmission (version 0.1.1)
 
 Due to an dependency loading failure on Windows, the package did not pass the incoming checks. Try it again.

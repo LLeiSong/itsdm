@@ -102,7 +102,6 @@
 #' }
 #'
 #' @importFrom dplyr arrange tibble
-#' @importFrom ecospat ecospat.boyce
 #' @importFrom ROCit rocit ciAUC
 #' @export
 #' @examples
@@ -183,10 +182,9 @@ evaluate_po <- function(model,
   cvi75 <- avi_test - avi_all
 
   # CBI
-  boy <- ecospat.boyce(fit = var_pred,
-                       obs = occ_pred,
-                       method = 'kendall',
-                       PEplot = F)
+  boy <- .cont_boyce(fit = var_pred,
+                     obs = occ_pred,
+                     method = 'kendall')
 
   # AUC_ratio
   roc_r <- .roc_ratio(occ_pred, var_pred)

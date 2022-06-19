@@ -1,3 +1,11 @@
+# itsdm 0.1.2
+
+- Fix a few bugs in README example.
+- Include an independent function to calculate continuous Boyce Index (`.cont_boyce`) in `utils.R` to reduce the pool of dependencies.
+- Make the start message simpler.
+- Fix the duplicated printout in function `print.POEvaluation`.
+- Use `inherits` function to check "try-error" in dataset functions.
+
 # itsdm 0.1.1
 
 ## Changes

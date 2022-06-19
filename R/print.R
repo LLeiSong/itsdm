@@ -324,7 +324,7 @@ print.POEvaluation <- function(x, ...){
   }
 
   # return
-  invisible(return(x))
+  invisible(x)
 }
 
 #' @title Print summary information from ReducedImageStack object.

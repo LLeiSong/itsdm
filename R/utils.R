@@ -282,3 +282,103 @@
   summary(v) %>% sort(decreasing = T) %>%
     `[`(1) %>% names() %>% as.factor()
 }
+
+## A simple function to calculate Boyce Index in Hirzel et al. 2006
+## The objective of this code chunk is to avoid import heavy package
+## the interested users can directly use their packages.
+## Reference from https://github.com/adamlilith/enmSdm/blob/master/R/contBoyce.r
+## and https://github.com/ecospat/ecospat/blob/master/ecospat/R/ecospat.boyce.R
+## License: GNU General Public License v3.0
+#' @importFrom stats cor
+.cont_boyce <- function(obs, fit,
+                       num_bins = 101,
+                       bin_width = 0.1,
+                       auto_window = TRUE,
+                       method = 'spearman',
+                       drop.zero = TRUE,
+                       na.rm = FALSE) {
+  # Check inputs
+  checkmate::check_int(num_bins)
+  checkmate::check_number(bin_width)
+  checkmate::check_choice(method,
+                          choices = c("pearson", "kendall", "spearman"))
+  checkmate::check_logical(auto_window)
+  checkmate::check_logical(drop.zero)
+  checkmate::check_logical(na.rm)
+
+  # if all NAs
+  if (all(is.na(obs)) | all(is.na(fit))) return(NA)
+
+  # [val1, val2) (assumes max value is > 0)
+  residual <- .Machine$double.eps
+  lowest <- ifelse(auto_window, min(c(obs, fit), na.rm = na.rm), 0)
+  highest <- ifelse(auto_window,
+                    max(c(obs, fit), na.rm = na.rm) + residual,
+                    1 + residual)
+
+  window_width <- bin_width * (highest - lowest)
+
+  lows <- seq(lowest, highest - window_width, length.out = num_bins)
+  highs <- seq(lowest + window_width + residual,
+               highest, length.out = num_bins)
+
+  ### tally proportion of test presences/background sites in each class
+  freq_obs_bg <- do.call(rbind, lapply(1:num_bins, function(count_class) {
+    # number of presence predictions in this class
+    obs_in <- obs >= lows[count_class] & obs < highs[count_class]
+    freq_obs <- sum(obs_in, na.rm = na.rm)
+
+    # number of background predictions in this class
+    bg_in <- fit >= lows[count_class] & fit < highs[count_class]
+    freq_bg <- sum(bg_in, na.rm = na.rm)
+
+    data.frame(freq_obs = freq_obs, freq_bg = freq_bg)
+  }))
+  freq_obs <- freq_obs_bg$freq_obs
+  freq_bg <- freq_obs_bg$freq_bg
+  rm(freq_obs_bg)
+
+  # mean bin prediction
+  mean_pred <- rowMeans(cbind(lows, highs))
+
+  # Store original values for return
+  HS <- mean_pred
+  F.ratio <- (freq_obs / length(obs)) / (freq_bg / length(fit))
+
+  # add small number to each bin that has 0 background frequency
+  # but does have a presence frequency > 0
+  if (any(freq_obs > 0 & freq_bg == 0)) {
+    freq_bg[freq_obs > 0 & freq_bg == 0] <- 0.1
+  }
+
+  # remove classes with 0 presence frequency
+  if (drop.zero && (0 %in% freq_obs)) {
+    zeros <- which(freq_obs == 0)
+    mean_pred[zeros] <- NA
+    freq_obs[zeros] <- NA
+    freq_bg[zeros] <- NA
+  }
+
+  # remove classes with 0 background frequency
+  if (any(0 %in% freq_bg)) {
+    zeros <- which(freq_bg == 0)
+    mean_pred[zeros] <- NA
+    freq_obs[zeros] <- NA
+    freq_bg[zeros] <- NA
+  }
+
+  P <- freq_obs / length(obs)
+  E <- freq_bg / length(fit)
+  PE <- P / E
+
+  # remove NAs
+  ids <- !(is.na(mean_pred) | is.na(PE))
+  mean_pred <- mean_pred[ids]
+  PE <- PE[ids]
+
+  # calculate continuous Boyce index (cbi)
+  cbi <- cor(x = mean_pred, y = PE, method = method)
+
+  return(list(F.ratio = F.ratio, cor = round(cbi, 3), HS = HS))
+}
+

@@ -1,16 +1,11 @@
 Package: itsdm
 Title: Isolation Forest-Based Presence-Only Species Distribution Modeling
-Version: 0.1.1
-Authors@R: 
-    c(person(given = "Lei",
-             family = "Song",
-             role = c("aut", "cre"),
-             email = "lsong@clarku.edu",
-             comment = c(ORCID = "0000-0002-4371-1473")),
-      person(given = "Lyndon",
-             family = "Estes",
-             role = "ths",
-             email = "lestes@clarku.edu"))
+Version: 0.1.2
+Authors@R: c(
+    person("Lei", "Song", , "lsong@clarku.edu", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-4371-1473")),
+    person("Lyndon", "Estes", , "lestes@clarku.edu", role = "ths")
+  )
 Description: Collection of R functions to do purely presence-only species
     distribution modeling with isolation forest (iForest) and its
     variations such as Extended isolation forest and SCiForest. See the
@@ -41,7 +36,6 @@ Depends:
 Imports:
     checkmate,
     dplyr,
-    ecospat (>= 3.2.1),
     fastshap,
     ggplot2,
     isotree,
@@ -67,4 +61,4 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
