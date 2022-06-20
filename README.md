@@ -88,7 +88,7 @@ plot(mod$independent_responses,
 
 1. [David Cortes](https://github.com/david-cortes), helps to improve the flexibility of calling `isotree`.
 
-We are welcome any helps! Please make a pull request or reach out to [lsong@clarku.edu](lsong@clarku.edu) if you want to make any contribution.
+We are welcome any helps! Please make a pull request or reach out to lsong@clarku.edu if you want to make any contribution.
 
 ## Funding
 This package is part of project "Combining Spatially-explicit Simulation of Animal Movement and Earth Observation to Reconcile Agriculture and Wildlife Conservation". This project is funded by NASA FINESST program (award number: 80NSSC20K1640).
