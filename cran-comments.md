@@ -1,3 +1,7 @@
+## Resubmission (version 0.1.2)
+
+Remove the unnecessary email link in README.
+
 ## Update (version 0.1.2)
 
 Changes to this version are minor and can be found in `NEWS.md`. For version 0.1.1, there was an CRAN check warning: *Required orphaned package: `gtools`* in one of the dependencies. Not sure how long the maintainer would fix the issue, so decide to remove the dependency and include an internal function to do the work.
