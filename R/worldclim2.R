@@ -185,6 +185,8 @@ worldclim2 <- function(var = "tmin",
             stop('Not valid boundary.')
         }
         clip_imgs <- st_crop(clip_imgs, bry)
+        if (inherits(clip_imgs, "stars_proxy")) {
+          clip_imgs <- st_as_stars(clip_imgs)}
 
         ## Save out
         invisible(lapply(1:n, function(n) {

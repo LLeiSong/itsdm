@@ -163,6 +163,8 @@ future_worldclim2 <- function(var = "tmin",
         clip_imgs <- read_stars(fpath, RasterIO = list(bands = c(1:n)))
         bry <- st_as_sf(bry) %>% st_make_valid()
         clip_imgs <- st_crop(clip_imgs, bry)
+        if (inherits(clip_imgs, "stars_proxy")) {
+          clip_imgs <- st_as_stars(clip_imgs)}
 
         ## Save out
         ### No 30s resolution, so stacking them together is fine.
