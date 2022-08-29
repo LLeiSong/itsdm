@@ -761,8 +761,11 @@ plot.VariableContribution <- function(x,
                                       num_features = 5,
                                       ...) {
   # Checking
-  checkmate::assert_int(num_features, lower = 1, upper = nrow(x$shapley_values))
   checkmate::assert_logical(plot_each_obs)
+  if (isTRUE(plot_each_obs)) {
+    checkmate::assert_int(num_features,
+                          lower = 1, upper = ncol(x$shapley_values))
+  }
   if (isTRUE(plot_each_obs) & nrow(x$shapley_values) > 16) {
     stop(paste0('Too many observations in VariableContribution to plot separately. \n',
              'Consider to use less observations in VariableContribution or set ',

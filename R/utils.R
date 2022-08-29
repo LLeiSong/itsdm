@@ -269,7 +269,7 @@
     rst_stack
   } else {
     for (nm in categ_vars) {
-      rst_stack[[nm]] <- deratify(rst_stack[[nm]])
+      rst_stack[[nm]] <- deratify(rst_stack[[nm]], complete = TRUE)
     }
     rst_stack
   }
