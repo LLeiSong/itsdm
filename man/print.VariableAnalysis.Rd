@@ -19,6 +19,10 @@ The same object that was passed as input.
 Display the most general and informative characteristics of
 a variable importance object.
 }
+\details{
+If the value is positive, print as "/". If the value is negative,
+then print as "\".
+}
 \examples{
 \donttest{
 # Using a pseudo presence-only occurrence dataset of
