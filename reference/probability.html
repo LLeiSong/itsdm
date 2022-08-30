@@ -68,7 +68,7 @@ environmental suitability and do quantile stretch to <code>[0, 1]</code>.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">probability</span><span class="op">(</span><span class="va">x</span>, <span class="va">vars</span>, offset <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">probability</span><span class="op">(</span><span class="va">x</span>, <span class="va">vars</span>, offset <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -102,39 +102,38 @@ is zero. Highly recommend to leave it as default.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span>
-<span class="co"># Using a pseudo presence-only occurrence dataset of</span>
-<span class="co"># virtual species provided in this package</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/stars/" class="external-link">stars</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LLeiSong/itsdm" class="external-link">itsdm</a></span><span class="op">)</span>
-
-<span class="co"># Prepare data</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"occ_virtual_species"</span><span class="op">)</span>
-<span class="va">occ_virtual_species</span> <span class="op">&lt;-</span> <span class="va">occ_virtual_species</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span>
-<span class="va">occ</span> <span class="op">&lt;-</span> <span class="va">occ_virtual_species</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html" class="external-link">sample_frac</a></span><span class="op">(</span><span class="fl">0.7</span><span class="op">)</span>
-<span class="va">occ_test</span> <span class="op">&lt;-</span> <span class="va">occ_virtual_species</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">occ</span><span class="op">$</span><span class="va">id</span><span class="op">)</span>
-<span class="va">occ</span> <span class="op">&lt;-</span> <span class="va">occ</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">id</span><span class="op">)</span>
-<span class="va">occ_test</span> <span class="op">&lt;-</span> <span class="va">occ_test</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">id</span><span class="op">)</span>
-
-<span class="va">env_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>
-  <span class="st">'extdata/bioclim_tanzania_10min.tif'</span>,
-  package <span class="op">=</span> <span class="st">'itsdm'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">read_stars</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="st">'band'</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">12</span>, <span class="fl">16</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Modeling</span>
-<span class="va">mod_virtual_species</span> <span class="op">&lt;-</span> <span class="fu"><a href="isotree_po.html">isotree_po</a></span><span class="op">(</span>occ <span class="op">=</span> <span class="va">occ</span>, occ_test <span class="op">=</span> <span class="va">occ_test</span>,
-  variables <span class="op">=</span> <span class="va">env_vars</span>, ntrees <span class="op">=</span> <span class="fl">50</span>, sample_size <span class="op">=</span> <span class="fl">0.8</span>, ndim <span class="op">=</span> <span class="fl">2L</span>,
-  seed <span class="op">=</span> <span class="fl">123L</span><span class="op">)</span>
-<span class="va">suit</span> <span class="op">&lt;-</span> <span class="fu">probability</span><span class="op">(</span><span class="va">mod_virtual_species</span><span class="op">$</span><span class="va">model</span>,
-  <span class="va">mod_virtual_species</span><span class="op">$</span><span class="va">variables</span><span class="op">)</span>
-<span class="op">}</span>
-
-</code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="co"># Using a pseudo presence-only occurrence dataset of</span></span>
+<span><span class="co"># virtual species provided in this package</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/stars/" class="external-link">stars</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LLeiSong/itsdm" class="external-link">itsdm</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Prepare data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"occ_virtual_species"</span><span class="op">)</span></span>
+<span><span class="va">occ_virtual_species</span> <span class="op">&lt;-</span> <span class="va">occ_virtual_species</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span></span>
+<span><span class="va">occ</span> <span class="op">&lt;-</span> <span class="va">occ_virtual_species</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html" class="external-link">sample_frac</a></span><span class="op">(</span><span class="fl">0.7</span><span class="op">)</span></span>
+<span><span class="va">occ_test</span> <span class="op">&lt;-</span> <span class="va">occ_virtual_species</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">occ</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
+<span><span class="va">occ</span> <span class="op">&lt;-</span> <span class="va">occ</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">id</span><span class="op">)</span></span>
+<span><span class="va">occ_test</span> <span class="op">&lt;-</span> <span class="va">occ_test</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">id</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">env_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
+<span>  <span class="st">'extdata/bioclim_tanzania_10min.tif'</span>,</span>
+<span>  package <span class="op">=</span> <span class="st">'itsdm'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">read_stars</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="st">'band'</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">12</span>, <span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Modeling</span></span>
+<span><span class="va">mod_virtual_species</span> <span class="op">&lt;-</span> <span class="fu"><a href="isotree_po.html">isotree_po</a></span><span class="op">(</span>occ <span class="op">=</span> <span class="va">occ</span>, occ_test <span class="op">=</span> <span class="va">occ_test</span>,</span>
+<span>  variables <span class="op">=</span> <span class="va">env_vars</span>, ntrees <span class="op">=</span> <span class="fl">50</span>, sample_size <span class="op">=</span> <span class="fl">0.8</span>, ndim <span class="op">=</span> <span class="fl">2L</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">123L</span><span class="op">)</span></span>
+<span><span class="va">suit</span> <span class="op">&lt;-</span> <span class="fu">probability</span><span class="op">(</span><span class="va">mod_virtual_species</span><span class="op">$</span><span class="va">model</span>,</span>
+<span>  <span class="va">mod_virtual_species</span><span class="op">$</span><span class="va">variables</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span></code></pre></div>
     </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -148,7 +147,7 @@ is zero. Highly recommend to leave it as default.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

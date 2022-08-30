@@ -98,18 +98,18 @@
 </h2>
 <p>Install your missing packages</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"rnaturalearth"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"rgbif"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"lubridate"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
-  ropensci <span class="op">=</span> <span class="st">'https://ropensci.r-universe.dev'</span>,
-  CRAN <span class="op">=</span> <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'scrubr'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"rnaturalearth"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"rgbif"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"lubridate"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  ropensci <span class="op">=</span> <span class="st">'https://ropensci.r-universe.dev'</span>,</span>
+<span>  CRAN <span class="op">=</span> <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'scrubr'</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LLeiSong/itsdm" class="external-link">itsdm</a></span>, quietly <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span>, quietly <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, quietly <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
-<span class="va">select</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="va"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LLeiSong/itsdm" class="external-link">itsdm</a></span>, quietly <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span>, quietly <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, quietly <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span><span class="va">select</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="va"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="prepare-environmental-variables">Prepare environmental variables<a class="anchor" aria-label="anchor" href="#prepare-environmental-variables"></a>
@@ -122,31 +122,31 @@
 </ol>
 <p>Note that maps of the protected area and land cover types are prepared and provided in this package. You could use <code>system.file</code> with file names to find them like the following.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/stars/" class="external-link">stars</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ropenscilabs/rnaturalearth" class="external-link">rnaturalearth</a></span>, quietly <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
-
-<span class="co"># Bioclimatic variables</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"mainland_africa"</span><span class="op">)</span>
-<span class="va">bios</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/worldclim2.html">worldclim2</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">'bio'</span>,
-                   bry <span class="op">=</span> <span class="va">mainland_africa</span>,
-                   path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,
-                   nm_mark <span class="op">=</span> <span class="st">'africa'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_normalize.html" class="external-link">st_normalize</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="co"># Protected area</span>
-<span class="va">fname</span> <span class="op">&lt;-</span> <span class="st">'extdata/wdpa_africa_10min.tif'</span>
-<span class="va">wdpa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="va">fname</span>, package <span class="op">=</span> <span class="st">'itsdm'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">read_stars</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="st">'wdpa'</span><span class="op">)</span>
-
-<span class="co"># Land cover</span>
-<span class="va">fname</span> <span class="op">&lt;-</span> <span class="st">'extdata/landcover_africa_10min.tif'</span>
-<span class="va">landcover</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="va">fname</span>, package <span class="op">=</span> <span class="st">'itsdm'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">read_stars</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="st">'landcover'</span><span class="op">)</span>
-
-<span class="co"># Merge them together as variable stack</span>
-<span class="va">variables</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">c</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/stars/reference/merge.html" class="external-link">split</a></span><span class="op">(</span><span class="va">bios</span>, <span class="st">'band'</span><span class="op">)</span>,
-                             <span class="va">wdpa</span>, <span class="va">landcover</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">fname</span>, <span class="va">bios</span>, <span class="va">wdpa</span>, <span class="va">landcover</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/stars/" class="external-link">stars</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ropenscilabs/rnaturalearth" class="external-link">rnaturalearth</a></span>, quietly <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Bioclimatic variables</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"mainland_africa"</span><span class="op">)</span></span>
+<span><span class="va">bios</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/worldclim2.html">worldclim2</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">'bio'</span>,</span>
+<span>                   bry <span class="op">=</span> <span class="va">mainland_africa</span>,</span>
+<span>                   path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                   nm_mark <span class="op">=</span> <span class="st">'africa'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_normalize.html" class="external-link">st_normalize</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Protected area</span></span>
+<span><span class="va">fname</span> <span class="op">&lt;-</span> <span class="st">'extdata/wdpa_africa_10min.tif'</span></span>
+<span><span class="va">wdpa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="va">fname</span>, package <span class="op">=</span> <span class="st">'itsdm'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">read_stars</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="st">'wdpa'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Land cover</span></span>
+<span><span class="va">fname</span> <span class="op">&lt;-</span> <span class="st">'extdata/landcover_africa_10min.tif'</span></span>
+<span><span class="va">landcover</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="va">fname</span>, package <span class="op">=</span> <span class="st">'itsdm'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">read_stars</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="st">'landcover'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Merge them together as variable stack</span></span>
+<span><span class="va">variables</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">c</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">bios</span>, <span class="st">'band'</span><span class="op">)</span>,</span>
+<span>                             <span class="va">wdpa</span>, <span class="va">landcover</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">fname</span>, <span class="va">bios</span>, <span class="va">wdpa</span>, <span class="va">landcover</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="prepare-occurrence-from-gbif">Prepare occurrence from GBIF<a class="anchor" aria-label="anchor" href="#prepare-occurrence-from-gbif"></a>
@@ -158,20 +158,20 @@
 </ol>
 <p>We choose the most recent occurrence observations (2010 to now) with an assumption that landcover changes could be ignorable between 2010 and now.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span>, quietly <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rgbif" class="external-link">rgbif</a></span>, quietly <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
-
-<span class="co">## Set the time interval for querying on GBIF</span>
-<span class="va">start_year</span> <span class="op">&lt;-</span> <span class="fl">2010</span>
-<span class="va">year</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'%s,%s'</span>,  <span class="va">start_year</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/year.html" class="external-link">year</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Search</span>
-<span class="va">nm_search</span> <span class="op">&lt;-</span> <span class="st">"Loxodonta africana (Blumenbach, 1797)"</span>
-<span class="va">occ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/rgbif/reference/occ_search.html" class="external-link">occ_search</a></span><span class="op">(</span>scientificName <span class="op">=</span> <span class="va">nm_search</span>,
-                  hasCoordinate <span class="op">=</span> <span class="cn">TRUE</span>,
-                  limit <span class="op">=</span> <span class="fl">200000</span>,
-                  year <span class="op">=</span> <span class="va">year</span>,
-                  hasGeospatialIssue <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span>, quietly <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rgbif" class="external-link">rgbif</a></span>, quietly <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Set the time interval for querying on GBIF</span></span>
+<span><span class="va">start_year</span> <span class="op">&lt;-</span> <span class="fl">2010</span></span>
+<span><span class="va">year</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'%s,%s'</span>,  <span class="va">start_year</span>, <span class="fu">year</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Search</span></span>
+<span><span class="va">nm_search</span> <span class="op">&lt;-</span> <span class="st">"Loxodonta africana (Blumenbach, 1797)"</span></span>
+<span><span class="va">occ</span> <span class="op">&lt;-</span> <span class="fu">occ_search</span><span class="op">(</span>scientificName <span class="op">=</span> <span class="va">nm_search</span>,</span>
+<span>                  hasCoordinate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                  limit <span class="op">=</span> <span class="fl">200000</span>,</span>
+<span>                  year <span class="op">=</span> <span class="va">year</span>,</span>
+<span>                  hasGeospatialIssue <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>Even though the occurrence dataset obtained from GBIF has high quality and its API provides available options to do some screening. There are still some disturbances contained in occurrence. As a complement, we do extra steps to clean the occurrence data. The steps include:</p>
 <ol style="list-style-type: decimal">
 <li>Basic Geo-cleaning. For example, clean the records with impossible or incomplete coordinates. Or clean the duplicated records. We did this step using package <code>scrubr</code>.</li>
@@ -181,138 +181,138 @@
 <strong>Environmental cleaning</strong>. Detect and/or drop the records with outlier environmental values. We could do this step before dimension reduction of the environmental variable because <code>outlier.tree</code> compares records with the general condition.</li>
 </ol>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scrubr</span>, quietly <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
-
-<span class="co"># Step1: Basic Geo-cleaning on occurrence</span>
-<span class="va">occ_clean</span> <span class="op">&lt;-</span> <span class="va">occ</span><span class="op">$</span><span class="va">data</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">name</span>, <span class="va">decimalLongitude</span>,
-         <span class="va">decimalLatitude</span>, <span class="va">eventDate</span>, <span class="va">key</span><span class="op">)</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'name'</span>, <span class="st">'longitude'</span>,
-             <span class="st">'latitude'</span>, <span class="st">'date'</span>, <span class="st">'key'</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">dframe</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">coord_impossible</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">coord_incomplete</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">coord_unlikely</span><span class="op">(</span><span class="op">)</span>
-
-<span class="co"># Step2: Range-cleaning on occurrence</span>
-<span class="co">## For example, Africa savanna elephant only could appear in Africa</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"mainland_africa"</span><span class="op">)</span>
-<span class="va">occ_clean_sf</span> <span class="op">&lt;-</span> <span class="va">occ_clean</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://r-spatial.github.io/stars/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span>coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'longitude'</span>, <span class="st">'latitude'</span><span class="op">)</span>,
-           crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
-<span class="va">occ_clean_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">st_intersection</a></span><span class="op">(</span><span class="va">mainland_africa</span>, <span class="va">occ_clean_sf</span><span class="op">)</span>
-
-<span class="co"># Step3: Spatial deduction</span>
-<span class="va">occ_clean_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/stars/reference/st_rasterize.html" class="external-link">st_rasterize</a></span><span class="op">(</span>
-  <span class="va">occ_clean_sf</span>,
-  template <span class="op">=</span> <span class="va">variables</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">'bio1'</span><span class="op">)</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>bio1 <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://r-spatial.github.io/stars/reference/st_xy2sfc.html" class="external-link">st_xy2sfc</a></span><span class="op">(</span>as_points <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/stars/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">geometry</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scrubr</span>, quietly <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Step1: Basic Geo-cleaning on occurrence</span></span>
+<span><span class="va">occ_clean</span> <span class="op">&lt;-</span> <span class="va">occ</span><span class="op">$</span><span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">name</span>, <span class="va">decimalLongitude</span>,</span>
+<span>         <span class="va">decimalLatitude</span>, <span class="va">eventDate</span>, <span class="va">key</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'name'</span>, <span class="st">'longitude'</span>,</span>
+<span>             <span class="st">'latitude'</span>, <span class="st">'date'</span>, <span class="st">'key'</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">dframe</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">coord_impossible</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">coord_incomplete</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">coord_unlikely</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Step2: Range-cleaning on occurrence</span></span>
+<span><span class="co">## For example, Africa savanna elephant only could appear in Africa</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"mainland_africa"</span><span class="op">)</span></span>
+<span><span class="va">occ_clean_sf</span> <span class="op">&lt;-</span> <span class="va">occ_clean</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span>coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'longitude'</span>, <span class="st">'latitude'</span><span class="op">)</span>,</span>
+<span>           crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
+<span><span class="va">occ_clean_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">st_intersection</a></span><span class="op">(</span><span class="va">mainland_africa</span>, <span class="va">occ_clean_sf</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Step3: Spatial deduction</span></span>
+<span><span class="va">occ_clean_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/stars/reference/st_rasterize.html" class="external-link">st_rasterize</a></span><span class="op">(</span></span>
+<span>  <span class="va">occ_clean_sf</span>,</span>
+<span>  template <span class="op">=</span> <span class="va">variables</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">'bio1'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>bio1 <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/stars/reference/st_xy2sfc.html" class="external-link">st_xy2sfc</a></span><span class="op">(</span>as_points <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">geometry</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Step4: Environmental-cleaning on occurrence</span>
-<span class="co">## We used a very high z_outliers</span>
-<span class="co">## It is tricky to remove environmental outliers</span>
-<span class="co">## because it is hard to tell if they are outliers or</span>
-<span class="co">## just rare records.</span>
-<span class="va">occ_outliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/suspicious_env_outliers.html">suspicious_env_outliers</a></span><span class="op">(</span>
-  <span class="va">occ_clean_sf</span>,
-  variables <span class="op">=</span> <span class="va">variables</span>,
-  z_outlier <span class="op">=</span> <span class="fl">16</span>,
-  outliers_print <span class="op">=</span> <span class="fl">4L</span><span class="op">)</span>
-<span class="co">#&gt; Reporting top 4 outliers [out of 27 found]</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; row [123] - suspicious column: [bio14] - suspicious value: [1.00]</span>
-<span class="co">#&gt;  distribution: 98.701% &lt;= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 76]</span>
-<span class="co">#&gt;  given:</span>
-<span class="co">#&gt;      [bio11] &gt; [25.71] (value: 26.22)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; row [1] - suspicious column: [bio17] - suspicious value: [1.00]</span>
-<span class="co">#&gt;  distribution: 96.000% &lt;= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 24]</span>
-<span class="co">#&gt;  given:</span>
-<span class="co">#&gt;      [bio14] &lt;= [1.00] (value: 0.00)</span>
-<span class="co">#&gt;      [bio5] &gt; [39.79] (value: 41.24)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; row [521] - suspicious column: [bio19] - suspicious value: [36.00]</span>
-<span class="co">#&gt;  distribution: 97.297% &gt;= 509.00 - [mean: 616.06] - [sd: 40.46] - [norm. obs: 36]</span>
-<span class="co">#&gt;  given:</span>
-<span class="co">#&gt;      [bio17] &gt; [2.00] (value: 27.00)</span>
-<span class="co">#&gt;      [bio5] &gt; [35.53] (value: 36.72)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; row [801] - suspicious column: [bio19] - suspicious value: [1.00]</span>
-<span class="co">#&gt;  distribution: 96.429% &lt;= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 27]</span>
-<span class="co">#&gt;  given:</span>
-<span class="co">#&gt;      [bio13] &lt;= [65.00] (value: 45.00)</span>
-<span class="co">#&gt;      [bio17] &lt;= [2.00] (value: 0.00)</span>
-<span class="fu"><a href="https://r-spatial.github.io/stars/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">occ_outliers</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Step4: Environmental-cleaning on occurrence</span></span>
+<span><span class="co">## We used a very high z_outliers</span></span>
+<span><span class="co">## It is tricky to remove environmental outliers</span></span>
+<span><span class="co">## because it is hard to tell if they are outliers or</span></span>
+<span><span class="co">## just rare records.</span></span>
+<span><span class="va">occ_outliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/suspicious_env_outliers.html">suspicious_env_outliers</a></span><span class="op">(</span></span>
+<span>  <span class="va">occ_clean_sf</span>,</span>
+<span>  variables <span class="op">=</span> <span class="va">variables</span>,</span>
+<span>  z_outlier <span class="op">=</span> <span class="fl">16</span>,</span>
+<span>  outliers_print <span class="op">=</span> <span class="fl">4L</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Reporting top 4 outliers [out of 27 found]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; row [123] - suspicious column: [bio14] - suspicious value: [1.00]</span></span>
+<span><span class="co">#&gt;  distribution: 98.701% &lt;= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 76]</span></span>
+<span><span class="co">#&gt;  given:</span></span>
+<span><span class="co">#&gt;      [bio11] &gt; [25.71] (value: 26.22)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; row [1] - suspicious column: [bio17] - suspicious value: [1.00]</span></span>
+<span><span class="co">#&gt;  distribution: 96.000% &lt;= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 24]</span></span>
+<span><span class="co">#&gt;  given:</span></span>
+<span><span class="co">#&gt;      [bio14] &lt;= [1.00] (value: 0.00)</span></span>
+<span><span class="co">#&gt;      [bio5] &gt; [39.79] (value: 41.24)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; row [521] - suspicious column: [bio19] - suspicious value: [36.00]</span></span>
+<span><span class="co">#&gt;  distribution: 97.297% &gt;= 509.00 - [mean: 616.06] - [sd: 40.46] - [norm. obs: 36]</span></span>
+<span><span class="co">#&gt;  given:</span></span>
+<span><span class="co">#&gt;      [bio17] &gt; [2.00] (value: 27.00)</span></span>
+<span><span class="co">#&gt;      [bio5] &gt; [35.53] (value: 36.72)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; row [801] - suspicious column: [bio19] - suspicious value: [1.00]</span></span>
+<span><span class="co">#&gt;  distribution: 96.429% &lt;= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 27]</span></span>
+<span><span class="co">#&gt;  given:</span></span>
+<span><span class="co">#&gt;      [bio13] &lt;= [65.00] (value: 45.00)</span></span>
+<span><span class="co">#&gt;      [bio17] &lt;= [2.00] (value: 0.00)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">occ_outliers</span><span class="op">)</span></span></code></pre></div>
 <p><img src="itsdm-outliers-1.png" title="plot of chunk outliers" alt="plot of chunk outliers" style="display: block; margin: auto;"></p>
 <p>According to the figure and the prior knowledge of the Africa savanna elephant, we decide not to drop the outliers. The outliers seem more like rare records. In addition, if they are real outliers, the later <code>isolation.forest</code> could detect them again. Now let’s organize the occurrence before the next step.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">occ</span> <span class="op">&lt;-</span> <span class="va">occ_outliers</span><span class="op">$</span><span class="va">pts_occ</span>
-<span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">occ_clean_sf</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">occ</span> <span class="op">&lt;-</span> <span class="va">occ_outliers</span><span class="op">$</span><span class="va">pts_occ</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">occ_clean_sf</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="understand-the-correlations-between-variables">Understand the correlations between variables<a class="anchor" aria-label="anchor" href="#understand-the-correlations-between-variables"></a>
 </h2>
 <p>Function <code>dim_reduce</code> in this package allows the user to reduce the dimensions arbitrarily for numeric environmental variables based on their correlation. Thus, here we do such thing to numeric ones of <code>variables</code> and keep the categorical ones.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Split continuous and categorical variables</span>
-<span class="co"># and reduce dimensions for continuous ones</span>
-<span class="va">cat_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'wdpa'</span>, <span class="st">'landcover'</span><span class="op">)</span>
-<span class="va">var_cat</span> <span class="op">&lt;-</span> <span class="va">variables</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">cat_vars</span><span class="op">)</span><span class="op">)</span>
-<span class="va">var_con</span> <span class="op">&lt;-</span> <span class="va">variables</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">cat_vars</span><span class="op">)</span><span class="op">)</span>
-<span class="va">var_con_rdc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dim_reduce.html">dim_reduce</a></span><span class="op">(</span><span class="va">var_con</span>, threshold <span class="op">=</span> <span class="fl">0.75</span>, samples <span class="op">=</span> <span class="va">occ</span><span class="op">)</span>
-<span class="va">var_con_rdc</span>
-<span class="co">#&gt; Dimension reduction</span>
-<span class="co">#&gt; Correlation threshold: 0.75</span>
-<span class="co">#&gt; Original variables: bio1, bio2, bio3, bio4, bio5, bio6, bio7, bio8, bio9,</span>
-<span class="co">#&gt; bio10, bio11, bio12, bio13, bio14, bio15, bio16, bio17, bio18, bio19</span>
-<span class="co">#&gt; Variables after dimension reduction: bio1, bio2, bio3, bio6, bio12, bio14,</span>
-<span class="co">#&gt; bio18, bio19</span>
-<span class="co">#&gt; ================================================================================</span>
-<span class="co">#&gt; Reduced correlations:</span>
-<span class="co">#&gt;        bio1  bio2  bio3  bio6 bio12 bio14 bio18 bio19</span>
-<span class="co">#&gt; bio1   1.00  0.02 -0.22  0.64  0.06 -0.39 -0.41  0.29</span>
-<span class="co">#&gt; bio2   0.02  1.00 -0.43 -0.66 -0.55 -0.46 -0.34 -0.29</span>
-<span class="co">#&gt; bio3  -0.22 -0.43  1.00  0.43  0.33  0.44  0.23  0.22</span>
-<span class="co">#&gt; bio6   0.64 -0.66  0.43  1.00  0.46  0.11 -0.09  0.48</span>
-<span class="co">#&gt; bio12  0.06 -0.55  0.33  0.46  1.00  0.59  0.49  0.54</span>
-<span class="co">#&gt; bio14 -0.39 -0.46  0.44  0.11  0.59  1.00  0.43  0.30</span>
-<span class="co">#&gt; bio18 -0.41 -0.34  0.23 -0.09  0.49  0.43  1.00 -0.07</span>
-<span class="co">#&gt; bio19  0.29 -0.29  0.22  0.48  0.54  0.30 -0.07  1.00</span>
-
-<span class="co"># Put together</span>
-<span class="va">var_con</span> <span class="op">&lt;-</span> <span class="va">var_con_rdc</span><span class="op">$</span><span class="va">img_reduced</span>
-<span class="va">variables</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">c</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/stars/reference/merge.html" class="external-link">split</a></span><span class="op">(</span><span class="va">var_con</span>, <span class="st">'band'</span><span class="op">)</span>, <span class="va">var_cat</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">cat_vars</span>, <span class="va">var_cat</span>, <span class="va">var_con</span>, <span class="va">var_con_rdc</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Split continuous and categorical variables</span></span>
+<span><span class="co"># and reduce dimensions for continuous ones</span></span>
+<span><span class="va">cat_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'wdpa'</span>, <span class="st">'landcover'</span><span class="op">)</span></span>
+<span><span class="va">var_cat</span> <span class="op">&lt;-</span> <span class="va">variables</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">cat_vars</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">var_con</span> <span class="op">&lt;-</span> <span class="va">variables</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">cat_vars</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">var_con_rdc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dim_reduce.html">dim_reduce</a></span><span class="op">(</span><span class="va">var_con</span>, threshold <span class="op">=</span> <span class="fl">0.75</span>, samples <span class="op">=</span> <span class="va">occ</span><span class="op">)</span></span>
+<span><span class="va">var_con_rdc</span></span>
+<span><span class="co">#&gt; Dimension reduction</span></span>
+<span><span class="co">#&gt; Correlation threshold: 0.75</span></span>
+<span><span class="co">#&gt; Original variables: bio1, bio2, bio3, bio4, bio5, bio6, bio7, bio8, bio9,</span></span>
+<span><span class="co">#&gt; bio10, bio11, bio12, bio13, bio14, bio15, bio16, bio17, bio18, bio19</span></span>
+<span><span class="co">#&gt; Variables after dimension reduction: bio1, bio2, bio3, bio6, bio12, bio14,</span></span>
+<span><span class="co">#&gt; bio18, bio19</span></span>
+<span><span class="co">#&gt; ================================================================================</span></span>
+<span><span class="co">#&gt; Reduced correlations:</span></span>
+<span><span class="co">#&gt;        bio1  bio2  bio3  bio6 bio12 bio14 bio18 bio19</span></span>
+<span><span class="co">#&gt; bio1   1.00  0.02 -0.22  0.64  0.06 -0.39 -0.41  0.29</span></span>
+<span><span class="co">#&gt; bio2   0.02  1.00 -0.43 -0.66 -0.55 -0.46 -0.34 -0.29</span></span>
+<span><span class="co">#&gt; bio3  -0.22 -0.43  1.00  0.43  0.33  0.44  0.23  0.22</span></span>
+<span><span class="co">#&gt; bio6   0.64 -0.66  0.43  1.00  0.46  0.11 -0.09  0.48</span></span>
+<span><span class="co">#&gt; bio12  0.06 -0.55  0.33  0.46  1.00  0.59  0.49  0.54</span></span>
+<span><span class="co">#&gt; bio14 -0.39 -0.46  0.44  0.11  0.59  1.00  0.43  0.30</span></span>
+<span><span class="co">#&gt; bio18 -0.41 -0.34  0.23 -0.09  0.49  0.43  1.00 -0.07</span></span>
+<span><span class="co">#&gt; bio19  0.29 -0.29  0.22  0.48  0.54  0.30 -0.07  1.00</span></span>
+<span></span>
+<span><span class="co"># Put together</span></span>
+<span><span class="va">var_con</span> <span class="op">&lt;-</span> <span class="va">var_con_rdc</span><span class="op">$</span><span class="va">img_reduced</span></span>
+<span><span class="va">variables</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">c</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">var_con</span>, <span class="st">'band'</span><span class="op">)</span>, <span class="va">var_cat</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">cat_vars</span>, <span class="va">var_cat</span>, <span class="va">var_con</span>, <span class="va">var_con_rdc</span><span class="op">)</span></span></code></pre></div>
 <p>It is highly not recommended to merge <code>attributes</code> of <code>variables</code> to <code>band</code> or any other dimension if there are any categorical layers in it unless you know pretty well about what you are doing. Because merging will force categorical values to change to numeric ones, you know that it is tricky to convert between factors and numbers in R.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># If you really want to merge</span>
-<span class="co">## At least could ensure the values are the original values</span>
-<span class="va">var_merge</span> <span class="op">&lt;-</span> <span class="va">variables</span>
-<span class="va">var_merge</span> <span class="op">&lt;-</span> <span class="va">var_merge</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>wdpa <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">wdpa</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="va">wdpa</span><span class="op">]</span>,
-         landcover <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">landcover</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="va">landcover</span><span class="op">]</span><span class="op">)</span>
-<span class="va">var_merge</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/stars/reference/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">var_merge</span>, name <span class="op">=</span> <span class="st">'band'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">var_merge</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># If you really want to merge</span></span>
+<span><span class="co">## At least could ensure the values are the original values</span></span>
+<span><span class="va">var_merge</span> <span class="op">&lt;-</span> <span class="va">variables</span></span>
+<span><span class="va">var_merge</span> <span class="op">&lt;-</span> <span class="va">var_merge</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>wdpa <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">wdpa</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="va">wdpa</span><span class="op">]</span>,</span>
+<span>         landcover <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">landcover</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="va">landcover</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">var_merge</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">var_merge</span>, name <span class="op">=</span> <span class="st">'band'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">var_merge</span><span class="op">)</span></span></code></pre></div>
 <p>By far, the <code>variables</code> is the environmental variable stack with numeric ones with low correlation and categorical ones.</p>
 </div>
 <div class="section level2">
 <h2 id="split-occurrence-to-training-and-test">Split occurrence to training and test<a class="anchor" aria-label="anchor" href="#split-occurrence-to-training-and-test"></a>
 </h2>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Make occurrences</span>
-<span class="va">occ</span> <span class="op">&lt;-</span> <span class="va">occ</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span>
-<span class="va">occ_sf</span> <span class="op">&lt;-</span> <span class="va">occ</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html" class="external-link">sample_frac</a></span><span class="op">(</span><span class="fl">0.7</span><span class="op">)</span>
-<span class="va">occ_test_sf</span> <span class="op">&lt;-</span> <span class="va">occ</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">occ_sf</span><span class="op">$</span><span class="va">id</span><span class="op">)</span>
-<span class="va">occ_sf</span> <span class="op">&lt;-</span> <span class="va">occ_sf</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">id</span><span class="op">)</span>
-<span class="va">occ_test_sf</span> <span class="op">&lt;-</span> <span class="va">occ_test_sf</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">id</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">occ</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Make occurrences</span></span>
+<span><span class="va">occ</span> <span class="op">&lt;-</span> <span class="va">occ</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span></span>
+<span><span class="va">occ_sf</span> <span class="op">&lt;-</span> <span class="va">occ</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html" class="external-link">sample_frac</a></span><span class="op">(</span><span class="fl">0.7</span><span class="op">)</span></span>
+<span><span class="va">occ_test_sf</span> <span class="op">&lt;-</span> <span class="va">occ</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">occ_sf</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
+<span><span class="va">occ_sf</span> <span class="op">&lt;-</span> <span class="va">occ_sf</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">id</span><span class="op">)</span></span>
+<span><span class="va">occ_test_sf</span> <span class="op">&lt;-</span> <span class="va">occ_test_sf</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">id</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">occ</span><span class="op">)</span></span></code></pre></div>
 <p>Now both occurrence and environmental variables are ready to use for modeling.</p>
 </div>
 <div class="section level2">
@@ -327,15 +327,15 @@
 <li><code>categ_cols = c('wdpa', 'landcover')</code></li>
 </ul>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Do modeling</span>
-<span class="va">it_sdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/isotree_po.html">isotree_po</a></span><span class="op">(</span>occ <span class="op">=</span> <span class="va">occ_sf</span>,
-                     occ_test <span class="op">=</span> <span class="va">occ_test_sf</span>,
-                     variables <span class="op">=</span> <span class="va">variables</span>,
-                     categ_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'wdpa'</span>, <span class="st">'landcover'</span><span class="op">)</span>,
-                     ntrees <span class="op">=</span> <span class="fl">200L</span>,
-                     sample_size <span class="op">=</span> <span class="fl">0.9</span>,
-                     ndim <span class="op">=</span> <span class="fl">4</span>,
-                     seed <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Do modeling</span></span>
+<span><span class="va">it_sdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/isotree_po.html">isotree_po</a></span><span class="op">(</span>occ <span class="op">=</span> <span class="va">occ_sf</span>,</span>
+<span>                     occ_test <span class="op">=</span> <span class="va">occ_test_sf</span>,</span>
+<span>                     variables <span class="op">=</span> <span class="va">variables</span>,</span>
+<span>                     categ_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'wdpa'</span>, <span class="st">'landcover'</span><span class="op">)</span>,</span>
+<span>                     ntrees <span class="op">=</span> <span class="fl">200L</span>,</span>
+<span>                     sample_size <span class="op">=</span> <span class="fl">0.9</span>,</span>
+<span>                     ndim <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>                     seed <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="visualize-results">Visualize results<a class="anchor" aria-label="anchor" href="#visualize-results"></a>
@@ -345,31 +345,31 @@
 <p>This indicates African savanna elephants have a very large potential habitat on this continent. Like more explicit field research indicates that the potential range of African elephants could be more than five times larger than its current extent (<a href="https://scitechdaily.com/african-elephants-have-plenty-of-habitat-if-spared-from-the-ivory-trade/" class="external-link uri">https://scitechdaily.com/african-elephants-have-plenty-of-habitat-if-spared-from-the-ivory-trade/</a>). As a mega-mammal, elephants could adapt themselves to survive harsh environments.</p>
 <p>Presence-only model evaluation</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># According to training dataset</span>
-<span class="co"># it_sdm$eval_train</span>
-<span class="co"># plot(it_sdm$eval_train)</span>
-
-<span class="co"># According to test dataset</span>
-<span class="va">it_sdm</span><span class="op">$</span><span class="va">eval_test</span>
-<span class="co">#&gt; ===================================</span>
-<span class="co">#&gt; Presence-only evaluation:</span>
-<span class="co">#&gt; CVI with 0.25 threshold:      0.007</span>
-<span class="co">#&gt; CVI with 0.5 threshold:       0.102</span>
-<span class="co">#&gt; CVI with 0.75 threshold:      0.548</span>
-<span class="co">#&gt; CBI:                          0.586</span>
-<span class="co">#&gt; AUC (ratio)                   0.864</span>
-<span class="co">#&gt; ===================================</span>
-<span class="co">#&gt; Presence-background evaluation:</span>
-<span class="co">#&gt; Sensitivity:                  0.740</span>
-<span class="co">#&gt; Specificity:                  0.813</span>
-<span class="co">#&gt; TSS:                          0.553</span>
-<span class="co">#&gt; AUC:                          0.849</span>
-<span class="co">#&gt; Similarity indices:</span>
-<span class="co">#&gt; Jaccard's similarity index:   0.623</span>
-<span class="co">#&gt; Sørensen's similarity index:  0.767</span>
-<span class="co">#&gt; Overprediction rate:          0.203</span>
-<span class="co">#&gt; Underprediction rate:         0.260</span>
-<span class="fu"><a href="https://r-spatial.github.io/stars/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">eval_test</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># According to training dataset</span></span>
+<span><span class="co"># it_sdm$eval_train</span></span>
+<span><span class="co"># plot(it_sdm$eval_train)</span></span>
+<span></span>
+<span><span class="co"># According to test dataset</span></span>
+<span><span class="va">it_sdm</span><span class="op">$</span><span class="va">eval_test</span></span>
+<span><span class="co">#&gt; ===================================</span></span>
+<span><span class="co">#&gt; Presence-only evaluation:</span></span>
+<span><span class="co">#&gt; CVI with 0.25 threshold:      0.007</span></span>
+<span><span class="co">#&gt; CVI with 0.5 threshold:       0.102</span></span>
+<span><span class="co">#&gt; CVI with 0.75 threshold:      0.548</span></span>
+<span><span class="co">#&gt; CBI:                          0.586</span></span>
+<span><span class="co">#&gt; AUC (ratio)                   0.864</span></span>
+<span><span class="co">#&gt; ===================================</span></span>
+<span><span class="co">#&gt; Presence-background evaluation:</span></span>
+<span><span class="co">#&gt; Sensitivity:                  0.740</span></span>
+<span><span class="co">#&gt; Specificity:                  0.813</span></span>
+<span><span class="co">#&gt; TSS:                          0.553</span></span>
+<span><span class="co">#&gt; AUC:                          0.849</span></span>
+<span><span class="co">#&gt; Similarity indices:</span></span>
+<span><span class="co">#&gt; Jaccard's similarity index:   0.623</span></span>
+<span><span class="co">#&gt; Sørensen's similarity index:  0.767</span></span>
+<span><span class="co">#&gt; Overprediction rate:          0.203</span></span>
+<span><span class="co">#&gt; Underprediction rate:         0.260</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">eval_test</span><span class="op">)</span></span></code></pre></div>
 <p><img src="itsdm-eval-1.png" title="plot of chunk eval" alt="plot of chunk eval" style="display: block; margin: auto;"></p>
 <p>According to the evaluation, the model has the potential to improve, for instance, by adding more explanatory features: forest cover, distance to water, elevation, slope, human influence, etc. According to the continuous Boyce index and TSS curve, the model overestimates some “completely” unsuitable areas, for example, Sahara (see above suitability map). One assumption is that several occurrence data locate in the Namib desert. And land cover map reflects this information to Sahara. But Namib desert is very narrow and close to natural resources, which makes it suitable for elephants. However, deep Sahara is not the same story. So, including a feature describing the distance to water could be helpful to improve the model.</p>
 </div>
@@ -379,13 +379,13 @@
 <p>Response curves of environmental variables show how the suitability of a variable to this species changes when its value is varied.</p>
 <p>Marginal response curves</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Plot response curves</span>
-<span class="fu"><a href="https://r-spatial.github.io/stars/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">marginal_responses</span>, target_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'bio1'</span>, <span class="st">'bio12'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Plot response curves</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">marginal_responses</span>, target_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'bio1'</span>, <span class="st">'bio12'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="itsdm-marginal_responses-1.png" title="plot of chunk marginal_responses" alt="plot of chunk marginal_responses" style="display: block; margin: auto;"></p>
 <p>We checked the marginal response curves of two bioclimatic variables. The response curve of bio1 and bio12 are very reasonable and indicate the preferred temperature and precipitation conditions.</p>
 <p>Independent response curves</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://r-spatial.github.io/stars/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">independent_responses</span>, target_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'landcover'</span>, <span class="st">'wdpa'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">independent_responses</span>, target_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'landcover'</span>, <span class="st">'wdpa'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="itsdm-independent_responses-1.png" title="plot of chunk independent_responses" alt="plot of chunk independent_responses" style="display: block; margin: auto;"></p>
 <p>According to the figure above, elephants go beyond protected areas often. This matches with the previous study related to elephant movement. Thus, the binary protected area is not a good modeling variable. Distance to the protected area might be, however. Because usually, there are plenty of natural resources (food, water, etc.) within the protected area. Elephants might like to stay around these protected areas. The response of land cover indicates that elephants strongly prefer to stay in some landscape, such as forest, shrub, wetland, cropland, and built-up. Here is some useful information:</p>
 <ol style="list-style-type: decimal">
@@ -394,8 +394,8 @@
 </ol>
 <p>Shapley value based dependence curves</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Variable dependence scatter points with fitted curves made by SHAP test</span>
-<span class="fu"><a href="https://r-spatial.github.io/stars/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">shap_dependences</span>, smooth_span <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Variable dependence scatter points with fitted curves made by SHAP test</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">shap_dependences</span>, smooth_span <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 <p><img src="itsdm-variable_dependence-1.png" title="plot of chunk variable_dependence" alt="plot of chunk variable_dependence" style="display: block; margin: auto;"></p>
 <p>Now, let’s overview all variable responses made by Shapley values. All variables seem to be the environmental features of elephants. Precipitation seems like a solid decisive factor. We could analyze feature importance further to diagnose the contribution of each variable.</p>
 </div>
@@ -404,134 +404,134 @@
 </h2>
 <p>Variable importance analysis is another way to understand the relationship between environmental variables and species distribution. It also could help to improve model performance.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">it_sdm</span><span class="op">$</span><span class="va">variable_analysis</span>
-<span class="co">#&gt; Relative variable importance</span>
-<span class="co">#&gt; ===================================</span>
-<span class="co">#&gt; Methods: Jackknife test and SHAP</span>
-<span class="co">#&gt; Numer of variables: 10</span>
-<span class="co">#&gt; ===================================</span>
-<span class="co">#&gt; Jackknife test</span>
-<span class="co">#&gt; Based on Pearson correlation (Max value is 1)</span>
-<span class="co">#&gt; [Training dataset]:</span>
-<span class="co">#&gt; bio12     With only: ################################## 0.757</span>
-<span class="co">#&gt;           Without  : ############################################ 0.976</span>
-<span class="co">#&gt; bio18     With only: ############################ 0.616</span>
-<span class="co">#&gt;           Without  : ############################################ 0.982</span>
-<span class="co">#&gt; landcover With only: ########################### 0.603</span>
-<span class="co">#&gt;           Without  : ############################################ 0.987</span>
-<span class="co">#&gt; bio3      With only: ########################### 0.594</span>
-<span class="co">#&gt;           Without  : ############################################ 0.979</span>
-<span class="co">#&gt; bio6      With only: ######################## 0.537</span>
-<span class="co">#&gt;           Without  : ############################################ 0.986</span>
-<span class="co">#&gt; bio19     With only: ######################## 0.531</span>
-<span class="co">#&gt;           Without  : ########################################### 0.957</span>
-<span class="co">#&gt; bio1      With only: ##################### 0.463</span>
-<span class="co">#&gt;           Without  : ############################################ 0.985</span>
-<span class="co">#&gt; wdpa      With only: #################### 0.434</span>
-<span class="co">#&gt;           Without  : ############################################ 0.985</span>
-<span class="co">#&gt; bio14     With only: ################ 0.365</span>
-<span class="co">#&gt;           Without  : ############################################ 0.984</span>
-<span class="co">#&gt; bio2      With only: ############### 0.333</span>
-<span class="co">#&gt;           Without  : ############################################ 0.987</span>
-<span class="co">#&gt; [Test dataset]:</span>
-<span class="co">#&gt; bio12     With only: ################################# 0.742</span>
-<span class="co">#&gt;           Without  : ############################################ 0.971</span>
-<span class="co">#&gt; landcover With only: ########################## 0.581</span>
-<span class="co">#&gt;           Without  : ############################################ 0.987</span>
-<span class="co">#&gt; bio19     With only: ########################## 0.571</span>
-<span class="co">#&gt;           Without  : ########################################### 0.952</span>
-<span class="co">#&gt; bio3      With only: ########################## 0.569</span>
-<span class="co">#&gt;           Without  : ############################################ 0.979</span>
-<span class="co">#&gt; bio18     With only: ######################## 0.542</span>
-<span class="co">#&gt;           Without  : ############################################ 0.985</span>
-<span class="co">#&gt; bio6      With only: ###################### 0.485</span>
-<span class="co">#&gt;           Without  : ############################################ 0.986</span>
-<span class="co">#&gt; wdpa      With only: #################### 0.453</span>
-<span class="co">#&gt;           Without  : ############################################ 0.984</span>
-<span class="co">#&gt; bio1      With only: ################## 0.405</span>
-<span class="co">#&gt;           Without  : ############################################ 0.984</span>
-<span class="co">#&gt; bio14     With only: ################ 0.364</span>
-<span class="co">#&gt;           Without  : ############################################ 0.984</span>
-<span class="co">#&gt; bio2      With only: ############# 0.297</span>
-<span class="co">#&gt;           Without  : ############################################ 0.986</span>
-<span class="co">#&gt; ======================================================================</span>
-<span class="co">#&gt; Jackknife test</span>
-<span class="co">#&gt; Based on AUC ratio (Max value of traing and test are 0.877 and 0.864)</span>
-<span class="co">#&gt; [Training dataset]:</span>
-<span class="co">#&gt; bio12     With only: ###################################### 0.843</span>
-<span class="co">#&gt;           Without  : ###################################### 0.853</span>
-<span class="co">#&gt; bio18     With only: #################################### 0.802</span>
-<span class="co">#&gt;           Without  : ####################################### 0.877</span>
-<span class="co">#&gt; bio3      With only: ################################## 0.762</span>
-<span class="co">#&gt;           Without  : ######################################## 0.886</span>
-<span class="co">#&gt; bio6      With only: ################################ 0.716</span>
-<span class="co">#&gt;           Without  : ####################################### 0.874</span>
-<span class="co">#&gt; bio1      With only: ################################ 0.707</span>
-<span class="co">#&gt;           Without  : ####################################### 0.875</span>
-<span class="co">#&gt; landcover With only: ############################### 0.678</span>
-<span class="co">#&gt;           Without  : ######################################## 0.882</span>
-<span class="co">#&gt; wdpa      With only: ############################## 0.678</span>
-<span class="co">#&gt;           Without  : ####################################### 0.87</span>
-<span class="co">#&gt; bio2      With only: ############################## 0.661</span>
-<span class="co">#&gt;           Without  : ####################################### 0.871</span>
-<span class="co">#&gt; bio19     With only: ######################## 0.53</span>
-<span class="co">#&gt;           Without  : ######################################## 0.886</span>
-<span class="co">#&gt; bio14     With only: ############## 0.306</span>
-<span class="co">#&gt;           Without  : ######################################## 0.89</span>
-<span class="co">#&gt; [Test dataset]:</span>
-<span class="co">#&gt; bio12     With only: ##################################### 0.82</span>
-<span class="co">#&gt;           Without  : ###################################### 0.844</span>
-<span class="co">#&gt; bio18     With only: ################################### 0.767</span>
-<span class="co">#&gt;           Without  : ####################################### 0.866</span>
-<span class="co">#&gt; bio3      With only: ################################# 0.737</span>
-<span class="co">#&gt;           Without  : ######################################## 0.881</span>
-<span class="co">#&gt; landcover With only: ############################### 0.691</span>
-<span class="co">#&gt;           Without  : ####################################### 0.872</span>
-<span class="co">#&gt; bio6      With only: ############################### 0.686</span>
-<span class="co">#&gt;           Without  : ####################################### 0.868</span>
-<span class="co">#&gt; bio1      With only: ############################## 0.673</span>
-<span class="co">#&gt;           Without  : ####################################### 0.868</span>
-<span class="co">#&gt; wdpa      With only: ############################## 0.669</span>
-<span class="co">#&gt;           Without  : ####################################### 0.863</span>
-<span class="co">#&gt; bio2      With only: ########################## 0.588</span>
-<span class="co">#&gt;           Without  : ####################################### 0.87</span>
-<span class="co">#&gt; bio19     With only: ####################### 0.521</span>
-<span class="co">#&gt;           Without  : ####################################### 0.875</span>
-<span class="co">#&gt; bio14     With only: ############## 0.309</span>
-<span class="co">#&gt;           Without  : ######################################## 0.881</span>
-<span class="co">#&gt; ======================================================================</span>
-<span class="co">#&gt; SHAP (mean(|Shapley value|))</span>
-<span class="co">#&gt; [Training dataset]:</span>
-<span class="co">#&gt; bio12     : ########################################### 0.016</span>
-<span class="co">#&gt; bio19     : ####################################### 0.015</span>
-<span class="co">#&gt; bio3      : ############################### 0.012</span>
-<span class="co">#&gt; bio18     : ########################## 0.01</span>
-<span class="co">#&gt; bio1      : ######################## 0.009</span>
-<span class="co">#&gt; bio14     : ################### 0.007</span>
-<span class="co">#&gt; bio6      : ################## 0.007</span>
-<span class="co">#&gt; bio2      : ################## 0.007</span>
-<span class="co">#&gt; landcover : ################ 0.006</span>
-<span class="co">#&gt; wdpa      : ############### 0.006</span>
-<span class="co">#&gt; [Test dataset]:</span>
-<span class="co">#&gt; bio12     : ############################################# 0.017</span>
-<span class="co">#&gt; bio19     : ######################################### 0.015</span>
-<span class="co">#&gt; bio3      : ############################### 0.012</span>
-<span class="co">#&gt; bio18     : ######################## 0.009</span>
-<span class="co">#&gt; bio1      : ####################### 0.009</span>
-<span class="co">#&gt; bio14     : ################### 0.007</span>
-<span class="co">#&gt; bio6      : ################## 0.007</span>
-<span class="co">#&gt; bio2      : ################## 0.007</span>
-<span class="co">#&gt; landcover : ################ 0.006</span>
-<span class="co">#&gt; wdpa      : ################ 0.006</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">it_sdm</span><span class="op">$</span><span class="va">variable_analysis</span></span>
+<span><span class="co">#&gt; Relative variable importance</span></span>
+<span><span class="co">#&gt; ===================================</span></span>
+<span><span class="co">#&gt; Methods: Jackknife test and SHAP</span></span>
+<span><span class="co">#&gt; Numer of variables: 10</span></span>
+<span><span class="co">#&gt; ===================================</span></span>
+<span><span class="co">#&gt; Jackknife test</span></span>
+<span><span class="co">#&gt; Based on Pearson correlation (Max value is 1)</span></span>
+<span><span class="co">#&gt; [Training dataset]:</span></span>
+<span><span class="co">#&gt; bio12     With only: ################################## 0.757</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.976</span></span>
+<span><span class="co">#&gt; bio18     With only: ############################ 0.616</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.982</span></span>
+<span><span class="co">#&gt; landcover With only: ########################### 0.603</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.987</span></span>
+<span><span class="co">#&gt; bio3      With only: ########################### 0.594</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.979</span></span>
+<span><span class="co">#&gt; bio6      With only: ######################## 0.537</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.986</span></span>
+<span><span class="co">#&gt; bio19     With only: ######################## 0.531</span></span>
+<span><span class="co">#&gt;           Without  : ########################################### 0.957</span></span>
+<span><span class="co">#&gt; bio1      With only: ##################### 0.463</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.985</span></span>
+<span><span class="co">#&gt; wdpa      With only: #################### 0.434</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.985</span></span>
+<span><span class="co">#&gt; bio14     With only: ################ 0.365</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.984</span></span>
+<span><span class="co">#&gt; bio2      With only: ############### 0.333</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.987</span></span>
+<span><span class="co">#&gt; [Test dataset]:</span></span>
+<span><span class="co">#&gt; bio12     With only: ################################# 0.742</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.971</span></span>
+<span><span class="co">#&gt; landcover With only: ########################## 0.581</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.987</span></span>
+<span><span class="co">#&gt; bio19     With only: ########################## 0.571</span></span>
+<span><span class="co">#&gt;           Without  : ########################################### 0.952</span></span>
+<span><span class="co">#&gt; bio3      With only: ########################## 0.569</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.979</span></span>
+<span><span class="co">#&gt; bio18     With only: ######################## 0.542</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.985</span></span>
+<span><span class="co">#&gt; bio6      With only: ###################### 0.485</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.986</span></span>
+<span><span class="co">#&gt; wdpa      With only: #################### 0.453</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.984</span></span>
+<span><span class="co">#&gt; bio1      With only: ################## 0.405</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.984</span></span>
+<span><span class="co">#&gt; bio14     With only: ################ 0.364</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.984</span></span>
+<span><span class="co">#&gt; bio2      With only: ############# 0.297</span></span>
+<span><span class="co">#&gt;           Without  : ############################################ 0.986</span></span>
+<span><span class="co">#&gt; ======================================================================</span></span>
+<span><span class="co">#&gt; Jackknife test</span></span>
+<span><span class="co">#&gt; Based on AUC ratio (Max value of traing and test are 0.877 and 0.864)</span></span>
+<span><span class="co">#&gt; [Training dataset]:</span></span>
+<span><span class="co">#&gt; bio12     With only: ###################################### 0.843</span></span>
+<span><span class="co">#&gt;           Without  : ###################################### 0.853</span></span>
+<span><span class="co">#&gt; bio18     With only: #################################### 0.802</span></span>
+<span><span class="co">#&gt;           Without  : ####################################### 0.877</span></span>
+<span><span class="co">#&gt; bio3      With only: ################################## 0.762</span></span>
+<span><span class="co">#&gt;           Without  : ######################################## 0.886</span></span>
+<span><span class="co">#&gt; bio6      With only: ################################ 0.716</span></span>
+<span><span class="co">#&gt;           Without  : ####################################### 0.874</span></span>
+<span><span class="co">#&gt; bio1      With only: ################################ 0.707</span></span>
+<span><span class="co">#&gt;           Without  : ####################################### 0.875</span></span>
+<span><span class="co">#&gt; landcover With only: ############################### 0.678</span></span>
+<span><span class="co">#&gt;           Without  : ######################################## 0.882</span></span>
+<span><span class="co">#&gt; wdpa      With only: ############################## 0.678</span></span>
+<span><span class="co">#&gt;           Without  : ####################################### 0.87</span></span>
+<span><span class="co">#&gt; bio2      With only: ############################## 0.661</span></span>
+<span><span class="co">#&gt;           Without  : ####################################### 0.871</span></span>
+<span><span class="co">#&gt; bio19     With only: ######################## 0.53</span></span>
+<span><span class="co">#&gt;           Without  : ######################################## 0.886</span></span>
+<span><span class="co">#&gt; bio14     With only: ############## 0.306</span></span>
+<span><span class="co">#&gt;           Without  : ######################################## 0.89</span></span>
+<span><span class="co">#&gt; [Test dataset]:</span></span>
+<span><span class="co">#&gt; bio12     With only: ##################################### 0.82</span></span>
+<span><span class="co">#&gt;           Without  : ###################################### 0.844</span></span>
+<span><span class="co">#&gt; bio18     With only: ################################### 0.767</span></span>
+<span><span class="co">#&gt;           Without  : ####################################### 0.866</span></span>
+<span><span class="co">#&gt; bio3      With only: ################################# 0.737</span></span>
+<span><span class="co">#&gt;           Without  : ######################################## 0.881</span></span>
+<span><span class="co">#&gt; landcover With only: ############################### 0.691</span></span>
+<span><span class="co">#&gt;           Without  : ####################################### 0.872</span></span>
+<span><span class="co">#&gt; bio6      With only: ############################### 0.686</span></span>
+<span><span class="co">#&gt;           Without  : ####################################### 0.868</span></span>
+<span><span class="co">#&gt; bio1      With only: ############################## 0.673</span></span>
+<span><span class="co">#&gt;           Without  : ####################################### 0.868</span></span>
+<span><span class="co">#&gt; wdpa      With only: ############################## 0.669</span></span>
+<span><span class="co">#&gt;           Without  : ####################################### 0.863</span></span>
+<span><span class="co">#&gt; bio2      With only: ########################## 0.588</span></span>
+<span><span class="co">#&gt;           Without  : ####################################### 0.87</span></span>
+<span><span class="co">#&gt; bio19     With only: ####################### 0.521</span></span>
+<span><span class="co">#&gt;           Without  : ####################################### 0.875</span></span>
+<span><span class="co">#&gt; bio14     With only: ############## 0.309</span></span>
+<span><span class="co">#&gt;           Without  : ######################################## 0.881</span></span>
+<span><span class="co">#&gt; ======================================================================</span></span>
+<span><span class="co">#&gt; SHAP (mean(|Shapley value|))</span></span>
+<span><span class="co">#&gt; [Training dataset]:</span></span>
+<span><span class="co">#&gt; bio12     : ########################################### 0.016</span></span>
+<span><span class="co">#&gt; bio19     : ####################################### 0.015</span></span>
+<span><span class="co">#&gt; bio3      : ############################### 0.012</span></span>
+<span><span class="co">#&gt; bio18     : ########################## 0.01</span></span>
+<span><span class="co">#&gt; bio1      : ######################## 0.009</span></span>
+<span><span class="co">#&gt; bio14     : ################### 0.007</span></span>
+<span><span class="co">#&gt; bio6      : ################## 0.007</span></span>
+<span><span class="co">#&gt; bio2      : ################## 0.007</span></span>
+<span><span class="co">#&gt; landcover : ################ 0.006</span></span>
+<span><span class="co">#&gt; wdpa      : ############### 0.006</span></span>
+<span><span class="co">#&gt; [Test dataset]:</span></span>
+<span><span class="co">#&gt; bio12     : ############################################# 0.017</span></span>
+<span><span class="co">#&gt; bio19     : ######################################### 0.015</span></span>
+<span><span class="co">#&gt; bio3      : ############################### 0.012</span></span>
+<span><span class="co">#&gt; bio18     : ######################## 0.009</span></span>
+<span><span class="co">#&gt; bio1      : ####################### 0.009</span></span>
+<span><span class="co">#&gt; bio14     : ################### 0.007</span></span>
+<span><span class="co">#&gt; bio6      : ################## 0.007</span></span>
+<span><span class="co">#&gt; bio2      : ################## 0.007</span></span>
+<span><span class="co">#&gt; landcover : ################ 0.006</span></span>
+<span><span class="co">#&gt; wdpa      : ################ 0.006</span></span></code></pre></div>
 <p>From the text above, annual precipitation is the most important decisive factor. Because precipitation decides the supply of food and water. Temperature is not a very critical constraint to elephants. It indicates that compared to food/water, elephants could tolerate the extreme temperature. Bio14 (Precipitation of Driest Month) is a not-important variable agreed by the Jackknife test and SHAP test. One assumption is that all animals must deal with limited precipitation over the driest month, common in the African savanna. In the Jackknife test, landcover has a relatively high contribution when working alone. But the model performs very well without it. The same to wdpa. In the Shapley value-based test, these two variables are judged as less important. It indicates that landcover and wdpa strongly correlate with some other variables. Changing the way to use them might be necessary to improve the model performance.</p>
 <p>Shapley value summary plot is another way to interpret variable contribution.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">var_contrib</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/variable_contrib.html">variable_contrib</a></span><span class="op">(</span>
-  <span class="va">it_sdm</span><span class="op">$</span><span class="va">model</span>,
-  <span class="va">it_sdm</span><span class="op">$</span><span class="va">var_train</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span>,
-  <span class="va">it_sdm</span><span class="op">$</span><span class="va">var_train</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="co"># Plot general contribution for all observations</span>
-<span class="fu"><a href="https://r-spatial.github.io/stars/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">var_contrib</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">var_contrib</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/variable_contrib.html">variable_contrib</a></span><span class="op">(</span></span>
+<span>  <span class="va">it_sdm</span><span class="op">$</span><span class="va">model</span>,</span>
+<span>  <span class="va">it_sdm</span><span class="op">$</span><span class="va">var_train</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">it_sdm</span><span class="op">$</span><span class="va">var_train</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Plot general contribution for all observations</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">var_contrib</span><span class="op">)</span></span></code></pre></div>
 <p><img src="itsdm-var_contrib_general-1.png" title="plot of chunk var_contrib_general" alt="plot of chunk var_contrib_general" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
@@ -539,18 +539,18 @@
 </h2>
 <p>Use function <code>convert_to_pa</code> to convert suitability to probability of occurrence.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Convert to presence-absence map</span>
-<span class="va">pa_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/convert_to_pa.html">convert_to_pa</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">prediction</span>,
-                        method <span class="op">=</span> <span class="st">"logistic"</span>,
-                        beta <span class="op">=</span> <span class="fl">0.2</span>,
-                        species_prevalence <span class="op">=</span> <span class="fl">0.2</span>,
-                        threshold <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://r-spatial.github.io/stars/reference/geom_stars.html" class="external-link">geom_stars</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pa_map</span><span class="op">$</span><span class="va">probability_of_occurrence</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span><span class="st">'Probability of occurrence'</span>,
-                       na.value <span class="op">=</span> <span class="st">'transparent'</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_equal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_linedraw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Convert to presence-absence map</span></span>
+<span><span class="va">pa_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/convert_to_pa.html">convert_to_pa</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">prediction</span>,</span>
+<span>                        method <span class="op">=</span> <span class="st">"logistic"</span>,</span>
+<span>                        beta <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>                        species_prevalence <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>                        threshold <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/stars/reference/geom_stars.html" class="external-link">geom_stars</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pa_map</span><span class="op">$</span><span class="va">probability_of_occurrence</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span><span class="st">'Probability of occurrence'</span>,</span>
+<span>                       na.value <span class="op">=</span> <span class="st">'transparent'</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_equal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_linedraw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="itsdm-pa-1.png" title="plot of chunk pa" alt="plot of chunk pa" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
@@ -558,9 +558,9 @@
 </h2>
 <p>Randomly check variable dependence with each other.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://r-spatial.github.io/stars/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">shap_dependences</span>,
-     target_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'bio1'</span>, <span class="st">'bio12'</span>, <span class="st">'landcover'</span><span class="op">)</span>,
-     related_var <span class="op">=</span> <span class="st">'bio3'</span>, smooth_span <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">shap_dependences</span>,</span>
+<span>     target_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'bio1'</span>, <span class="st">'bio12'</span>, <span class="st">'landcover'</span><span class="op">)</span>,</span>
+<span>     related_var <span class="op">=</span> <span class="st">'bio3'</span>, smooth_span <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 <p><img src="itsdm-var_inter_dependence-1.png" title="plot of chunk var_inter_dependence" alt="plot of chunk var_inter_dependence" style="display: block; margin: auto;"></p>
 <p>Bio3 has a strong correlation with bio12. We could check variable dependence one by one to exclude some in the final model.</p>
 </div>
@@ -569,23 +569,23 @@
 </h2>
 <p>Sometimes, we are interested in some observations, for instance, the outliers detected in the beginning steps. According to the figure below, we can tell that these suspicious outliers are not all environmental outliers.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Analyze variable contribution for interested observations.</span>
-<span class="co">## For example, the first 10 outliers detected.</span>
-<span class="va">var_occ</span> <span class="op">&lt;-</span> <span class="va">it_sdm</span><span class="op">$</span><span class="va">var_train</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">var_analysis</span> <span class="op">&lt;-</span> <span class="va">var_occ</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="va">occ_outliers</span><span class="op">$</span><span class="va">outliers</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">outlier_score</span><span class="op">)</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://docs.ropensci.org/rgbif/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">suspious_row</span><span class="op">)</span><span class="op">)</span>
-<span class="va">var_contrib_outliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/variable_contrib.html">variable_contrib</a></span><span class="op">(</span>
-  <span class="va">it_sdm</span><span class="op">$</span><span class="va">model</span>,
-  <span class="va">var_occ</span>,
-  <span class="va">var_analysis</span><span class="op">)</span>
-
-<span class="co"># Plot contribution separately for each observation</span>
-<span class="co">## By default, it only plot the most 5 important variables for each observation</span>
-<span class="co">## You could change `num_features` to show more variables</span>
-<span class="fu"><a href="https://r-spatial.github.io/stars/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">var_contrib_outliers</span>, plot_each_obs <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Analyze variable contribution for interested observations.</span></span>
+<span><span class="co">## For example, the first 10 outliers detected.</span></span>
+<span><span class="va">var_occ</span> <span class="op">&lt;-</span> <span class="va">it_sdm</span><span class="op">$</span><span class="va">var_train</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">var_analysis</span> <span class="op">&lt;-</span> <span class="va">var_occ</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="va">occ_outliers</span><span class="op">$</span><span class="va">outliers</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">outlier_score</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">suspious_row</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">var_contrib_outliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/variable_contrib.html">variable_contrib</a></span><span class="op">(</span></span>
+<span>  <span class="va">it_sdm</span><span class="op">$</span><span class="va">model</span>,</span>
+<span>  <span class="va">var_occ</span>,</span>
+<span>  <span class="va">var_analysis</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot contribution separately for each observation</span></span>
+<span><span class="co">## By default, it only plot the most 5 important variables for each observation</span></span>
+<span><span class="co">## You could change `num_features` to show more variables</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">var_contrib_outliers</span>, plot_each_obs <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p><img src="itsdm-var_contrib-1.png" title="plot of chunk var_contrib" alt="plot of chunk var_contrib" style="display: block; margin: auto;"></p>
 <p>According to feature response curves and this figure, some detected outliers could be removed from training. For example, some features have a strongly negative contribution to observations No.2, No.4, and No.6 and they could be excluded.</p>
 </div>
@@ -621,7 +621,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
