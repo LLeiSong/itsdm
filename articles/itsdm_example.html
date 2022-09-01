@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">itsdm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
       <h1 data-toc-skip>Using <code>itsdm</code> to a real species: Africa savanna elephant</h1>
                         <h4 data-toc-skip class="author">Lei Song</h4>
             
-            <h4 data-toc-skip class="date">2022-06-19</h4>
+            <h4 data-toc-skip class="date">2022-08-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/LLeiSong/itsdm/blob/HEAD/vignettes/itsdm_example.Rmd" class="external-link"><code>vignettes/itsdm_example.Rmd</code></a></small>
       <div class="hidden name"><code>itsdm_example.Rmd</code></div>
@@ -130,8 +130,7 @@
 <span><span class="va">bios</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/worldclim2.html">worldclim2</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">'bio'</span>,</span>
 <span>                   bry <span class="op">=</span> <span class="va">mainland_africa</span>,</span>
 <span>                   path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                   nm_mark <span class="op">=</span> <span class="st">'africa'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_normalize.html" class="external-link">st_normalize</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>                   nm_mark <span class="op">=</span> <span class="st">'africa'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_normalize.html" class="external-link">st_normalize</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Protected area</span></span>
 <span><span class="va">fname</span> <span class="op">&lt;-</span> <span class="st">'extdata/wdpa_africa_10min.tif'</span></span>
@@ -144,8 +143,12 @@
 <span>  <span class="fu"><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">read_stars</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="st">'landcover'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Merge them together as variable stack</span></span>
-<span><span class="va">variables</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">c</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">bios</span>, <span class="st">'band'</span><span class="op">)</span>,</span>
-<span>                             <span class="va">wdpa</span>, <span class="va">landcover</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">variables</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">bios</span>,</span>
+<span>               <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">wdpa</span>, <span class="va">landcover</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"band"</span><span class="op">)</span>,</span>
+<span>               along <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="st">"band"</span><span class="op">)</span></span>
+<span><span class="va">variables</span> <span class="op">&lt;-</span> <span class="va">variables</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>wdpa <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">wdpa</span><span class="op">)</span>,</span>
+<span>         landcover <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">landcover</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">fname</span>, <span class="va">bios</span>, <span class="va">wdpa</span>, <span class="va">landcover</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -221,33 +224,33 @@
 <span>  variables <span class="op">=</span> <span class="va">variables</span>,</span>
 <span>  z_outlier <span class="op">=</span> <span class="fl">16</span>,</span>
 <span>  outliers_print <span class="op">=</span> <span class="fl">4L</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Reporting top 4 outliers [out of 27 found]</span></span>
+<span><span class="co">#&gt; Reporting top 4 outliers [out of 19 found]</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; row [123] - suspicious column: [bio14] - suspicious value: [1.00]</span></span>
-<span><span class="co">#&gt;  distribution: 98.701% &lt;= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 76]</span></span>
+<span><span class="co">#&gt; row [124] - suspicious column: [bio14] - suspicious value: [1.00]</span></span>
+<span><span class="co">#&gt;  distribution: 98.734% &lt;= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 78]</span></span>
 <span><span class="co">#&gt;  given:</span></span>
 <span><span class="co">#&gt;      [bio11] &gt; [25.71] (value: 26.22)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; row [1] - suspicious column: [bio17] - suspicious value: [1.00]</span></span>
-<span><span class="co">#&gt;  distribution: 96.000% &lt;= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 24]</span></span>
+<span><span class="co">#&gt;  distribution: 92.593% &lt;= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 25]</span></span>
 <span><span class="co">#&gt;  given:</span></span>
 <span><span class="co">#&gt;      [bio14] &lt;= [1.00] (value: 0.00)</span></span>
 <span><span class="co">#&gt;      [bio5] &gt; [39.79] (value: 41.24)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; row [521] - suspicious column: [bio19] - suspicious value: [36.00]</span></span>
-<span><span class="co">#&gt;  distribution: 97.297% &gt;= 509.00 - [mean: 616.06] - [sd: 40.46] - [norm. obs: 36]</span></span>
+<span><span class="co">#&gt; row [35] - suspicious column: [bio17] - suspicious value: [1.00]</span></span>
+<span><span class="co">#&gt;  distribution: 92.593% &lt;= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 25]</span></span>
 <span><span class="co">#&gt;  given:</span></span>
-<span><span class="co">#&gt;      [bio17] &gt; [2.00] (value: 27.00)</span></span>
-<span><span class="co">#&gt;      [bio5] &gt; [35.53] (value: 36.72)</span></span>
+<span><span class="co">#&gt;      [bio14] &lt;= [1.00] (value: 0.00)</span></span>
+<span><span class="co">#&gt;      [bio5] &gt; [39.79] (value: 40.49)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; row [801] - suspicious column: [bio19] - suspicious value: [1.00]</span></span>
-<span><span class="co">#&gt;  distribution: 96.429% &lt;= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 27]</span></span>
+<span><span class="co">#&gt; row [100] - suspicious column: [bio14] - suspicious value: [1.00]</span></span>
+<span><span class="co">#&gt;  distribution: 98.833% &lt;= 0.00 - [mean: 0.00] - [sd: 0.00] - [norm. obs: 254]</span></span>
 <span><span class="co">#&gt;  given:</span></span>
-<span><span class="co">#&gt;      [bio13] &lt;= [65.00] (value: 45.00)</span></span>
-<span><span class="co">#&gt;      [bio17] &lt;= [2.00] (value: 0.00)</span></span>
+<span><span class="co">#&gt;      [bio17] &lt;= [8.00] (value: 6.00)</span></span>
+<span><span class="co">#&gt;      [bio18] &lt;= [145.00] (value: 99.00)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">occ_outliers</span><span class="op">)</span></span></code></pre></div>
 <p><img src="itsdm-outliers-1.png" title="plot of chunk outliers" alt="plot of chunk outliers" style="display: block; margin: auto;"></p>
 <p>According to the figure and the prior knowledge of the Africa savanna elephant, we decide not to drop the outliers. The outliers seem more like rare records. In addition, if they are real outliers, the later <code>isolation.forest</code> could detect them again. Now let’s organize the occurrence before the next step.</p>
@@ -276,14 +279,14 @@
 <span><span class="co">#&gt; ================================================================================</span></span>
 <span><span class="co">#&gt; Reduced correlations:</span></span>
 <span><span class="co">#&gt;        bio1  bio2  bio3  bio6 bio12 bio14 bio18 bio19</span></span>
-<span><span class="co">#&gt; bio1   1.00  0.02 -0.22  0.64  0.06 -0.39 -0.41  0.29</span></span>
-<span><span class="co">#&gt; bio2   0.02  1.00 -0.43 -0.66 -0.55 -0.46 -0.34 -0.29</span></span>
-<span><span class="co">#&gt; bio3  -0.22 -0.43  1.00  0.43  0.33  0.44  0.23  0.22</span></span>
-<span><span class="co">#&gt; bio6   0.64 -0.66  0.43  1.00  0.46  0.11 -0.09  0.48</span></span>
-<span><span class="co">#&gt; bio12  0.06 -0.55  0.33  0.46  1.00  0.59  0.49  0.54</span></span>
-<span><span class="co">#&gt; bio14 -0.39 -0.46  0.44  0.11  0.59  1.00  0.43  0.30</span></span>
-<span><span class="co">#&gt; bio18 -0.41 -0.34  0.23 -0.09  0.49  0.43  1.00 -0.07</span></span>
-<span><span class="co">#&gt; bio19  0.29 -0.29  0.22  0.48  0.54  0.30 -0.07  1.00</span></span>
+<span><span class="co">#&gt; bio1   1.00  0.02 -0.22  0.65  0.04 -0.41 -0.41  0.27</span></span>
+<span><span class="co">#&gt; bio2   0.02  1.00 -0.43 -0.66 -0.56 -0.47 -0.35 -0.30</span></span>
+<span><span class="co">#&gt; bio3  -0.22 -0.43  1.00  0.43  0.34  0.44  0.23  0.23</span></span>
+<span><span class="co">#&gt; bio6   0.65 -0.66  0.43  1.00  0.45  0.10 -0.09  0.47</span></span>
+<span><span class="co">#&gt; bio12  0.04 -0.56  0.34  0.45  1.00  0.59  0.50  0.54</span></span>
+<span><span class="co">#&gt; bio14 -0.41 -0.47  0.44  0.10  0.59  1.00  0.43  0.30</span></span>
+<span><span class="co">#&gt; bio18 -0.41 -0.35  0.23 -0.09  0.50  0.43  1.00 -0.07</span></span>
+<span><span class="co">#&gt; bio19  0.27 -0.30  0.23  0.47  0.54  0.30 -0.07  1.00</span></span>
 <span></span>
 <span><span class="co"># Put together</span></span>
 <span><span class="va">var_con</span> <span class="op">&lt;-</span> <span class="va">var_con_rdc</span><span class="op">$</span><span class="va">img_reduced</span></span>
@@ -353,22 +356,22 @@
 <span><span class="va">it_sdm</span><span class="op">$</span><span class="va">eval_test</span></span>
 <span><span class="co">#&gt; ===================================</span></span>
 <span><span class="co">#&gt; Presence-only evaluation:</span></span>
-<span><span class="co">#&gt; CVI with 0.25 threshold:      0.007</span></span>
-<span><span class="co">#&gt; CVI with 0.5 threshold:       0.102</span></span>
-<span><span class="co">#&gt; CVI with 0.75 threshold:      0.548</span></span>
-<span><span class="co">#&gt; CBI:                          0.586</span></span>
-<span><span class="co">#&gt; AUC (ratio)                   0.864</span></span>
+<span><span class="co">#&gt; CVI with 0.25 threshold:      0.027</span></span>
+<span><span class="co">#&gt; CVI with 0.5 threshold:       0.237</span></span>
+<span><span class="co">#&gt; CVI with 0.75 threshold:      0.581</span></span>
+<span><span class="co">#&gt; CBI:                          0.752</span></span>
+<span><span class="co">#&gt; AUC (ratio)                   0.869</span></span>
 <span><span class="co">#&gt; ===================================</span></span>
 <span><span class="co">#&gt; Presence-background evaluation:</span></span>
-<span><span class="co">#&gt; Sensitivity:                  0.740</span></span>
-<span><span class="co">#&gt; Specificity:                  0.813</span></span>
-<span><span class="co">#&gt; TSS:                          0.553</span></span>
-<span><span class="co">#&gt; AUC:                          0.849</span></span>
+<span><span class="co">#&gt; Sensitivity:                  0.801</span></span>
+<span><span class="co">#&gt; Specificity:                  0.782</span></span>
+<span><span class="co">#&gt; TSS:                          0.583</span></span>
+<span><span class="co">#&gt; AUC:                          0.861</span></span>
 <span><span class="co">#&gt; Similarity indices:</span></span>
-<span><span class="co">#&gt; Jaccard's similarity index:   0.623</span></span>
-<span><span class="co">#&gt; Sørensen's similarity index:  0.767</span></span>
-<span><span class="co">#&gt; Overprediction rate:          0.203</span></span>
-<span><span class="co">#&gt; Underprediction rate:         0.260</span></span>
+<span><span class="co">#&gt; Jaccard's similarity index:   0.658</span></span>
+<span><span class="co">#&gt; Sørensen's similarity index:  0.793</span></span>
+<span><span class="co">#&gt; Overprediction rate:          0.214</span></span>
+<span><span class="co">#&gt; Underprediction rate:         0.199</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">eval_test</span><span class="op">)</span></span></code></pre></div>
 <p><img src="itsdm-eval-1.png" title="plot of chunk eval" alt="plot of chunk eval" style="display: block; margin: auto;"></p>
 <p>According to the evaluation, the model has the potential to improve, for instance, by adding more explanatory features: forest cover, distance to water, elevation, slope, human influence, etc. According to the continuous Boyce index and TSS curve, the model overestimates some “completely” unsuitable areas, for example, Sahara (see above suitability map). One assumption is that several occurrence data locate in the Namib desert. And land cover map reflects this information to Sahara. But Namib desert is very narrow and close to natural resources, which makes it suitable for elephants. However, deep Sahara is not the same story. So, including a feature describing the distance to water could be helpful to improve the model.</p>
@@ -395,7 +398,7 @@
 <p>Shapley value based dependence curves</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Variable dependence scatter points with fitted curves made by SHAP test</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">shap_dependences</span>, smooth_span <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">shap_dependences</span>, smooth_line <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="itsdm-variable_dependence-1.png" title="plot of chunk variable_dependence" alt="plot of chunk variable_dependence" style="display: block; margin: auto;"></p>
 <p>Now, let’s overview all variable responses made by Shapley values. All variables seem to be the environmental features of elephants. Precipitation seems like a solid decisive factor. We could analyze feature importance further to diagnose the contribution of each variable.</p>
 </div>
@@ -413,116 +416,116 @@
 <span><span class="co">#&gt; Jackknife test</span></span>
 <span><span class="co">#&gt; Based on Pearson correlation (Max value is 1)</span></span>
 <span><span class="co">#&gt; [Training dataset]:</span></span>
-<span><span class="co">#&gt; bio12     With only: ################################## 0.757</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.976</span></span>
-<span><span class="co">#&gt; bio18     With only: ############################ 0.616</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.982</span></span>
-<span><span class="co">#&gt; landcover With only: ########################### 0.603</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.987</span></span>
-<span><span class="co">#&gt; bio3      With only: ########################### 0.594</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.979</span></span>
-<span><span class="co">#&gt; bio6      With only: ######################## 0.537</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.986</span></span>
-<span><span class="co">#&gt; bio19     With only: ######################## 0.531</span></span>
-<span><span class="co">#&gt;           Without  : ########################################### 0.957</span></span>
-<span><span class="co">#&gt; bio1      With only: ##################### 0.463</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.985</span></span>
-<span><span class="co">#&gt; wdpa      With only: #################### 0.434</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.985</span></span>
-<span><span class="co">#&gt; bio14     With only: ################ 0.365</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.984</span></span>
-<span><span class="co">#&gt; bio2      With only: ############### 0.333</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.987</span></span>
+<span><span class="co">#&gt; bio12     With only: ////////////////////////////////// 0.762</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.977</span></span>
+<span><span class="co">#&gt; landcover With only: //////////////////////////// 0.622</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.983</span></span>
+<span><span class="co">#&gt; bio18     With only: //////////////////////////// 0.613</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.983</span></span>
+<span><span class="co">#&gt; bio3      With only: /////////////////////////// 0.598</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.972</span></span>
+<span><span class="co">#&gt; bio19     With only: //////////////////////// 0.523</span></span>
+<span><span class="co">#&gt;           Without  : /////////////////////////////////////////// 0.95</span></span>
+<span><span class="co">#&gt; bio6      With only: ////////////////////// 0.485</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.988</span></span>
+<span><span class="co">#&gt; bio1      With only: //////////////////// 0.451</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.982</span></span>
+<span><span class="co">#&gt; wdpa      With only: /////////////////// 0.429</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.987</span></span>
+<span><span class="co">#&gt; bio14     With only: //////////////// 0.36</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.981</span></span>
+<span><span class="co">#&gt; bio2      With only: /////////////// 0.336</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.988</span></span>
 <span><span class="co">#&gt; [Test dataset]:</span></span>
-<span><span class="co">#&gt; bio12     With only: ################################# 0.742</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.971</span></span>
-<span><span class="co">#&gt; landcover With only: ########################## 0.581</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.987</span></span>
-<span><span class="co">#&gt; bio19     With only: ########################## 0.571</span></span>
-<span><span class="co">#&gt;           Without  : ########################################### 0.952</span></span>
-<span><span class="co">#&gt; bio3      With only: ########################## 0.569</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.979</span></span>
-<span><span class="co">#&gt; bio18     With only: ######################## 0.542</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.985</span></span>
-<span><span class="co">#&gt; bio6      With only: ###################### 0.485</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.986</span></span>
-<span><span class="co">#&gt; wdpa      With only: #################### 0.453</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.984</span></span>
-<span><span class="co">#&gt; bio1      With only: ################## 0.405</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.984</span></span>
-<span><span class="co">#&gt; bio14     With only: ################ 0.364</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.984</span></span>
-<span><span class="co">#&gt; bio2      With only: ############# 0.297</span></span>
-<span><span class="co">#&gt;           Without  : ############################################ 0.986</span></span>
+<span><span class="co">#&gt; bio12     With only: /////////////////////////////////// 0.775</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.977</span></span>
+<span><span class="co">#&gt; landcover With only: /////////////////////////// 0.606</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.984</span></span>
+<span><span class="co">#&gt; bio19     With only: /////////////////////////// 0.591</span></span>
+<span><span class="co">#&gt;           Without  : /////////////////////////////////////////// 0.946</span></span>
+<span><span class="co">#&gt; bio3      With only: ////////////////////////// 0.582</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.976</span></span>
+<span><span class="co">#&gt; bio18     With only: //////////////////////// 0.539</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.987</span></span>
+<span><span class="co">#&gt; bio6      With only: //////////////////// 0.453</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.987</span></span>
+<span><span class="co">#&gt; wdpa      With only: /////////////////// 0.43</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.987</span></span>
+<span><span class="co">#&gt; bio1      With only: ////////////////// 0.405</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.984</span></span>
+<span><span class="co">#&gt; bio14     With only: //////////////// 0.362</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////////// 0.982</span></span>
+<span><span class="co">#&gt; bio2      With only: ///////////// 0.299</span></span>
+<span><span class="co">#&gt;           Without  : ///////////////////////////////////////////// 0.99</span></span>
 <span><span class="co">#&gt; ======================================================================</span></span>
 <span><span class="co">#&gt; Jackknife test</span></span>
-<span><span class="co">#&gt; Based on AUC ratio (Max value of traing and test are 0.877 and 0.864)</span></span>
+<span><span class="co">#&gt; Based on AUC ratio (Max value of traing and test are 0.871 and 0.869)</span></span>
 <span><span class="co">#&gt; [Training dataset]:</span></span>
-<span><span class="co">#&gt; bio12     With only: ###################################### 0.843</span></span>
-<span><span class="co">#&gt;           Without  : ###################################### 0.853</span></span>
-<span><span class="co">#&gt; bio18     With only: #################################### 0.802</span></span>
-<span><span class="co">#&gt;           Without  : ####################################### 0.877</span></span>
-<span><span class="co">#&gt; bio3      With only: ################################## 0.762</span></span>
-<span><span class="co">#&gt;           Without  : ######################################## 0.886</span></span>
-<span><span class="co">#&gt; bio6      With only: ################################ 0.716</span></span>
-<span><span class="co">#&gt;           Without  : ####################################### 0.874</span></span>
-<span><span class="co">#&gt; bio1      With only: ################################ 0.707</span></span>
-<span><span class="co">#&gt;           Without  : ####################################### 0.875</span></span>
-<span><span class="co">#&gt; landcover With only: ############################### 0.678</span></span>
-<span><span class="co">#&gt;           Without  : ######################################## 0.882</span></span>
-<span><span class="co">#&gt; wdpa      With only: ############################## 0.678</span></span>
-<span><span class="co">#&gt;           Without  : ####################################### 0.87</span></span>
-<span><span class="co">#&gt; bio2      With only: ############################## 0.661</span></span>
-<span><span class="co">#&gt;           Without  : ####################################### 0.871</span></span>
-<span><span class="co">#&gt; bio19     With only: ######################## 0.53</span></span>
-<span><span class="co">#&gt;           Without  : ######################################## 0.886</span></span>
-<span><span class="co">#&gt; bio14     With only: ############## 0.306</span></span>
-<span><span class="co">#&gt;           Without  : ######################################## 0.89</span></span>
+<span><span class="co">#&gt; bio12     With only: ////////////////////////////////////// 0.847</span></span>
+<span><span class="co">#&gt;           Without  : ////////////////////////////////////// 0.852</span></span>
+<span><span class="co">#&gt; bio18     With only: //////////////////////////////////// 0.796</span></span>
+<span><span class="co">#&gt;           Without  : /////////////////////////////////////// 0.872</span></span>
+<span><span class="co">#&gt; bio3      With only: ////////////////////////////////// 0.761</span></span>
+<span><span class="co">#&gt;           Without  : /////////////////////////////////////// 0.869</span></span>
+<span><span class="co">#&gt; bio6      With only: //////////////////////////////// 0.717</span></span>
+<span><span class="co">#&gt;           Without  : /////////////////////////////////////// 0.871</span></span>
+<span><span class="co">#&gt; bio1      With only: /////////////////////////////// 0.693</span></span>
+<span><span class="co">#&gt;           Without  : /////////////////////////////////////// 0.862</span></span>
+<span><span class="co">#&gt; landcover With only: /////////////////////////////// 0.681</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////// 0.892</span></span>
+<span><span class="co">#&gt; wdpa      With only: ////////////////////////////// 0.675</span></span>
+<span><span class="co">#&gt;           Without  : /////////////////////////////////////// 0.869</span></span>
+<span><span class="co">#&gt; bio2      With only: ///////////////////////////// 0.644</span></span>
+<span><span class="co">#&gt;           Without  : /////////////////////////////////////// 0.87</span></span>
+<span><span class="co">#&gt; bio19     With only: //////////////////////// 0.529</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////// 0.885</span></span>
+<span><span class="co">#&gt; bio14     With only: //////////////////// 0.442</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////// 0.889</span></span>
 <span><span class="co">#&gt; [Test dataset]:</span></span>
-<span><span class="co">#&gt; bio12     With only: ##################################### 0.82</span></span>
-<span><span class="co">#&gt;           Without  : ###################################### 0.844</span></span>
-<span><span class="co">#&gt; bio18     With only: ################################### 0.767</span></span>
-<span><span class="co">#&gt;           Without  : ####################################### 0.866</span></span>
-<span><span class="co">#&gt; bio3      With only: ################################# 0.737</span></span>
-<span><span class="co">#&gt;           Without  : ######################################## 0.881</span></span>
-<span><span class="co">#&gt; landcover With only: ############################### 0.691</span></span>
-<span><span class="co">#&gt;           Without  : ####################################### 0.872</span></span>
-<span><span class="co">#&gt; bio6      With only: ############################### 0.686</span></span>
-<span><span class="co">#&gt;           Without  : ####################################### 0.868</span></span>
-<span><span class="co">#&gt; bio1      With only: ############################## 0.673</span></span>
-<span><span class="co">#&gt;           Without  : ####################################### 0.868</span></span>
-<span><span class="co">#&gt; wdpa      With only: ############################## 0.669</span></span>
-<span><span class="co">#&gt;           Without  : ####################################### 0.863</span></span>
-<span><span class="co">#&gt; bio2      With only: ########################## 0.588</span></span>
-<span><span class="co">#&gt;           Without  : ####################################### 0.87</span></span>
-<span><span class="co">#&gt; bio19     With only: ####################### 0.521</span></span>
-<span><span class="co">#&gt;           Without  : ####################################### 0.875</span></span>
-<span><span class="co">#&gt; bio14     With only: ############## 0.309</span></span>
-<span><span class="co">#&gt;           Without  : ######################################## 0.881</span></span>
+<span><span class="co">#&gt; bio12     With only: ///////////////////////////////////// 0.82</span></span>
+<span><span class="co">#&gt;           Without  : ////////////////////////////////////// 0.854</span></span>
+<span><span class="co">#&gt; bio18     With only: /////////////////////////////////// 0.771</span></span>
+<span><span class="co">#&gt;           Without  : /////////////////////////////////////// 0.871</span></span>
+<span><span class="co">#&gt; bio3      With only: ///////////////////////////////// 0.737</span></span>
+<span><span class="co">#&gt;           Without  : /////////////////////////////////////// 0.874</span></span>
+<span><span class="co">#&gt; landcover With only: /////////////////////////////// 0.699</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////// 0.89</span></span>
+<span><span class="co">#&gt; bio1      With only: /////////////////////////////// 0.696</span></span>
+<span><span class="co">#&gt;           Without  : /////////////////////////////////////// 0.863</span></span>
+<span><span class="co">#&gt; bio6      With only: /////////////////////////////// 0.679</span></span>
+<span><span class="co">#&gt;           Without  : /////////////////////////////////////// 0.871</span></span>
+<span><span class="co">#&gt; wdpa      With only: ////////////////////////////// 0.67</span></span>
+<span><span class="co">#&gt;           Without  : /////////////////////////////////////// 0.873</span></span>
+<span><span class="co">#&gt; bio2      With only: /////////////////////////// 0.602</span></span>
+<span><span class="co">#&gt;           Without  : /////////////////////////////////////// 0.87</span></span>
+<span><span class="co">#&gt; bio19     With only: /////////////////////// 0.503</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////// 0.894</span></span>
+<span><span class="co">#&gt; bio14     With only: /////////////////// 0.414</span></span>
+<span><span class="co">#&gt;           Without  : //////////////////////////////////////// 0.891</span></span>
 <span><span class="co">#&gt; ======================================================================</span></span>
 <span><span class="co">#&gt; SHAP (mean(|Shapley value|))</span></span>
 <span><span class="co">#&gt; [Training dataset]:</span></span>
-<span><span class="co">#&gt; bio12     : ########################################### 0.016</span></span>
-<span><span class="co">#&gt; bio19     : ####################################### 0.015</span></span>
-<span><span class="co">#&gt; bio3      : ############################### 0.012</span></span>
-<span><span class="co">#&gt; bio18     : ########################## 0.01</span></span>
-<span><span class="co">#&gt; bio1      : ######################## 0.009</span></span>
-<span><span class="co">#&gt; bio14     : ################### 0.007</span></span>
-<span><span class="co">#&gt; bio6      : ################## 0.007</span></span>
-<span><span class="co">#&gt; bio2      : ################## 0.007</span></span>
-<span><span class="co">#&gt; landcover : ################ 0.006</span></span>
-<span><span class="co">#&gt; wdpa      : ############### 0.006</span></span>
-<span><span class="co">#&gt; [Test dataset]:</span></span>
-<span><span class="co">#&gt; bio12     : ############################################# 0.017</span></span>
-<span><span class="co">#&gt; bio19     : ######################################### 0.015</span></span>
-<span><span class="co">#&gt; bio3      : ############################### 0.012</span></span>
+<span><span class="co">#&gt; bio12     : ############################################ 0.017</span></span>
+<span><span class="co">#&gt; bio19     : ################################### 0.014</span></span>
+<span><span class="co">#&gt; bio3      : ############################## 0.012</span></span>
+<span><span class="co">#&gt; bio1      : ######################## 0.01</span></span>
 <span><span class="co">#&gt; bio18     : ######################## 0.009</span></span>
-<span><span class="co">#&gt; bio1      : ####################### 0.009</span></span>
-<span><span class="co">#&gt; bio14     : ################### 0.007</span></span>
-<span><span class="co">#&gt; bio6      : ################## 0.007</span></span>
+<span><span class="co">#&gt; bio14     : ###################### 0.009</span></span>
+<span><span class="co">#&gt; bio6      : #################### 0.008</span></span>
+<span><span class="co">#&gt; landcover : ################## 0.007</span></span>
 <span><span class="co">#&gt; bio2      : ################## 0.007</span></span>
-<span><span class="co">#&gt; landcover : ################ 0.006</span></span>
-<span><span class="co">#&gt; wdpa      : ################ 0.006</span></span></code></pre></div>
+<span><span class="co">#&gt; wdpa      : ############# 0.005</span></span>
+<span><span class="co">#&gt; [Test dataset]:</span></span>
+<span><span class="co">#&gt; bio12     : ############################################# 0.018</span></span>
+<span><span class="co">#&gt; bio19     : ######################################## 0.016</span></span>
+<span><span class="co">#&gt; bio3      : ############################## 0.012</span></span>
+<span><span class="co">#&gt; bio1      : ####################### 0.009</span></span>
+<span><span class="co">#&gt; bio14     : ###################### 0.009</span></span>
+<span><span class="co">#&gt; bio18     : ###################### 0.009</span></span>
+<span><span class="co">#&gt; bio6      : ################### 0.008</span></span>
+<span><span class="co">#&gt; landcover : ################## 0.007</span></span>
+<span><span class="co">#&gt; bio2      : ################ 0.006</span></span>
+<span><span class="co">#&gt; wdpa      : ############# 0.005</span></span></code></pre></div>
 <p>From the text above, annual precipitation is the most important decisive factor. Because precipitation decides the supply of food and water. Temperature is not a very critical constraint to elephants. It indicates that compared to food/water, elephants could tolerate the extreme temperature. Bio14 (Precipitation of Driest Month) is a not-important variable agreed by the Jackknife test and SHAP test. One assumption is that all animals must deal with limited precipitation over the driest month, common in the African savanna. In the Jackknife test, landcover has a relatively high contribution when working alone. But the model performs very well without it. The same to wdpa. In the Shapley value-based test, these two variables are judged as less important. It indicates that landcover and wdpa strongly correlate with some other variables. Changing the way to use them might be necessary to improve the model performance.</p>
 <p>Shapley value summary plot is another way to interpret variable contribution.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -560,7 +563,7 @@
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">shap_dependences</span>,</span>
 <span>     target_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'bio1'</span>, <span class="st">'bio12'</span>, <span class="st">'landcover'</span><span class="op">)</span>,</span>
-<span>     related_var <span class="op">=</span> <span class="st">'bio3'</span>, smooth_span <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<span>     related_var <span class="op">=</span> <span class="st">'bio3'</span>, smooth_line <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="itsdm-var_inter_dependence-1.png" title="plot of chunk var_inter_dependence" alt="plot of chunk var_inter_dependence" style="display: block; margin: auto;"></p>
 <p>Bio3 has a strong correlation with bio12. We could check variable dependence one by one to exclude some in the final model.</p>
 </div>
@@ -573,9 +576,9 @@
 <span><span class="co">## For example, the first 10 outliers detected.</span></span>
 <span><span class="va">var_occ</span> <span class="op">&lt;-</span> <span class="va">it_sdm</span><span class="op">$</span><span class="va">var_train</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">var_analysis</span> <span class="op">&lt;-</span> <span class="va">var_occ</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="va">occ_outliers</span><span class="op">$</span><span class="va">outliers</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">outlier_score</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="va">occ_outliers</span><span class="op">$</span><span class="va">outliers</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">outlier_score</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">suspious_row</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">var_contrib_outliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/variable_contrib.html">variable_contrib</a></span><span class="op">(</span></span>
 <span>  <span class="va">it_sdm</span><span class="op">$</span><span class="va">model</span>,</span>

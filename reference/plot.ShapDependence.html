@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">itsdm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
       </span>
     </div>
 
@@ -67,7 +67,16 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for ShapDependence</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, target_var <span class="op">=</span> <span class="cn">NA</span>, related_var <span class="op">=</span> <span class="cn">NA</span>, smooth_span <span class="op">=</span> <span class="fl">0.3</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  target_var <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  related_var <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  sample_prop <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>  sample_bin <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  smooth_line <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">123</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -88,9 +97,26 @@ target variables. It could be <code>NA</code>. If it is <code>NA</code>, no rela
 plotted.</p></dd>
 
 
-<dt>smooth_span</dt>
-<dd><p>(<code>numeric</code>) The span value for smooth fit in <code>ggplot2</code>.
-When it is <code>0</code>, no smooth applied. The default is <code>0.3</code>.</p></dd>
+<dt>sample_prop</dt>
+<dd><p>(<code>numeric</code>) The proportion of points to sample for plotting.
+It will be ignored if the number of points is less than 1000.
+The default is <code>0.3</code>.</p></dd>
+
+
+<dt>sample_bin</dt>
+<dd><p>(<code>integer</code>) The number of bins to use for stratified sampling.</p></dd>
+
+
+<dt>smooth_line</dt>
+<dd><p>(<code>logical</code>) Whether to fit the smooth line or not.
+It will be ignored if the number of points is less than 1000.
+The default is 100.</p></dd>
+
+
+<dt>seed</dt>
+<dd><p>(<code>integer</code>) The seed for sampling.
+It will be ignored if the number of points is less than 1000.
+The default is 123.</p></dd>
 
 
 <dt>...</dt>
@@ -102,6 +128,12 @@ When it is <code>0</code>, no smooth applied. The default is <code>0.3</code>.</
     
 
 <p><code>ggplot2</code> figure of dependent curves</p>
+    </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>If the number of samples is more than 1000, a stratified sampling is used to
+thin the sample pool, and then plot its subset. The user could set a proportion
+to sample and a number of bins for stratified sampling.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>

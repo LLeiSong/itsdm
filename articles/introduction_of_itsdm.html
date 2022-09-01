@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">itsdm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
       <h1 data-toc-skip>Introduction of <code>itsdm</code> with a virtual species</h1>
                         <h4 data-toc-skip class="author">Lei Song</h4>
             
-            <h4 data-toc-skip class="date">2022-06-19</h4>
+            <h4 data-toc-skip class="date">2022-08-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/LLeiSong/itsdm/blob/HEAD/vignettes/introduction_of_itsdm.Rmd" class="external-link"><code>vignettes/introduction_of_itsdm.Rmd</code></a></small>
       <div class="hidden name"><code>introduction_of_itsdm.Rmd</code></div>
@@ -377,7 +377,7 @@
 <p><img src="intro-independent_responses-1.png" title="plot of chunk independent_responses" alt="plot of chunk independent_responses" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Variable dependence scatter points with fitted curves made by SHAP test</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">shap_dependence</span>, smooth_span <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">shap_dependence</span>, smooth_line <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="intro-variable_dependence-1.png" title="plot of chunk variable_dependence" alt="plot of chunk variable_dependence" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Printing variable analysis could give you enough info of variable importance</span></span>
@@ -390,44 +390,44 @@
 <span><span class="co">#&gt; Jackknife test</span></span>
 <span><span class="co">#&gt; Based on Pearson correlation (Max value is 1)</span></span>
 <span><span class="co">#&gt; [Training dataset]:</span></span>
-<span><span class="co">#&gt; bio12 With only: ######################################## 0.885</span></span>
-<span><span class="co">#&gt;       Without  : ########################################## 0.937</span></span>
-<span><span class="co">#&gt; bio15 With only: ################################ 0.71</span></span>
-<span><span class="co">#&gt;       Without  : ############################################ 0.974</span></span>
-<span><span class="co">#&gt; bio5  With only: ############################### 0.692</span></span>
-<span><span class="co">#&gt;       Without  : ############################################ 0.983</span></span>
-<span><span class="co">#&gt; bio1  With only: ######################## 0.543</span></span>
-<span><span class="co">#&gt;       Without  : ############################################ 0.983</span></span>
+<span><span class="co">#&gt; bio12 With only: //////////////////////////////////////// 0.885</span></span>
+<span><span class="co">#&gt;       Without  : ////////////////////////////////////////// 0.937</span></span>
+<span><span class="co">#&gt; bio15 With only: //////////////////////////////// 0.71</span></span>
+<span><span class="co">#&gt;       Without  : //////////////////////////////////////////// 0.974</span></span>
+<span><span class="co">#&gt; bio5  With only: /////////////////////////////// 0.692</span></span>
+<span><span class="co">#&gt;       Without  : //////////////////////////////////////////// 0.983</span></span>
+<span><span class="co">#&gt; bio1  With only: //////////////////////// 0.543</span></span>
+<span><span class="co">#&gt;       Without  : //////////////////////////////////////////// 0.983</span></span>
 <span><span class="co">#&gt; [Test dataset]:</span></span>
-<span><span class="co">#&gt; bio12 With only: ####################################### 0.878</span></span>
-<span><span class="co">#&gt;       Without  : ########################################## 0.934</span></span>
-<span><span class="co">#&gt; bio5  With only: ################################ 0.705</span></span>
-<span><span class="co">#&gt;       Without  : ############################################ 0.983</span></span>
-<span><span class="co">#&gt; bio15 With only: ################################ 0.703</span></span>
-<span><span class="co">#&gt;       Without  : ############################################ 0.976</span></span>
-<span><span class="co">#&gt; bio1  With only: ######################## 0.536</span></span>
-<span><span class="co">#&gt;       Without  : ############################################ 0.983</span></span>
+<span><span class="co">#&gt; bio12 With only: /////////////////////////////////////// 0.878</span></span>
+<span><span class="co">#&gt;       Without  : ////////////////////////////////////////// 0.934</span></span>
+<span><span class="co">#&gt; bio5  With only: //////////////////////////////// 0.705</span></span>
+<span><span class="co">#&gt;       Without  : //////////////////////////////////////////// 0.983</span></span>
+<span><span class="co">#&gt; bio15 With only: //////////////////////////////// 0.703</span></span>
+<span><span class="co">#&gt;       Without  : //////////////////////////////////////////// 0.976</span></span>
+<span><span class="co">#&gt; bio1  With only: //////////////////////// 0.536</span></span>
+<span><span class="co">#&gt;       Without  : //////////////////////////////////////////// 0.983</span></span>
 <span><span class="co">#&gt; ======================================================================</span></span>
 <span><span class="co">#&gt; Jackknife test</span></span>
 <span><span class="co">#&gt; Based on AUC ratio (Max value of traing and test are 0.946 and 0.942)</span></span>
 <span><span class="co">#&gt; [Training dataset]:</span></span>
-<span><span class="co">#&gt; bio12 With only: ######################################## 0.898</span></span>
-<span><span class="co">#&gt;       Without  : ######################################### 0.921</span></span>
-<span><span class="co">#&gt; bio5  With only: ##################################### 0.82</span></span>
-<span><span class="co">#&gt;       Without  : ########################################## 0.941</span></span>
-<span><span class="co">#&gt; bio15 With only: #################################### 0.801</span></span>
-<span><span class="co">#&gt;       Without  : ########################################## 0.94</span></span>
-<span><span class="co">#&gt; bio1  With only: ################################## 0.761</span></span>
-<span><span class="co">#&gt;       Without  : ########################################## 0.943</span></span>
+<span><span class="co">#&gt; bio12 With only: //////////////////////////////////////// 0.898</span></span>
+<span><span class="co">#&gt;       Without  : ///////////////////////////////////////// 0.921</span></span>
+<span><span class="co">#&gt; bio5  With only: ///////////////////////////////////// 0.82</span></span>
+<span><span class="co">#&gt;       Without  : ////////////////////////////////////////// 0.941</span></span>
+<span><span class="co">#&gt; bio15 With only: //////////////////////////////////// 0.801</span></span>
+<span><span class="co">#&gt;       Without  : ////////////////////////////////////////// 0.94</span></span>
+<span><span class="co">#&gt; bio1  With only: ////////////////////////////////// 0.761</span></span>
+<span><span class="co">#&gt;       Without  : ////////////////////////////////////////// 0.943</span></span>
 <span><span class="co">#&gt; [Test dataset]:</span></span>
-<span><span class="co">#&gt; bio12 With only: ######################################## 0.878</span></span>
-<span><span class="co">#&gt;       Without  : ######################################### 0.919</span></span>
-<span><span class="co">#&gt; bio5  With only: #################################### 0.791</span></span>
-<span><span class="co">#&gt;       Without  : ########################################## 0.936</span></span>
-<span><span class="co">#&gt; bio15 With only: ################################### 0.773</span></span>
-<span><span class="co">#&gt;       Without  : ########################################## 0.936</span></span>
-<span><span class="co">#&gt; bio1  With only: ################################# 0.735</span></span>
-<span><span class="co">#&gt;       Without  : ########################################## 0.938</span></span>
+<span><span class="co">#&gt; bio12 With only: //////////////////////////////////////// 0.878</span></span>
+<span><span class="co">#&gt;       Without  : ///////////////////////////////////////// 0.919</span></span>
+<span><span class="co">#&gt; bio5  With only: //////////////////////////////////// 0.791</span></span>
+<span><span class="co">#&gt;       Without  : ////////////////////////////////////////// 0.936</span></span>
+<span><span class="co">#&gt; bio15 With only: /////////////////////////////////// 0.773</span></span>
+<span><span class="co">#&gt;       Without  : ////////////////////////////////////////// 0.936</span></span>
+<span><span class="co">#&gt; bio1  With only: ///////////////////////////////// 0.735</span></span>
+<span><span class="co">#&gt;       Without  : ////////////////////////////////////////// 0.938</span></span>
 <span><span class="co">#&gt; ======================================================================</span></span>
 <span><span class="co">#&gt; SHAP (mean(|Shapley value|))</span></span>
 <span><span class="co">#&gt; [Training dataset]:</span></span>
@@ -492,7 +492,7 @@
 <span><span class="co">## Plot without smooth fit curve</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">var_dependence</span>,</span>
 <span>     target_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'bio1'</span>, <span class="st">'bio12'</span><span class="op">)</span>,</span>
-<span>     related_var <span class="op">=</span> <span class="st">'bio5'</span>, smooth_span <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<span>     related_var <span class="op">=</span> <span class="st">'bio5'</span>, smooth_line <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="intro-var_inter_dependence-1.png" title="plot of chunk var_inter_dependence" alt="plot of chunk var_inter_dependence" style="display: block; margin: auto;"></p>
 <p>Above figure shows bio1 and bio5 have strong correlations.</p>
 </div>
