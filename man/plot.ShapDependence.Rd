@@ -4,7 +4,16 @@
 \alias{plot.ShapDependence}
 \title{Function to plot variable dependence obtained from SHAP test.}
 \usage{
-\method{plot}{ShapDependence}(x, target_var = NA, related_var = NA, smooth_span = 0.3, ...)
+\method{plot}{ShapDependence}(
+  x,
+  target_var = NA,
+  related_var = NA,
+  sample_prop = 0.3,
+  sample_bin = 100,
+  smooth_line = TRUE,
+  seed = 123,
+  ...
+)
 }
 \arguments{
 \item{x}{(\code{ShapDependence}) The variable dependence object to plot.
@@ -17,8 +26,19 @@ It could be the return of function \code{\link{shap_dependence}}.}
 target variables. It could be \code{NA}. If it is \code{NA}, no related variable will be
 plotted.}
 
-\item{smooth_span}{(\code{numeric}) The span value for smooth fit in \code{ggplot2}.
-When it is \code{0}, no smooth applied. The default is \code{0.3}.}
+\item{sample_prop}{(\code{numeric}) The proportion of points to sample for plotting.
+It will be ignored if the number of points is less than 1000.
+The default is \code{0.3}.}
+
+\item{sample_bin}{(\code{integer}) The number of bins to use for stratified sampling.}
+
+\item{smooth_line}{(\code{logical}) Whether to fit the smooth line or not.
+It will be ignored if the number of points is less than 1000.
+The default is 100.}
+
+\item{seed}{(\code{integer}) The seed for sampling.
+It will be ignored if the number of points is less than 1000.
+The default is 123.}
 
 \item{...}{Not used.}
 }
@@ -27,6 +47,11 @@ When it is \code{0}, no smooth applied. The default is \code{0.3}.}
 }
 \description{
 Plot variable dependence curves using ggplot2.
+}
+\details{
+If the number of samples is more than 1000, a stratified sampling is used to
+thin the sample pool, and then plot its subset. The user could set a proportion
+to sample and a number of bins for stratified sampling.
 }
 \examples{
 \donttest{

@@ -13,8 +13,10 @@
 #' \code{\link{variable_analysis}}, \code{\link{plot.VariableAnalysis}}
 #'
 #' @details
-#' If the value is positive, print as "/". If the value is negative,
-#' then print as "\".
+#' For Jackknife test, if the value is positive, print as "/".
+#' If the value is negative, then print as "\". For Shapley values based test,
+#' print as "#" since there is no negative value and in order to distinguish
+#' this characteristic with Jackknife test.
 #'
 #' @export
 #' @examples

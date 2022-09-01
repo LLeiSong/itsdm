@@ -382,3 +382,35 @@
   return(list(F.ratio = F.ratio, cor = round(cbi, 3), HS = HS))
 }
 
+# A function to thin points to plot shap dependence
+#' @importFrom rlang .data
+#' @importFrom dplyr slice_sample ungroup
+.shap_plot_thin <- function(x_trans,
+                            sample_prop,
+                            sample_bin,
+                            seed,
+                            category = FALSE) {
+  if (category) {
+    # Resample within each category
+    set.seed(seed)
+    x_trans %>%
+      group_by(.data$variable, .data$x) %>%
+      slice_sample(prop = sample_prop) %>%
+      ungroup()
+  } else {
+    # Resample within bins
+    x_trans_bins <- do.call(
+      rbind, lapply(unique(x_trans$variable), function(var_select) {
+        x_trans_sub <- x_trans %>% filter(.data$variable == var_select)
+        width <- (max(x_trans_sub$x) - min(x_trans_sub$x)) / sample_bin
+        x_trans_sub %>%
+          mutate(bin = cut_width(.data$x, width = width, boundary = 0))
+      }))
+
+    set.seed(seed)
+    x_trans_bins %>%
+      group_by(.data$variable, .data$bin) %>%
+      slice_sample(prop = sample_prop) %>%
+      ungroup()
+  }
+}

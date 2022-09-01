@@ -258,7 +258,7 @@ plot(it_sdm$independent_responses, target_var = c('bio1', 'bio12'))
 
 ```{r variable_dependence, fig.align='center', fig.width=7, fig.height=7}
 ## Variable dependence scatter points with fitted curves made by SHAP test
-plot(it_sdm$shap_dependence, smooth_span = 0)
+plot(it_sdm$shap_dependence, smooth_line = FALSE)
 ```
 
 ```{r variable_analysis, fig.align='center', fig.width=9, fig.height=8}
@@ -317,7 +317,7 @@ var_dependence <- shap_dependence(
 ## Plot without smooth fit curve
 plot(var_dependence,
      target_var = c('bio1', 'bio12'),
-     related_var = 'bio5', smooth_span = 0)
+     related_var = 'bio5', smooth_line = TRUE)
 ```
 
 Above figure shows bio1 and bio5 have strong correlations.

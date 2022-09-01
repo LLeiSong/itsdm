@@ -259,12 +259,25 @@ plot.IndependentResponse <- function(x,
 #' @param related_var (`character`) The dependent variable to plot together with
 #' target variables. It could be `NA`. If it is `NA`, no related variable will be
 #' plotted.
-#' @param smooth_span (`numeric`) The span value for smooth fit in `ggplot2`.
-#' When it is `0`, no smooth applied. The default is `0.3`.
+#' @param sample_prop (`numeric`) The proportion of points to sample for plotting.
+#' It will be ignored if the number of points is less than 1000.
+#' The default is `0.3`.
+#' @param sample_bin (`integer`) The number of bins to use for stratified sampling.
+#' @param smooth_line (`logical`) Whether to fit the smooth line or not.
+#' It will be ignored if the number of points is less than 1000.
+#' The default is 100.
+#' @param seed (`integer`) The seed for sampling.
+#' It will be ignored if the number of points is less than 1000.
+#' The default is 123.
 #' @param ... Not used.
 #' @return `ggplot2` figure of dependent curves
 #' @seealso
 #' \code{\link{shap_dependence}}
+#'
+#' @details
+#' If the number of samples is more than 1000, a stratified sampling is used to
+#' thin the sample pool, and then plot its subset. The user could set a proportion
+#' to sample and a number of bins for stratified sampling.
 #'
 #' @import ggplot2
 #' @importFrom methods is
@@ -312,7 +325,10 @@ plot.IndependentResponse <- function(x,
 plot.ShapDependence <- function(x,
                                 target_var = NA,
                                 related_var = NA,
-                                smooth_span = 0.3,
+                                sample_prop = 0.3,
+                                sample_bin = 100,
+                                smooth_line = TRUE,
+                                seed = 123,
                                 ...) {
   # Checking
   nms <- names(x$feature_values)
@@ -322,6 +338,19 @@ plot.ShapDependence <- function(x,
   checkmate::assert_character(target_var, min.len = 0)
   if (!all(is.na(target_var))) {
     stopifnot(all(target_var %in% nms))}
+  if (nrow(x$feature_values) > 1000) {
+    thin <- TRUE
+    checkmate::assert_number(
+      sample_prop, lower = 0, upper = 1, na.ok = TRUE, null.ok = TRUE)
+    if (is.na(sample_prop) | is.null(sample_prop)) sample_prop <- 0.3
+    checkmate::assert_int(
+      sample_bin, lower = 0, upper = nrow(x$feature_values) %/% 2,
+      na.ok = TRUE, null.ok = TRUE)
+    if (is.na(sample_bin) | is.null(sample_bin)) sample_bin <- 100
+    checkmate::assert_int(seed, na.ok = TRUE, null.ok = TRUE)
+    if (is.na(seed) | is.null(seed)) seed <- 123
+  } else thin <- FALSE
+  checkmate::assert_flag(smooth_line)
 
   # Subset x if target_var is not NA
   # feature_values is the X in explain, so keep it.
@@ -349,6 +378,9 @@ plot.ShapDependence <- function(x,
         x_cont[[n]] %>% mutate(variable = nms[n])
       }))
 
+      if (thin){
+        x_trans <- .shap_plot_thin(x_trans, sample_prop, sample_bin, seed)}
+
       # Plot
       cex.axis <- 1
       cex.lab <- 1
@@ -361,13 +393,14 @@ plot.ShapDependence <- function(x,
               axis.title = element_text(size = rel(cex.lab)),
               plot.title = element_text(hjust = 0.5)) +
         theme_linedraw()
-      if (smooth_span > 0) {
+      if (smooth_line) {
         g_cont <- g_cont +
-          geom_smooth(color = 'red', span = smooth_span, alpha = 0)
+          geom_smooth(color = 'red', alpha = 0)
       }
     } else g_cont <- NULL
 
     # Categorical vars
+    ## TODO: what if categorical var has many classes
     if (!is.null(x$dependences_cat)) {
       # Transform data
       x_cat <- x$dependences_cat
@@ -376,12 +409,16 @@ plot.ShapDependence <- function(x,
         x_cat[[n]] %>% mutate(variable = nms[n])
       }))
 
+      if (thin){
+        x_trans <- .shap_plot_thin(
+          x_trans, sample_prop, sample_bin, seed, TRUE)}
+
       # Plot
       cex.axis <- 1
       cex.lab <- 1
       g_cat <- ggplot(x_trans, aes(x = .data$x, y = .data$y)) +
         geom_violin(position = position_dodge()) +
-        geom_jitter(size = 1.5, position = position_jitter(0.2)) +
+        geom_jitter(size = 0.8, position = position_jitter(0.2)) +
         xlab('Variable values') +
         ylab("(Categorical variables)\nShapley value") +
         facet_wrap(~variable, scales = 'free', ncol = 2) +
@@ -403,9 +440,9 @@ plot.ShapDependence <- function(x,
       g_cat
     }
 
-  # Have related var
-  ## related var is continuous
-  ## related var is categorical
+    # Have related var
+    ## related var is continuous
+    ## related var is categorical
   } else {
     # Continuous vars
     if (!is.null(x$dependences_cont)) {
@@ -418,13 +455,16 @@ plot.ShapDependence <- function(x,
                                variable = rep(nms[n], nrow(.)))
       }))
 
+      if (thin){
+        x_trans <- .shap_plot_thin(x_trans, sample_prop, sample_bin, seed)}
+
       # Plot
       cex.axis <- 1
       cex.lab <- 1
       if (related_var %in% bands_cat) {
         g_cont <- ggplot(x_trans,
-                    aes(x = .data$x, y = .data$y,
-                        color = .data$related_var)) +
+                         aes(x = .data$x, y = .data$y,
+                             color = .data$related_var)) +
           geom_point(size = 0.8) +
           xlab('Variable values') +
           ylab("(Continuous variables)\nShapley value") +
@@ -436,8 +476,8 @@ plot.ShapDependence <- function(x,
           theme_linedraw()
       } else {
         g_cont <- ggplot(x_trans,
-                    aes(x = .data$x, y = .data$y,
-                        color = .data$related_var)) +
+                         aes(x = .data$x, y = .data$y,
+                             color = .data$related_var)) +
           geom_point(size = 0.8) +
           xlab('Variable values') +
           ylab("(Continuous variables)\nShapley value") +
@@ -448,13 +488,14 @@ plot.ShapDependence <- function(x,
                 plot.title = element_text(hjust = 0.5)) +
           theme_linedraw()
       }
-      if (smooth_span > 0) {
+      if (smooth_line) {
         g_cont <- g_cont +
-          geom_smooth(color = 'red', span = smooth_span, alpha = 0)
+          geom_smooth(color = 'red', alpha = 0)
       }
     } else g_cont <- NULL
 
     # Categorical vars
+    ## TODO: what if categorical var has many classes
     if (!is.null(x$dependences_cat)) {
       # Transform data
       x_cat <- x$dependences_cat
@@ -465,6 +506,10 @@ plot.ShapDependence <- function(x,
                               variable = rep(nms[n], nrow(.)))
       }))
 
+      if (thin){
+        x_trans <- .shap_plot_thin(
+          x_trans, sample_prop, sample_bin, seed, TRUE)}
+
       # Plot
       cex.axis <- 1
       cex.lab <- 1
@@ -473,7 +518,7 @@ plot.ShapDependence <- function(x,
                         aes(x = .data$x, y = .data$y)) +
           geom_violin(position = position_dodge()) +
           geom_jitter(aes(color = related_var),
-                      size = 1.5, position = position_jitter(0.2),
+                      size = 0.8, position = position_jitter(0.2),
                       show.legend = FALSE) +
           xlab('Variable values') +
           ylab("(Categorical variables)\nShapley value") +
@@ -488,7 +533,7 @@ plot.ShapDependence <- function(x,
                         aes(x = .data$x, y = .data$y)) +
           geom_violin(position = position_dodge()) +
           geom_jitter(aes(color = related_var),
-                      size = 1.5, position = position_jitter(0.2),
+                      size = 0.8, position = position_jitter(0.2),
                       show.legend = FALSE) +
           xlab('Variable values') +
           ylab("(Categorical variables)\nShapley value") +
@@ -677,7 +722,7 @@ plot.SpatialResponse <- function(x,
       s_plot <- ggplot() +
         geom_stars(
           data = do.call(c, x$spatial_shap_dependence)) +
-        scale_fill_distiller('Value', palette = "RdYlGn",
+        scale_fill_distiller('Value', palette = "RdYlBu",
                              na.value = "transparent") +
         ggtitle(sprintf('SHAP-based effect of %s',
                         names(x$spatial_marginal_response))) +
@@ -824,7 +869,7 @@ plot.VariableContribution <- function(x,
                y = .data$shapley_value)) +
       geom_violin(position = position_dodge()) +
       geom_jitter(aes(color = abs(.data$shapley_value)),
-                  size = 1.5, position = position_jitter(0.2)) +
+                  size = 0.8, position = position_jitter(0.2)) +
       scale_color_viridis_c('Abs value') +
       ggtitle('Variable contribution') +
       ylab('Shapley value') +

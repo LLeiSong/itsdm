@@ -63,8 +63,7 @@ data("mainland_africa")
 bios <- worldclim2(var = 'bio',
                    bry = mainland_africa,
                    path = tempdir(),
-                   nm_mark = 'africa') %>%
-  st_normalize()
+                   nm_mark = 'africa') %>% st_normalize()
 
 # Protected area
 fname <- 'extdata/wdpa_africa_10min.tif'
@@ -77,8 +76,12 @@ landcover <- system.file(fname, package = 'itsdm') %>%
   read_stars() %>% setNames('landcover')
 
 # Merge them together as variable stack
-variables <- do.call(c, list(split(bios, 'band'),
-                             wdpa, landcover))
+variables <- c(bios,
+               c(wdpa, landcover) %>% merge(name = "band"),
+               along = 3) %>% split("band")
+variables <- variables %>%
+  mutate(wdpa = factor(wdpa),
+         landcover = factor(landcover))
 rm(fname, bios, wdpa, landcover)
 ```
 
@@ -301,7 +304,7 @@ Shapley value based dependence curves
 
 ```{r variable_dependence, fig.align='center', fig.width=8, fig.height=8}
 ## Variable dependence scatter points with fitted curves made by SHAP test
-plot(it_sdm$shap_dependences, smooth_span = 0)
+plot(it_sdm$shap_dependences, smooth_line = FALSE)
 ```
 
 Now, let's overview all variable responses made by Shapley values. All variables seem to be the environmental features of elephants. Precipitation seems like a solid decisive factor. We could analyze feature importance further to diagnose the contribution of each variable.
@@ -353,7 +356,7 @@ Randomly check variable dependence with each other.
 ```{r var_inter_dependence, fig.align='center', fig.width=7, fig.height=5}
 plot(it_sdm$shap_dependences,
      target_var = c('bio1', 'bio12', 'landcover'),
-     related_var = 'bio3', smooth_span = 0)
+     related_var = 'bio3', smooth_line = FALSE)
 ```
 
 Bio3 has a strong correlation with bio12. We could check variable dependence one by one to exclude some in the final model.
@@ -395,4 +398,3 @@ With a primary analysis, we found a few obvious things to do to improve model pe
 4. Probably tune one or two parameters in `isotree_po`. When the distribution of elephants is well studied, the model only translate the information to machine language. A good model can explain clearly and concisely but cannot tell you the knowledge that it is not taught.
 
 The interested user could try it on their own.
-
