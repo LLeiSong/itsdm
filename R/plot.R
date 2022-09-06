@@ -1227,8 +1227,9 @@ plot.POEvaluation <- function(x, ...) {
                   colour = "chance", linetype = "chance"),
               size = 0.8) +
     geom_text(x = 0.8, y = 0.1,
-              label = sprintf("AUC: %s",
-                              round(po_eval$roc_ratio$auc_ratio, 3))) +
+              label = sprintf("AUC[ratio]: %s",
+                              round(po_eval$roc_ratio$auc_ratio, 3)),
+              parse = TRUE) +
     ggtitle('Modified ROC curve') +
     labs(y = "1 - omission error",
          x = "Proportion of area predicted present") +
@@ -1259,9 +1260,9 @@ plot.POEvaluation <- function(x, ...) {
     scale_x_continuous(n.breaks = 9) +
     geom_text(x = 0.2, y = max(cbi_bins$f_ratio),
               label = sprintf("CBI: %s", round(po_eval$boyce$cor, 3))) +
-    labs(y = "P/E ratio",
+    labs(y = "Predicted-to-expected (P/E) ratio",
          x = "Suitability") +
-    ggtitle("Continuous boyces index") +
+    ggtitle("Continuous P/E index") +
     theme_minimal() +
     theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
           plot.title.position = 'panel',
