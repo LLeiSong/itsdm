@@ -84,7 +84,7 @@
       <h1 data-toc-skip>Using <code>itsdm</code> to a real species: Africa savanna elephant</h1>
                         <h4 data-toc-skip class="author">Lei Song</h4>
             
-            <h4 data-toc-skip class="date">2022-08-31</h4>
+            <h4 data-toc-skip class="date">2022-09-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/LLeiSong/itsdm/blob/HEAD/vignettes/itsdm_example.Rmd" class="external-link"><code>vignettes/itsdm_example.Rmd</code></a></small>
       <div class="hidden name"><code>itsdm_example.Rmd</code></div>
@@ -252,7 +252,7 @@
 <span><span class="co">#&gt;      [bio17] &lt;= [8.00] (value: 6.00)</span></span>
 <span><span class="co">#&gt;      [bio18] &lt;= [145.00] (value: 99.00)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">occ_outliers</span><span class="op">)</span></span></code></pre></div>
-<p><img src="itsdm-outliers-1.png" title="plot of chunk outliers" alt="plot of chunk outliers" style="display: block; margin: auto;"></p>
+<p><img src="itsdm-outliers-1.png" alt="plot of chunk outliers" style="display: block; margin: auto;"></p>
 <p>According to the figure and the prior knowledge of the Africa savanna elephant, we decide not to drop the outliers. The outliers seem more like rare records. In addition, if they are real outliers, the later <code>isolation.forest</code> could detect them again. Now let’s organize the occurrence before the next step.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">occ</span> <span class="op">&lt;-</span> <span class="va">occ_outliers</span><span class="op">$</span><span class="va">pts_occ</span></span>
@@ -344,7 +344,7 @@
 <h2 id="visualize-results">Visualize results<a class="anchor" aria-label="anchor" href="#visualize-results"></a>
 </h2>
 <p>Predicted environmental suitability</p>
-<p><img src="itsdm-prediction-1.png" title="plot of chunk prediction" alt="plot of chunk prediction" style="display: block; margin: auto;"></p>
+<p><img src="itsdm-prediction-1.png" alt="plot of chunk prediction" style="display: block; margin: auto;"></p>
 <p>This indicates African savanna elephants have a very large potential habitat on this continent. Like more explicit field research indicates that the potential range of African elephants could be more than five times larger than its current extent (<a href="https://scitechdaily.com/african-elephants-have-plenty-of-habitat-if-spared-from-the-ivory-trade/" class="external-link uri">https://scitechdaily.com/african-elephants-have-plenty-of-habitat-if-spared-from-the-ivory-trade/</a>). As a mega-mammal, elephants could adapt themselves to survive harsh environments.</p>
 <p>Presence-only model evaluation</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -373,7 +373,7 @@
 <span><span class="co">#&gt; Overprediction rate:          0.214</span></span>
 <span><span class="co">#&gt; Underprediction rate:         0.199</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">eval_test</span><span class="op">)</span></span></code></pre></div>
-<p><img src="itsdm-eval-1.png" title="plot of chunk eval" alt="plot of chunk eval" style="display: block; margin: auto;"></p>
+<p><img src="itsdm-eval-1.png" alt="plot of chunk eval" style="display: block; margin: auto;"></p>
 <p>According to the evaluation, the model has the potential to improve, for instance, by adding more explanatory features: forest cover, distance to water, elevation, slope, human influence, etc. According to the continuous Boyce index and TSS curve, the model overestimates some “completely” unsuitable areas, for example, Sahara (see above suitability map). One assumption is that several occurrence data locate in the Namib desert. And land cover map reflects this information to Sahara. But Namib desert is very narrow and close to natural resources, which makes it suitable for elephants. However, deep Sahara is not the same story. So, including a feature describing the distance to water could be helpful to improve the model.</p>
 </div>
 <div class="section level2">
@@ -384,12 +384,12 @@
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot response curves</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">marginal_responses</span>, target_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'bio1'</span>, <span class="st">'bio12'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="itsdm-marginal_responses-1.png" title="plot of chunk marginal_responses" alt="plot of chunk marginal_responses" style="display: block; margin: auto;"></p>
+<p><img src="itsdm-marginal_responses-1.png" alt="plot of chunk marginal_responses" style="display: block; margin: auto;"></p>
 <p>We checked the marginal response curves of two bioclimatic variables. The response curve of bio1 and bio12 are very reasonable and indicate the preferred temperature and precipitation conditions.</p>
 <p>Independent response curves</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">independent_responses</span>, target_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'landcover'</span>, <span class="st">'wdpa'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="itsdm-independent_responses-1.png" title="plot of chunk independent_responses" alt="plot of chunk independent_responses" style="display: block; margin: auto;"></p>
+<p><img src="itsdm-independent_responses-1.png" alt="plot of chunk independent_responses" style="display: block; margin: auto;"></p>
 <p>According to the figure above, elephants go beyond protected areas often. This matches with the previous study related to elephant movement. Thus, the binary protected area is not a good modeling variable. Distance to the protected area might be, however. Because usually, there are plenty of natural resources (food, water, etc.) within the protected area. Elephants might like to stay around these protected areas. The response of land cover indicates that elephants strongly prefer to stay in some landscape, such as forest, shrub, wetland, cropland, and built-up. Here is some useful information:</p>
 <ol style="list-style-type: decimal">
 <li>Forest/shrub cover ratio may be another helpful feature regarding land cover.</li>
@@ -399,7 +399,7 @@
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Variable dependence scatter points with fitted curves made by SHAP test</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">shap_dependences</span>, smooth_line <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="itsdm-variable_dependence-1.png" title="plot of chunk variable_dependence" alt="plot of chunk variable_dependence" style="display: block; margin: auto;"></p>
+<p><img src="itsdm-variable_dependence-1.png" alt="plot of chunk variable_dependence" style="display: block; margin: auto;"></p>
 <p>Now, let’s overview all variable responses made by Shapley values. All variables seem to be the environmental features of elephants. Precipitation seems like a solid decisive factor. We could analyze feature importance further to diagnose the contribution of each variable.</p>
 </div>
 <div class="section level2">
@@ -535,7 +535,7 @@
 <span>  <span class="va">it_sdm</span><span class="op">$</span><span class="va">var_train</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># Plot general contribution for all observations</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">var_contrib</span><span class="op">)</span></span></code></pre></div>
-<p><img src="itsdm-var_contrib_general-1.png" title="plot of chunk var_contrib_general" alt="plot of chunk var_contrib_general" style="display: block; margin: auto;"></p>
+<p><img src="itsdm-var_contrib_general-1.png" alt="plot of chunk var_contrib_general" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="presence-absence-map">Presence-absence map<a class="anchor" aria-label="anchor" href="#presence-absence-map"></a>
@@ -554,7 +554,7 @@
 <span>                       na.value <span class="op">=</span> <span class="st">'transparent'</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_equal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_linedraw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="itsdm-pa-1.png" title="plot of chunk pa" alt="plot of chunk pa" style="display: block; margin: auto;"></p>
+<p><img src="itsdm-pa-1.png" alt="plot of chunk pa" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="analyze-variable-dependence">Analyze variable dependence<a class="anchor" aria-label="anchor" href="#analyze-variable-dependence"></a>
@@ -564,7 +564,7 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">shap_dependences</span>,</span>
 <span>     target_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'bio1'</span>, <span class="st">'bio12'</span>, <span class="st">'landcover'</span><span class="op">)</span>,</span>
 <span>     related_var <span class="op">=</span> <span class="st">'bio3'</span>, smooth_line <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="itsdm-var_inter_dependence-1.png" title="plot of chunk var_inter_dependence" alt="plot of chunk var_inter_dependence" style="display: block; margin: auto;"></p>
+<p><img src="itsdm-var_inter_dependence-1.png" alt="plot of chunk var_inter_dependence" style="display: block; margin: auto;"></p>
 <p>Bio3 has a strong correlation with bio12. We could check variable dependence one by one to exclude some in the final model.</p>
 </div>
 <div class="section level2">
@@ -589,7 +589,7 @@
 <span><span class="co">## By default, it only plot the most 5 important variables for each observation</span></span>
 <span><span class="co">## You could change `num_features` to show more variables</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">var_contrib_outliers</span>, plot_each_obs <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<p><img src="itsdm-var_contrib-1.png" title="plot of chunk var_contrib" alt="plot of chunk var_contrib" style="display: block; margin: auto;"></p>
+<p><img src="itsdm-var_contrib-1.png" alt="plot of chunk var_contrib" style="display: block; margin: auto;"></p>
 <p>According to feature response curves and this figure, some detected outliers could be removed from training. For example, some features have a strongly negative contribution to observations No.2, No.4, and No.6 and they could be excluded.</p>
 </div>
 <div class="section level2">

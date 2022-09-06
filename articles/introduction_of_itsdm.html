@@ -84,7 +84,7 @@
       <h1 data-toc-skip>Introduction of <code>itsdm</code> with a virtual species</h1>
                         <h4 data-toc-skip class="author">Lei Song</h4>
             
-            <h4 data-toc-skip class="date">2022-08-31</h4>
+            <h4 data-toc-skip class="date">2022-09-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/LLeiSong/itsdm/blob/HEAD/vignettes/introduction_of_itsdm.Rmd" class="external-link"><code>vignettes/introduction_of_itsdm.Rmd</code></a></small>
       <div class="hidden name"><code>introduction_of_itsdm.Rmd</code></div>
@@ -211,7 +211,7 @@
 <span></span>
 <span><span class="co"># Check response curves</span></span>
 <span><span class="fu">plotResponse</span><span class="op">(</span><span class="va">my.species</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-virtualspecies-1.png" title="plot of chunk virtualspecies" alt="plot of chunk virtualspecies" style="display: block; margin: auto;"></p>
+<p><img src="intro-virtualspecies-1.png" alt="plot of chunk virtualspecies" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="generate-pseudo-samples-for-virtual-species">Generate pseudo samples for virtual species<a class="anchor" aria-label="anchor" href="#generate-pseudo-samples-for-virtual-species"></a>
@@ -284,7 +284,7 @@
 <span><span class="co"># plot(occ_outliers,</span></span>
 <span><span class="co">#      overlay_raster = variables %&gt;% slice('band', 6))</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">occ_outliers</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-remove_outliers-1.png" title="plot of chunk remove_outliers" alt="plot of chunk remove_outliers" style="display: block; margin: auto;"></p>
+<p><img src="intro-remove_outliers-1.png" alt="plot of chunk remove_outliers" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Remove outliers if necessary</span></span>
@@ -339,8 +339,8 @@
 <span>                     sample_size <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>                     ndim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p>Let’s compare the predicted suitability with real suitability.</p>
-<p><img src="intro-prediction-1.png" title="plot of chunk prediction" alt="plot of chunk prediction" style="display: block; margin: auto;"></p>
-<p><img src="intro-raw_suit-1.png" title="plot of chunk raw_suit" alt="plot of chunk raw_suit" style="display: block; margin: auto;"></p>
+<p><img src="intro-prediction-1.png" alt="plot of chunk prediction" style="display: block; margin: auto;"></p>
+<p><img src="intro-raw_suit-1.png" alt="plot of chunk raw_suit" style="display: block; margin: auto;"></p>
 <p>Let’s do model evaluation using multiple presence-only metrics. In this package, we implement both presence-only and presence-background evaluation metrics. The model calculated evaluation on both training and test datasets. Here we just display evaluation on test dataset. You could check <code>it_sdm$eval_train</code> the same way as <code>it_sdm$eval_test</code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Metrics based on test dataset</span></span>
@@ -364,21 +364,21 @@
 <span><span class="co">#&gt; Overprediction rate:          0.122</span></span>
 <span><span class="co">#&gt; Underprediction rate:         0.028</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">eval_test</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-evaluation-1.png" title="plot of chunk evaluation" alt="plot of chunk evaluation" style="display: block; margin: auto;"></p>
+<p><img src="intro-evaluation-1.png" alt="plot of chunk evaluation" style="display: block; margin: auto;"></p>
 <p>The result of <code>isotree_po</code> has options to generate response curves and variable analysis together. The response curves include marginal response curves, independent response curves, and Shapley value-based dependence. The variable analysis consists of the Jackknife of Pearson correlation with the result of the full model with all variables and AUC_ratio and variable dependence with SHAP test.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot response curves</span></span>
 <span><span class="co">## Marginal response curves of bio5 and bio6</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">marginal_responses</span>, target_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'bio1'</span>, <span class="st">'bio5'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-marginal_responses-1.png" title="plot of chunk marginal_responses" alt="plot of chunk marginal_responses" style="display: block; margin: auto;"></p>
+<p><img src="intro-marginal_responses-1.png" alt="plot of chunk marginal_responses" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Independent response curves of variable bio1 and bio12.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">independent_responses</span>, target_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'bio1'</span>, <span class="st">'bio12'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-independent_responses-1.png" title="plot of chunk independent_responses" alt="plot of chunk independent_responses" style="display: block; margin: auto;"></p>
+<p><img src="intro-independent_responses-1.png" alt="plot of chunk independent_responses" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Variable dependence scatter points with fitted curves made by SHAP test</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">shap_dependence</span>, smooth_line <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-variable_dependence-1.png" title="plot of chunk variable_dependence" alt="plot of chunk variable_dependence" style="display: block; margin: auto;"></p>
+<p><img src="intro-variable_dependence-1.png" alt="plot of chunk variable_dependence" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Printing variable analysis could give you enough info of variable importance</span></span>
 <span><span class="va">it_sdm</span><span class="op">$</span><span class="va">variable_analysis</span></span>
@@ -443,7 +443,7 @@
 <span></span>
 <span><span class="co"># We also could plot variable importance out</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">it_sdm</span><span class="op">$</span><span class="va">variable_analysis</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-variable_analysis-1.png" title="plot of chunk variable_analysis" alt="plot of chunk variable_analysis" style="display: block; margin: auto;"></p>
+<p><img src="intro-variable_analysis-1.png" alt="plot of chunk variable_analysis" style="display: block; margin: auto;"></p>
 <p>According to the analysis, all explanatory variables contribute significantly to the model. This is predictable because the virtual species is made by these four variables. bio12 is the most important variable.</p>
 <p>Besides the regular response curves, <code>itsdm</code> also makes spatially partial dependence maps. By default in <code>isotree_po</code>, Shapley value-based spatial dependence maps are not generated because of the computational efficiency. The user could generate these maps by calling function <code>spatial_response</code> later after getting the model done.</p>
 <p>Note that a very large raster stack of environmental variables might cause memory failure or super slow computation when calculating Shapely value-based spatially dependence maps. So use it based on your own knowledge of your data. Shapley value-based dependence map will give you a bit more information of the value pushing the prediction higher or lower than average.</p>
@@ -477,7 +477,7 @@
 <span><span class="co">#&gt; beta = 0.7</span></span>
 <span><span class="co">#&gt; alpha = -0.05</span></span>
 <span><span class="co">#&gt; species prevalence = 0.105503625307627</span></span></code></pre></div>
-<p><img src="intro-pa-1.png" title="plot of chunk pa" alt="plot of chunk pa" style="display: block; margin: auto;"></p>
+<p><img src="intro-pa-1.png" alt="plot of chunk pa" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="analyze-variable-dependence">Analyze variable dependence<a class="anchor" aria-label="anchor" href="#analyze-variable-dependence"></a>
@@ -493,7 +493,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">var_dependence</span>,</span>
 <span>     target_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'bio1'</span>, <span class="st">'bio12'</span><span class="op">)</span>,</span>
 <span>     related_var <span class="op">=</span> <span class="st">'bio5'</span>, smooth_line <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-var_inter_dependence-1.png" title="plot of chunk var_inter_dependence" alt="plot of chunk var_inter_dependence" style="display: block; margin: auto;"></p>
+<p><img src="intro-var_inter_dependence-1.png" alt="plot of chunk var_inter_dependence" style="display: block; margin: auto;"></p>
 <p>Above figure shows bio1 and bio5 have strong correlations.</p>
 </div>
 <div class="section level2">
@@ -512,7 +512,7 @@
 <span><span class="co">## By default, it only plot the most 5 important variables for each observation</span></span>
 <span><span class="co">## You could change `num_features` to show more variables</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">var_contrib</span>, plot_each_obs <span class="op">=</span> <span class="cn">T</span>, num_features <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-var_contrib-1.png" title="plot of chunk var_contrib" alt="plot of chunk var_contrib" style="display: block; margin: auto;"></p>
+<p><img src="intro-var_contrib-1.png" alt="plot of chunk var_contrib" style="display: block; margin: auto;"></p>
 <p>For example, No.2 observation is decided largely by bio15 and bio5 negatively. Let’s check it with spatial response map together.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -522,7 +522,7 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">it_sdm</span><span class="op">$</span><span class="va">var_test</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>          color <span class="op">=</span> <span class="st">'blue'</span>, pch <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_linedraw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-var_contrib_plot-1.png" title="plot of chunk var_contrib_plot" alt="plot of chunk var_contrib_plot" style="display: block; margin: auto;"></p>
+<p><img src="intro-var_contrib_plot-1.png" alt="plot of chunk var_contrib_plot" style="display: block; margin: auto;"></p>
 </div>
   </div>
 
