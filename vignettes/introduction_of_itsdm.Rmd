@@ -1,7 +1,7 @@
 ---
 title: "Introduction of `itsdm` with a virtual species"
 author: "Lei Song"
-date: "2022-08-31"
+date: "2022-09-05"
 output:
   rmarkdown::html_document:
     theme: readable
@@ -152,7 +152,7 @@ my.species <- convertToPA(
 plotResponse(my.species)
 ```
 
-<img src="intro-virtualspecies-1.png" title="plot of chunk virtualspecies" alt="plot of chunk virtualspecies" style="display: block; margin: auto;" />
+<img src="intro-virtualspecies-1.png" alt="plot of chunk virtualspecies" style="display: block; margin: auto;" />
 
 ## Generate pseudo samples for virtual species
 
@@ -231,7 +231,7 @@ occ_outliers <- suspicious_env_outliers(
 plot(occ_outliers)
 ```
 
-<img src="intro-remove_outliers-1.png" title="plot of chunk remove_outliers" alt="plot of chunk remove_outliers" style="display: block; margin: auto;" />
+<img src="intro-remove_outliers-1.png" alt="plot of chunk remove_outliers" style="display: block; margin: auto;" />
 
 ```r
 
@@ -293,9 +293,9 @@ it_sdm <- isotree_po(occ = occ_sf,
 
 Let's compare the predicted suitability with real suitability.
 
-<img src="intro-prediction-1.png" title="plot of chunk prediction" alt="plot of chunk prediction" style="display: block; margin: auto;" />
+<img src="intro-prediction-1.png" alt="plot of chunk prediction" style="display: block; margin: auto;" />
 
-<img src="intro-raw_suit-1.png" title="plot of chunk raw_suit" alt="plot of chunk raw_suit" style="display: block; margin: auto;" />
+<img src="intro-raw_suit-1.png" alt="plot of chunk raw_suit" style="display: block; margin: auto;" />
 
 Let's do model evaluation using multiple presence-only metrics. In this package, we implement both presence-only and presence-background evaluation metrics. The model calculated evaluation on both training and test datasets. Here we just display evaluation on test dataset. You could check `it_sdm$eval_train` the same way as `it_sdm$eval_test`.
 
@@ -324,7 +324,7 @@ it_sdm$eval_test
 plot(it_sdm$eval_test)
 ```
 
-<img src="intro-evaluation-1.png" title="plot of chunk evaluation" alt="plot of chunk evaluation" style="display: block; margin: auto;" />
+<img src="intro-evaluation-1.png" alt="plot of chunk evaluation" style="display: block; margin: auto;" />
 
 The result of `isotree_po` has options to generate response curves and variable analysis together. The response curves include marginal response curves, independent response curves, and Shapley value-based dependence. The variable analysis consists of the Jackknife of Pearson correlation with the result of the full model with all variables and AUC_ratio and variable dependence with SHAP test.
 
@@ -335,7 +335,7 @@ The result of `isotree_po` has options to generate response curves and variable 
 plot(it_sdm$marginal_responses, target_var = c('bio1', 'bio5'))
 ```
 
-<img src="intro-marginal_responses-1.png" title="plot of chunk marginal_responses" alt="plot of chunk marginal_responses" style="display: block; margin: auto;" />
+<img src="intro-marginal_responses-1.png" alt="plot of chunk marginal_responses" style="display: block; margin: auto;" />
 
 
 ```r
@@ -343,7 +343,7 @@ plot(it_sdm$marginal_responses, target_var = c('bio1', 'bio5'))
 plot(it_sdm$independent_responses, target_var = c('bio1', 'bio12'))
 ```
 
-<img src="intro-independent_responses-1.png" title="plot of chunk independent_responses" alt="plot of chunk independent_responses" style="display: block; margin: auto;" />
+<img src="intro-independent_responses-1.png" alt="plot of chunk independent_responses" style="display: block; margin: auto;" />
 
 
 ```r
@@ -351,7 +351,7 @@ plot(it_sdm$independent_responses, target_var = c('bio1', 'bio12'))
 plot(it_sdm$shap_dependence, smooth_line = FALSE)
 ```
 
-<img src="intro-variable_dependence-1.png" title="plot of chunk variable_dependence" alt="plot of chunk variable_dependence" style="display: block; margin: auto;" />
+<img src="intro-variable_dependence-1.png" alt="plot of chunk variable_dependence" style="display: block; margin: auto;" />
 
 
 ```r
@@ -420,7 +420,7 @@ it_sdm$variable_analysis
 plot(it_sdm$variable_analysis)
 ```
 
-<img src="intro-variable_analysis-1.png" title="plot of chunk variable_analysis" alt="plot of chunk variable_analysis" style="display: block; margin: auto;" />
+<img src="intro-variable_analysis-1.png" alt="plot of chunk variable_analysis" style="display: block; margin: auto;" />
 
 According to the analysis, all explanatory variables contribute significantly to the model. This is predictable because the virtual species is made by these four variables. bio12 is the most important variable.
 
@@ -465,7 +465,7 @@ pa_map; plot(pa_map)
 #> species prevalence = 0.105503625307627
 ```
 
-<img src="intro-pa-1.png" title="plot of chunk pa" alt="plot of chunk pa" style="display: block; margin: auto;" />
+<img src="intro-pa-1.png" alt="plot of chunk pa" style="display: block; margin: auto;" />
 
 ## Analyze variable dependence
 
@@ -484,7 +484,7 @@ plot(var_dependence,
      related_var = 'bio5', smooth_line = TRUE)
 ```
 
-<img src="intro-var_inter_dependence-1.png" title="plot of chunk var_inter_dependence" alt="plot of chunk var_inter_dependence" style="display: block; margin: auto;" />
+<img src="intro-var_inter_dependence-1.png" alt="plot of chunk var_inter_dependence" style="display: block; margin: auto;" />
 
 Above figure shows bio1 and bio5 have strong correlations.
 
@@ -507,7 +507,7 @@ var_contrib <- variable_contrib(
 plot(var_contrib, plot_each_obs = T, num_features = 4)
 ```
 
-<img src="intro-var_contrib-1.png" title="plot of chunk var_contrib" alt="plot of chunk var_contrib" style="display: block; margin: auto;" />
+<img src="intro-var_contrib-1.png" alt="plot of chunk var_contrib" style="display: block; margin: auto;" />
 
 For example, No.2 observation is decided largely by bio15 and bio5 negatively. Let's check it with spatial response map together.
 
@@ -522,4 +522,4 @@ ggplot() +
   theme_linedraw()
 ```
 
-<img src="intro-var_contrib_plot-1.png" title="plot of chunk var_contrib_plot" alt="plot of chunk var_contrib_plot" style="display: block; margin: auto;" />
+<img src="intro-var_contrib_plot-1.png" alt="plot of chunk var_contrib_plot" style="display: block; margin: auto;" />

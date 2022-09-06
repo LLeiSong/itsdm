@@ -1,7 +1,7 @@
 ---
 title: "Using `itsdm` to a real species: Africa savanna elephant"
 author: "Lei Song"
-date: "2022-08-31"
+date: "2022-09-06"
 output:
   rmarkdown::html_document:
     theme: readable
@@ -190,7 +190,7 @@ occ_outliers <- suspicious_env_outliers(
 plot(occ_outliers)
 ```
 
-<img src="itsdm-outliers-1.png" title="plot of chunk outliers" alt="plot of chunk outliers" style="display: block; margin: auto;" />
+<img src="itsdm-outliers-1.png" alt="plot of chunk outliers" style="display: block; margin: auto;" />
 
 According to the figure and the prior knowledge of the Africa savanna elephant, we decide not to drop the outliers. The outliers seem more like rare records. In addition, if they are real outliers, the later `isolation.forest` could detect them again. Now let's organize the occurrence before the next step.
 
@@ -295,7 +295,7 @@ it_sdm <- isotree_po(occ = occ_sf,
 
 Predicted environmental suitability
 
-<img src="itsdm-prediction-1.png" title="plot of chunk prediction" alt="plot of chunk prediction" style="display: block; margin: auto;" />
+<img src="itsdm-prediction-1.png" alt="plot of chunk prediction" style="display: block; margin: auto;" />
 
 This indicates African savanna elephants have a very large potential habitat on this continent. Like more explicit field research indicates that the potential range of African elephants could be more than five times larger than its current extent (https://scitechdaily.com/african-elephants-have-plenty-of-habitat-if-spared-from-the-ivory-trade/). As a mega-mammal, elephants could adapt themselves to survive harsh environments.
 
@@ -330,7 +330,7 @@ it_sdm$eval_test
 plot(it_sdm$eval_test)
 ```
 
-<img src="itsdm-eval-1.png" title="plot of chunk eval" alt="plot of chunk eval" style="display: block; margin: auto;" />
+<img src="itsdm-eval-1.png" alt="plot of chunk eval" style="display: block; margin: auto;" />
 
 According to the evaluation, the model has the potential to improve, for instance, by adding more explanatory features: forest cover, distance to water, elevation, slope, human influence, etc. According to the continuous Boyce index and TSS curve, the model overestimates some "completely" unsuitable areas, for example, Sahara (see above suitability map). One assumption is that several occurrence data locate in the Namib desert. And land cover map reflects this information to Sahara. But Namib desert is very narrow and close to natural resources, which makes it suitable for elephants. However, deep Sahara is not the same story. So, including a feature describing the distance to water could be helpful to improve the model.
 
@@ -346,7 +346,7 @@ Marginal response curves
 plot(it_sdm$marginal_responses, target_var = c('bio1', 'bio12'))
 ```
 
-<img src="itsdm-marginal_responses-1.png" title="plot of chunk marginal_responses" alt="plot of chunk marginal_responses" style="display: block; margin: auto;" />
+<img src="itsdm-marginal_responses-1.png" alt="plot of chunk marginal_responses" style="display: block; margin: auto;" />
 
 We checked the marginal response curves of two bioclimatic variables. The response curve of bio1 and bio12 are very reasonable and indicate the preferred temperature and precipitation conditions.
 
@@ -357,7 +357,7 @@ Independent response curves
 plot(it_sdm$independent_responses, target_var = c('landcover', 'wdpa'))
 ```
 
-<img src="itsdm-independent_responses-1.png" title="plot of chunk independent_responses" alt="plot of chunk independent_responses" style="display: block; margin: auto;" />
+<img src="itsdm-independent_responses-1.png" alt="plot of chunk independent_responses" style="display: block; margin: auto;" />
 
 According to the figure above, elephants go beyond protected areas often. This matches with the previous study related to elephant movement. Thus, the binary protected area is not a good modeling variable. Distance to the protected area might be, however. Because usually, there are plenty of natural resources (food, water, etc.) within the protected area. Elephants might like to stay around these protected areas.
 The response of land cover indicates that elephants strongly prefer to stay in some landscape, such as forest, shrub, wetland, cropland, and built-up. Here is some useful information:
@@ -373,7 +373,7 @@ Shapley value based dependence curves
 plot(it_sdm$shap_dependences, smooth_line = FALSE)
 ```
 
-<img src="itsdm-variable_dependence-1.png" title="plot of chunk variable_dependence" alt="plot of chunk variable_dependence" style="display: block; margin: auto;" />
+<img src="itsdm-variable_dependence-1.png" alt="plot of chunk variable_dependence" style="display: block; margin: auto;" />
 
 Now, let's overview all variable responses made by Shapley values. All variables seem to be the environmental features of elephants. Precipitation seems like a solid decisive factor. We could analyze feature importance further to diagnose the contribution of each variable.
 
@@ -518,7 +518,7 @@ var_contrib <- variable_contrib(
 plot(var_contrib)
 ```
 
-<img src="itsdm-var_contrib_general-1.png" title="plot of chunk var_contrib_general" alt="plot of chunk var_contrib_general" style="display: block; margin: auto;" />
+<img src="itsdm-var_contrib_general-1.png" alt="plot of chunk var_contrib_general" style="display: block; margin: auto;" />
 
 ## Presence-absence map
 
@@ -540,7 +540,7 @@ ggplot() +
   theme_linedraw()
 ```
 
-<img src="itsdm-pa-1.png" title="plot of chunk pa" alt="plot of chunk pa" style="display: block; margin: auto;" />
+<img src="itsdm-pa-1.png" alt="plot of chunk pa" style="display: block; margin: auto;" />
 
 ## Analyze variable dependence
 
@@ -553,7 +553,7 @@ plot(it_sdm$shap_dependences,
      related_var = 'bio3', smooth_line = FALSE)
 ```
 
-<img src="itsdm-var_inter_dependence-1.png" title="plot of chunk var_inter_dependence" alt="plot of chunk var_inter_dependence" style="display: block; margin: auto;" />
+<img src="itsdm-var_inter_dependence-1.png" alt="plot of chunk var_inter_dependence" style="display: block; margin: auto;" />
 
 Bio3 has a strong correlation with bio12. We could check variable dependence one by one to exclude some in the final model.
 
@@ -582,7 +582,7 @@ var_contrib_outliers <- variable_contrib(
 plot(var_contrib_outliers, plot_each_obs = T)
 ```
 
-<img src="itsdm-var_contrib-1.png" title="plot of chunk var_contrib" alt="plot of chunk var_contrib" style="display: block; margin: auto;" />
+<img src="itsdm-var_contrib-1.png" alt="plot of chunk var_contrib" style="display: block; margin: auto;" />
 
 According to feature response curves and this figure, some detected outliers could be removed from training. For example, some features have a strongly negative contribution to observations No.2, No.4, and No.6 and they could be excluded.
 

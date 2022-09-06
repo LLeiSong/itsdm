@@ -2,6 +2,7 @@
 
 - Fix a bug in function `print.VariableAnalysis` mentioned in issue #2: if any value is negative then it would fail. 
 - As mentioned in issue #3, add a sampling step in function `plot.ShapDependence` when the number of records is larger than 1000. In order to keep the overall trend, the sampling is stratified by bins. So the points cloud can be clearer to interpret.
+- Modify some text in POEvaluation plot figure.
 
 # itsdm 0.1.2
 

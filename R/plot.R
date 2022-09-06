@@ -1262,7 +1262,7 @@ plot.POEvaluation <- function(x, ...) {
               label = sprintf("CBI: %s", round(po_eval$boyce$cor, 3))) +
     labs(y = "Predicted-to-expected (P/E) ratio",
          x = "Suitability") +
-    ggtitle("Continuous P/E index") +
+    ggtitle("Continuous P/E curve") +
     theme_minimal() +
     theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
           plot.title.position = 'panel',
