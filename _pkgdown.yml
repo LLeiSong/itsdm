@@ -1,2 +1,37 @@
 url: https://lleisong.github.io/itsdm/
 
+reference:
+- title: Modeling species distribution
+- contents:
+  - "dim_reduce"
+  - "suspicious_env_outliers"
+  - "isotree_po"
+  - "probability"
+  - "variable_analysis"
+  - "evaluate_po"
+  - "independent_response"
+  - "marginal_response"
+  - "shap_dependence"
+  - "spatial_response"
+  - "variable_contrib"
+  - "convert_to_pa"
+
+- title: Visualization
+- subtitle: Plot/figure
+- contents:
+  - starts_with("plot")
+- subtitle: Print/summary
+- contents:
+  - starts_with("print")
+- title: Datasets
+- contents:
+  - "mainland_africa"
+  - "occ_virtual_species"
+  - "worldclim2"
+  - "future_worldclim2"
+  - "cmcc_bioclim"
+  - "future_cmcc_bioclim"
+- title: Package
+- contents:
+  - "itsdm-package"
+
