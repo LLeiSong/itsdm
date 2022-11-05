@@ -60,58 +60,66 @@
     </div>
 
     <table class="ref-index"><colgroup><col class="alias"><col class="title"></colgroup><tbody><tr><th colspan="2">
-          <h2 id="all-functions">All functions <a href="#all-functions" class="anchor" aria-hidden="true"></a></h2>
+          <h2 id="modeling-species-distribution">Modeling species distribution <a href="#modeling-species-distribution" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="cmcc_bioclim.html">cmcc_bioclim()</a></code> </p>
-        </td>
-        <td><p>Download historic Bioclimatic indicators (BIOs) named CMCC-BioClimInd.</p></td>
-      </tr><tr><td>
-          <p><code><a href="convert_to_pa.html">convert_to_pa()</a></code> </p>
-        </td>
-        <td><p>Convert predicted suitability to presence-absence map.</p></td>
-      </tr><tr><td>
           <p><code><a href="dim_reduce.html">dim_reduce()</a></code> </p>
         </td>
         <td><p>Reduce dimensions using auto-correlation between numeric raster layers.</p></td>
       </tr><tr><td>
-          <p><code><a href="evaluate_po.html">evaluate_po()</a></code> </p>
+          <p><code><a href="suspicious_env_outliers.html">suspicious_env_outliers()</a></code> </p>
         </td>
-        <td><p>Evaluate the model based on presence-only data.</p></td>
-      </tr><tr><td>
-          <p><code><a href="future_cmcc_bioclim.html">future_cmcc_bioclim()</a></code> </p>
-        </td>
-        <td><p>Download future Bioclimatic indicators (BIOs) named CMCC-BioClimInd.</p></td>
-      </tr><tr><td>
-          <p><code><a href="future_worldclim2.html">future_worldclim2()</a></code> </p>
-        </td>
-        <td><p>A function to parse the future climate from worldclim version 2.1.</p></td>
-      </tr><tr><td>
-          <p><code><a href="independent_response.html">independent_response()</a></code> </p>
-        </td>
-        <td><p>Calculate independent responses of each variables.</p></td>
+        <td><p>Function to detect suspicious outliers based on environmental variables.</p></td>
       </tr><tr><td>
           <p><code><a href="isotree_po.html">isotree_po()</a></code> </p>
         </td>
         <td><p>Function to run extended isolation forest as SDM.</p></td>
       </tr><tr><td>
-          <p><code><a href="itsdm-package.html">itsdm-package</a></code> <code><a href="itsdm-package.html">itsdm</a></code> </p>
+          <p><code><a href="probability.html">probability()</a></code> </p>
         </td>
-        <td><p>Isolation forest-based presence-only species distribution modeling</p></td>
+        <td><p>Estimate suitability on stars object using trained <code>isolation.forest</code> model.</p></td>
       </tr><tr><td>
-          <p><code><a href="mainland_africa.html">mainland_africa</a></code> </p>
+          <p><code><a href="variable_analysis.html">variable_analysis()</a></code> </p>
         </td>
-        <td><p>Boundary of mainland Africa</p></td>
+        <td><p>Function to evaluate relative importance of each variable.</p></td>
+      </tr><tr><td>
+          <p><code><a href="evaluate_po.html">evaluate_po()</a></code> </p>
+        </td>
+        <td><p>Evaluate the model based on presence-only data.</p></td>
+      </tr><tr><td>
+          <p><code><a href="independent_response.html">independent_response()</a></code> </p>
+        </td>
+        <td><p>Calculate independent responses of each variables.</p></td>
       </tr><tr><td>
           <p><code><a href="marginal_response.html">marginal_response()</a></code> </p>
         </td>
         <td><p>Calculate marginal responses of each variables.</p></td>
       </tr><tr><td>
-          <p><code><a href="occ_virtual_species.html">occ_virtual_species</a></code> </p>
+          <p><code><a href="shap_dependence.html">shap_dependence()</a></code> </p>
         </td>
-        <td><p>Occurrence dataset of a virtual species</p></td>
+        <td><p>Calculate Shapley value based variable dependence.</p></td>
       </tr><tr><td>
+          <p><code><a href="spatial_response.html">spatial_response()</a></code> </p>
+        </td>
+        <td><p>Calculate spatial response or dependence plot.</p></td>
+      </tr><tr><td>
+          <p><code><a href="variable_contrib.html">variable_contrib()</a></code> </p>
+        </td>
+        <td><p>Evaluate variable contributions for targeted observations.</p></td>
+      </tr><tr><td>
+          <p><code><a href="convert_to_pa.html">convert_to_pa()</a></code> </p>
+        </td>
+        <td><p>Convert predicted suitability to presence-absence map.</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="visualization">Visualization <a href="#visualization" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="plot-figure">Plot/figure <a href="#plot-figure" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
           <p><code><a href="plot.EnvironmentalOutlier.html">plot(<i>&lt;EnvironmentalOutlier&gt;</i>)</a></code> </p>
         </td>
         <td><p>Function to plot suspicious outliers in an observation dataset.</p></td>
@@ -147,7 +155,11 @@
           <p><code><a href="plot.VariableContribution.html">plot(<i>&lt;VariableContribution&gt;</i>)</a></code> </p>
         </td>
         <td><p>Function to plot variable contribution for target observations.</p></td>
-      </tr><tr><td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="print-summary">Print/summary <a href="#print-summary" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
           <p><code><a href="print.EnvironmentalOutlier.html">print(<i>&lt;EnvironmentalOutlier&gt;</i>)</a></code> </p>
         </td>
         <td><p>Print summary information from PAConversion object.</p></td>
@@ -171,34 +183,42 @@
           <p><code><a href="print.VariableAnalysis.html">print(<i>&lt;VariableAnalysis&gt;</i>)</a></code> </p>
         </td>
         <td><p>Print summary information from variable importance object.</p></td>
-      </tr><tr><td>
-          <p><code><a href="probability.html">probability()</a></code> </p>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="datasets">Datasets <a href="#datasets" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="mainland_africa.html">mainland_africa</a></code> </p>
         </td>
-        <td><p>Estimate suitability on stars object using trained <code>isolation.forest</code> model.</p></td>
+        <td><p>Boundary of mainland Africa</p></td>
       </tr><tr><td>
-          <p><code><a href="shap_dependence.html">shap_dependence()</a></code> </p>
+          <p><code><a href="occ_virtual_species.html">occ_virtual_species</a></code> </p>
         </td>
-        <td><p>Calculate Shapley value based variable dependence.</p></td>
-      </tr><tr><td>
-          <p><code><a href="spatial_response.html">spatial_response()</a></code> </p>
-        </td>
-        <td><p>Calculate spatial response or dependence plot.</p></td>
-      </tr><tr><td>
-          <p><code><a href="suspicious_env_outliers.html">suspicious_env_outliers()</a></code> </p>
-        </td>
-        <td><p>Function to detect suspicious outliers based on environmental variables.</p></td>
-      </tr><tr><td>
-          <p><code><a href="variable_analysis.html">variable_analysis()</a></code> </p>
-        </td>
-        <td><p>Function to evaluate relative importance of each variable.</p></td>
-      </tr><tr><td>
-          <p><code><a href="variable_contrib.html">variable_contrib()</a></code> </p>
-        </td>
-        <td><p>Evaluate variable contributions for targeted observations.</p></td>
+        <td><p>Occurrence dataset of a virtual species</p></td>
       </tr><tr><td>
           <p><code><a href="worldclim2.html">worldclim2()</a></code> </p>
         </td>
         <td><p>Download environmental variables made by worldclim version 2.1.</p></td>
+      </tr><tr><td>
+          <p><code><a href="future_worldclim2.html">future_worldclim2()</a></code> </p>
+        </td>
+        <td><p>A function to parse the future climate from worldclim version 2.1.</p></td>
+      </tr><tr><td>
+          <p><code><a href="cmcc_bioclim.html">cmcc_bioclim()</a></code> </p>
+        </td>
+        <td><p>Download historic Bioclimatic indicators (BIOs) named CMCC-BioClimInd.</p></td>
+      </tr><tr><td>
+          <p><code><a href="future_cmcc_bioclim.html">future_cmcc_bioclim()</a></code> </p>
+        </td>
+        <td><p>Download future Bioclimatic indicators (BIOs) named CMCC-BioClimInd.</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="package">Package <a href="#package" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="itsdm-package.html">itsdm-package</a></code> <code><a href="itsdm-package.html">itsdm</a></code> </p>
+        </td>
+        <td><p>Isolation forest-based presence-only species distribution modeling</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
