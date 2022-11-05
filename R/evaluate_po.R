@@ -298,7 +298,7 @@ evaluate_po <- function(model,
 
   # Visualize
   if (visualize) {
-    plot(out)
+    print(plot(out))
   }
 
   # Return

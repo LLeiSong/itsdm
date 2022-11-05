@@ -379,7 +379,7 @@ variable_analysis <- function(model,
 
   # Visualize
   if (visualize) {
-    plot(out)
+    print(plot(out))
   }
 
   # Return

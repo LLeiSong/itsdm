@@ -183,7 +183,7 @@ independent_response <- function(model,
 
   # Visualize
   if (visualize) {
-    plot(responses)
+    print(plot(responses))
   }
 
   # Return

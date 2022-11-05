@@ -106,6 +106,6 @@ variable_contrib <- function(model,
   class(out) <- append("VariableContribution", class(out))
 
   # Plot and return
-  if (visualize) plot(out)
+  if (visualize) print(plot(out))
   return(out)
 }

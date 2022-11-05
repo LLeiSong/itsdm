@@ -1,3 +1,70 @@
+## Update (version 0.1.3)
+
+Changes to this version are minor and can be found in `NEWS.md`. Fixed a bug in function `print.VariableAnalysis`, modified a few printout formats in function `plot.POEvaluation`, and improved the usage of function `plot.ShapDependence`.
+
+### Test environments
+
+1. Local macOS Monterey 12.5.1, R version 4.0.4
+
+2. Github actions
+
+- Windows Server x64 (build 20348), R version 4.2.1 (2022-06-23 ucrt)
+- Ubuntu 20.04.5 LTS, R version 4.2.1 (2022-06-23)
+- Ubuntu 20.04.5 LTS, R Under development (unstable) (2022-09-05 r82812)
+- Ubuntu 20.04.4 LTS, R version 4.1.3 (2022-03-10)
+- macOS Big Sur/Monterey 10.16, R version 4.2.1 (2022-06-23)
+
+3. `devtools` check
+
+- Windows, R Under development (unstable) (2022-09-09 r82828 ucrt), `devtools::check_win_devel()`
+- Windows, R version 4.2.1 (2022-06-23 ucrt), `devtools::check_win_release()`
+- Windows, R version 4.1.3 (2022-03-10), `devtools::check_win_oldrelease()`
+- MacOS, R version 4.2.1 Patched (2022-06-23 r82516), `devtools::check_mac_release()`
+- Linux, `devtools::check_rhub()`
+
+### R CMD check
+
+There is no error or warning. It got some notes of invalid URLs only on some Windows machines. I manually check these links and all of them seem still available.
+
+```
+Found the following (possibly) invalid URLs:
+  URL: https://doi.org/10.1002/joc.5086
+    From: man/future_worldclim2.Rd
+          man/worldclim2.Rd
+    Status: 503
+    Message: Service Unavailable
+  URL: https://doi.org/10.1111/jbi.13402
+    From: man/evaluate_po.Rd
+    Status: 503
+    Message: Service Unavailable
+```
+
+It also got some possible miss-spellings on Windows oldrelease. I double checked all of them and they are not mis-spelled.
+
+```
+Possibly mis-spelled words in DESCRIPTION:
+  Brunner (15:9)
+  Caporaso (30:38)
+  Fick (28:66)
+  Guha (17:5)
+  Hariri (14:51)
+  Hijmans (29:14)
+  Kononenko (23:60)
+  Liu (13:45, 15:63)
+  Lundberg (21:45)
+  Mishra (17:15)
+  Noce (30:28)
+  SCiForest (12:54)
+  Santini (30:55)
+  Schrijvers (17:39)
+  Shapley (19:39, 20:58)
+  Zhou (14:5, 16:20)
+  bioclimatic (28:5)
+  iForest (11:50)
+  itsdm (24:45)
+  trumbelj (23:43)
+```
+
 ## Resubmission (version 0.1.2)
 
 Remove the unnecessary email link in README.

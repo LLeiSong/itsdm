@@ -228,7 +228,7 @@ spatial_response <- function(model,
 
   # Visualize
   if (visualize) {
-    plot(spatial_deps)
+    print(plot(spatial_deps))
   }
 
   # Return

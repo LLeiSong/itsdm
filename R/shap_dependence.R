@@ -124,7 +124,7 @@ shap_dependence <- function(model,
 
   # Visualize
   if (visualize) {
-    plot(dependences)
+    print(plot(dependences))
   }
 
   # Return

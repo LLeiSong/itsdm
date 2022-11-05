@@ -10,7 +10,8 @@ suspicious_env_outliers(
   variables,
   rm_outliers = FALSE,
   seed = 10L,
-  ...
+  ...,
+  visualize = TRUE
 )
 }
 \arguments{
@@ -32,6 +33,9 @@ integer. The default is \code{10L}.}
 
 \item{...}{Other arguments passed to function \code{\link{outlier.tree}} in
 package \code{outliertree}.}
+
+\item{visualize}{(\code{logical}) If \code{TRUE}, plot the result.
+The default is \code{TRUE}.}
 }
 \value{
 (\code{EnvironmentalOutlier}) A list that contains

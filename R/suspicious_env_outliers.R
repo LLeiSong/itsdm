@@ -13,6 +13,8 @@
 #' integer. The default is `10L`.
 #' @param ... Other arguments passed to function \code{\link{outlier.tree}} in
 #' package `outliertree`.
+#' @param visualize (`logical`) If `TRUE`, plot the result.
+#' The default is `TRUE`.
 #' @return (`EnvironmentalOutlier`) A list that contains
 #' \itemize{
 #' \item{outliers (\code{\link{sf}}) The \code{\link{sf}} points of outliers}
@@ -67,7 +69,8 @@ suspicious_env_outliers <- function(occ,
                                     variables,
                                     rm_outliers = FALSE,
                                     seed = 10L,
-                                    ...) {
+                                    ...,
+                                    visualize = TRUE) {
   # Check inputs
   checkmate::assert_multi_class(
     occ, c('data.frame', 'sf',
@@ -134,5 +137,10 @@ suspicious_env_outliers <- function(occ,
               outlier_details = outliers_details,
               pts_occ = pts_occ)
   class(out) <- append("EnvironmentalOutlier", class(out))
-  out
+
+  if (visualize) {
+    print(plot(out))
+  }
+  # Return
+  return(out)
 }

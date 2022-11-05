@@ -378,7 +378,9 @@ convert_to_pa <- function(suitability, # prediction from isotree_sdm
               pa_map = pa_map)
   class(out) <- append("PAConversion", class(out))
 
-  if (visualize) plot(out)
+  if (visualize) {
+    print(plot(out))
+  }
   # Return
   return(out)
 }
