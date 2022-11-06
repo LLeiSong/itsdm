@@ -659,3 +659,48 @@ print.POIsotree <- function(x, ...){
   # Return
   invisible(x)
 }
+
+#' @title Print summary information from FormatOccurrence object.
+#' @description Display the most general and informative characteristics of
+#' a FormatOccurrence object.
+#' @param x (`FormatOccurrence`) A `FormatOccurrence` object to be messaged.
+#' It could be the return of function \code{\link{format_observation}}.
+#' @param ... Not used.
+#' @return The same object that was passed as input.
+#' @seealso
+#' \code{\link{format_observation}}
+#'
+#' @export
+#' @examples
+#' \donttest{
+#' library(dplyr)
+#' library(itsdm)
+#' data("occ_virtual_species")
+#' obs_formatted <- format_observation(
+#'   obs_df = occ_virtual_species,
+#'   x_col = "x", y_col = "y", obs_col = "observation",
+#'   obs_type = "presence-absence")
+#'
+#' print(obs_formatted)
+#'}
+#'
+print.FormatOccurrence <- function(x, ...) {
+  cat('Formatted occurrence observations\n')
+
+  # Training
+  cat('  Training observations: \n')
+  cat(sprintf("    Type: %s\n", x$obs_type))
+  cat(sprintf("    No. of observations: %s\n", nrow(x$obs)))
+
+  # eval
+  if (isTRUE(x$has_eval)) {
+    cat('  Evaluation observations: \n')
+    cat(sprintf("    Type: %s\n", x$eval_type))
+    cat(sprintf("    No. of observations: %s\n", nrow(x$eval)))
+  } else {
+    cat('  No observations for evaluation.')
+  }
+
+  # Return
+  invisible(x)
+}

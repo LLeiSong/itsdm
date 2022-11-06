@@ -8,8 +8,12 @@
 A \code{data.frame} with 300 rows and 2 fields
 \describe{
 \item{x}{(\code{numeric}) The x coordinates of the records in
-geographic coordinate system}
-\item{y}{(\code{numeric}) The y coordinates of the records}}
+WGS84 geographic coordinate system}
+\item{y}{(\code{numeric}) The y coordinates of the records in
+WGS84 geographic coordinate system}
+\item{observation}{(\code{numeric}) The observations of presence and absence.}
+\item{usage}{(\code{character}) The usage of the occurrences, either be "train"
+as training set, or "eval" as test set.}}
 }
 \source{
 \code{virtualspecies}
@@ -18,7 +22,7 @@ geographic coordinate system}
 occ_virtual_species
 }
 \description{
-A pseudo presence-only occurrence dataset of a virtual species made
+A pseudo presence-absence occurrence dataset of a virtual species made
 by package \code{virtualspecies}.
 }
 \details{
@@ -31,6 +35,7 @@ The response function of annual precipitation is normal distribution with
 mean = 1000 and standard deviation = 200.
 Then the suitability is convert to presence-absence map by logistic
 conversion with beta = 0.7, alpha = -0.05, and species prevalence = 0.27.
-Finally 300 presence-only points are sampled across the whole region.
+Finally 500 presence-absence points are sampled across the whole region.
+Then these points were randomly split into train (0.7) and test set (0.3).
 }
 \keyword{datasets}
