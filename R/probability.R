@@ -50,7 +50,7 @@
 probability <- function(x,
                         vars,
                         offset = 0) {
-  # For later extension
+  # TODO: For later extension
   convert <- 'linear'
   pts_train <- NULL
 

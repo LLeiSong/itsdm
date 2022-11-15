@@ -13,7 +13,8 @@
 #' @param bg_pred (`vector` of `numeric`) the vector contains predicted values
 #' with same number of background points.
 #' @param var_pred (`vector` of `numeric`) the vector contains predicted values
-#' of the whole area.
+#' of the whole area. The reason to take a vector is to keep this function
+#' flexible for multiple types of output.
 #' @param threshold (`numeric` or `NULL`) The threshold to calculate
 #' threshold-based evaluation metrics. If `NULL`, a recommended threshold
 #' will be calculated based on optimal TSS value. The default is `NULL`.

@@ -28,25 +28,27 @@
 #' @param obs_col (`character`) The name of column that represents observations
 #' in `obs_df` and `eval_df` if not `NULL`.
 #' @param obs_type (`character`) The type of observation to be formatted to.
-#' Only can be one of `c("presence-only", "presence-absence")`.
-#' Note that if "presence-only" is set, the absences in `obs_df` will be deleted.
+#' Only can be one of `c("presence_only", "presence_absence")`.
+#' Note that if "presence_only" is set, the absences in `obs_df` will be deleted.
 #' This only affect `obs_df`, `eval_df` will keep the original type no matter it
-#' is an independent one or is splitted from `eval_df`.
+#' is an independent one or is split from `eval_df`.
 #' @return (`FormatOccurrence`) A list of
 #' \itemize{
-#' \item{obs (`sf`) the formmated pts of observations.}
+#' \item{obs (`sf`) the formatted pts of observations.
+#' The column of observation is "observation".}
 #' \item{obs_type (`character`) the type of the observations,
-#' presence-only or presence-absence.}
+#' presence_only or presence_absence.}
 #' \item{has_eval (`logical`) whether evaluation dataset is set or generated.}
-#' \item{eval (`sf`) the formmated pts of observations for evaluation if any.}
+#' \item{eval (`sf`) the formatted pts of observations for evaluation if any.
+#' The column of observation is "observation".}
 #' \item{eval (`eval_type`)  the type of the observations for evaluation,
-#' presence-only or presence-absence.}
+#' presence_only or presence_absence.}
 #' }
 #'
 #' @seealso
 #' \code{\link{print.FormatOccurrence}}
 #'
-#' @importFrom dplyr mutate row_number sample_frac select filter all_of
+#' @importFrom dplyr mutate row_number sample_frac select filter all_of rename
 #' @importFrom sf st_as_sf st_crs st_transform
 #' @export
 #' @examples
@@ -60,7 +62,7 @@
 #' x_col <- "x"
 #' y_col <- "y"
 #' obs_col <- "observation"
-#' obs_type <- "presence-absence"
+#' obs_type <- "presence_absence"
 #'
 #' obs <- format_observation(
 #'   obs_df = obs_df, eval_df = eval_df,
@@ -73,7 +75,7 @@
 #' x_col <- "x"
 #' y_col <- "y"
 #' obs_col <- "observation"
-#' obs_type <- "presence-only"
+#' obs_type <- "presence_only"
 #'
 #' obs <- format_observation(
 #'   obs_df = obs_df, eval_df = eval_df,
@@ -89,7 +91,7 @@
 #' x_col <- "x"
 #' y_col <- "y"
 #' obs_col <- "observation"
-#' obs_type <- "presence-only"
+#' obs_type <- "presence_only"
 #'
 #' obs <- format_observation(
 #'   obs_df = obs_df, eval_df = eval_df,
@@ -105,7 +107,7 @@
 #' x_col <- "x"
 #' y_col <- "y"
 #' obs_col <- "observation"
-#' obs_type <- "presence-absence"
+#' obs_type <- "presence_absence"
 #'
 #' obs <- format_observation(
 #'   obs_df = obs_df, split_perc = split_perc,
@@ -121,7 +123,7 @@
 #' x_col <- "x"
 #' y_col <- "y"
 #' obs_col <- "observation"
-#' obs_type <- "presence-only"
+#' obs_type <- "presence_only"
 #'
 #' obs <- format_observation(
 #'   obs_df = obs_df, eval_df = eval_df,
@@ -142,7 +144,7 @@ format_observation <- function(obs_df, # observation data frame
                                y_col = "y",
                                obs_col = "observation",
                                # Depends on users' need
-                               obs_type = "presence-only") {
+                               obs_type = "presence_only") {
 
   # Check format of inputs
   checkmate::assert_data_frame(obs_df)
@@ -152,10 +154,10 @@ format_observation <- function(obs_df, # observation data frame
   checkmate::assert_character(y_col)
   checkmate::assert_character(obs_col)
   checkmate::assert_choice(
-    obs_type, choices = c("presence-only", "presence-absence"))
+    obs_type, choices = c("presence_only", "presence_absence"))
 
   # Detailed check
-  ## Check observtion table
+  ## Check observation table
   if (!all(c(x_col, y_col, obs_col) %in% names(obs_df))){
     stop("Columns not found in observation data table.")}
 
@@ -171,7 +173,7 @@ format_observation <- function(obs_df, # observation data frame
   }
 
   # No problem in the inputs, start the process
-  ## Step 1: spefify train and test set
+  ## Step 1: specify train and test set
   ## Step 2: convert the train and test set into spatial format
   # Split the dataset
   has_eval <- TRUE
@@ -194,24 +196,26 @@ format_observation <- function(obs_df, # observation data frame
 
   # train observation
   eval_type <- obs_type
-  if (obs_type == "presence-only") {
+  if (obs_type == "presence_only") {
     if (sum(obs_df[, obs_col] == 0) > 0) {
       warning(paste0("Set observation type as presence-only, ",
                      "extra absences may be deleted."))
       obs_df <- obs_df %>% filter(!!as.symbol(obs_col) == 1)}}
   obs_pts <- obs_df %>%
     select(all_of(x_col), all_of(y_col), all_of(obs_col)) %>%
-    st_as_sf(coords = c(x_col, y_col), crs = obs_crs)
+    st_as_sf(coords = c(x_col, y_col), crs = obs_crs) %>%
+    rename("observation" = all_of(obs_col))
 
   # eval
   ## Check the observation type first
   if (!is.null(eval_df)) {
     if (sum(eval_df[, obs_col] == 0) > 0) {
-      eval_type <- "presence-absence"
+      eval_type <- "presence_absence"
     }
     eval_pts <- eval_df %>%
       select(all_of(x_col), all_of(y_col), all_of(obs_col)) %>%
-      st_as_sf(coords = c(x_col, y_col), crs = eval_crs)
+      st_as_sf(coords = c(x_col, y_col), crs = eval_crs) %>%
+      rename("observation" = all_of(obs_col))
 
     # Transform if need
     if (st_crs(eval_pts) != st_crs(obs_pts)) {
@@ -220,6 +224,8 @@ format_observation <- function(obs_df, # observation data frame
   } else eval_pts <- NULL
 
   ## Gather and return the result
+  ### So within the formatted sf, the column name of observation
+  ### is observation
   out <- list(obs = obs_pts,
               obs_type = obs_type,
               has_eval = has_eval,

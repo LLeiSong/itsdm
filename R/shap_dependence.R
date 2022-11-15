@@ -4,6 +4,9 @@
 #' It could be the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
 #' @param var_occ (`data.frame`, `tibble`) The `data.frame` style table that
 #' include values of environmental variables at occurrence locations.
+#' @param si (`integer`) The number of samples to generate response curves.
+#' If it is too small, the response curves might be biased.
+#' The default value is `1000`.
 #' @param shap_nsim (`integer`) The number of Monte Carlo repetitions in SHAP
 #' method to use for estimating each Shapley value. When the number of variables
 #' is large, a smaller shap_nsim could be used. See details in documentation of
@@ -84,22 +87,40 @@
 #'
 shap_dependence <- function(model,
                             var_occ,
+                            si = 1000,
                             shap_nsim = 100,
                             visualize = FALSE,
                             seed = 10L) {
 
   # Check inputs
   checkmate::assert_data_frame(var_occ)
+  checkmate::assert_int(si)
   checkmate::assert_int(shap_nsim)
   checkmate::assert_logical(visualize)
   checkmate::assert_int(seed)
 
+  # Get background samples
+  # Because this is response, it is necessary to
+  # cover the whole range of values. This is why
+  # we need the background samples
+  # Make a template
+  rst_template <- st_apply(merge(variables), c("x", "y"),
+                           "mean", na.rm = FALSE)
+  rst_template[!is.na(rst_template)] <- 1
+
+  # Observations
+  obs_bg <- .bg_sampling(rst_template, NULL, seed, si)
+  obs_bg_vars_mat <- st_extract(x = variables, at = obs_bg) %>%
+    st_drop_geometry()
+  rm(rst_template)
+
   # Do SHAP
   set.seed(seed)
   shap_explain <- explain(model, X = var_occ, nsim = shap_nsim,
+                          newdata = obs_bg_vars_mat,
                           pred_wrapper = .pfun_shap)
   dependences <- lapply(names(var_occ), function(var) {
-    data.frame(x = var_occ %>% pull(var),
+    data.frame(x = obs_bg_vars_mat %>% pull(var),
                y = shap_explain %>% pull(var))
   })
   names(dependences) <- names(var_occ)
@@ -119,7 +140,7 @@ shap_dependence <- function(model,
   # Reunion
   dependences <- list(dependences_cont = dependences_cont,
                       dependences_cat = dependences_cat)
-  dependences$feature_values <- var_occ
+  dependences$feature_values <- obs_bg_vars_mat
   class(dependences) <- append("ShapDependence", class(dependences))
 
   # Visualize

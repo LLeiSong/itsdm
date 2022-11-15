@@ -5,11 +5,13 @@
 \title{Function to run extended isolation forest as SDM.}
 \usage{
 isotree_po(
-  occ,
-  occ_test = NULL,
-  occ_crs = 4326,
+  obs_mode = "imperfect_presence",
+  mode = ifelse(species_is_rare, "reverse", "normal"),
+  obs,
+  obs_ind_eval = NULL,
   variables,
   categ_vars = NULL,
+  contamination = 0.1,
   ntrees = 100L,
   sample_size = 1,
   ndim = 1L,
@@ -23,25 +25,48 @@ isotree_po(
 )
 }
 \arguments{
-\item{occ}{(\code{data.frame}, \code{sf}, \code{SpatialPointsDataFrame})
-The occurrence dataset for training.
-There must be column \code{x} and \code{y} for coordinates if
-it is a regular \code{data.frame}.}
+\item{obs_mode}{(\code{string}) The mode of occurrence for training. It should be
+one of \code{c("perfect_presence", "imperfect_presence", "presence_absence")}.
+"perfect_presence" means presence-only occurrences without
+errors/uncertainties/bias, which should be rare in reality.
+"Imperfect_presence" means presence-only occurrences with
+errors/uncertainties/bias, which should be a most common case.
+"presence_absence" means presence-absence observations regardless quality.
+This argument should be set together with \code{mode} and \code{contamination} below.
+See details to learn how to set it.}
 
-\item{occ_test}{(\code{data.frame}, \code{sf}, \code{SpatialPointsDataFrame}, or \code{NULL})
-The occurrence dataset for independent test. The same structure as \code{occ}.
-If not \code{NULL}, there must be column \code{x} and \code{y} for coordinates when it is a
-regular \code{data.frame}. If \code{NULL}, no independent test will be used.
-The default is \code{NULL}.}
+\item{mode}{(\code{string}) The mode of modeling. It should be one of
+\code{c("normal", "reverse", "joint")}.
+"normal" means \code{iForest} will be trained taking presence as normal cases.
+"reverse" mean \code{iForest} will be trained taking background as normal cases.
+"joint" means \code{iForest} will be trained taking presence as normal cases, and
+taking background as normal cases, respectively. Then the final result is the
+joint result of these two models.
+It is used together with \code{obs_mode} and \code{contamination}.
+See details to learn how to set it.}
 
-\item{occ_crs}{(\code{numeric} or \code{\link{crs}}) The EPSG number or
-\code{\link{crs}} object of occurrence CRS.
-The default value is \code{4326}, which is the geographic coordinate system.}
+\item{obs}{(\code{sf}) The \code{sf} of observation for training. It is recommended to
+call function \code{\link{format_observation}} to format the
+occurrence (\code{obs}) before passing it here.
+Otherwise, make sure there is a column named "observation" for observation.}
+
+\item{obs_ind_eval}{(\code{sf} or \code{NULL}) Optional \code{sf} of observations for
+independent test. It is recommended to call function
+\code{\link{format_observation}} to format the occurrence (\code{obs})
+before passing it here. Otherwise, make sure there is a column named
+"observation" for observation.
+If \code{NULL}, no independent test set will be used. The default is \code{NULL}.}
 
 \item{variables}{(\code{RasterStack} or \code{stars}) The stack of environmental variables.}
 
 \item{categ_vars}{(\code{vector} of \code{character} or \code{NULL}) The names of categorical
 variables. Must be the same as the names in \code{variables}.}
+
+\item{contamination}{(\code{numeric}) The percentage of abnormal cases within a
+dataset. Because \code{iForest} is an outlier detection algorithm. It picks up
+abnormal cases (much fewer) from normal cases. This argument is used to set
+how many abnormal cases should be there if the users have the power to control.
+See details for how to set it. The default value is 0.1.}
 
 \item{ntrees}{(\code{integer}) The number of trees for the isolation forest. It must
 be integer, which you could use function \code{\link{as.integer}} to convert to.
@@ -130,6 +155,24 @@ Call isolation forest and its variations to do
 species distribution modeling and optionally do model explanation.
 }
 \details{
+It is recommended to use \bold{mode} "normal" for \bold{obs_mode}
+"perfect_presence" and "imperfect_presence". For "perfect_presence", a
+user-defined number (\code{contamination}) of samples will be taken from
+background to train the model. If "imperfect_presence", no further actions is
+required.
+
+If the \bold{obs_mode} is "presence_absence", it is recommended to use
+\bold{mode} "joint". It means the model will be trained by all presences and
+\code{contamination} percent of absences. Then the model will be trained by all
+absences and \code{contamination} percent of presences.
+The final model is the joint of these two models.
+
+\bold{mode} "joint" can also be used for \bold{obs_mode} "perfect_presence"
+and "imperfect_presence". Absences will be sampled from background.
+
+It is recommended to use \bold{mode} "reverse" for rare species. The
+model will treats background as normal case, so it is called "reverse".
+
 Please read details of algorithm \code{\link{isolation.forest}} on
 \url{https://github.com/david-cortes/isotree}, and
 the R documentation of function \code{\link{isolation.forest}}.

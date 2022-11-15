@@ -129,7 +129,8 @@
 #'
 variable_analysis <- function(model,
                               pts_occ,
-                              pts_occ_test = NULL, # Independent test
+                              # Independent test
+                              pts_occ_test = NULL,
                               variables,
                               shap_nsim = 100,
                               visualize = FALSE,
@@ -204,7 +205,8 @@ variable_analysis <- function(model,
       model$params
     )
     args_iforest$ndim <- 1
-    args_iforest$ncols_per_tree <- min(ncol(args_iforest$data), args_iforest$ncols_per_tree)
+    args_iforest$ncols_per_tree <- min(ncol(args_iforest$data),
+                                       args_iforest$ncols_per_tree)
     if (args_iforest$new_categ_action == "impute") {
       args_iforest$new_categ_action <- "weighted"
     }

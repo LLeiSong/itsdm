@@ -56,16 +56,18 @@ in \code{obs_df} and \code{eval_df} if not \code{NULL}.}
 Only can be one of \code{c("presence-only", "presence-absence")}.
 Note that if "presence-only" is set, the absences in \code{obs_df} will be deleted.
 This only affect \code{obs_df}, \code{eval_df} will keep the original type no matter it
-is an independent one or is splitted from \code{eval_df}.}
+is an independent one or is split from \code{eval_df}.}
 }
 \value{
 (\code{FormatOccurrence}) A list of
 \itemize{
-\item{obs (\code{sf}) the formmated pts of observations.}
+\item{obs (\code{sf}) the formatted pts of observations.
+The column of observation is "observation".}
 \item{obs_type (\code{character}) the type of the observations,
 presence-only or presence-absence.}
 \item{has_eval (\code{logical}) whether evaluation dataset is set or generated.}
-\item{eval (\code{sf}) the formmated pts of observations for evaluation if any.}
+\item{eval (\code{sf}) the formatted pts of observations for evaluation if any.
+The column of observation is "observation".}
 \item{eval (\code{eval_type})  the type of the observations for evaluation,
 presence-only or presence-absence.}
 }

@@ -115,11 +115,13 @@ independent_response <- function(model,
     # for single-variable model, other arguments
     # inherit from model object.
     args_iforest <- c(
-      list(data=ind_var_occ, seed=model$random_seed, nthreads=model$nthreads),
+      list(data = ind_var_occ, seed = model$random_seed,
+           nthreads = model$nthreads),
       model$params
     )
     args_iforest$ndim <- 1
-    args_iforest$ncols_per_tree <- min(ncol(args_iforest$data), args_iforest$ncols_per_tree)
+    args_iforest$ncols_per_tree <- min(ncol(args_iforest$data),
+                                       args_iforest$ncols_per_tree)
     if (args_iforest$new_categ_action == "impute") {
       args_iforest$new_categ_action <- "weighted"
     }

@@ -414,3 +414,157 @@
       ungroup()
   }
 }
+
+# Function to sample background
+#' @importFrom rlang .data
+#' @importFrom dplyr select mutate sample_n
+#' @importFrom stars st_rasterize
+#' @importFrom sf st_xy2sfc st_as_sf
+.bg_sampling <- function(rst_template, obs, seed, num) {
+  if (is.null(obs)) {
+    bg_samples <- rst_template
+  } else {
+    # Remove observations from background
+    bg_samples <- obs %>% select() %>%
+      mutate(value = 0) %>%
+      st_rasterize(rst_template)
+    bg_samples[bg_samples == 0] <- NA
+  }
+
+  # Sampling
+  set.seed(seed)
+  bg_samples %>%
+    st_xy2sfc(as_points = T) %>%
+    st_as_sf() %>%
+    sample_n(min(num, nrow(.))) %>%
+    select()
+}
+
+# TODO: let the model have high flexibility to take care of the
+# input dataset.
+# Function to mode the observations
+#' @importFrom rlang .data
+#' @importFrom dplyr select mutate sample_n rbind filter
+.obs_moding <- function(mode, obs_mode, rst_template,
+                        obs, seed, contamination) {
+  # Sampling
+  if (mode == "normal") {
+    if (obs_mode == "perfect_presence") {
+      # Sample background
+      obs <- .bg_sampling(
+        rst_template, obs, seed, nrow(obs) * contamination) %>%
+        mutate("observation" = 0) %>%
+        rbind(obs)
+      contamination <- sum(obs$observation == 0) /
+        sum(obs$observation == 1)
+    } else if (obs_mode == "presence_absence") {
+      # Sample absence
+      obs_frd <- obs %>% filter(.data$observation == 1)
+      set.seed(seed)
+      obs_frd <- obs_frd %>%
+        rbind(obs %>% filter(.data$observation == 0) %>%
+                sample_n(min((nrow(obs_frd) * contamination),
+                             nrow(.))))
+      obs <- obs_frd; rm(obs_frd)
+      contamination <- sum(obs$observation == 0) /
+        sum(obs$observation == 1)
+    } else {
+      contamination <- 0.001
+    }
+  } else if (mode == "reverse") {
+    # Extract presences
+    obs <- obs %>% filter(.data$observation == 1)
+    # Sample background
+    obs <- .bg_sampling(
+      rst_template, obs, seed, nrow(obs) * (1 / contamination)) %>%
+      mutate("observation" = 0) %>%
+      rbind(obs)
+
+    # Double check the contamination
+    if (sum(obs$observation == 1) /
+        sum(obs$observation == 0) > 0.3) {
+      # Sample absence
+      obs_frd <- obs %>% filter(.data$observation == 1)
+      set.seed(seed)
+      obs_frd <- obs_frd %>%
+        rbind(obs %>% filter(.data$observation == 0) %>%
+                sample_n((nrow(obs_frd) * 0.3)))
+      obs <- obs_frd; rm(obs_frd)
+      contamination <- 0.3
+    } else {
+      contamination <- sum(obs$observation == 1) /
+        sum(obs$observation == 0)
+    }
+
+  } else { # joint
+    if (obs_mode == "presence_absence") {
+      ## For forward
+      obs_frd <- obs %>% filter(.data$observation == 1)
+      set.seed(seed)
+      obs_frd <- obs_frd %>%
+        rbind(obs %>% filter(.data$observation == 0) %>%
+                sample_n((nrow(obs_frd) * contamination)))
+      contamination_frd <- sum(obs_frd$observation == 0) /
+        sum(obs_frd$observation == 1)
+
+      ## For reverse
+      obs_rev <- obs %>% filter(.data$observation == 0)
+      set.seed(seed)
+      obs_rev <- obs_rev %>%
+        rbind(obs %>% filter(.data$observation == 1) %>%
+                sample_n((nrow(obs_rev) * contamination)))
+      contamination_rev <- sum(obs_rev$observation == 1) /
+        sum(obs_rev$observation == 0)
+    } else {
+      # For forward, use presence
+      if (obs_mode == "perfect_presence") {
+        # Sample background
+        obs_frd <- .bg_sampling(
+          rst_template, obs, seed, nrow(obs) * contamination) %>%
+          mutate("observation" = 0) %>%
+          rbind(obs)
+        contamination_frd <- sum(obs_frd$observation == 0) /
+          sum(obs_frd$observation == 1)
+      } else {
+        obs_frd <- obs
+        contamination_frd <- 0.001
+      }
+
+      # For reserve, use background
+      # Extract presences
+      obs <- obs %>% filter(.data$observation == 1)
+      # Sample background
+      obs_rev <- .bg_sampling(
+        rst_template, obs, seed, nrow(obs) * (1 / contamination)) %>%
+        mutate("observation" = 0) %>%
+        rbind(obs)
+
+      # Double check the contamination
+      if (sum(obs_rev$observation == 1) /
+          sum(obs_rev$observation == 0) > 0.3) {
+        # Sample absence
+        obs_rev_frd <- obs_rev %>% filter(.data$observation == 1)
+        set.seed(seed)
+        obs_rev_frd <- obs_rev_frd %>%
+          rbind(obs_rev %>% filter(.data$observation == 0) %>%
+                  sample_n((nrow(obs_rev_frd) * 0.3)))
+        obs_rev <- obs_rev_frd; rm(obs_rev_frd)
+        contamination <- rev <- 0.3
+      } else {
+        contamination_rev <- sum(obs_rev$observation == 1) /
+          sum(obs_rev$observation == 0)
+      }
+    }
+  }
+
+  # Return the result according to mode
+  if (mode == "joint") {
+    return(list("obs_frd" = obs_frd,
+                "obs_rev" = obs_rev,
+                "contamination_frd" = contamination_frd,
+                "contamination_rev" = contamination_rev))
+  } else {
+    return(list("obs" = obs,
+                "contamination" = contamination))
+  }
+}
