@@ -2,7 +2,8 @@
 % Please edit documentation in R/isotree_po.R
 \name{isotree_po}
 \alias{isotree_po}
-\title{Function to run extended isolation forest as SDM.}
+\title{Build Isolation forest species distribution model and explain the
+the model and outputs.}
 \usage{
 isotree_po(
   obs_mode = "imperfect_presence",
@@ -140,8 +141,9 @@ analysis based on multiple metrics.
 See details in \code{\link{variable_analysis}}}}
 }
 \description{
-Call isolation forest and its variations to do
-species distribution modeling and optionally do model explanation.
+Call Isolation forest and its variations to do
+species distribution modeling and optionally call a collection of other
+functions to do model explanation.
 }
 \details{
 For "perfect_presence", a user-defined number (\code{contamination}) of samples

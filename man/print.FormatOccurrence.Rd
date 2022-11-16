@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.R
 \name{print.FormatOccurrence}
 \alias{print.FormatOccurrence}
-\title{Print summary information from FormatOccurrence object.}
+\title{Print summary information from \code{FormatOccurrence} object.}
 \usage{
 \method{print}{FormatOccurrence}(x, ...)
 }
@@ -16,8 +16,9 @@ It could be the return of function \code{\link{format_observation}}.}
 The same object that was passed as input.
 }
 \description{
-Display the most general and informative characteristics of
-a FormatOccurrence object.
+Display the type and number of training and evaluation dataset
+in the formatted observations obtained by
+function \code{\link{format_observation}}.
 }
 \examples{
 \donttest{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.R
 \name{print.POEvaluation}
 \alias{print.POEvaluation}
-\title{Print summary information from presence-only evaluation object.}
+\title{Print summary information from model evaluation object (\code{POEvaluation}).}
 \usage{
 \method{print}{POEvaluation}(x, ...)
 }
@@ -17,7 +17,7 @@ The same object that was passed as input.
 }
 \description{
 Display the most general and informative characteristics of
-a presence-only evaluation object.
+a model evaluation object.
 }
 \examples{
 \donttest{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot.MarginalResponse}
 \alias{plot.MarginalResponse}
-\title{Function to plot marginal response curves.}
+\title{Show marginal response curves.}
 \usage{
 \method{plot}{MarginalResponse}(x, target_var = NA, smooth_span = 0.3, ...)
 }
@@ -22,7 +22,8 @@ When it is \code{0}, no smooth applied. The default is \code{0.3}.}
 \code{ggplot2} figure of response curves
 }
 \description{
-Plot marginal response curves using ggplot2.
+Plot marginal response curves using ggplot2 by optionally set
+target variable(s).
 }
 \examples{
 \donttest{

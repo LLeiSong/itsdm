@@ -2,7 +2,7 @@
 % Please edit documentation in R/probability.R
 \name{probability}
 \alias{probability}
-\title{Estimate suitability on stars object using trained \code{isolation.forest} model.}
+\title{Estimate suitability on \code{stars} object using trained \code{isolation.forest} model.}
 \usage{
 probability(x, vars, offset = 0)
 }

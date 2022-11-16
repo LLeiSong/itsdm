@@ -1,6 +1,8 @@
-#' @title Function to run extended isolation forest as SDM.
-#' @description Call isolation forest and its variations to do
-#' species distribution modeling and optionally do model explanation.
+#' @title Build Isolation forest species distribution model and explain the
+#' the model and outputs.
+#' @description Call Isolation forest and its variations to do
+#' species distribution modeling and optionally call a collection of other
+#' functions to do model explanation.
 #' @param obs_mode (`string`) The mode of observations for training. It should
 #' be one of `c("perfect_presence", "imperfect_presence", "presence_absence")`.
 #' "perfect_presence" means presence-only occurrences without

@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.R
 \name{print.PAConversion}
 \alias{print.PAConversion}
-\title{Print summary information from PAConversion object.}
+\title{Print summary information from \code{PAConversion} object.}
 \usage{
 \method{print}{PAConversion}(x, ...)
 }
@@ -16,8 +16,7 @@ It could be the return of function \code{\link{convert_to_pa}}.}
 The same object that was passed as input.
 }
 \description{
-Display the most general and informative characteristics of
-a PAConversion object.
+Display the equation and parameters of a \code{PAConversion} object.
 }
 \examples{
 \donttest{

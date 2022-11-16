@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot.SpatialResponse}
 \alias{plot.SpatialResponse}
-\title{Function to plot spatial variable dependence maps.}
+\title{Display spatial variable dependence maps.}
 \usage{
 \method{plot}{SpatialResponse}(x, target_var = NA, ...)
 }
@@ -19,7 +19,8 @@ It could be \code{NA}. If it is \code{NA}, all variables will be plotted.}
 \code{ggplot2} figure of dependent maps
 }
 \description{
-Plot spatial variable dependence maps using ggplot2.
+Plot spatial variable dependence maps using ggplot2 by
+optionally setting target variable(s).
 }
 \examples{
 \donttest{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot.IndependentResponse}
 \alias{plot.IndependentResponse}
-\title{Function to plot independent response curves.}
+\title{Show independent response curves.}
 \usage{
 \method{plot}{IndependentResponse}(x, target_var = NA, smooth_span = 0.3, ...)
 }
@@ -22,7 +22,8 @@ When it is \code{0}, no smooth applied. The default is \code{0.3}.}
 \code{ggplot2} figure of response curves
 }
 \description{
-Plot independent response curves using ggplot2.
+Plot independent response curves using ggplot2 by optionally
+set target variable(s).
 }
 \examples{
 \donttest{

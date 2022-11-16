@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.R
 \name{print.ReducedImageStack}
 \alias{print.ReducedImageStack}
-\title{Print summary information from ReducedImageStack object.}
+\title{Print summary information from \code{ReducedImageStack} object.}
 \usage{
 \method{print}{ReducedImageStack}(x, ...)
 }
@@ -17,7 +17,8 @@ The same object that was passed as input.
 }
 \description{
 Display the most general and informative characteristics of
-a ReducedImageStack object.
+a ReducedImageStack object, including the set threshold, original variables,
+and the selected variables and the correlations between them.
 }
 \examples{
 \donttest{

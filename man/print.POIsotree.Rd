@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.R
 \name{print.POIsotree}
 \alias{print.POIsotree}
-\title{Print summary information from POIsotree object.}
+\title{Print summary information from \code{POIsotree} object.}
 \usage{
 \method{print}{POIsotree}(x, ...)
 }
@@ -17,7 +17,8 @@ The same object that was passed as input.
 }
 \description{
 Display the most general and informative characteristics of
-a fitted POIsotree object.
+a fitted POIsotree object. It includes the model information,
+model evaluation, variable analysis, etc.
 }
 \examples{
 \donttest{

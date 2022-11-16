@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot.POEvaluation}
 \alias{plot.POEvaluation}
-\title{Function to plot presence-only evaluation.}
+\title{Show model evaluation.}
 \usage{
 \method{plot}{POEvaluation}(x, ...)
 }
@@ -17,7 +17,7 @@ A \code{patchwork} of \code{ggplot2} figure of AUC_ratio, AUC_background and CBI
 }
 \description{
 Display informative and detailed figures of continuous Boyce
-index and AUC curves.
+index, AUC curves, and TSS curve.
 }
 \examples{
 \donttest{

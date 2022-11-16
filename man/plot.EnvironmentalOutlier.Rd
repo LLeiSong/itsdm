@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot.EnvironmentalOutlier}
 \alias{plot.EnvironmentalOutlier}
-\title{Function to plot suspicious outliers in an observation dataset.}
+\title{Exhibit suspicious outliers in an observation dataset.}
 \usage{
 \method{plot}{EnvironmentalOutlier}(x, overlay_raster = NULL, pts_alpha = 0.5, ...)
 }
@@ -21,7 +21,8 @@ together with points.}
 A \code{ggplot2} figure of outliers distribution among all observations.
 }
 \description{
-Display observations and outliers in a dataset.
+Display observations and potential outliers diagnosed by
+function \code{\link{suspicious_env_outliers}} in a dataset.
 }
 \examples{
 \donttest{

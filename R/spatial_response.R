@@ -1,6 +1,7 @@
-#' @title Calculate spatial response or dependence plot.
+#' @title Calculate spatial response or dependence figures.
 #' @description Calculate spatially marginal, independence, and SHAP-based
-#' response plots.
+#' response figures. They can help to diagnose both how and where the species
+#' responses to environmental variables.
 #' @param model (`isolation_forest`). It could
 #' be the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
 #' @param var_occ (`data.frame`, `tibble`) The `data.frame` style table that

@@ -1,4 +1,4 @@
-#' @title Estimate suitability on stars object using trained `isolation.forest` model.
+#' @title Estimate suitability on `stars` object using trained `isolation.forest` model.
 #' @description Apply an `isolation.forest` model on a stars object to calculate
 #' environmental suitability and do quantile stretch to `[0, 1]`.
 #' @param x (`isolation_forest`). It could

@@ -91,8 +91,9 @@
 }
 # .plot_response end
 
-#' @title Function to plot marginal response curves.
-#' @description Plot marginal response curves using ggplot2.
+#' @title Show marginal response curves.
+#' @description Plot marginal response curves using ggplot2 by optionally set
+#' target variable(s).
 #' @param x (`MarginalResponse`) The marginal response curve object to plot.
 #' It could be the return of function \code{\link{marginal_response}}.
 #' @param target_var (`vector` of `character`) The target variable to plot. It could be
@@ -177,8 +178,9 @@ plot.MarginalResponse <- function(x,
   .plot_responses(x, smooth_span)
 }
 
-#' @title Function to plot independent response curves.
-#' @description Plot independent response curves using ggplot2.
+#' @title Show independent response curves.
+#' @description Plot independent response curves using ggplot2 by optionally
+#' set target variable(s).
 #' @param x (`IndependentResponse`) The independent response curve object to plot.
 #' It could be the return of function \code{\link{independent_response}}.
 #' @param target_var (`vector` of `character`) The target variable to plot. It could be
@@ -264,8 +266,11 @@ plot.IndependentResponse <- function(x,
   .plot_responses(x, smooth_span)
 }
 
-#' @title Function to plot variable dependence obtained from SHAP test.
-#' @description Plot variable dependence curves using ggplot2.
+#' @title Show variable dependence plots and variable interaction plots
+#' obtained from Shapley values.
+#' @description Plot Shapley value-based variable dependence curves using
+#' ggplot2 by optionally selecting target variable(s). It also can plot the
+#' interaction between a related variable to the selected variable(s).
 #' @param x (`ShapDependence`) The variable dependence object to plot.
 #' It could be the return of function \code{\link{shap_dependence}}.
 #' @param target_var (`vector` of `character`) The target variable to plot. It could be
@@ -584,8 +589,9 @@ plot.ShapDependence <- function(x,
   }
 }
 
-#' @title Function to plot spatial variable dependence maps.
-#' @description Plot spatial variable dependence maps using ggplot2.
+#' @title Display spatial variable dependence maps.
+#' @description Plot spatial variable dependence maps using ggplot2 by
+#' optionally setting target variable(s).
 #' @param x (`SpatialResponse`) The spatial variable dependence object to plot.
 #' It could be the return of function \code{\link{spatial_response}}.
 #' @param target_var (`vector` of `character`) The target variable to plot.
@@ -769,9 +775,10 @@ plot.SpatialResponse <- function(x,
   }
 }
 
-#' @title Function to plot variable contribution for target observations.
-#' @description Plot variable contribution for target observation separately
-#' or together using ggplot2.
+#' @title Exhibit variable contribution for target observations.
+#' @description Use ggplot2 to plot variable contribution for each target
+#' observation separately or summarize the overall variable contribution across
+#' all selected observations.
 #' @param x (`VariableContribution`) The `VariableContribution` object to plot.
 #' It could be the return of function \code{\link{variable_contrib}}.
 #' @param plot_each_obs (`logical`) The option of plot type. If `TRUE`, it will
@@ -923,7 +930,7 @@ plot.VariableContribution <- function(x,
   }
 }
 
-#' @title Function to plot variable importance.
+#' @title Display variable importance.
 #' @description Display informative and detailed figures of variable importance.
 #' @param x (`VariableAnalysis`) The variable importance object to plot.
 #' It could be the return of function \code{\link{variable_analysis}}.
@@ -1209,9 +1216,9 @@ plot.VariableAnalysis <- function(x, ...) {
     (g_shap_train | g_shap_test)
 }
 
-#' @title Function to plot presence-only evaluation.
+#' @title Show model evaluation.
 #' @description Display informative and detailed figures of continuous Boyce
-#' index and AUC curves.
+#' index, AUC curves, and TSS curve.
 #' @param x (`POEvaluation`) The presence-only evaluation object to plot.
 #' It could be the return of function \code{\link{evaluate_po}}.
 #' @param ... Not used.
@@ -1403,9 +1410,9 @@ plot.POEvaluation <- function(x, ...) {
   }
 }
 
-#' @title Function to plot results of conversion to PA.
+#' @title Display results of conversion to presence-absence (PA).
 #' @description Display raster of suitability, probability of occurrence,
-#' presence-absence binary map from PA conversion.
+#' presence-absence binary map from presence-absence (PA) conversion.
 #' @param x (`PAConversion`) The `PAConversion` object to plot.
 #' It could be the return of function \code{\link{convert_to_pa}}.
 #' @param ... Not used.
@@ -1498,8 +1505,9 @@ plot.PAConversion <- function(x, ...) {
   g1 / g2 / g3
 }
 
-#' @title Function to plot suspicious outliers in an observation dataset.
-#' @description Display observations and outliers in a dataset.
+#' @title Exhibit suspicious outliers in an observation dataset.
+#' @description Display observations and potential outliers diagnosed by
+#' function \code{\link{suspicious_env_outliers}} in a dataset.
 #' @param x (`EnvironmentalOutlier`) The PAConversion object to plot.
 #' It could be the return of function \code{\link{suspicious_env_outliers}}.
 #' @param overlay_raster (`RasterLayer` or `stars`) The environmental raster to plot

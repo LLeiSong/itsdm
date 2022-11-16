@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot.PAConversion}
 \alias{plot.PAConversion}
-\title{Function to plot results of conversion to PA.}
+\title{Display results of conversion to presence-absence (PA).}
 \usage{
 \method{plot}{PAConversion}(x, ...)
 }
@@ -18,7 +18,7 @@ presence-absence binary map.
 }
 \description{
 Display raster of suitability, probability of occurrence,
-presence-absence binary map from PA conversion.
+presence-absence binary map from presence-absence (PA) conversion.
 }
 \examples{
 \donttest{

@@ -1,5 +1,6 @@
-#' @title Calculate Shapley value based variable dependence.
-#' @description Calculate the variable dependence using Shapley values.
+#' @title Calculate Shapley value-based variable dependence.
+#' @description Calculate how a species responses to environmental variables
+#' using Shapley values.
 #' @param model (\code{isolation_forest}). The isolation forest SDM.
 #' It could be the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
 #' @param var_occ (`data.frame`, `tibble`) The `data.frame` style table that

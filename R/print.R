@@ -1,6 +1,7 @@
-#' @title Print summary information from variable importance object.
-#' @description Display the most general and informative characteristics of
-#' a variable importance object.
+#' @title Print summary information from variable importance object
+#' (`VariableAnalysis`).
+#' @description Display non-visualized information of a `VariableAnalysis`
+#' object returned by function \code{\link{variable_analysis}}.
 #' @param x (`VariableAnalysis`) A variable importance object to be messaged.
 #' It could be the return of function \code{\link{variable_analysis}}.
 #' @param ... Not used.
@@ -258,9 +259,9 @@ print.VariableAnalysis <- function(x, ...){
   invisible(x)
 }
 
-#' @title Print summary information from presence-only evaluation object.
+#' @title Print summary information from model evaluation object (`POEvaluation`).
 #' @description Display the most general and informative characteristics of
-#' a presence-only evaluation object.
+#' a model evaluation object.
 #' @param x (`POEvaluation`) A presence-only evaluation object to be messaged.
 #' It could be the return of function \code{\link{evaluate_po}}.
 #' @param ... Not used.
@@ -375,9 +376,10 @@ print.POEvaluation <- function(x, ...){
   invisible(x)
 }
 
-#' @title Print summary information from ReducedImageStack object.
+#' @title Print summary information from `ReducedImageStack` object.
 #' @description Display the most general and informative characteristics of
-#' a ReducedImageStack object.
+#' a ReducedImageStack object, including the set threshold, original variables,
+#' and the selected variables and the correlations between them.
 #' @param x (`ReducedImageStack`) A `ReducedImageStack` object to be messaged.
 #' It could be the return of function \code{\link{dim_reduce}}.
 #' @param ... Not used.
@@ -423,9 +425,8 @@ print.ReducedImageStack <- function(x, ...) {
   invisible(x)
 }
 
-#' @title Print summary information from PAConversion object.
-#' @description Display the most general and informative characteristics of
-#' a PAConversion object.
+#' @title Print summary information from `PAConversion` object.
+#' @description Display the equation and parameters of a `PAConversion` object.
 #' @param x (`PAConversion`) A PAConversion object to be messaged.
 #' It could be the return of function \code{\link{convert_to_pa}}.
 #' @param ... Not used.
@@ -502,9 +503,9 @@ print.PAConversion <- function(x, ...) {
   invisible(x)
 }
 
-#' @title Print summary information from PAConversion object.
-#' @description Display the most general and informative characteristics of
-#' a PAConversion object.
+#' @title Print summary information from `EnvironmentalOutlier` object.
+#' @description Display the environmental variable values comparing to the mean
+#' values of the detected environmental outliers in observations.
 #' @param x (`EnvironmentalOutlier`) A `EnvironmentalOutlier` object to be messaged.
 #' It could be the return of function \code{\link{suspicious_env_outliers}}.
 #' @param ... Not used.
@@ -541,9 +542,10 @@ print.EnvironmentalOutlier <- function(x, ...) {
   invisible(x)
 }
 
-#' @title Print summary information from POIsotree object.
+#' @title Print summary information from `POIsotree` object.
 #' @description Display the most general and informative characteristics of
-#' a fitted POIsotree object.
+#' a fitted POIsotree object. It includes the model information,
+#' model evaluation, variable analysis, etc.
 #' @param x (`POIsotree`) The POIsotree object to be messaged.
 #' It could be the return of function \code{\link{isotree_po}}.
 #' @param ... Not used.
@@ -689,9 +691,10 @@ print.POIsotree <- function(x, ...){
   invisible(x)
 }
 
-#' @title Print summary information from FormatOccurrence object.
-#' @description Display the most general and informative characteristics of
-#' a FormatOccurrence object.
+#' @title Print summary information from `FormatOccurrence` object.
+#' @description Display the type and number of training and evaluation dataset
+#' in the formatted observations obtained by
+#' function \code{\link{format_observation}}.
 #' @param x (`FormatOccurrence`) A `FormatOccurrence` object to be messaged.
 #' It could be the return of function \code{\link{format_observation}}.
 #' @param ... Not used.

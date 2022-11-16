@@ -2,7 +2,8 @@
 % Please edit documentation in R/print.R
 \name{print.VariableAnalysis}
 \alias{print.VariableAnalysis}
-\title{Print summary information from variable importance object.}
+\title{Print summary information from variable importance object
+(\code{VariableAnalysis}).}
 \usage{
 \method{print}{VariableAnalysis}(x, ...)
 }
@@ -16,8 +17,8 @@ It could be the return of function \code{\link{variable_analysis}}.}
 The same object that was passed as input.
 }
 \description{
-Display the most general and informative characteristics of
-a variable importance object.
+Display non-visualized information of a \code{VariableAnalysis}
+object returned by function \code{\link{variable_analysis}}.
 }
 \details{
 For Jackknife test, if the value is positive, print as "/".

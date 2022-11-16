@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.R
 \name{print.EnvironmentalOutlier}
 \alias{print.EnvironmentalOutlier}
-\title{Print summary information from PAConversion object.}
+\title{Print summary information from \code{EnvironmentalOutlier} object.}
 \usage{
 \method{print}{EnvironmentalOutlier}(x, ...)
 }
@@ -16,8 +16,8 @@ It could be the return of function \code{\link{suspicious_env_outliers}}.}
 The same object that was passed as input.
 }
 \description{
-Display the most general and informative characteristics of
-a PAConversion object.
+Display the environmental variable values comparing to the mean
+values of the detected environmental outliers in observations.
 }
 \examples{
 \donttest{

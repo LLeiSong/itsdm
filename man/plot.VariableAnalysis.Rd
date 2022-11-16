@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot.VariableAnalysis}
 \alias{plot.VariableAnalysis}
-\title{Function to plot variable importance.}
+\title{Display variable importance.}
 \usage{
 \method{plot}{VariableAnalysis}(x, ...)
 }

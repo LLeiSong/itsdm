@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot.VariableContribution}
 \alias{plot.VariableContribution}
-\title{Function to plot variable contribution for target observations.}
+\title{Exhibit variable contribution for target observations.}
 \usage{
 \method{plot}{VariableContribution}(x, plot_each_obs = FALSE, num_features = 5, ...)
 }
@@ -23,8 +23,9 @@ Just work if plot_each_obs is \code{TRUE}.}
 \code{ggplot2} figure of Variable Contribution.
 }
 \description{
-Plot variable contribution for target observation separately
-or together using ggplot2.
+Use ggplot2 to plot variable contribution for each target
+observation separately or summarize the overall variable contribution across
+all selected observations.
 }
 \examples{
 \donttest{

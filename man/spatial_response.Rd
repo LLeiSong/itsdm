@@ -2,7 +2,7 @@
 % Please edit documentation in R/spatial_response.R
 \name{spatial_response}
 \alias{spatial_response}
-\title{Calculate spatial response or dependence plot.}
+\title{Calculate spatial response or dependence figures.}
 \usage{
 spatial_response(
   model,
@@ -56,7 +56,8 @@ SHAP-based response of all variables}
 }
 \description{
 Calculate spatially marginal, independence, and SHAP-based
-response plots.
+response figures. They can help to diagnose both how and where the species
+responses to environmental variables.
 }
 \details{
 The values show how each environmental variable affects the modeling

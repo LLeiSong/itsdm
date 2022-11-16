@@ -2,7 +2,7 @@
 % Please edit documentation in R/shap_dependence.R
 \name{shap_dependence}
 \alias{shap_dependence}
-\title{Calculate Shapley value based variable dependence.}
+\title{Calculate Shapley value-based variable dependence.}
 \usage{
 shap_dependence(
   model,
@@ -53,7 +53,8 @@ The default is \code{FALSE}.}
 }
 }
 \description{
-Calculate the variable dependence using Shapley values.
+Calculate how a species responses to environmental variables
+using Shapley values.
 }
 \details{
 The values show how each environmental variable independently

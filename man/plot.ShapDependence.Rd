@@ -2,7 +2,8 @@
 % Please edit documentation in R/plot.R
 \name{plot.ShapDependence}
 \alias{plot.ShapDependence}
-\title{Function to plot variable dependence obtained from SHAP test.}
+\title{Show variable dependence plots and variable interaction plots
+obtained from Shapley values.}
 \usage{
 \method{plot}{ShapDependence}(
   x,
@@ -46,7 +47,9 @@ The default is 123.}
 \code{ggplot2} figure of dependent curves
 }
 \description{
-Plot variable dependence curves using ggplot2.
+Plot Shapley value-based variable dependence curves using
+ggplot2 by optionally selecting target variable(s). It also can plot the
+interaction between a related variable to the selected variable(s).
 }
 \details{
 If the number of samples is more than 1000, a stratified sampling is used to
