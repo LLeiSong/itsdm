@@ -23,7 +23,7 @@ SHapley Additive exPlanations (SHAP) according to Shapley values
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">itsdm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -38,10 +38,10 @@ SHapley Additive exPlanations (SHAP) according to Shapley values
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/introduction_of_itsdm.html">Introduction of `itsdm` with a virtual species</a>
+      <a href="../articles/introduction_of_itsdm.html">Introduction of itsdm with a virtual species</a>
     </li>
     <li>
-      <a href="../articles/itsdm_example.html">Using `itsdm` to a real species: Africa savanna elephant</a>
+      <a href="../articles/itsdm_example.html">Using itsdm to a real species: Africa savanna elephant</a>
     </li>
   </ul></li>
 <li>
@@ -195,23 +195,29 @@ rajan, Mukund, and Amir Najmi. "The many Shapley values for model explanation
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LLeiSong/itsdm" class="external-link">itsdm</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"occ_virtual_species"</span><span class="op">)</span></span>
-<span><span class="va">occ_virtual_species</span> <span class="op">&lt;-</span> <span class="va">occ_virtual_species</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">obs_df</span> <span class="op">&lt;-</span> <span class="va">occ_virtual_species</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">usage</span> <span class="op">==</span> <span class="st">"train"</span><span class="op">)</span></span>
+<span><span class="va">eval_df</span> <span class="op">&lt;-</span> <span class="va">occ_virtual_species</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">usage</span> <span class="op">==</span> <span class="st">"eval"</span><span class="op">)</span></span>
+<span><span class="va">x_col</span> <span class="op">&lt;-</span> <span class="st">"x"</span></span>
+<span><span class="va">y_col</span> <span class="op">&lt;-</span> <span class="st">"y"</span></span>
+<span><span class="va">obs_col</span> <span class="op">&lt;-</span> <span class="st">"observation"</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span></span>
-<span><span class="va">occ</span> <span class="op">&lt;-</span> <span class="va">occ_virtual_species</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html" class="external-link">sample_frac</a></span><span class="op">(</span><span class="fl">0.7</span><span class="op">)</span></span>
-<span><span class="va">occ_test</span> <span class="op">&lt;-</span> <span class="va">occ_virtual_species</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">occ</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
-<span><span class="va">occ</span> <span class="op">&lt;-</span> <span class="va">occ</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">id</span><span class="op">)</span></span>
-<span><span class="va">occ_test</span> <span class="op">&lt;-</span> <span class="va">occ_test</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">id</span><span class="op">)</span></span>
+<span><span class="co"># Format the observations</span></span>
+<span><span class="va">obs_train_eval</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_observation.html">format_observation</a></span><span class="op">(</span></span>
+<span>  obs_df <span class="op">=</span> <span class="va">obs_df</span>, eval_df <span class="op">=</span> <span class="va">eval_df</span>,</span>
+<span>  x_col <span class="op">=</span> <span class="va">x_col</span>, y_col <span class="op">=</span> <span class="va">y_col</span>, obs_col <span class="op">=</span> <span class="va">obs_col</span>,</span>
+<span>  obs_type <span class="op">=</span> <span class="st">"presence_only"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">env_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
 <span>  <span class="st">'extdata/bioclim_tanzania_10min.tif'</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">'itsdm'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">read_stars</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="st">'band'</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">12</span>, <span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># With imperfect_presence mode,</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="isotree_po.html">isotree_po</a></span><span class="op">(</span></span>
-<span>  occ <span class="op">=</span> <span class="va">occ</span>, occ_test <span class="op">=</span> <span class="va">occ_test</span>,</span>
-<span>  variables <span class="op">=</span> <span class="va">env_vars</span>, ntrees <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>  obs_mode <span class="op">=</span> <span class="st">"imperfect_presence"</span>,</span>
+<span>  obs <span class="op">=</span> <span class="va">obs_train_eval</span><span class="op">$</span><span class="va">obs</span>,</span>
+<span>  obs_ind_eval <span class="op">=</span> <span class="va">obs_train_eval</span><span class="op">$</span><span class="va">eval</span>,</span>
+<span>  variables <span class="op">=</span> <span class="va">env_vars</span>, ntrees <span class="op">=</span> <span class="fl">30</span>,</span>
 <span>  sample_size <span class="op">=</span> <span class="fl">0.8</span>, ndim <span class="op">=</span> <span class="fl">2L</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">123L</span>, response <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  spatial_response <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -219,8 +225,8 @@ rajan, Mukund, and Amir Najmi. "The many Shapley values for model explanation
 <span></span>
 <span><span class="va">var_analysis</span> <span class="op">&lt;-</span> <span class="fu">variable_analysis</span><span class="op">(</span></span>
 <span>  model <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">model</span>,</span>
-<span>  pts_occ <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">pts_occ</span>,</span>
-<span>  pts_occ_test <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">pts_occ_test</span>,</span>
+<span>  pts_occ <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">observation</span>,</span>
+<span>  pts_occ_test <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">independent_test</span>,</span>
 <span>  variables <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">variables</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">var_analysis</span><span class="op">)</span></span>
 <span><span class="co"># }</span></span>

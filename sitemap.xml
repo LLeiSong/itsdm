@@ -40,6 +40,9 @@
     <loc>https://lleisong.github.io/itsdm/reference/evaluate_po.html</loc>
   </url>
   <url>
+    <loc>https://lleisong.github.io/itsdm/reference/format_observation.html</loc>
+  </url>
+  <url>
     <loc>https://lleisong.github.io/itsdm/reference/future_cmcc_bioclim.html</loc>
   </url>
   <url>
@@ -95,6 +98,9 @@
   </url>
   <url>
     <loc>https://lleisong.github.io/itsdm/reference/print.EnvironmentalOutlier.html</loc>
+  </url>
+  <url>
+    <loc>https://lleisong.github.io/itsdm/reference/print.FormatOccurrence.html</loc>
   </url>
   <url>
     <loc>https://lleisong.github.io/itsdm/reference/print.PAConversion.html</loc>

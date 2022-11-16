@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">itsdm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -32,10 +32,10 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/introduction_of_itsdm.html">Introduction of `itsdm` with a virtual species</a>
+      <a href="../articles/introduction_of_itsdm.html">Introduction of itsdm with a virtual species</a>
     </li>
     <li>
-      <a href="../articles/itsdm_example.html">Using `itsdm` to a real species: Africa savanna elephant</a>
+      <a href="../articles/itsdm_example.html">Using itsdm to a real species: Africa savanna elephant</a>
     </li>
   </ul></li>
 <li>
@@ -64,6 +64,10 @@
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
+          <p><code><a href="format_observation.html">format_observation()</a></code> </p>
+        </td>
+        <td><p>Format the occurrence dataset for usage in <span class="pkg">itsdm</span></p></td>
+      </tr><tr><td>
           <p><code><a href="dim_reduce.html">dim_reduce()</a></code> </p>
         </td>
         <td><p>Reduce dimensions using auto-correlation between numeric raster layers.</p></td>
@@ -74,11 +78,12 @@
       </tr><tr><td>
           <p><code><a href="isotree_po.html">isotree_po()</a></code> </p>
         </td>
-        <td><p>Function to run extended isolation forest as SDM.</p></td>
+        <td><p>Build Isolation forest species distribution model and explain the
+the model and outputs.</p></td>
       </tr><tr><td>
           <p><code><a href="probability.html">probability()</a></code> </p>
         </td>
-        <td><p>Estimate suitability on stars object using trained <code>isolation.forest</code> model.</p></td>
+        <td><p>Estimate suitability on <code>stars</code> object using trained <code>isolation.forest</code> model.</p></td>
       </tr><tr><td>
           <p><code><a href="variable_analysis.html">variable_analysis()</a></code> </p>
         </td>
@@ -98,11 +103,11 @@
       </tr><tr><td>
           <p><code><a href="shap_dependence.html">shap_dependence()</a></code> </p>
         </td>
-        <td><p>Calculate Shapley value based variable dependence.</p></td>
+        <td><p>Calculate Shapley value-based variable dependence.</p></td>
       </tr><tr><td>
           <p><code><a href="spatial_response.html">spatial_response()</a></code> </p>
         </td>
-        <td><p>Calculate spatial response or dependence plot.</p></td>
+        <td><p>Calculate spatial response or dependence figures.</p></td>
       </tr><tr><td>
           <p><code><a href="variable_contrib.html">variable_contrib()</a></code> </p>
         </td>
@@ -122,39 +127,40 @@
       </tr></tbody><tbody><tr><td>
           <p><code><a href="plot.EnvironmentalOutlier.html">plot(<i>&lt;EnvironmentalOutlier&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Function to plot suspicious outliers in an observation dataset.</p></td>
+        <td><p>Exhibit suspicious outliers in an observation dataset.</p></td>
       </tr><tr><td>
           <p><code><a href="plot.IndependentResponse.html">plot(<i>&lt;IndependentResponse&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Function to plot independent response curves.</p></td>
+        <td><p>Show independent response curves.</p></td>
       </tr><tr><td>
           <p><code><a href="plot.MarginalResponse.html">plot(<i>&lt;MarginalResponse&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Function to plot marginal response curves.</p></td>
+        <td><p>Show marginal response curves.</p></td>
       </tr><tr><td>
           <p><code><a href="plot.PAConversion.html">plot(<i>&lt;PAConversion&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Function to plot results of conversion to PA.</p></td>
+        <td><p>Display results of conversion to presence-absence (PA).</p></td>
       </tr><tr><td>
           <p><code><a href="plot.POEvaluation.html">plot(<i>&lt;POEvaluation&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Function to plot presence-only evaluation.</p></td>
+        <td><p>Show model evaluation.</p></td>
       </tr><tr><td>
           <p><code><a href="plot.ShapDependence.html">plot(<i>&lt;ShapDependence&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Function to plot variable dependence obtained from SHAP test.</p></td>
+        <td><p>Show variable dependence plots and variable interaction plots
+obtained from Shapley values.</p></td>
       </tr><tr><td>
           <p><code><a href="plot.SpatialResponse.html">plot(<i>&lt;SpatialResponse&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Function to plot spatial variable dependence maps.</p></td>
+        <td><p>Display spatial variable dependence maps.</p></td>
       </tr><tr><td>
           <p><code><a href="plot.VariableAnalysis.html">plot(<i>&lt;VariableAnalysis&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Function to plot variable importance.</p></td>
+        <td><p>Display variable importance.</p></td>
       </tr><tr><td>
           <p><code><a href="plot.VariableContribution.html">plot(<i>&lt;VariableContribution&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Function to plot variable contribution for target observations.</p></td>
+        <td><p>Exhibit variable contribution for target observations.</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h3 id="print-summary">Print/summary <a href="#print-summary" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
@@ -162,27 +168,32 @@
       </tr></tbody><tbody><tr><td>
           <p><code><a href="print.EnvironmentalOutlier.html">print(<i>&lt;EnvironmentalOutlier&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Print summary information from PAConversion object.</p></td>
+        <td><p>Print summary information from <code>EnvironmentalOutlier</code> object.</p></td>
+      </tr><tr><td>
+          <p><code><a href="print.FormatOccurrence.html">print(<i>&lt;FormatOccurrence&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Print summary information from <code>FormatOccurrence</code> object.</p></td>
       </tr><tr><td>
           <p><code><a href="print.PAConversion.html">print(<i>&lt;PAConversion&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Print summary information from PAConversion object.</p></td>
+        <td><p>Print summary information from <code>PAConversion</code> object.</p></td>
       </tr><tr><td>
           <p><code><a href="print.POEvaluation.html">print(<i>&lt;POEvaluation&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Print summary information from presence-only evaluation object.</p></td>
+        <td><p>Print summary information from model evaluation object (<code>POEvaluation</code>).</p></td>
       </tr><tr><td>
           <p><code><a href="print.POIsotree.html">print(<i>&lt;POIsotree&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Print summary information from POIsotree object.</p></td>
+        <td><p>Print summary information from <code>POIsotree</code> object.</p></td>
       </tr><tr><td>
           <p><code><a href="print.ReducedImageStack.html">print(<i>&lt;ReducedImageStack&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Print summary information from ReducedImageStack object.</p></td>
+        <td><p>Print summary information from <code>ReducedImageStack</code> object.</p></td>
       </tr><tr><td>
           <p><code><a href="print.VariableAnalysis.html">print(<i>&lt;VariableAnalysis&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Print summary information from variable importance object.</p></td>
+        <td><p>Print summary information from variable importance object
+(<code>VariableAnalysis</code>).</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="datasets">Datasets <a href="#datasets" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p>
