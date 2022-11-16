@@ -1,7 +1,8 @@
 #' @title Format the occurrence dataset for usage in \pkg{itsdm}
 #' @description The focus of this function is to format the dataset
 #' but to keep the dataset as original as possible.
-#' Then the users can modify the data if wanted before put into this function.
+#' Then the users can modify the data if they want before put it
+#' into this function.
 #' @param obs_df (`data.frame`). The `data.frame` style table that
 #' include x and y coordinate and observation of training dataset.
 #' This parameter is required as it is the training dataset.

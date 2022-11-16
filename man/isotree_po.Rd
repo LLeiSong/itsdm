@@ -171,6 +171,7 @@ library(stars)
 library(itsdm)
 
 # Load example dataset
+data("occ_virtual_species")
 obs_df <- occ_virtual_species \%>\% filter(usage == "train")
 eval_df <- occ_virtual_species \%>\% filter(usage == "eval")
 x_col <- "x"
@@ -221,6 +222,7 @@ plot(mod_virtual_species$variable_analysis)
 
 ########### Presence-absence mode ##################
 # Load example dataset
+data("occ_virtual_species")
 obs_df <- occ_virtual_species \%>\% filter(usage == "train")
 eval_df <- occ_virtual_species \%>\% filter(usage == "eval")
 x_col <- "x"

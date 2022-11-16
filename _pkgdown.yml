@@ -3,6 +3,7 @@ url: https://lleisong.github.io/itsdm/
 reference:
 - title: Modeling species distribution
 - contents:
+  - "format_observation"
   - "dim_reduce"
   - "suspicious_env_outliers"
   - "isotree_po"

@@ -1,5 +1,5 @@
 ---
-title: "Using `itsdm` to a real species: Africa savanna elephant"
+title: "Using itsdm to a real species: Africa savanna elephant"
 author: "Lei Song"
 date: "`r Sys.Date()`"
 output:
@@ -165,7 +165,8 @@ occ_outliers <- suspicious_env_outliers(
   occ_clean_sf,
   variables = variables,
   z_outlier = 16,
-  outliers_print = 4L)
+  outliers_print = 4L,
+  visualize = FALSE)
 plot(occ_outliers)
 ```
 
@@ -218,8 +219,10 @@ occ <- occ %>% mutate(id = 1:nrow(.))
 set.seed(11)
 occ_sf <- occ %>% sample_frac(0.7)
 occ_test_sf <- occ %>% filter(! id %in% occ_sf$id)
-occ_sf <- occ_sf %>% select(-id)
-occ_test_sf <- occ_test_sf %>% select(-id)
+occ_sf <- occ_sf %>% select(-id) %>%
+  mutate(observation = 1)
+occ_test_sf <- occ_test_sf %>% select(-id) %>%
+  mutate(observation = 1)
 rm(occ)
 ```
 
@@ -236,8 +239,8 @@ At this step, the users could use strategies like grid search and preferred eval
 
 ```{r sdm, fig.align='center', fig.width=4, fig.height=3}
 # Do modeling
-it_sdm <- isotree_po(occ = occ_sf,
-                     occ_test = occ_test_sf,
+it_sdm <- isotree_po(obs = occ_sf,
+                     obs_ind_eval = occ_test_sf,
                      variables = variables,
                      categ_vars = c('wdpa', 'landcover'),
                      ntrees = 200L,
@@ -324,8 +327,8 @@ Shapley value summary plot is another way to interpret variable contribution.
 ```{r var_contrib_general, fig.align='center', fig.width=6, fig.height=5}
 var_contrib <- variable_contrib(
   it_sdm$model,
-  it_sdm$var_train %>% st_drop_geometry(),
-  it_sdm$var_train %>% st_drop_geometry())
+  it_sdm$vars_train,
+  it_sdm$vars_train)
 # Plot general contribution for all observations
 plot(var_contrib)
 ```
@@ -340,7 +343,9 @@ pa_map <- convert_to_pa(it_sdm$prediction,
                         method = "logistic",
                         beta = 0.2,
                         species_prevalence = 0.2,
-                        threshold = 0.5)
+                        threshold = 0.5,
+                        visualize = FALSE)
+
 ggplot() +
   geom_stars(data = pa_map$probability_of_occurrence) +
   scale_fill_viridis_c('Probability of occurrence',
@@ -368,15 +373,14 @@ Sometimes, we are interested in some observations, for instance, the outliers de
 ```{r var_contrib, fig.align='center', fig.width=7, fig.height=9}
 ## Analyze variable contribution for interested observations.
 ## For example, the first 10 outliers detected.
-var_occ <- it_sdm$var_train %>% st_drop_geometry()
-var_analysis <- var_occ %>%
+var_analysis <- it_sdm$vars_train %>%
   slice(occ_outliers$outliers %>%
           arrange(-outlier_score) %>%
           slice(1:10) %>%
           pull(suspious_row))
 var_contrib_outliers <- variable_contrib(
   it_sdm$model,
-  var_occ,
+  it_sdm$vars_train,
   var_analysis)
 
 # Plot contribution separately for each observation

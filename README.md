@@ -47,15 +47,18 @@ library(ggplot2)
 # Using a pseudo presence-only occurrence dataset of
 # virtual species provided in this package
 data("occ_virtual_species")
+obs_df <- occ_virtual_species %>% filter(usage == "train")
+eval_df <- occ_virtual_species %>% filter(usage == "eval")
+x_col <- "x"
+y_col <- "y"
+obs_col <- "observation"
+obs_type <- "presence_absence"
 
-# Split to training and test
-occ_virtual_species <- occ_virtual_species %>%
-  mutate(id = row_number())
-set.seed(11)
-occ <- occ_virtual_species %>% sample_frac(0.7)
-occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
-occ <- occ %>% select(-id)
-occ_test <- occ_test %>% select(-id)
+# Format the observations
+obs_train_eval <- format_observation(
+  obs_df = obs_df, eval_df = eval_df,
+  x_col = x_col, y_col = y_col, obs_col = obs_col,
+  obs_type = obs_type)
 
 # Get environmental variables
 env_vars <- system.file(
@@ -65,9 +68,11 @@ env_vars <- system.file(
 
 # Train the model
 mod <- isotree_po(
-  occ = occ, occ_test = occ_test,
+  obs_mode = "presence_absence",
+  obs = obs_train_eval$obs,
+  obs_ind_eval = obs_train_eval$eval,
   variables = env_vars, ntrees = 200,
-  sample_size = 0.8, ndim = 2L,
+  sample_size = 0.8, ndim = 2,
   seed = 123L)
 
 # Check results
@@ -81,7 +86,7 @@ ggplot() +
 
 ## Plot independent response curves
 plot(mod$independent_responses, 
-  target_var = c('bio1', 'bio12'))
+     target_var = c('bio1', 'bio12'))
 ```
 
 ## Contributor

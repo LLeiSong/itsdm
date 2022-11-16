@@ -168,6 +168,7 @@
 #' library(itsdm)
 #'
 #' # Load example dataset
+#' data("occ_virtual_species")
 #' obs_df <- occ_virtual_species %>% filter(usage == "train")
 #' eval_df <- occ_virtual_species %>% filter(usage == "eval")
 #' x_col <- "x"
@@ -218,6 +219,7 @@
 #'
 #' ########### Presence-absence mode ##################
 #' # Load example dataset
+#' data("occ_virtual_species")
 #' obs_df <- occ_virtual_species %>% filter(usage == "train")
 #' eval_df <- occ_virtual_species %>% filter(usage == "eval")
 #' x_col <- "x"
@@ -281,6 +283,14 @@ isotree_po <- function(
     obs, c('sf', null.ok = F))
   checkmate::assert_multi_class(
     obs_ind_eval, c('sf', null.ok = T))
+  if (!"observation" %in% names(obs)) {
+    stop("No observation column in obs.")
+  }
+
+  if (!"observation" %in% names(obs_ind_eval)) {
+    stop("No observation column in obs_ind_eval.")
+  }
+
   checkmate::assert_multi_class(
     variables, c('RasterStack', 'stars'))
   checkmate::assert_vector(categ_vars, null.ok = T)
@@ -636,7 +646,7 @@ isotree_po <- function(
       rm(rst_template)
 
       ## Calculate
-      eval_train <- evaluate_po(
+      eval_test <- evaluate_po(
         isotree_mod,
         obs_eval_pred$prediction,
         obs_eval_bg_pred$prediction,

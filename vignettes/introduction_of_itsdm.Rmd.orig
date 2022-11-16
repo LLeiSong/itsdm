@@ -1,5 +1,5 @@
 ---
-title: "Introduction of `itsdm` with a virtual species"
+title: "Introduction of itsdm with a virtual species"
 author: "Lei Song"
 date: "`r Sys.Date()`"
 output:
@@ -161,7 +161,8 @@ occ_outliers <- suspicious_env_outliers(
   po_df,
   variables = variables,
   z_outlier = 5,
-  outliers_print = 4L)
+  outliers_print = 4,
+  visualize = FALSE)
 
 # Check result
 # You could also plot samples overlap with a raster
@@ -174,15 +175,18 @@ occ_outliers <- suspicious_env_outliers(
   po_df, variables = variables,
   rm_outliers = T,
   z_outlier = 5,
-  outliers_print = 0L)
+  outliers_print = 0L,
+  visualize = FALSE)
 po_sf <- occ_outliers$pts_occ
 
 # Make occurrences
 set.seed(11)
 occ_sf <- po_sf %>% sample_frac(0.7)
 occ_test_sf <- po_sf %>% filter(! id %in% occ_sf$id)
-occ_sf <- occ_sf %>% select(-id)
-occ_test_sf <- occ_test_sf %>% select(-id)
+occ_sf <- occ_sf %>% select(-id) %>%
+  mutate(observation = 1)
+occ_test_sf <- occ_test_sf %>% select(-id) %>%
+  mutate(observation = 1)
 
 # Have a look at the samples if you like
 # ggplot() +
@@ -206,8 +210,8 @@ Here we build a SDM using extended isolation forest (with `ndim = 2`) and a samp
 
 ```{r sdm, fig.align='center', fig.width=4, fig.height=3}
 # Do modeling
-it_sdm <- isotree_po(occ = occ_sf,
-                     occ_test = occ_test_sf,
+it_sdm <- isotree_po(obs = occ_sf,
+                     obs_ind_eval = occ_test_sf,
                      variables = variables,
                      sample_size = 0.8,
                      ndim = 2)
@@ -281,7 +285,7 @@ Note that a very large raster stack of environmental variables might cause memor
 ## trade-off
 spatial_responses_all <- spatial_response(
   model = it_sdm$model,
-  var_occ = it_sdm$var_train %>% st_drop_geometry(),
+  var_occ = it_sdm$vars_train,
   variables = it_sdm$variables,
   shap_nsim = 20)
 
@@ -300,7 +304,8 @@ The direct result of function `isotree_po` is environmental suitability. We coul
 pa_map <- convert_to_pa(it_sdm$prediction,
                         method = "logistic",
                         beta = 0.7, # the same with virtual species
-                        alpha = -.05)
+                        alpha = -.05,
+                        visualize = FALSE)
 pa_map; plot(pa_map)
 ```
 
@@ -310,8 +315,8 @@ It is always helpful to understand the dependence among variables. The result of
 
 ```{r var_inter_dependence, fig.align='center', fig.width=7, fig.height=3}
 var_dependence <- shap_dependence(
-  it_sdm$model,
-  it_sdm$var_train %>% st_drop_geometry())
+  it_sdm$model, it_sdm$vars_train,
+  variables = it_sdm$variables)
 
 # Multiple ways to plot variable VariableDependence object
 ## Plot without smooth fit curve
@@ -331,8 +336,8 @@ Sometimes, we are interested in some observations, for instance, the outliers. `
 ## For example, outliers.
 var_contrib <- variable_contrib(
   it_sdm$model,
-  it_sdm$var_train %>% st_drop_geometry(),
-  it_sdm$var_test %>% st_drop_geometry() %>% slice(1:6))
+  it_sdm$vars_train,
+  it_sdm$vars_test %>% slice(1:6))
 
 # Plot contribution separately for each observation
 ## By default, it only plot the most 5 important variables for each observation
@@ -347,7 +352,7 @@ ggplot() +
   geom_stars(data = spatial_responses_all$spatial_shap_dependence$bio15) +
   scale_fill_distiller('SHAP-based effect', palette = "RdYlBu",
                        na.value = "transparent") +
-  geom_sf(data = it_sdm$var_test %>% slice(2),
+  geom_sf(data = occ_test_sf %>% slice(2),
           color = 'blue', pch = 1) +
   theme_linedraw()
 ```

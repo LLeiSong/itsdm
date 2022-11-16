@@ -75,7 +75,8 @@ presence_only or presence_absence.}
 \description{
 The focus of this function is to format the dataset
 but to keep the dataset as original as possible.
-Then the users can modify the data if wanted before put into this function.
+Then the users can modify the data if they want before put it
+into this function.
 }
 \examples{
 library(dplyr)

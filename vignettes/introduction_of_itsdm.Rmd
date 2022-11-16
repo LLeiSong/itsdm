@@ -1,7 +1,7 @@
 ---
-title: "Introduction of `itsdm` with a virtual species"
+title: "Introduction of itsdm with a virtual species"
 author: "Lei Song"
-date: "2022-09-05"
+date: "2022-11-16"
 output:
   rmarkdown::html_document:
     theme: readable
@@ -190,7 +190,8 @@ occ_outliers <- suspicious_env_outliers(
   po_df,
   variables = variables,
   z_outlier = 5,
-  outliers_print = 4L)
+  outliers_print = 4,
+  visualize = FALSE)
 #> Reporting top 4 outliers [out of 6 found]
 #> 
 #> row [463] - suspicious column: [bio5] - suspicious value: [32.78]
@@ -240,15 +241,18 @@ occ_outliers <- suspicious_env_outliers(
   po_df, variables = variables,
   rm_outliers = T,
   z_outlier = 5,
-  outliers_print = 0L)
+  outliers_print = 0L,
+  visualize = FALSE)
 po_sf <- occ_outliers$pts_occ
 
 # Make occurrences
 set.seed(11)
 occ_sf <- po_sf %>% sample_frac(0.7)
 occ_test_sf <- po_sf %>% filter(! id %in% occ_sf$id)
-occ_sf <- occ_sf %>% select(-id)
-occ_test_sf <- occ_test_sf %>% select(-id)
+occ_sf <- occ_sf %>% select(-id) %>% 
+  mutate(observation = 1)
+occ_test_sf <- occ_test_sf %>% select(-id) %>% 
+  mutate(observation = 1)
 
 # Have a look at the samples if you like
 # ggplot() +
@@ -284,8 +288,8 @@ Here we build a SDM using extended isolation forest (with `ndim = 2`) and a samp
 
 ```r
 # Do modeling
-it_sdm <- isotree_po(occ = occ_sf,
-                     occ_test = occ_test_sf,
+it_sdm <- isotree_po(obs = occ_sf,
+                     obs_ind_eval = occ_test_sf,
                      variables = variables,
                      sample_size = 0.8,
                      ndim = 2)
@@ -313,13 +317,13 @@ it_sdm$eval_test
 #> ===================================
 #> Presence-background evaluation:
 #> Sensitivity:                  0.972
-#> Specificity:                  0.865
-#> TSS:                          0.836
-#> AUC:                          0.947
+#> Specificity:                  0.856
+#> TSS:                          0.828
+#> AUC:                          0.946
 #> Similarity indices:
-#> Jaccard's similarity index:   0.856
-#> Sørensen's similarity index:  0.922
-#> Overprediction rate:          0.122
+#> Jaccard's similarity index:   0.849
+#> Sørensen's similarity index:  0.919
+#> Overprediction rate:          0.129
 #> Underprediction rate:         0.028
 plot(it_sdm$eval_test)
 ```
@@ -435,7 +439,7 @@ Note that a very large raster stack of environmental variables might cause memor
 ## trade-off
 spatial_responses_all <- spatial_response(
   model = it_sdm$model,
-  var_occ = it_sdm$var_train %>% st_drop_geometry(),
+  var_occ = it_sdm$vars_train,
   variables = it_sdm$variables,
   shap_nsim = 20)
 
@@ -443,7 +447,7 @@ spatial_responses_all <- spatial_response(
 plot(spatial_responses_all, target_var = c('bio1', 'bio12'))
 ```
 
-![plot of chunk spatial_response](intro-spatial_response-1.png)
+<img src="intro-spatial_response-1.png" alt="plot of chunk spatial_response" style="display: block; margin: auto;" />
 
 Marginal and independent effects only indicate the difference comparing the variable itself. And Shapley value based effect additionally show the relative contribution of one variable comparing to to other variables. For example, SHAP-based effect of bio1 shows that bio1 does not contribute much to the model over some areas even though it is an decisive variable.
 
@@ -457,7 +461,8 @@ The direct result of function `isotree_po` is environmental suitability. We coul
 pa_map <- convert_to_pa(it_sdm$prediction,
                         method = "logistic",
                         beta = 0.7, # the same with virtual species
-                        alpha = -.05)
+                        alpha = -.05,
+                        visualize = FALSE)
 pa_map; plot(pa_map)
 #> Logistic conversion
 #> beta = 0.7
@@ -474,8 +479,8 @@ It is always helpful to understand the dependence among variables. The result of
 
 ```r
 var_dependence <- shap_dependence(
-  it_sdm$model,
-  it_sdm$var_train %>% st_drop_geometry())
+  it_sdm$model, it_sdm$vars_train,
+  variables = it_sdm$variables)
 
 # Multiple ways to plot variable VariableDependence object
 ## Plot without smooth fit curve
@@ -498,8 +503,8 @@ Sometimes, we are interested in some observations, for instance, the outliers. `
 ## For example, outliers.
 var_contrib <- variable_contrib(
   it_sdm$model,
-  it_sdm$var_train %>% st_drop_geometry(),
-  it_sdm$var_test %>% st_drop_geometry() %>% slice(1:6))
+  it_sdm$vars_train,
+  it_sdm$vars_test %>% slice(1:6))
 
 # Plot contribution separately for each observation
 ## By default, it only plot the most 5 important variables for each observation
@@ -517,7 +522,7 @@ ggplot() +
   geom_stars(data = spatial_responses_all$spatial_shap_dependence$bio15) +
   scale_fill_distiller('SHAP-based effect', palette = "RdYlBu",
                        na.value = "transparent") +
-  geom_sf(data = it_sdm$var_test %>% slice(2),
+  geom_sf(data = occ_test_sf %>% slice(2),
           color = 'blue', pch = 1) +
   theme_linedraw()
 ```
