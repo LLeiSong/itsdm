@@ -24,10 +24,19 @@ a FormatOccurrence object.
 library(dplyr)
 library(itsdm)
 data("occ_virtual_species")
+
+# obs + eval, presence-absence
+obs_df <- occ_virtual_species \%>\% filter(usage == "train")
+eval_df <- occ_virtual_species \%>\% filter(usage == "eval")
+x_col <- "x"
+y_col <- "y"
+obs_col <- "observation"
+obs_type <- "presence_absence"
+
 obs_formatted <- format_observation(
-  obs_df = occ_virtual_species,
-  x_col = "x", y_col = "y", obs_col = "observation",
-  obs_type = "presence-absence")
+  obs_df = obs_df, eval_df = eval_df,
+  x_col = x_col, y_col = y_col, obs_col = obs_col,
+  obs_type = obs_type)
 
 print(obs_formatted)
 }

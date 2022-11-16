@@ -4,6 +4,13 @@
 #' It could be the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
 #' @param var_occ (`data.frame`, `tibble`) The `data.frame` style table that
 #' include values of environmental variables at occurrence locations.
+#' @param variables (`stars`) The `stars` of environmental variables.
+#' It should have multiple `attributes` instead of `dims`.
+#' If you have `raster` object instead, you
+#' could use \code{\link{st_as_stars}} to convert it to `stars` or use
+#' \code{\link{read_stars}} directly read source data as a `stars`.
+#' You also could use item `variables` of `POIsotree` made by function
+#' \code{\link{isotree_po}}.
 #' @param si (`integer`) The number of samples to generate response curves.
 #' If it is too small, the response curves might be biased.
 #' The default value is `1000`.
@@ -47,6 +54,7 @@
 #'
 #' @importFrom dplyr select
 #' @importFrom fastshap explain
+#' @importFrom stars st_apply
 #' @export
 #' @examples
 #' \donttest{
@@ -58,35 +66,44 @@
 #' library(itsdm)
 #'
 #' data("occ_virtual_species")
-#' occ_virtual_species <- occ_virtual_species %>%
-#'   mutate(id = row_number())
+#' obs_df <- occ_virtual_species %>% filter(usage == "train")
+#' eval_df <- occ_virtual_species %>% filter(usage == "eval")
+#' x_col <- "x"
+#' y_col <- "y"
+#' obs_col <- "observation"
 #'
-#' set.seed(11)
-#' occ <- occ_virtual_species %>% sample_frac(0.7)
-#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
-#' occ <- occ %>% select(-id)
-#' occ_test <- occ_test %>% select(-id)
+#' # Format the observations
+#' obs_train_eval <- format_observation(
+#'   obs_df = obs_df, eval_df = eval_df,
+#'   x_col = x_col, y_col = y_col, obs_col = obs_col,
+#'   obs_type = "presence_only")
 #'
 #' env_vars <- system.file(
 #'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
+#' # With imperfect_presence mode,
 #' mod <- isotree_po(
-#'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 50,
-#'   sample_size = 0.8, ndim = 1L,
+#'   obs_mode = "imperfect_presence",
+#'   obs = obs_train_eval$obs,
+#'   obs_ind_eval = obs_train_eval$eval,
+#'   variables = env_vars, ntrees = 30,
+#'   sample_size = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' var_dependence <- shap_dependence(
 #'   model = mod$model,
-#'   var_occ = mod$var_train %>% st_drop_geometry())
-#'}
+#'   var_occ = mod$vars_train,
+#'   variables = mod$variables)
+#' plot(var_dependence, target_var = "bio1", related_var = "bio16")
+#' }
 #'
 shap_dependence <- function(model,
                             var_occ,
+                            variables,
                             si = 1000,
                             shap_nsim = 100,
                             visualize = FALSE,
@@ -94,6 +111,7 @@ shap_dependence <- function(model,
 
   # Check inputs
   checkmate::assert_data_frame(var_occ)
+  checkmate::assert_class(variables, 'stars')
   checkmate::assert_int(si)
   checkmate::assert_int(shap_nsim)
   checkmate::assert_logical(visualize)

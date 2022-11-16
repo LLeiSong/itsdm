@@ -150,7 +150,7 @@
 #' @import checkmate
 #' @importFrom raster nlayers
 #' @importFrom dplyr select slice mutate sample_n
-#' @importFrom stars st_as_stars st_extract st_xy2sfc st_rasterize
+#' @importFrom stars st_as_stars st_extract st_xy2sfc st_rasterize st_apply
 #' @importFrom sf st_as_sf st_crs st_transform st_drop_geometry
 #' @importFrom isotree isolation.forest
 #' @importFrom rlang := .data
@@ -159,7 +159,12 @@
 #' @export
 #' @examples
 #' \donttest{
-#' ########### Presence-absence mode #################3
+#' ########### Presence-absence mode #################
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
+#'
 #' # Load example dataset
 #' obs_df <- occ_virtual_species %>% filter(usage == "train")
 #' eval_df <- occ_virtual_species %>% filter(usage == "eval")
@@ -209,7 +214,7 @@
 #' mod_virtual_species$variable_analysis
 #' plot(mod_virtual_species$variable_analysis)
 #'
-#' ########### Presence-absence mode #################3
+#' ########### Presence-absence mode ##################
 #' # Load example dataset
 #' obs_df <- occ_virtual_species %>% filter(usage == "train")
 #' eval_df <- occ_virtual_species %>% filter(usage == "eval")
@@ -312,11 +317,11 @@ isotree_po <- function(
   if (grepl("presence", obs_mode) &
       sum(obs$observation == 1) == 0) {
     stop(sprintf("Presences do not exist in observations for mode %s.",
-                 abs_mode))}
+                 obs_mode))}
   if (grepl("absence", obs_mode) &
       sum(obs$observation == 0) == 0) {
     stop(sprintf("Absences do not exist in observations for mode %s.",
-                 abs_mode))}
+                 obs_mode))}
 
   # Check categ_cols
   if (exists('categ_cols')) {
@@ -481,6 +486,7 @@ isotree_po <- function(
     shap_dependences <- shap_dependence(
       model = isotree_mod,
       var_occ = obs_vars_mat,
+      variables = variables,
       visualize = visualize,
       seed = seed)
   } else {
@@ -528,9 +534,9 @@ isotree_po <- function(
   if (obs_mode == "presence_absence") {
     nums <- obs_full %>%
       st_drop_geometry() %>%
-      group_by(observation) %>%
+      group_by(.data$observation) %>%
       summarise(n = n()) %>%
-      arrange(observation)
+      arrange(.data$observation)
 
     # Check the balance of the dataset
     # Just give a warning to let the user deal with
@@ -584,9 +590,9 @@ isotree_po <- function(
     if (0 %in% obs_ind_eval$observation) {
       nums <- obs_ind_eval %>%
         st_drop_geometry() %>%
-        group_by(observation) %>%
+        group_by(.data$observation) %>%
         summarise(n = n()) %>%
-        arrange(observation)
+        arrange(.data$observation)
 
       # Check the balance of the dataset
       # Just give a warning to let the user deal with

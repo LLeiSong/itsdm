@@ -116,24 +116,31 @@
 #' library(stars)
 #' library(itsdm)
 #'
+#' # Prepare data
 #' data("occ_virtual_species")
-#' occ_virtual_species <- occ_virtual_species %>%
-#'   mutate(id = row_number())
+#' obs_df <- occ_virtual_species %>% filter(usage == "train")
+#' eval_df <- occ_virtual_species %>% filter(usage == "eval")
+#' x_col <- "x"
+#' y_col <- "y"
+#' obs_col <- "observation"
 #'
-#' set.seed(11)
-#' occ <- occ_virtual_species %>% sample_frac(0.7)
-#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
-#' occ <- occ %>% select(-id)
-#' occ_test <- occ_test %>% select(-id)
+#' # Format the observations
+#' obs_train_eval <- format_observation(
+#'   obs_df = obs_df, eval_df = eval_df,
+#'   x_col = x_col, y_col = y_col, obs_col = obs_col,
+#'   obs_type = "presence_only")
 #'
 #' env_vars <- system.file(
 #'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
+#' # With imperfect_presence mode,
 #' mod <- isotree_po(
-#'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 50,
+#'   obs_mode = "imperfect_presence",
+#'   obs = obs_train_eval$obs,
+#'   obs_ind_eval = obs_train_eval$eval,
+#'   variables = env_vars, ntrees = 20,
 #'   sample_size = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
@@ -141,7 +148,7 @@
 #'
 #' marginal_responses <- marginal_response(
 #'   model = mod$model,
-#'   var_occ = mod$var_train %>% st_drop_geometry(),
+#'   var_occ = mod$vars_train,
 #'   variables = mod$variables)
 #' plot(marginal_responses, target_var = 'bio1')
 #'}
@@ -196,24 +203,31 @@ plot.MarginalResponse <- function(x,
 #' library(stars)
 #' library(itsdm)
 #'
+#' # Prepare data
 #' data("occ_virtual_species")
-#' occ_virtual_species <- occ_virtual_species %>%
-#'   mutate(id = row_number())
+#' obs_df <- occ_virtual_species %>% filter(usage == "train")
+#' eval_df <- occ_virtual_species %>% filter(usage == "eval")
+#' x_col <- "x"
+#' y_col <- "y"
+#' obs_col <- "observation"
 #'
-#' set.seed(11)
-#' occ <- occ_virtual_species %>% sample_frac(0.7)
-#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
-#' occ <- occ %>% select(-id)
-#' occ_test <- occ_test %>% select(-id)
+#' # Format the observations
+#' obs_train_eval <- format_observation(
+#'   obs_df = obs_df, eval_df = eval_df,
+#'   x_col = x_col, y_col = y_col, obs_col = obs_col,
+#'   obs_type = "presence_only")
 #'
 #' env_vars <- system.file(
 #'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
+#' # With imperfect_presence mode,
 #' mod <- isotree_po(
-#'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 50,
+#'   obs_mode = "imperfect_presence",
+#'   obs = obs_train_eval$obs,
+#'   obs_ind_eval = obs_train_eval$eval,
+#'   variables = env_vars, ntrees = 20,
 #'   sample_size = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
@@ -221,7 +235,7 @@ plot.MarginalResponse <- function(x,
 #'
 #' independent_responses <- independent_response(
 #'   model = mod$model,
-#'   var_occ = mod$var_train %>% st_drop_geometry(),
+#'   var_occ = mod$vars_train,
 #'   variables = mod$variables)
 #' plot(independent_responses)
 #'}
@@ -294,31 +308,40 @@ plot.IndependentResponse <- function(x,
 #' library(stars)
 #' library(itsdm)
 #'
+#' # Prepare data
 #' data("occ_virtual_species")
-#' occ_virtual_species <- occ_virtual_species %>%
-#'   mutate(id = row_number())
+#' obs_df <- occ_virtual_species %>% filter(usage == "train")
+#' eval_df <- occ_virtual_species %>% filter(usage == "eval")
+#' x_col <- "x"
+#' y_col <- "y"
+#' obs_col <- "observation"
 #'
-#' set.seed(11)
-#' occ <- occ_virtual_species %>% sample_frac(0.7)
-#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
-#' occ <- occ %>% select(-id)
-#' occ_test <- occ_test %>% select(-id)
+#' # Format the observations
+#' obs_train_eval <- format_observation(
+#'   obs_df = obs_df, eval_df = eval_df,
+#'   x_col = x_col, y_col = y_col, obs_col = obs_col,
+#'   obs_type = "presence_only")
 #'
 #' env_vars <- system.file(
 #'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
+#' # With imperfect_presence mode,
 #' mod <- isotree_po(
-#'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 50,
-#'   sample_size = 0.8, ndim = 3L,
+#'   obs_mode = "imperfect_presence",
+#'   obs = obs_train_eval$obs,
+#'   obs_ind_eval = obs_train_eval$eval,
+#'   variables = env_vars, ntrees = 20,
+#'   sample_size = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' var_dependence <- shap_dependence(
 #'   model = mod$model,
-#'   var_occ = mod$var_train %>% st_drop_geometry())
+#'   var_occ = mod$vars_train,
+#'   variables = mod$variables)
 #' plot(var_dependence, target_var = 'bio1', related_var = 'bio12')
 #'}
 #'
@@ -586,33 +609,41 @@ plot.ShapDependence <- function(x,
 #' library(stars)
 #' library(itsdm)
 #'
+#' # Prepare data
 #' data("occ_virtual_species")
-#' occ_virtual_species <- occ_virtual_species %>%
-#'   mutate(id = row_number())
+#' obs_df <- occ_virtual_species %>% filter(usage == "train")
+#' eval_df <- occ_virtual_species %>% filter(usage == "eval")
+#' x_col <- "x"
+#' y_col <- "y"
+#' obs_col <- "observation"
 #'
-#' set.seed(11)
-#' occ <- occ_virtual_species %>% sample_frac(0.7)
-#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
-#' occ <- occ %>% select(-id)
-#' occ_test <- occ_test %>% select(-id)
+#' # Format the observations
+#' obs_train_eval <- format_observation(
+#'   obs_df = obs_df, eval_df = eval_df,
+#'   x_col = x_col, y_col = y_col, obs_col = obs_col,
+#'   obs_type = "presence_only")
 #'
 #' env_vars <- system.file(
 #'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
+#' # With imperfect_presence mode,
 #' mod <- isotree_po(
-#'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 50,
-#'   sample_size = 0.8, ndim = 3L,
+#'   obs_mode = "imperfect_presence",
+#'   obs = obs_train_eval$obs,
+#'   obs_ind_eval = obs_train_eval$eval,
+#'   variables = env_vars, ntrees = 20,
+#'   sample_size = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' spatial_responses <- spatial_response(
 #'   model = mod$model,
-#'   var_occ = mod$var_train %>% st_drop_geometry(),
-#'   variables = mod$variables)
+#'   var_occ = mod$vars_train,
+#'   variables = mod$variables,
+#'   shap_nsim = 10)
 #' plot(spatial_responses)
 #' plot(spatial_responses, target_var = 'bio1')
 #'}
@@ -766,37 +797,47 @@ plot.SpatialResponse <- function(x,
 #' library(stars)
 #' library(itsdm)
 #'
+#' # Prepare data
 #' data("occ_virtual_species")
-#' occ_virtual_species <- occ_virtual_species %>%
-#'   mutate(id = row_number())
+#' obs_df <- occ_virtual_species %>% filter(usage == "train")
+#' eval_df <- occ_virtual_species %>% filter(usage == "eval")
+#' x_col <- "x"
+#' y_col <- "y"
+#' obs_col <- "observation"
 #'
-#' set.seed(11)
-#' occ <- occ_virtual_species %>% sample_frac(0.7)
-#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
-#' occ <- occ %>% select(-id)
-#' occ_test <- occ_test %>% select(-id)
+#' # Format the observations
+#' obs_train_eval <- format_observation(
+#'   obs_df = obs_df, eval_df = eval_df,
+#'   x_col = x_col, y_col = y_col, obs_col = obs_col,
+#'   obs_type = "presence_only")
 #'
 #' env_vars <- system.file(
 #'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
+#' # With imperfect_presence mode,
 #' mod <- isotree_po(
-#'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 50,
-#'   sample_size = 0.8, ndim = 1L,
+#'   obs_mode = "imperfect_presence",
+#'   obs = obs_train_eval$obs,
+#'   obs_ind_eval = obs_train_eval$eval,
+#'   variables = env_vars, ntrees = 20,
+#'   sample_size = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' var_contribution <- variable_contrib(
 #'   model = mod$model,
-#'   var_occ = mod$var_train %>% st_drop_geometry(),
-#'   var_occ_analysis = mod$var_train %>%
-#'     st_drop_geometry() %>% slice(1:10))
+#'   var_occ = mod$vars_train,
+#'   var_occ_analysis = mod$vars_train %>% slice(1:10))
+#'
+#' # Plot variable contribution to each observation
 #' plot(var_contribution,
-#'   plot_each_obs = TRUE,
-#'   num_features = 3)
+#'      plot_each_obs = TRUE,
+#'      num_features = 3)
+#'
+#' # Plot the summarized contribution
 #' plot(var_contribution)
 #'}
 #'
@@ -907,33 +948,40 @@ plot.VariableContribution <- function(x,
 #' library(stars)
 #' library(itsdm)
 #'
+#' # Prepare data
 #' data("occ_virtual_species")
-#' occ_virtual_species <- occ_virtual_species %>%
-#'   mutate(id = row_number())
+#' obs_df <- occ_virtual_species %>% filter(usage == "train")
+#' eval_df <- occ_virtual_species %>% filter(usage == "eval")
+#' x_col <- "x"
+#' y_col <- "y"
+#' obs_col <- "observation"
 #'
-#' set.seed(11)
-#' occ <- occ_virtual_species %>% sample_frac(0.7)
-#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
-#' occ <- occ %>% select(-id)
-#' occ_test <- occ_test %>% select(-id)
+#' # Format the observations
+#' obs_train_eval <- format_observation(
+#'   obs_df = obs_df, eval_df = eval_df,
+#'   x_col = x_col, y_col = y_col, obs_col = obs_col,
+#'   obs_type = "presence_only")
 #'
 #' env_vars <- system.file(
 #'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
+#' # With imperfect_presence mode,
 #' mod <- isotree_po(
-#'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 50,
-#'   sample_size = 0.8, ndim = 1L,
+#'   obs_mode = "imperfect_presence",
+#'   obs = obs_train_eval$obs,
+#'   obs_ind_eval = obs_train_eval$eval,
+#'   variables = env_vars, ntrees = 20,
+#'   sample_size = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
 #' var_analysis <- variable_analysis(
 #'   model = mod$model,
-#'   pts_occ = mod$pts_occ,
-#'   pts_occ_test = mod$pts_occ_test,
+#'   pts_occ = mod$observation,
+#'   pts_occ_test = mod$independent_test,
 #'   variables = mod$variables)
 #' plot(var_analysis)
 #'}
@@ -1184,30 +1232,38 @@ plot.VariableAnalysis <- function(x, ...) {
 #' library(stars)
 #' library(itsdm)
 #'
+#' # Prepare data
 #' data("occ_virtual_species")
-#' occ_virtual_species <- occ_virtual_species %>%
-#'   mutate(id = row_number())
+#' obs_df <- occ_virtual_species %>% filter(usage == "train")
+#' eval_df <- occ_virtual_species %>% filter(usage == "eval")
+#' x_col <- "x"
+#' y_col <- "y"
+#' obs_col <- "observation"
 #'
-#' set.seed(11)
-#' occ <- occ_virtual_species %>% sample_frac(0.7)
-#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
-#' occ <- occ %>% select(-id)
-#' occ_test <- occ_test %>% select(-id)
+#' # Format the observations
+#' obs_train_eval <- format_observation(
+#'   obs_df = obs_df, eval_df = eval_df,
+#'   x_col = x_col, y_col = y_col, obs_col = obs_col,
+#'   obs_type = "presence_only")
 #'
 #' env_vars <- system.file(
 #'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
+#' # With imperfect_presence mode,
 #' mod <- isotree_po(
-#'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 50,
+#'   obs_mode = "imperfect_presence",
+#'   obs = obs_train_eval$obs,
+#'   obs_ind_eval = obs_train_eval$eval,
+#'   variables = env_vars, ntrees = 20,
 #'   sample_size = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
-#' eval_train <- evaluate_po(mod$model,
+#' eval_train <- evaluate_po(
+#'   mod$model,
 #'   occ_pred = mod$pred_train$prediction,
 #'   var_pred = na.omit(as.vector(mod$prediction[[1]])))
 #'
@@ -1372,25 +1428,32 @@ plot.POEvaluation <- function(x, ...) {
 #' library(stars)
 #' library(itsdm)
 #'
+#' # Prepare data
 #' data("occ_virtual_species")
-#' occ_virtual_species <- occ_virtual_species %>%
-#'   mutate(id = row_number())
+#' obs_df <- occ_virtual_species %>% filter(usage == "train")
+#' eval_df <- occ_virtual_species %>% filter(usage == "eval")
+#' x_col <- "x"
+#' y_col <- "y"
+#' obs_col <- "observation"
 #'
-#' set.seed(11)
-#' occ <- occ_virtual_species %>% sample_frac(0.7)
-#' occ_test <- occ_virtual_species %>% filter(! id %in% occ$id)
-#' occ <- occ %>% select(-id)
-#' occ_test <- occ_test %>% select(-id)
+#' # Format the observations
+#' obs_train_eval <- format_observation(
+#'   obs_df = obs_df, eval_df = eval_df,
+#'   x_col = x_col, y_col = y_col, obs_col = obs_col,
+#'   obs_type = "presence_only")
 #'
 #' env_vars <- system.file(
 #'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
 #'   slice('band', c(1, 5, 12, 16))
 #'
+#' # With imperfect_presence mode,
 #' mod <- isotree_po(
-#'   occ = occ, occ_test = occ_test,
-#'   variables = env_vars, ntrees = 50,
-#'   sample_size = 0.8, ndim = 1L,
+#'   obs_mode = "imperfect_presence",
+#'   obs = obs_train_eval$obs,
+#'   obs_ind_eval = obs_train_eval$eval,
+#'   variables = env_vars, ntrees = 20,
+#'   sample_size = 0.8, ndim = 2L,
 #'   seed = 123L, response = FALSE,
 #'   spatial_response = FALSE,
 #'   check_variable = FALSE)

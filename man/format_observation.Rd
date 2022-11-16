@@ -14,7 +14,7 @@ format_observation(
   x_col = "x",
   y_col = "y",
   obs_col = "observation",
-  obs_type = "presence-only"
+  obs_type = "presence_only"
 )
 }
 \arguments{
@@ -53,8 +53,8 @@ in \code{obs_df} and \code{eval_df} if not \code{NULL}.}
 in \code{obs_df} and \code{eval_df} if not \code{NULL}.}
 
 \item{obs_type}{(\code{character}) The type of observation to be formatted to.
-Only can be one of \code{c("presence-only", "presence-absence")}.
-Note that if "presence-only" is set, the absences in \code{obs_df} will be deleted.
+Only can be one of \code{c("presence_only", "presence_absence")}.
+Note that if "presence_only" is set, the absences in \code{obs_df} will be deleted.
 This only affect \code{obs_df}, \code{eval_df} will keep the original type no matter it
 is an independent one or is split from \code{eval_df}.}
 }
@@ -64,12 +64,12 @@ is an independent one or is split from \code{eval_df}.}
 \item{obs (\code{sf}) the formatted pts of observations.
 The column of observation is "observation".}
 \item{obs_type (\code{character}) the type of the observations,
-presence-only or presence-absence.}
+presence_only or presence_absence.}
 \item{has_eval (\code{logical}) whether evaluation dataset is set or generated.}
 \item{eval (\code{sf}) the formatted pts of observations for evaluation if any.
 The column of observation is "observation".}
 \item{eval (\code{eval_type})  the type of the observations for evaluation,
-presence-only or presence-absence.}
+presence_only or presence_absence.}
 }
 }
 \description{
@@ -88,7 +88,7 @@ eval_df <- occ_virtual_species \%>\% filter(usage == "eval")
 x_col <- "x"
 y_col <- "y"
 obs_col <- "observation"
-obs_type <- "presence-absence"
+obs_type <- "presence_absence"
 
 obs <- format_observation(
   obs_df = obs_df, eval_df = eval_df,
@@ -101,7 +101,7 @@ eval_df <- occ_virtual_species \%>\% filter(usage == "eval")
 x_col <- "x"
 y_col <- "y"
 obs_col <- "observation"
-obs_type <- "presence-only"
+obs_type <- "presence_only"
 
 obs <- format_observation(
   obs_df = obs_df, eval_df = eval_df,
@@ -117,7 +117,7 @@ eval_crs <- 20935
 x_col <- "x"
 y_col <- "y"
 obs_col <- "observation"
-obs_type <- "presence-only"
+obs_type <- "presence_only"
 
 obs <- format_observation(
   obs_df = obs_df, eval_df = eval_df,
@@ -133,7 +133,7 @@ obs_crs <- 4326
 x_col <- "x"
 y_col <- "y"
 obs_col <- "observation"
-obs_type <- "presence-absence"
+obs_type <- "presence_absence"
 
 obs <- format_observation(
   obs_df = obs_df, split_perc = split_perc,
@@ -149,7 +149,7 @@ obs_crs <- 4326
 x_col <- "x"
 y_col <- "y"
 obs_col <- "observation"
-obs_type <- "presence-only"
+obs_type <- "presence_only"
 
 obs <- format_observation(
   obs_df = obs_df, eval_df = eval_df,

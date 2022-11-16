@@ -6,7 +6,6 @@
 \usage{
 isotree_po(
   obs_mode = "imperfect_presence",
-  mode = ifelse(species_is_rare, "reverse", "normal"),
   obs,
   obs_ind_eval = NULL,
   variables,
@@ -25,25 +24,14 @@ isotree_po(
 )
 }
 \arguments{
-\item{obs_mode}{(\code{string}) The mode of occurrence for training. It should be
-one of \code{c("perfect_presence", "imperfect_presence", "presence_absence")}.
+\item{obs_mode}{(\code{string}) The mode of observations for training. It should
+be one of \code{c("perfect_presence", "imperfect_presence", "presence_absence")}.
 "perfect_presence" means presence-only occurrences without
 errors/uncertainties/bias, which should be rare in reality.
 "Imperfect_presence" means presence-only occurrences with
 errors/uncertainties/bias, which should be a most common case.
 "presence_absence" means presence-absence observations regardless quality.
-This argument should be set together with \code{mode} and \code{contamination} below.
-See details to learn how to set it.}
-
-\item{mode}{(\code{string}) The mode of modeling. It should be one of
-\code{c("normal", "reverse", "joint")}.
-"normal" means \code{iForest} will be trained taking presence as normal cases.
-"reverse" mean \code{iForest} will be trained taking background as normal cases.
-"joint" means \code{iForest} will be trained taking presence as normal cases, and
-taking background as normal cases, respectively. Then the final result is the
-joint result of these two models.
-It is used together with \code{obs_mode} and \code{contamination}.
-See details to learn how to set it.}
+See details to learn how to set it. The default is "imperfect_presence".}
 
 \item{obs}{(\code{sf}) The \code{sf} of observation for training. It is recommended to
 call function \code{\link{format_observation}} to format the
@@ -66,7 +54,8 @@ variables. Must be the same as the names in \code{variables}.}
 dataset. Because \code{iForest} is an outlier detection algorithm. It picks up
 abnormal cases (much fewer) from normal cases. This argument is used to set
 how many abnormal cases should be there if the users have the power to control.
-See details for how to set it. The default value is 0.1.}
+See details for how to set it. The value should be less than 0.5. Here we
+constrain it in (0, 0.3]. The default value is 0.1.}
 
 \item{ntrees}{(\code{integer}) The number of trees for the isolation forest. It must
 be integer, which you could use function \code{\link{as.integer}} to convert to.
@@ -110,24 +99,24 @@ related to the model. The default is \code{FALSE}.}
 function inputs}
 \item{variables (\code{stars}) The formatted image stack of
 environmental variables}
-\item{pts_occ (\code{\link{sf}}) A \code{\link{sf}} of training occurrence
+\item{observation (\code{\link{sf}}) A \code{\link{sf}} of training occurrence
 dataset}
-\item{pts_bg_occ (\code{\link{sf}}) A \code{\link{sf}} of background points
+\item{background_samples (\code{\link{sf}}) A \code{\link{sf}} of background points
 for training dataset evaluation or SHAP dependence plot}
-\item{pts_occ_test (\code{\link{sf}} or \code{NULL}) A \code{\link{sf}} of test
+\item{independent_test (\code{\link{sf}} or \code{NULL}) A \code{\link{sf}} of test
 occurrence dataset}
-\item{pts_bg_occ_test (\code{\link{sf}} or \code{NULL}) A \code{\link{sf}} of
+\item{background_samples_test (\code{\link{sf}} or \code{NULL}) A \code{\link{sf}} of
 background points for test dataset evaluation or SHAP dependence plot}
-\item{var_train (\code{\link{sf}}) A \code{\link{sf}} with values of each
+\item{vars_train (\code{\link{data.frame}}) A \code{\link{data.frame}} with values of each
 environmental variables for training occurrence}
-\item{pred_train (\code{\link{sf}}) A \code{\link{sf}} with values of
+\item{pred_train (\code{\link{data.frame}}) A \code{\link{data.frame}} with values of
 prediction for training occurrence}
 \item{eval_train (\code{POEvaluation}) A list of presence-only evaluation metrics
 based on training dataset. See details of \code{POEvaluation} in
 \code{\link{evaluate_po}}}
-\item{var_test (\code{\link{sf}} or \code{NULL}) A \code{\link{sf}} with values of each
+\item{var_test (\code{\link{data.frame}} or \code{NULL}) A \code{\link{data.frame}} with values of each
 environmental variables for test occurrence}
-\item{pred_test (\code{\link{sf}} or \code{NULL}) A \code{\link{sf}} with values of
+\item{pred_test (\code{\link{data.frame}} or \code{NULL}) A \code{\link{data.frame}} with values of
 prediction for test occurrence}
 \item{eval_test (\code{POEvaluation} or \code{NULL}) A list of presence-only evaluation metrics
 based on test dataset.
@@ -155,23 +144,17 @@ Call isolation forest and its variations to do
 species distribution modeling and optionally do model explanation.
 }
 \details{
-It is recommended to use \bold{mode} "normal" for \bold{obs_mode}
-"perfect_presence" and "imperfect_presence". For "perfect_presence", a
-user-defined number (\code{contamination}) of samples will be taken from
-background to train the model. If "imperfect_presence", no further actions is
-required.
+For "perfect_presence", a user-defined number (\code{contamination}) of samples
+will be taken from background to let \code{iForest} function normally.
 
-If the \bold{obs_mode} is "presence_absence", it is recommended to use
-\bold{mode} "joint". It means the model will be trained by all presences and
-\code{contamination} percent of absences. Then the model will be trained by all
-absences and \code{contamination} percent of presences.
-The final model is the joint of these two models.
+If "imperfect_presence", no further actions is required.
 
-\bold{mode} "joint" can also be used for \bold{obs_mode} "perfect_presence"
-and "imperfect_presence". Absences will be sampled from background.
+If the \bold{obs_mode} is "presence_absence", a \code{contamination} percent
+of absences will be randomly selected and work together with all presences
+to train the model.
 
-It is recommended to use \bold{mode} "reverse" for rare species. The
-model will treats background as normal case, so it is called "reverse".
+NOTE: \bold{obs_mode} and \bold{mode} only works for \code{obs}. \code{obs_ind_eval}
+will follow its own structure.
 
 Please read details of algorithm \code{\link{isolation.forest}} on
 \url{https://github.com/david-cortes/isotree}, and
@@ -179,24 +162,27 @@ the R documentation of function \code{\link{isolation.forest}}.
 }
 \examples{
 \donttest{
-# Using a pseudo presence-only occurrence dataset of
-# virtual species provided in this package
+########### Presence-absence mode #################
 library(dplyr)
 library(sf)
 library(stars)
 library(itsdm)
 
-# Prepare data
-data("occ_virtual_species")
-occ_virtual_species <- occ_virtual_species \%>\%
-  mutate(id = row_number())
+# Load example dataset
+obs_df <- occ_virtual_species \%>\% filter(usage == "train")
+eval_df <- occ_virtual_species \%>\% filter(usage == "eval")
+x_col <- "x"
+y_col <- "y"
+obs_col <- "observation"
+obs_type <- "presence_absence"
 
-set.seed(11)
-occ <- occ_virtual_species \%>\% sample_frac(0.7)
-occ_test <- occ_virtual_species \%>\% filter(! id \%in\% occ$id)
-occ <- occ \%>\% select(-id)
-occ_test <- occ_test \%>\% select(-id)
+# Format the observations
+obs_train_eval <- format_observation(
+  obs_df = obs_df, eval_df = eval_df,
+  x_col = x_col, y_col = y_col, obs_col = obs_col,
+  obs_type = obs_type)
 
+# Load variables
 env_vars <- system.file(
   'extdata/bioclim_tanzania_10min.tif',
   package = 'itsdm') \%>\% read_stars() \%>\%
@@ -204,7 +190,9 @@ env_vars <- system.file(
 
 # Modeling
 mod_virtual_species <- isotree_po(
-  occ = occ, occ_test = occ_test,
+  obs_mode = "presence_absence",
+  obs = obs_train_eval$obs,
+  obs_ind_eval = obs_train_eval$eval,
   variables = env_vars, ntrees = 10,
   sample_size = 0.6, ndim = 1L,
   seed = 123L)
@@ -217,17 +205,49 @@ plot(mod_virtual_species$eval_train)
 ## Response curves
 plot(mod_virtual_species$marginal_responses)
 plot(mod_virtual_species$independent_responses,
-  target_var = c('bio1', 'bio5'))
+     target_var = c('bio1', 'bio5'))
 plot(mod_virtual_species$shap_dependence)
 
 ## Relationships between target var and related var
 plot(mod_virtual_species$shap_dependence,
-  target_var = c('bio1', 'bio5'),
-  related_var = 'bio12', smooth_span = 0)
+     target_var = c('bio1', 'bio5'),
+     related_var = 'bio12', smooth_span = 0)
 
 # Variable importance
 mod_virtual_species$variable_analysis
 plot(mod_virtual_species$variable_analysis)
+
+########### Presence-absence mode ##################
+# Load example dataset
+obs_df <- occ_virtual_species \%>\% filter(usage == "train")
+eval_df <- occ_virtual_species \%>\% filter(usage == "eval")
+x_col <- "x"
+y_col <- "y"
+obs_col <- "observation"
+
+# Format the observations
+obs_train_eval <- format_observation(
+  obs_df = obs_df, eval_df = eval_df,
+  x_col = x_col, y_col = y_col, obs_col = obs_col,
+  obs_type = "presence_only")
+
+# Modeling with perfect_presence mode
+mod_perfect_pres <- isotree_po(
+  obs_mode = "perfect_presence",
+  obs = obs_train_eval$obs,
+  obs_ind_eval = obs_train_eval$eval,
+  variables = env_vars, ntrees = 10,
+  sample_size = 0.6, ndim = 1L,
+  seed = 123L)
+
+# Modeling with imperfect_presence mode
+mod_imperfect_pres <- isotree_po(
+  obs_mode = "imperfect_presence",
+  obs = obs_train_eval$obs,
+  obs_ind_eval = obs_train_eval$eval,
+  variables = env_vars, ntrees = 10,
+  sample_size = 0.6, ndim = 1L,
+  seed = 123L)
 }
 
 }

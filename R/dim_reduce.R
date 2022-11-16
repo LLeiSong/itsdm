@@ -68,12 +68,12 @@ dim_reduce <- function(img_stack = NULL,
     if_stars <- is(img_stack, 'stars')
     if (if_stars) {
         if (length(dim(img_stack)) == 2) {
-            img <- stack(as(img_stack, 'Spatial'))
+            img <- stack(as(img_stack, 'Raster'))
         } else {
           img_stack <- split(img_stack)
-          img <- stack(as(img_stack, 'Spatial'))
+          img <- stack(as(img_stack, 'Raster'))
         }
-    }
+    } else img <- img_stack
 
     # Check preferred variables are all in image stack
     if (is.null(preferred_vars)) preferred_vars <- names(img)

@@ -419,7 +419,8 @@
 #' @importFrom rlang .data
 #' @importFrom dplyr select mutate sample_n
 #' @importFrom stars st_rasterize
-#' @importFrom sf st_xy2sfc st_as_sf
+#' @importFrom sf st_as_sf
+#' @importFrom stars st_xy2sfc
 .bg_sampling <- function(rst_template, obs, seed, num) {
   if (is.null(obs)) {
     bg_samples <- rst_template
@@ -444,7 +445,7 @@
 # input dataset.
 # Function to mode the observations
 #' @importFrom rlang .data
-#' @importFrom dplyr select mutate sample_n rbind filter
+#' @importFrom dplyr select mutate sample_n filter
 .obs_moding <- function(mode, obs_mode, rst_template,
                         obs, seed, contamination) {
   # Sampling

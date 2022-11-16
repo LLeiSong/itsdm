@@ -25,7 +25,8 @@ at occurrence locations.}
 with same number of background points.}
 
 \item{var_pred}{(\code{vector} of \code{numeric}) the vector contains predicted values
-of the whole area.}
+of the whole area. The reason to take a vector is to keep this function
+flexible for multiple types of output.}
 
 \item{threshold}{(\code{numeric} or \code{NULL}) The threshold to calculate
 threshold-based evaluation metrics. If \code{NULL}, a recommended threshold
@@ -107,34 +108,53 @@ library(stars)
 library(itsdm)
 
 data("occ_virtual_species")
-occ_virtual_species <- occ_virtual_species \%>\%
-  mutate(id = row_number())
+obs_df <- occ_virtual_species \%>\% filter(usage == "train")
+eval_df <- occ_virtual_species \%>\% filter(usage == "eval")
+x_col <- "x"
+y_col <- "y"
+obs_col <- "observation"
 
-set.seed(11)
-occ <- occ_virtual_species \%>\% sample_frac(0.7)
-occ_test <- occ_virtual_species \%>\% filter(! id \%in\% occ$id)
-occ <- occ \%>\% select(-id)
-occ_test <- occ_test \%>\% select(-id)
+# Format the observations
+obs_train_eval <- format_observation(
+  obs_df = obs_df, eval_df = eval_df,
+  x_col = x_col, y_col = y_col, obs_col = obs_col,
+  obs_type = "presence_only")
 
 env_vars <- system.file(
   'extdata/bioclim_tanzania_10min.tif',
   package = 'itsdm') \%>\% read_stars() \%>\%
   slice('band', c(1, 5, 12, 16))
 
+# With perfect_presence mode,
+# which should be very rare in reality.
 mod <- isotree_po(
-  occ = occ, occ_test = occ_test,
-  variables = env_vars, ntrees = 50,
+  obs_mode = "perfect_presence",
+  obs = obs_train_eval$obs,
+  obs_ind_eval = obs_train_eval$eval,
+  variables = env_vars, ntrees = 30,
   sample_size = 0.8, ndim = 2L,
   seed = 123L, response = FALSE,
   spatial_response = FALSE,
   check_variable = FALSE)
 
-eval_train <- evaluate_po(mod$model,
+# Without background samples or absences
+eval_train <- evaluate_po(
+  mod$model,
   occ_pred = mod$pred_train$prediction,
   var_pred = na.omit(as.vector(mod$prediction[[1]])))
 print(eval_train)
-plot(eval_train)
 
+# With background samples
+bg_pred <- st_extract(
+  mod$prediction, mod$background_samples) \%>\%
+  st_drop_geometry()
+eval_train <- evaluate_po(
+  mod$model,
+  occ_pred = mod$pred_train$prediction,
+  bg_pred = bg_pred$prediction,
+  var_pred = na.omit(as.vector(mod$prediction[[1]])))
+plot(eval_train)
+#'
 }
 \references{
 \itemize{
