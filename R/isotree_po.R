@@ -409,17 +409,18 @@ isotree_po <- function(
   # Collect results
   ## Fill out the train and evaluate dataset if necessary
   if (obs_mode != "imperfect_presence") {
-    # Make a template
-    rst_template <- st_apply(merge(variables), c("x", "y"),
-                             "mean", na.rm = FALSE)
-    rst_template[!is.na(rst_template)] <- 1
-
     if (obs_mode == "perfect_presence") {
+      # Make a template
+      rst_template <- st_apply(merge(variables), c("x", "y"),
+                               "sum", na.rm = FALSE)
+      rst_template[!is.na(rst_template)] <- 1
+
       # Select a contamination percent of background samples
       obs <- .bg_sampling(
-        rst_template, obs, seed, contamination) %>%
+        rst_template, obs, seed, floor(contamination * nrow(obs))) %>%
         mutate("observation" = 0) %>%
         rbind(obs)
+      rm(rst_template)
 
       # In case there is very limited background to sample
       contamination <- sum(obs$observation == 0) /
@@ -437,8 +438,6 @@ isotree_po <- function(
       contamination <- sum(obs$observation == 0) /
         sum(obs$observation == 1)
     }
-
-    rm(rst_template)
   }
 
   ################ Preparation is done ################
@@ -467,7 +466,7 @@ isotree_po <- function(
 
   # Train the model
   isotree_mod <- isolation.forest(
-    obs_vars_mat %>% na.omit(),
+    obs_vars_mat,
     ntrees = ntrees,
     sample_size = sample_size,
     ndim = ndim,

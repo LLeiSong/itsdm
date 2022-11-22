@@ -36,10 +36,12 @@ Only required if \code{eval_df} is \code{NULL}.}
 \item{seed}{(\code{integer}) The seed to split train and evaluation set.
 The default value is \code{123}. Only required if \code{eval_df} is \code{NULL}.}
 
-\item{obs_crs}{(\code{integer}) The EPSG code of the coordinate system
-of the training dataset. It corresponds to \code{x_col} and \code{y_col} in \code{obs_df}.}
+\item{obs_crs}{(\code{integer}, \code{numeric}, \code{character}, or \code{crs})
+The EPSG code, CRS string, or \code{sf::crs} object of the coordinate system of
+the training dataset. It corresponds to \code{x_col} and \code{y_col} in \code{obs_df}.}
 
-\item{eval_crs}{(\code{integer}) The EPSG code of the coordinate system
+\item{eval_crs}{(\code{integer}, \code{numeric}, \code{character}, or \code{crs})
+The EPSG code, CRS string, or \code{sf::crs} object of the coordinate system
 of the evaluation dataset. Only required if  \code{eval_df} is not \code{NULL}.
 It corresponds to \code{x_col} and \code{y_col} in \code{eval_df} if any.}
 

@@ -17,9 +17,11 @@
 ##' Only required if `eval_df` is `NULL`.
 #' @param seed (`integer`) The seed to split train and evaluation set.
 #' The default value is `123`. Only required if `eval_df` is `NULL`.
-#' @param obs_crs (`integer`) The EPSG code of the coordinate system
-#' of the training dataset. It corresponds to `x_col` and `y_col` in `obs_df`.
-#' @param eval_crs (`integer`) The EPSG code of the coordinate system
+#' @param obs_crs (`integer`, `numeric`, `character`, or `crs`)
+#' The EPSG code, CRS string, or `sf::crs` object of the coordinate system of
+#' the training dataset. It corresponds to `x_col` and `y_col` in `obs_df`.
+#' @param eval_crs (`integer`, `numeric`, `character`, or `crs`)
+#' The EPSG code, CRS string, or `sf::crs` object of the coordinate system
 #' of the evaluation dataset. Only required if  `eval_df` is not `NULL`.
 #' It corresponds to `x_col` and `y_col` in `eval_df` if any.
 #' @param x_col (`character`) The name of column that is x coordinate
@@ -150,7 +152,8 @@ format_observation <- function(obs_df, # observation data frame
   # Check format of inputs
   checkmate::assert_data_frame(obs_df)
   checkmate::assert_data_frame(eval_df, null.ok = T)
-  checkmate::assert_int(obs_crs)
+  checkmate::assert_multi_class(
+    obs_crs, c("integer", "numeric", 'character', 'crs'))
   checkmate::assert_character(x_col)
   checkmate::assert_character(y_col)
   checkmate::assert_character(obs_col)
@@ -168,7 +171,8 @@ format_observation <- function(obs_df, # observation data frame
     checkmate::assert_number(split_perc, lower = 0, upper = 1)
     checkmate::assert_int(seed)
   } else {
-    checkmate::assert_int(eval_crs)
+    checkmate::assert_multi_class(
+      eval_crs, c("integer", "numeric", 'character', 'crs'))
     if (!all(c(x_col, y_col, obs_col) %in% names(eval_df))){
       stop("Columns not found in evaluation data table.")}
   }
