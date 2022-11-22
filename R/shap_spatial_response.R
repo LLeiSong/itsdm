@@ -14,6 +14,8 @@
 #' \code{\link{read_stars}} directly read source data as a `stars`.
 #' You also could use item `variables` of `POIsotree` made by function
 #' \code{\link{isotree_po}}.
+#' @param target_vars (a `vector` of `character`) The selected variables to
+#' process. If it is `NULL`, all variables will be used.
 #' @param shap_nsim (`integer`) The number of Monte Carlo repetitions in SHAP
 #' method to use for estimating each Shapley value. See details in documentation
 #' of function \code{\link{explain}} in package `fastshap`.
@@ -94,12 +96,34 @@
 #'   variables = mod$variables,
 #'   shap_nsim = 1)
 #'
+#' shap_spatial <- shap_spatial_response(
+#' model = mod$model,
+#' target_vars = c("bio1", "bio12"),
+#' var_occ = mod$vars_train,
+#' variables = mod$variables,
+#' shap_nsim = 1)
+#'
 shap_spatial_response <- function(model,
                                   var_occ,
                                   variables,
+                                  target_vars = NULL,
                                   shap_nsim = 10,
                                   seed = 10,
                                   pfun = .pfun_shap){
+  # Check inputs
+  checkmate::assert_data_frame(var_occ)
+  checkmate::assert_class(variables, 'stars')
+  stopifnot(length(dim(variables)) <= 2)
+  checkmate::assert_int(shap_nsim)
+  checkmate::assert_int(seed)
+  checkmate::assert_character(target_vars, null.ok = TRUE)
+  bands <- names(variables)
+  stopifnot(all(bands %in% colnames(var_occ)))
+  stopifnot(all(target_vars %in% bands))
+
+  # Check and reformat inputs
+  if (is.null(target_vars)) target_vars <- bands
+
   ## Split numeric and categorical
   bands <- names(variables)
   isfacor <- as.vector(sapply(variables, is.factor))
@@ -125,7 +149,8 @@ shap_spatial_response <- function(model,
   x_shap[val_ids, ] <- cbind(
     x_shap %>% filter(val_ids) %>% select(.data$x, .data$y),
     shap_explain)
-  shap_spatial <- lapply(bands, function(nm) {
+
+  shap_spatial <- lapply(target_vars, function(nm) {
     # Continuous variables
     if (nm %in% bands_cont) {
       # Burn values
@@ -154,7 +179,7 @@ shap_spatial_response <- function(model,
       rst_raw
     }
   })
-  names(shap_spatial) <- bands
+  names(shap_spatial) <- target_vars
 
   # return
   shap_spatial

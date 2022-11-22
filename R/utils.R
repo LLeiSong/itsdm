@@ -283,6 +283,19 @@
     `[`(1) %>% names() %>% as.factor()
 }
 
+# Get the intersects of fitted curve and y = 0
+.find_intersects <- function(fun, values, bins = 100) {
+  vals_start <- seq(min(values), max(values),
+                    ceiling((max(values) - min(values)) / bins))
+  vals_end <- c(vals_start[-1], max(values))
+  roots <- lapply(1:length(vals_start), function(i){
+    inv <- c(vals_start[i], vals_end[i])
+    if (!inherits(try(rt <- uniroot(fun, inv)$root, silent = TRUE),
+                  "try-error")) rt
+  })
+  unlist(roots[!sapply(roots,is.null)])
+}
+
 ## A simple function to calculate Boyce Index in Hirzel et al. 2006
 ## The objective of this code chunk is to avoid import heavy package
 ## the interested users can directly use their packages.

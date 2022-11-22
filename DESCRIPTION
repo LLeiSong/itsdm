@@ -51,6 +51,7 @@ Imports:
     stats,
     stringr,
     tidyselect,
+    mgcv,
     utils
 Suggests: 
     knitr,

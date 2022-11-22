@@ -14,8 +14,10 @@ reference:
   - "marginal_response"
   - "shap_dependence"
   - "spatial_response"
+  - "shap_spatial_response"
   - "variable_contrib"
   - "convert_to_pa"
+  - "detect_climate_change"
 
 - title: Visualization
 - subtitle: Plot/figure
