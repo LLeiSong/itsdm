@@ -1,8 +1,9 @@
 #' @title Calculate Shapley value-based variable dependence.
 #' @description Calculate how a species responses to environmental variables
 #' using Shapley values.
-#' @param model (\code{isolation_forest}). The isolation forest SDM.
+#' @param model (\code{isolation_forest} or other model). The SDM.
 #' It could be the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
+#' It also could be other use-fitted models as long as the `pfun` can work on it.
 #' @param var_occ (`data.frame`, `tibble`) The `data.frame` style table that
 #' include values of environmental variables at occurrence locations.
 #' @param variables (`stars`) The `stars` of environmental variables.
@@ -22,7 +23,11 @@
 #' The default is 100.
 #' @param visualize (`logical`) if `TRUE`, plot the variable dependence plots.
 #' The default is `FALSE`.
-#' @param seed (`integer`) The seed for any random progress. The default is `10L`.
+#' @param seed (`integer`) The seed for any random progress. The default is `10`.
+#' @param pfun (`function`) The predict function that requires two arguments,
+#' `object` and `newdata`.
+#' It is only required when `model` is not \code{isolation_forest}.
+#' The default is the wrapper function designed for iForest model in `itsdm`.
 #'
 #' @return (`ShapDependence`) A list of
 #' \itemize{
@@ -108,7 +113,8 @@ shap_dependence <- function(model,
                             si = 1000,
                             shap_nsim = 100,
                             visualize = FALSE,
-                            seed = 10L) {
+                            seed = 10,
+                            pfun = .pfun_shap) {
 
   # Check inputs
   checkmate::assert_data_frame(var_occ)
@@ -125,7 +131,7 @@ shap_dependence <- function(model,
   # Make a template
   rst_template <- st_apply(merge(variables), c("x", "y"),
                            "mean", na.rm = FALSE)
-  rst_template[!is.na(rst_template)] <- 1
+  rst_template[[1]][!is.na(rst_template[[1]])] <- 1
 
   # Observations
   obs_bg <- .bg_sampling(rst_template, NULL, seed, si)
@@ -137,7 +143,7 @@ shap_dependence <- function(model,
   set.seed(seed)
   shap_explain <- explain(model, X = var_occ, nsim = shap_nsim,
                           newdata = obs_bg_vars_mat,
-                          pred_wrapper = .pfun_shap)
+                          pred_wrapper = pfun)
   dependences <- lapply(names(var_occ), function(var) {
     data.frame(x = obs_bg_vars_mat %>% pull(var),
                y = shap_explain %>% pull(var))

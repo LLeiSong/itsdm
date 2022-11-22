@@ -159,7 +159,8 @@ spatial_response <- function(model,
       model$params
     )
     args_iforest$ndim <- 1
-    args_iforest$ncols_per_tree <- min(ncol(args_iforest$data), args_iforest$ncols_per_tree)
+    args_iforest$ncols_per_tree <- min(ncol(args_iforest$data),
+                                       args_iforest$ncols_per_tree)
     if (args_iforest$new_categ_action == "impute") {
       args_iforest$new_categ_action <- "weighted"
     }
@@ -176,54 +177,13 @@ spatial_response <- function(model,
 
   ############ SHAP variable dependence
   if (shap_nsim > 0){
-    # Do SHAP
-    set.seed(seed)
-    x_shap <- variables %>% as.data.frame()
-    val_ids <- apply(x_shap[-c(1,2)], 1, function(x) all(!is.na(x)))
-
-    # Calculate Shapley values for full records
-    shap_explain <- explain(
-      model,
-      X = x_shap %>% filter(val_ids) %>% select(bands),
-      nsim = shap_nsim,
-      pred_wrapper = .pfun_shap)
-
-    # Mosaic back the background pixels
-    x_shap[] <- sapply(x_shap, as.numeric)
-    x_shap[!val_ids, bands] <- NA
-    x_shap[val_ids, ] <- cbind(
-      x_shap %>% filter(val_ids) %>% select(.data$x, .data$y),
-      shap_explain)
-    shap_spatial <- lapply(bands, function(nm) {
-      # Continuous variables
-      if (nm %in% bands_cont) {
-        # Burn values
-        variables[nm] %>%
-          mutate('{nm}' := x_shap %>% pull(nm)) %>%
-          select(all_of(nm))
-        # Categorical variables
-        ## Each class should have the same value, so aggregate to
-        ## each class with mean function
-        } else if (nm %in% bands_cat) {
-        # Get convert table
-        convert_tb <- data.frame(
-          shap = x_shap %>% pull(nm),
-          class = variables[[nm]] %>% as.vector()) %>%
-          group_by(class) %>%
-          summarise(shap = mean(.data$shap, na.rm = T)) %>%
-          mutate(class = as.integer(.data$class))
-
-        # Generate stars template
-        rst_raw <- variables[nm]
-        rst_raw[[nm]] <- as.integer(levels(rst_raw[[nm]]))[rst_raw[[nm]]]
-
-        # Replace class value with shap value
-        for (i in 1:nrow(convert_tb)) {
-          rst_raw[rst_raw == convert_tb[[i, 'class']]] <- convert_tb[i, 'shap']}
-        rst_raw
-        }
-      })
-    names(shap_spatial) <- bands
+    shap_spatial <- shap_spatial_response(
+      model = model,
+      var_occ = var_occ,
+      variables = variables,
+      shap_nsim = shap_nsim,
+      seed = seed,
+      pfun = .pfun_shap)
   } else {
     shap_spatial <- NULL
   }

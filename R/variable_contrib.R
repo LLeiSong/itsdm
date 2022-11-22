@@ -1,8 +1,9 @@
 #' @title Evaluate variable contributions for targeted observations.
 #' @description Evaluate variable contribution for targeted observations according
 #' to SHapley Additive exPlanations (SHAP).
-#' @param model (\code{isolation_forest}) The isolation forest SDM.
+#' @param model (\code{isolation_forest} or other model) The SDM.
 #' It could be the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
+#' It also could be other use-fitted models as long as the `pfun` can work on it.
 #' @param var_occ (`data.frame`, `tibble`) The `data.frame` style table that
 #' include values of environmental variables at occurrence locations.
 #' @param var_occ_analysis (`data.frame`, `tibble`) The `data.frame` style table that
@@ -14,6 +15,10 @@
 #' @param visualize (`logical`) if `TRUE`, plot the response curves.
 #' The default is `FALSE`.
 #' @param seed (`integer`) The seed for any random progress. The default is `10L`.
+#' @param pfun (`function`) The predict function that requires two arguments,
+#' `object` and `newdata`.
+#' It is only required when `model` is not \code{isolation_forest}.
+#' The default is the wrapper function designed for iForest model in `itsdm`.
 #' @return (`VariableContribution`) A list of
 #' \itemize{
 #' \item{shapley_values (`data.frame`) A table of Shapley values of each variables for
@@ -91,7 +96,8 @@ variable_contrib <- function(model,
                              var_occ_analysis,
                              shap_nsim = 100,
                              visualize = FALSE,
-                             seed = 10) {
+                             seed = 10,
+                             pfun = .pfun_shap) {
   # Check inputs
   checkmate::assert_data_frame(var_occ)
   checkmate::assert_data_frame(var_occ_analysis)

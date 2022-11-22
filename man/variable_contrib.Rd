@@ -10,12 +10,14 @@ variable_contrib(
   var_occ_analysis,
   shap_nsim = 100,
   visualize = FALSE,
-  seed = 10
+  seed = 10,
+  pfun = .pfun_shap
 )
 }
 \arguments{
-\item{model}{(\code{isolation_forest}) The isolation forest SDM.
-It could be the item \code{model} of \code{POIsotree} made by function \code{\link{isotree_po}}.}
+\item{model}{(\code{isolation_forest} or other model) The SDM.
+It could be the item \code{model} of \code{POIsotree} made by function \code{\link{isotree_po}}.
+It also could be other use-fitted models as long as the \code{pfun} can work on it.}
 
 \item{var_occ}{(\code{data.frame}, \code{tibble}) The \code{data.frame} style table that
 include values of environmental variables at occurrence locations.}
@@ -32,6 +34,11 @@ function \code{\link{explain}} in package \code{fastshap}.}
 The default is \code{FALSE}.}
 
 \item{seed}{(\code{integer}) The seed for any random progress. The default is \code{10L}.}
+
+\item{pfun}{(\code{function}) The predict function that requires two arguments,
+\code{object} and \code{newdata}.
+It is only required when \code{model} is not \code{isolation_forest}.
+The default is the wrapper function designed for iForest model in \code{itsdm}.}
 }
 \value{
 (\code{VariableContribution}) A list of

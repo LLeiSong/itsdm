@@ -413,7 +413,7 @@ isotree_po <- function(
       # Make a template
       rst_template <- st_apply(merge(variables), c("x", "y"),
                                "sum", na.rm = FALSE)
-      rst_template[!is.na(rst_template)] <- 1
+      rst_template[[1]][!is.na(rst_template[[1]])] <- 1
 
       # Select a contamination percent of background samples
       obs <- .bg_sampling(
@@ -579,7 +579,7 @@ isotree_po <- function(
     # Make a template
     rst_template <- st_apply(merge(variables), c("x", "y"),
                              "mean", na.rm = FALSE)
-    rst_template[!is.na(rst_template)] <- 1
+    rst_template[[1]][!is.na(rst_template[[1]])] <- 1
 
     # Observations
     obs_bg <- .bg_sampling(rst_template, obs, seed, nrow(obs))
@@ -636,7 +636,7 @@ isotree_po <- function(
       # Make a template
       rst_template <- st_apply(merge(variables), c("x", "y"),
                                "mean", na.rm = FALSE)
-      rst_template[!is.na(rst_template)] <- 1
+      rst_template[[1]][!is.na(rst_template[[1]])] <- 1
 
       # Observations
       obs_eval_bg <- .bg_sampling(rst_template, obs, seed, nrow(obs_ind_eval))
