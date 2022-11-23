@@ -113,12 +113,22 @@ mod <- isotree_po(
   obs_mode = "imperfect_presence",
   obs = obs_train_eval$obs,
   obs_ind_eval = obs_train_eval$eval,
-  variables = env_vars, ntrees = 20,
-  sample_size = 0.8, ndim = 2L,
+  variables = env_vars, ntrees = 10,
+  sample_size = 0.8, ndim = 1L,
   seed = 123L, response = FALSE,
   spatial_response = FALSE,
   check_variable = FALSE)
 
+# Use a fixed value
+climate_changes <- detect_climate_change(
+  model = mod$model,
+  var_occ = mod$vars_train,
+  variables = mod$variables,
+  shap_nsim = 1,
+  target_var = "bio1",
+  var_future = 5)
+
+\donttest{
 # Use a future layer
 ## Read the future Worldclim variables
 future_vars <- system.file(
@@ -137,7 +147,6 @@ climate_changes <- detect_climate_change(
   target_var = "bio1",
   var_future = future_vars \%>\% select("bio1"))
 
-\donttest{
 ## Use the whole future variable tack
 climate_changes <- detect_climate_change(
   model = mod$model,
@@ -147,14 +156,6 @@ climate_changes <- detect_climate_change(
   target_var = "bio12",
   variables_future = future_vars)
 
-# Use a fixed value
-climate_changes <- detect_climate_change(
-  model = mod$model,
-  var_occ = mod$vars_train,
-  variables = mod$variables,
-  shap_nsim = 1,
-  target_var = "bio1",
-  var_future = 5)
 }
 # Check the map
 climate_changes$p_map

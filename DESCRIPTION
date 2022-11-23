@@ -47,7 +47,7 @@ Imports:
     rlang,
     ROCit,
     sf,
-    stars,
+    stars (>= 0.6-0),
     stats,
     stringr,
     tidyselect,
