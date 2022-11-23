@@ -103,6 +103,48 @@
 #' variables = mod$variables,
 #' shap_nsim = 1)
 #'
+#' \dontrun{
+#' ##### Use Random Forest model as an external model ########
+#' library(randomForest)
+#'
+#' # Prepare data
+#' data("occ_virtual_species")
+#' obs_df <- occ_virtual_species %>%
+#'   filter(usage == "train")
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_tanzania_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   slice('band', c(1, 5, 12)) %>%
+#'   split()
+#'
+#' model_data <- stars::st_extract(
+#'   env_vars, at = as.matrix(obs_df %>% select(x, y))) %>%
+#'   as.data.frame()
+#' names(model_data) <- names(env_vars)
+#' model_data <- model_data %>%
+#'   mutate(occ = obs_df[['observation']])
+#' model_data$occ <- as.factor(model_data$occ)
+#'
+#' mod_rf <- randomForest(
+#'   occ ~ .,
+#'   data = model_data,
+#'   ntree = 200)
+#'
+#' pfun <- function(X.model, newdata) {
+#'   # for data.frame
+#'   predict(X.model, newdata, type = "prob")[, "1"]
+#' }
+#'
+#' shap_spatial <- shap_spatial_response(
+#'   model = mod_rf,
+#'   target_vars = c("bio1", "bio12"),
+#'   var_occ = model_data %>% select(-occ),
+#'   variables = env_vars,
+#'   shap_nsim = 10,
+#'   pfun = pfun)
+#' }
+#'
 shap_spatial_response <- function(model,
                                   var_occ,
                                   variables,

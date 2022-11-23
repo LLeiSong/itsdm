@@ -107,6 +107,47 @@
 #' plot(var_dependence, target_var = "bio1", related_var = "bio16")
 #' }
 #'
+#' \dontrun{
+#' ##### Use Random Forest model as an external model ########
+#' library(randomForest)
+#' # Prepare data
+#' data("occ_virtual_species")
+#' obs_df <- occ_virtual_species %>%
+#'   filter(usage == "train")
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_tanzania_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   slice('band', c(1, 5, 12)) %>%
+#'   split()
+#'
+#' model_data <- stars::st_extract(
+#'   env_vars, at = as.matrix(obs_df %>% select(x, y))) %>%
+#'   as.data.frame()
+#' names(model_data) <- names(env_vars)
+#' model_data <- model_data %>%
+#'   mutate(occ = obs_df[['observation']])
+#' model_data$occ <- as.factor(model_data$occ)
+#'
+#' mod_rf <- randomForest(
+#'   occ ~ .,
+#'   data = model_data,
+#'   ntree = 200)
+#'
+#' pfun <- function(X.model, newdata) {
+#'   # for data.frame
+#'   predict(X.model, newdata, type = "prob")[, "1"]
+#' }
+#'
+#' shap_dependences <- shap_dependence(
+#'   model = mod_rf,
+#'   var_occ = model_data %>% select(-occ),
+#'   variables = env_vars,
+#'   visualize = FALSE,
+#'   seed = 10,
+#'   pfun = pfun)
+#' }
+#'
 shap_dependence <- function(model,
                             var_occ,
                             variables,

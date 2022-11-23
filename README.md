@@ -89,6 +89,49 @@ plot(mod$independent_responses,
      target_var = c('bio1', 'bio12'))
 ```
 
+The Shapley values-based analysis can apply to external models. Here is an example to analyze impacts of the bio12 decreasing 200 mm to species distribution based on Random Forest (RF) prediction:
+
+```
+# Prepare data
+data("occ_virtual_species")
+obs_df <- occ_virtual_species %>% 
+  filter(usage == "train")
+
+env_vars <- system.file(
+  'extdata/bioclim_tanzania_10min.tif',
+  package = 'itsdm') %>% read_stars() %>%
+  slice('band', c(1, 5, 12)) %>% 
+  split()
+
+model_data <- stars::st_extract(
+  env_vars, at = as.matrix(obs_df %>% select(x, y))) %>% 
+  as.data.frame()
+names(model_data) <- names(env_vars)
+model_data <- model_data %>% 
+  mutate(occ = obs_df[['observation']])
+model_data$occ <- as.factor(model_data$occ)
+
+mod_rf <- randomForest(
+  occ ~ .,
+  data = model_data,
+  ntree = 200)
+
+pfun <- function(X.model, newdata) {
+  # for data.frame
+  predict(X.model, newdata, type = "prob")[, "1"]
+}
+
+# Use a fixed value
+climate_changes <- detect_climate_change(
+  model = mod_rf,
+  var_occ = model_data %>% select(-occ),
+  variables = env_vars,
+  target_var = "bio12",
+  bins = 20,
+  var_future = -200,
+  pfun = pfun)
+```
+
 ## Contributor
 
 1. [David Cortes](https://github.com/david-cortes), helps to improve the flexibility of calling `isotree`.
