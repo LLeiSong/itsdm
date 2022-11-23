@@ -105,6 +105,7 @@
 <div class="page-header"><h1 id="itsdm-">itsdm <img src="reference/figures/hexagon_sticker.png" align="right" height="120"><a class="anchor" aria-label="anchor" href="#itsdm-"></a>
 </h1></div>
 <!-- badges: start -->
+
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -184,12 +185,53 @@
 <span><span class="co">## Plot independent response curves</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">independent_responses</span>, </span>
 <span>     target_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'bio1'</span>, <span class="st">'bio12'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>The Shapley values-based analysis can apply to external models. Here is an example to analyze impacts of the bio12 decreasing 200 mm to species distribution based on Random Forest (RF) prediction:</p>
+<pre><code><span><span class="co"># Prepare data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"occ_virtual_species"</span><span class="op">)</span></span>
+<span><span class="va">obs_df</span> <span class="op">&lt;-</span> <span class="va">occ_virtual_species</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">usage</span> <span class="op">==</span> <span class="st">"train"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">env_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
+<span>  <span class="st">'extdata/bioclim_tanzania_10min.tif'</span>,</span>
+<span>  package <span class="op">=</span> <span class="st">'itsdm'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">read_stars</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="st">'band'</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">12</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">model_data</span> <span class="op">&lt;-</span> <span class="fu">stars</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/stars/reference/st_extract.html" class="external-link">st_extract</a></span><span class="op">(</span></span>
+<span>  <span class="va">env_vars</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">obs_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">model_data</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">env_vars</span><span class="op">)</span></span>
+<span><span class="va">model_data</span> <span class="op">&lt;-</span> <span class="va">model_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>occ <span class="op">=</span> <span class="va">obs_df</span><span class="op">[[</span><span class="st">'observation'</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">model_data</span><span class="op">$</span><span class="va">occ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">model_data</span><span class="op">$</span><span class="va">occ</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mod_rf</span> <span class="op">&lt;-</span> <span class="fu">randomForest</span><span class="op">(</span></span>
+<span>  <span class="va">occ</span> <span class="op">~</span> <span class="va">.</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">model_data</span>,</span>
+<span>  ntree <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pfun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">X.model</span>, <span class="va">newdata</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># for data.frame</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">X.model</span>, <span class="va">newdata</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span><span class="op">[</span>, <span class="st">"1"</span><span class="op">]</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Use a fixed value</span></span>
+<span><span class="va">climate_changes</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/detect_climate_change.html">detect_climate_change</a></span><span class="op">(</span></span>
+<span>  model <span class="op">=</span> <span class="va">mod_rf</span>,</span>
+<span>  var_occ <span class="op">=</span> <span class="va">model_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">occ</span><span class="op">)</span>,</span>
+<span>  variables <span class="op">=</span> <span class="va">env_vars</span>,</span>
+<span>  target_var <span class="op">=</span> <span class="st">"bio12"</span>,</span>
+<span>  bins <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  var_future <span class="op">=</span> <span class="op">-</span><span class="fl">200</span>,</span>
+<span>  pfun <span class="op">=</span> <span class="va">pfun</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="contributor">Contributor<a class="anchor" aria-label="anchor" href="#contributor"></a>
 </h2>
-<ol style="list-style-type: decimal"><li>
-<a href="https://github.com/david-cortes" class="external-link">David Cortes</a>, helps to improve the flexibility of calling <code>isotree</code>.</li></ol>
+<ol style="list-style-type: decimal">
+<li>
+<a href="https://github.com/david-cortes" class="external-link">David Cortes</a>, helps to improve the flexibility of calling <code>isotree</code>.</li>
+</ol>
 <p>We are welcome any helps! Please make a pull request or reach out to <a href="mailto:lsong@clarku.edu" class="email">lsong@clarku.edu</a> if you want to make any contribution.</p>
 </div>
 <div class="section level2">

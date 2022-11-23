@@ -34,6 +34,9 @@
     <loc>https://lleisong.github.io/itsdm/reference/convert_to_pa.html</loc>
   </url>
   <url>
+    <loc>https://lleisong.github.io/itsdm/reference/detect_climate_change.html</loc>
+  </url>
+  <url>
     <loc>https://lleisong.github.io/itsdm/reference/dim_reduce.html</loc>
   </url>
   <url>
@@ -122,6 +125,9 @@
   </url>
   <url>
     <loc>https://lleisong.github.io/itsdm/reference/shap_dependence.html</loc>
+  </url>
+  <url>
+    <loc>https://lleisong.github.io/itsdm/reference/shap_spatial_response.html</loc>
   </url>
   <url>
     <loc>https://lleisong.github.io/itsdm/reference/spatial_response.html</loc>

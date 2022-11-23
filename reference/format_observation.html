@@ -115,12 +115,14 @@ The default value is <code>123</code>. Only required if <code>eval_df</code> is 
 
 
 <dt>obs_crs</dt>
-<dd><p>(<code>integer</code>) The EPSG code of the coordinate system
-of the training dataset. It corresponds to <code>x_col</code> and <code>y_col</code> in <code>obs_df</code>.</p></dd>
+<dd><p>(<code>integer</code>, <code>numeric</code>, <code>character</code>, or <code>crs</code>)
+The EPSG code, CRS string, or <code>sf::crs</code> object of the coordinate system of
+the training dataset. It corresponds to <code>x_col</code> and <code>y_col</code> in <code>obs_df</code>.</p></dd>
 
 
 <dt>eval_crs</dt>
-<dd><p>(<code>integer</code>) The EPSG code of the coordinate system
+<dd><p>(<code>integer</code>, <code>numeric</code>, <code>character</code>, or <code>crs</code>)
+The EPSG code, CRS string, or <code>sf::crs</code> object of the coordinate system
 of the evaluation dataset. Only required if  <code>eval_df</code> is not <code>NULL</code>.
 It corresponds to <code>x_col</code> and <code>y_col</code> in <code>eval_df</code> if any.</p></dd>
 
