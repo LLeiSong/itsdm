@@ -745,3 +745,85 @@ print.FormatOccurrence <- function(x, ...) {
   # Return
   invisible(x)
 }
+
+#' @title Print summary information from `EnviChange` object.
+#' @description Display the detected tipping points and percentage of affected
+#' areas due to a changing variable from function
+#' \code{\link{detect_envi_change}}.
+#' @param x (`EnviChange`) A `EnviChange` object to be messaged.
+#' It could be the return of function \code{\link{detect_envi_change}}.
+#' @param ... Not used.
+#' @return The same object that was passed as input.
+#' @seealso
+#' \code{\link{detect_envi_change}}
+#'
+#' @export
+#' @examples
+#' \donttest{
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
+#' #'
+#' # Prepare data
+#' data("occ_virtual_species")
+#' obs_df <- occ_virtual_species %>% filter(usage == "train")
+#' eval_df <- occ_virtual_species %>% filter(usage == "eval")
+#' x_col <- "x"
+#' y_col <- "y"
+#' obs_col <- "observation"
+#' #'
+#' # Format the observations
+#' obs_train_eval <- format_observation(
+#'   obs_df = obs_df, eval_df = eval_df,
+#'   x_col = x_col, y_col = y_col, obs_col = obs_col,
+#'   obs_type = "presence_only")
+#' #'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_tanzania_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   slice('band', c(1, 5, 12))
+#' #'
+#' # With imperfect_presence mode,
+#' mod <- isotree_po(
+#'   obs_mode = "imperfect_presence",
+#'   obs = obs_train_eval$obs,
+#'   obs_ind_eval = obs_train_eval$eval,
+#'   variables = env_vars, ntrees = 10,
+#'   sample_size = 0.8, ndim = 1L,
+#'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
+#'   check_variable = FALSE)
+#'
+#' # Use a fixed value
+#' bio1_changes <- detect_envi_change(
+#'   model = mod$model,
+#'   var_occ = mod$vars_train,
+#'   variables = mod$variables,
+#'   shap_nsim = 1,
+#'   target_var = "bio1",
+#'   var_future = 5)
+#'
+#'print(bio1_changes)
+#'}
+#'
+print.EnviChange <- function(x, ...) {
+  # Tipping points
+  cat(sprintf("%s tipping point(s) detected: %s.\n\n",
+              length(x$Tipping_points),
+              paste(round(x$Tipping_points, 2), collapse = ", ")))
+
+  # Percentage of affected areas
+  change_map <- x$variable_contribution_change$change
+  change_map <- change_map[!is.na(change_map)]
+  tb <- data.frame(
+    "Contibuion change" = levels(change_map),
+    "Percentage" = sprintf("%.2f %%", tabulate(change_map) /
+                           length(change_map) * 100))
+  print(tb)
+
+  # Return
+  invisible(x)
+}

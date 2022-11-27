@@ -1,4 +1,4 @@
-#' @title Detect areas influenced by changing climate.
+#' @title Detect areas influenced by a changing environment variable.
 #' @description Use shapley values to detect the potential areas that will
 #' impact the species distribution. It only works on continuous variables.
 #' @param model (`isolation_forest` or other model). It could
@@ -36,7 +36,7 @@
 #' It is only required when `model` is not \code{isolation_forest}.
 #' The default is the wrapper function designed for iForest model in `itsdm`.
 #'
-#' @return (`ClimateChange`) A list of
+#' @return (`EnviChange`) A list of
 #' \itemize{
 #' \item{A figure of fitted variable curve}
 #' \item{A map of variable contribiution change}
@@ -51,7 +51,7 @@
 #' be affected by a changing variable.
 #'
 #' @seealso
-#' \code{\link{spatial_response}}
+#' \code{\link{shap_spatial_response}}
 #'
 #' @importFrom isotree isolation.forest
 #' @importFrom dplyr select slice mutate as_tibble pull n %>% group_by
@@ -104,13 +104,15 @@
 #'   check_variable = FALSE)
 #'
 #' # Use a fixed value
-#' climate_changes <- detect_climate_change(
+#' bio1_changes <- detect_envi_change(
 #'   model = mod$model,
 #'   var_occ = mod$vars_train,
 #'   variables = mod$variables,
 #'   shap_nsim = 1,
 #'   target_var = "bio1",
 #'   var_future = 5)
+#' # Check the map
+#' plot(bio1_changes)
 #'
 #' \donttest{
 #' # Use a future layer
@@ -123,7 +125,7 @@
 #' names(future_vars) <- paste0("bio", c(1, 5, 12))
 #'
 #' ## Just use the target future variable
-#' climate_changes <- detect_climate_change(
+#' climate_changes <- detect_envi_change(
 #'   model = mod$model,
 #'   var_occ = mod$vars_train,
 #'   variables = mod$variables,
@@ -132,7 +134,7 @@
 #'   var_future = future_vars %>% select("bio1"))
 #'
 #' ## Use the whole future variable tack
-#' climate_changes <- detect_climate_change(
+#' bio12_changes <- detect_envi_change(
 #'   model = mod$model,
 #'   var_occ = mod$vars_train,
 #'   variables = mod$variables,
@@ -140,9 +142,8 @@
 #'   target_var = "bio12",
 #'   variables_future = future_vars)
 #'
+#' print(bio12_changes)
 #' }
-#' # Check the map
-#' climate_changes$p_map
 #'
 #' \dontrun{
 #' ##### Use Random Forest model as an external model ########
@@ -178,7 +179,7 @@
 #' }
 #'
 #' # Use a fixed value
-#' climate_changes <- detect_climate_change(
+#' bio5_changes <- detect_envi_change(
 #'   model = mod_rf,
 #'   var_occ = model_data %>% select(-occ),
 #'   variables = env_vars,
@@ -186,20 +187,22 @@
 #'   bins = 20,
 #'   var_future = 5,
 #'   pfun = pfun)
+#'
+#' plot(bio5_changes)
 #'}
 #'
 # Now just for continuous variables
-detect_climate_change <- function(model,
-                                  var_occ,
-                                  variables,
-                                  target_var,
-                                  bins = NULL,
-                                  shap_nsim = 10,
-                                  seed = 10,
-                                  # a number or a stars
-                                  var_future = NULL,
-                                  variables_future = NULL,
-                                  pfun = .pfun_shap){
+detect_envi_change <- function(model,
+                               var_occ,
+                               variables,
+                               target_var,
+                               bins = NULL,
+                               shap_nsim = 10,
+                               seed = 10,
+                               # a number or a stars
+                               var_future = NULL,
+                               variables_future = NULL,
+                               pfun = .pfun_shap){
   # Check inputs
   ## required
   checkmate::assert_data_frame(var_occ)
@@ -260,10 +263,25 @@ detect_climate_change <- function(model,
                 linewidth = 1)
 
   # Get the intersection with y = 0
-  xy <- ggplot_build(p_curve)$data[[1]][, c("x", "y")]
-  fit_line <- gam(formula = y ~ s(x), data = xy)
-  fit_fun <- function(x) predict(fit_line, data.frame(x = x))
-  roots <- .find_intersects(fit_fun, xy$x)
+  ## In case curve failed to make
+  tryCatch(
+    expr = {
+      xy <- ggplot_build(p_curve)$data[[1]][, c("x", "y")]
+      fit_line <- gam(formula = y ~ s(x), data = xy)
+      fit_fun <- function(x) predict(fit_line, data.frame(x = x))
+    },
+    error = function(e) {
+      stop(paste0("Failed to generate response curve. ",
+                  "Please check the inputs, such as ",
+                  "variables or pfun."))
+    })
+
+  # In case no curve generated above
+  if(inherits(try(
+    roots <- .find_intersects(fit_fun, xy$x)
+  ), "try-error")){
+
+  }
 
   # Extend the plot
   if (length(roots) > 0) {
@@ -358,8 +376,9 @@ detect_climate_change <- function(model,
                     ifelse(.data$current > 0 & .data$future <= 0, 2,
                     ifelse(.data$current <= 0 & .data$future > 0, 3, 4)))) %>%
     mutate(change = factor(
-      .data$change, labels = c("Positive-Positive", "Positive-Negative",
-                               "Negative-Positive", "Negative-Negative")))
+      .data$change, levels = 1:4,
+      labels = c("Positive-Positive", "Positive-Negative",
+                 "Negative-Positive", "Negative-Negative")))
 
   p_map <- ggplot() +
     geom_stars(data = shap_change %>% select(.data$change),
@@ -371,8 +390,8 @@ detect_climate_change <- function(model,
               "p_map" = p_map,
               "Tipping_points" = roots,
               "variable_contribution_change" = shap_change)
-  class(out) <- append("ClimateChange", class(out))
+  class(out) <- append("EnviChange", class(out))
 
   # Return
-  out
+  return(out)
 }

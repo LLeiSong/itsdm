@@ -1608,3 +1608,182 @@ plot.EnvironmentalOutlier <- function(x,
   }
 
 }
+
+#' @title Display the figure and map of the `EnviChange` object.
+#' @description Show the response curve and the map of contribution change from
+#' \code{\link{detect_envi_change}}.
+#' @param x (`EnviChange`) A `EnviChange` object to be messaged.
+#' It could be the return of function \code{\link{detect_envi_change}}.
+#' @param ... Not used.
+#' @return The same object that was passed as input.
+#' @seealso
+#' \code{\link{detect_envi_change}}
+#'
+#' @import patchwork
+#'
+#' @export
+#' @examples
+#' \donttest{
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
+#' #'
+#' # Prepare data
+#' data("occ_virtual_species")
+#' obs_df <- occ_virtual_species %>% filter(usage == "train")
+#' eval_df <- occ_virtual_species %>% filter(usage == "eval")
+#' x_col <- "x"
+#' y_col <- "y"
+#' obs_col <- "observation"
+#' #'
+#' # Format the observations
+#' obs_train_eval <- format_observation(
+#'   obs_df = obs_df, eval_df = eval_df,
+#'   x_col = x_col, y_col = y_col, obs_col = obs_col,
+#'   obs_type = "presence_only")
+#' #'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_tanzania_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   slice('band', c(1, 5, 12))
+#' #'
+#' # With imperfect_presence mode,
+#' mod <- isotree_po(
+#'   obs_mode = "imperfect_presence",
+#'   obs = obs_train_eval$obs,
+#'   obs_ind_eval = obs_train_eval$eval,
+#'   variables = env_vars, ntrees = 10,
+#'   sample_size = 0.8, ndim = 1L,
+#'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
+#'   check_variable = FALSE)
+#'
+#' # Use a fixed value
+#' bio1_changes <- detect_envi_change(
+#'   model = mod$model,
+#'   var_occ = mod$vars_train,
+#'   variables = mod$variables,
+#'   shap_nsim = 1,
+#'   target_var = "bio1",
+#'   var_future = 5)
+#'
+#' plot(bio1_changes)
+#'}
+#'
+plot.EnviChange <- function(x, ...) {
+  x$p_curve + x$p_map
+}
+
+#' @title Display Shapley values-based spatial variable dependence maps.
+#' @description Plot Shapley values-based spatial variable dependence maps
+#' using ggplot2 by optionally setting target variable(s). This only works for
+#' `SHAPSpatial` even though it is part of `SpatialResponse`.
+#' @param x (`SHAPSpatial`) The spatial variable dependence object to plot.
+#' It could be the return of function \code{\link{shap_spatial_response}}.
+#' @param target_var (`vector` of `character`) The target variable to plot.
+#' It could be `NA`. If it is `NA`, all variables will be plotted.
+#' @param ... Not used.
+#' @return `ggplot2` figure of dependent maps
+#' @seealso
+#' \code{\link{spatial_response}}
+#'
+#' @import ggplot2
+#' @importFrom stars st_set_dimensions
+#' @export
+#' @examples
+#' \donttest{
+#' # Using a pseudo presence-only occurrence dataset of
+#' # virtual species provided in this package
+#' library(dplyr)
+#' library(sf)
+#' library(stars)
+#' library(itsdm)
+#'
+#' # Prepare data
+#' data("occ_virtual_species")
+#' obs_df <- occ_virtual_species %>% filter(usage == "train")
+#' eval_df <- occ_virtual_species %>% filter(usage == "eval")
+#' x_col <- "x"
+#' y_col <- "y"
+#' obs_col <- "observation"
+#'
+#' # Format the observations
+#' obs_train_eval <- format_observation(
+#'   obs_df = obs_df, eval_df = eval_df,
+#'   x_col = x_col, y_col = y_col, obs_col = obs_col,
+#'   obs_type = "presence_only")
+#'
+#' env_vars <- system.file(
+#'   'extdata/bioclim_tanzania_10min.tif',
+#'   package = 'itsdm') %>% read_stars() %>%
+#'   slice('band', c(1, 5, 12))
+#'
+#' # With imperfect_presence mode,
+#' mod <- isotree_po(
+#'   obs_mode = "imperfect_presence",
+#'   obs = obs_train_eval$obs,
+#'   obs_ind_eval = obs_train_eval$eval,
+#'   variables = env_vars, ntrees = 20,
+#'   sample_size = 0.8, ndim = 2L,
+#'   seed = 123L, response = FALSE,
+#'   spatial_response = FALSE,
+#'   check_variable = FALSE)
+#'
+#' shap_spatial <- shap_spatial_response(
+#'  model = mod$model,
+#'  target_vars = c("bio1", "bio12"),
+#'  var_occ = mod$vars_train,
+#'  variables = mod$variables,
+#'  shap_nsim = 1)
+#'
+#' plot(shap_spatial)
+#' plot(shap_spatial, target_var = "bio1")
+#'}
+#'
+plot.SHAPSpatial <- function(x,
+                             target_var = NA,
+                             ...) {
+  # Checking
+  nms <- names(x)
+  checkmate::assert_character(target_var, min.len = 0)
+  if (!all(is.na(target_var))) {
+    stopifnot(all(target_var %in% nms))}
+
+  # Subset
+  if (!all(is.na(target_var))) x <- x[target_var]
+
+  if (length(names(x)) > 1) {
+    # SHAP plot
+    ggplot() +
+      geom_stars(
+        data = do.call(c, x) %>%
+          merge(name = 'band') %>%
+          st_set_dimensions('band',
+                            values = names(x))) +
+      scale_fill_distiller('Value', palette = "RdYlBu",
+                           na.value = "transparent") +
+      ggtitle(sprintf('SHAP-based effect of %s', 'variables')) +
+      coord_equal() +
+      facet_wrap(~band) +
+      theme_void() +
+      theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
+            strip.text.x = element_text(size = 12, face = "bold.italic"))
+  } else {
+    # SHAP plot
+    ggplot() +
+      geom_stars(
+        data = do.call(c, x)) +
+      scale_fill_distiller('Value', palette = "RdYlBu",
+                           na.value = "transparent") +
+      ggtitle(sprintf('SHAP-based effect of %s',
+                      names(x))) +
+      coord_equal() +
+      theme_void() +
+      theme(plot.title = element_text(face = 'bold.italic', hjust = 0.5),
+            strip.text.x = element_text(size = 12, face = "bold.italic"))
+  }
+}
+# end of plot.SHAPSpatial

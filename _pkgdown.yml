@@ -17,7 +17,7 @@ reference:
   - "shap_spatial_response"
   - "variable_contrib"
   - "convert_to_pa"
-  - "detect_climate_change"
+  - "detect_envi_change"
 
 - title: Visualization
 - subtitle: Plot/figure

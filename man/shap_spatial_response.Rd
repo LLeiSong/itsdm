@@ -111,11 +111,11 @@ shap_spatial <- shap_spatial_response(
   shap_nsim = 1)
 
 shap_spatial <- shap_spatial_response(
-model = mod$model,
-target_vars = c("bio1", "bio12"),
-var_occ = mod$vars_train,
-variables = mod$variables,
-shap_nsim = 1)
+ model = mod$model,
+ target_vars = c("bio1", "bio12"),
+ var_occ = mod$vars_train,
+ variables = mod$variables,
+ shap_nsim = 1)
 
 \dontrun{
 ##### Use Random Forest model as an external model ########
