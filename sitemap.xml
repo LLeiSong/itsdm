@@ -34,7 +34,7 @@
     <loc>https://lleisong.github.io/itsdm/reference/convert_to_pa.html</loc>
   </url>
   <url>
-    <loc>https://lleisong.github.io/itsdm/reference/detect_climate_change.html</loc>
+    <loc>https://lleisong.github.io/itsdm/reference/detect_envi_change.html</loc>
   </url>
   <url>
     <loc>https://lleisong.github.io/itsdm/reference/dim_reduce.html</loc>
@@ -73,6 +73,9 @@
     <loc>https://lleisong.github.io/itsdm/reference/occ_virtual_species.html</loc>
   </url>
   <url>
+    <loc>https://lleisong.github.io/itsdm/reference/plot.EnviChange.html</loc>
+  </url>
+  <url>
     <loc>https://lleisong.github.io/itsdm/reference/plot.EnvironmentalOutlier.html</loc>
   </url>
   <url>
@@ -88,6 +91,9 @@
     <loc>https://lleisong.github.io/itsdm/reference/plot.POEvaluation.html</loc>
   </url>
   <url>
+    <loc>https://lleisong.github.io/itsdm/reference/plot.SHAPSpatial.html</loc>
+  </url>
+  <url>
     <loc>https://lleisong.github.io/itsdm/reference/plot.ShapDependence.html</loc>
   </url>
   <url>
@@ -98,6 +104,9 @@
   </url>
   <url>
     <loc>https://lleisong.github.io/itsdm/reference/plot.VariableContribution.html</loc>
+  </url>
+  <url>
+    <loc>https://lleisong.github.io/itsdm/reference/print.EnviChange.html</loc>
   </url>
   <url>
     <loc>https://lleisong.github.io/itsdm/reference/print.EnvironmentalOutlier.html</loc>
