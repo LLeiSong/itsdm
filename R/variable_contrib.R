@@ -3,7 +3,7 @@
 #' to SHapley Additive exPlanations (SHAP).
 #' @param model (\code{isolation_forest} or other model) The SDM.
 #' It could be the item `model` of `POIsotree` made by function \code{\link{isotree_po}}.
-#' It also could be other use-fitted models as long as the `pfun` can work on it.
+#' It also could be other user-fitted models as long as the `pfun` can work on it.
 #' @param var_occ (`data.frame`, `tibble`) The `data.frame` style table that
 #' include values of environmental variables at occurrence locations.
 #' @param var_occ_analysis (`data.frame`, `tibble`) The `data.frame` style table that

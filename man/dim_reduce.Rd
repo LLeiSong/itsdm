@@ -2,7 +2,7 @@
 % Please edit documentation in R/dim_reduce.R
 \name{dim_reduce}
 \alias{dim_reduce}
-\title{Reduce dimensions using auto-correlation between numeric raster layers.}
+\title{Remove environmental variables that have high correlation with others.}
 \usage{
 dim_reduce(
   img_stack = NULL,
@@ -44,9 +44,10 @@ correlations between all variables.}
 correlations between variables after dimension reduction.}}
 }
 \description{
-Reduce dimensions of raster layers based on Pearson correlation
-and a user-defined threshold. NOTE that it only works on numeric variables,
-does not work on categorical variables.
+Select environmental variables that have pairwise Pearson
+correlation lower than a user-defined threshold.
+NOTE that it only works on numeric variables, does not work on
+categorical variables.
 }
 \examples{
 library(sf)

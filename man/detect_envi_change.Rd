@@ -20,7 +20,7 @@ detect_envi_change(
 \arguments{
 \item{model}{(\code{isolation_forest} or other model). It could
 be the item \code{model} of \code{POIsotree} made by function \code{\link{isotree_po}}.
-It also could be other use-fitted models as long as the \code{pfun} can work on it.}
+It also could be other user-fitted models as long as the \code{pfun} can work on it.}
 
 \item{var_occ}{(\code{data.frame}, \code{tibble}) The \code{data.frame} style table that
 include values of environmental variables at occurrence locations.}

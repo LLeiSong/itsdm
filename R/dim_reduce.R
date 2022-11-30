@@ -1,7 +1,8 @@
-#' @title Reduce dimensions using auto-correlation between numeric raster layers.
-#' @description Reduce dimensions of raster layers based on Pearson correlation
-#' and a user-defined threshold. NOTE that it only works on numeric variables,
-#' does not work on categorical variables.
+#' @title Remove environmental variables that have high correlation with others.
+#' @description Select environmental variables that have pairwise Pearson
+#' correlation lower than a user-defined threshold.
+#' NOTE that it only works on numeric variables, does not work on
+#' categorical variables.
 #' @param img_stack (\code{stars} or \code{RasterStack})
 #' The image stack to work on.
 #' @param threshold (\code{numeric}) The threshold number of Pearson
