@@ -4,7 +4,8 @@ pkgdown_sha: ~
 articles:
   introduction_of_itsdm: introduction_of_itsdm.html
   itsdm_example: itsdm_example.html
-last_built: 2022-11-27T18:50Z
+  shap_application: shap_application.html
+last_built: 2022-12-01T22:26Z
 urls:
   reference: https://lleisong.github.io/itsdm/reference
   article: https://lleisong.github.io/itsdm/articles

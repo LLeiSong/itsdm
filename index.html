@@ -76,6 +76,9 @@
     <li>
       <a href="articles/itsdm_example.html">Using itsdm to a real species: Africa savanna elephant</a>
     </li>
+    <li>
+      <a href="articles/shap_application.html">Applications of Shapley values on SDM explanation</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -114,11 +117,13 @@
 <li>A few functions to download environmental variables.</li>
 <li>Outlier tree-based suspicious environmental outliers detection.</li>
 <li>Isolation forest-based environmental suitability modeling.</li>
-<li>Response curves of environmental variable.</li>
+<li>Non-spatial response curves of environmental variables.</li>
+<li>Spatial response maps of environmental variables.</li>
 <li>Variable importance analysis.</li>
 <li>Presence-only model evaluation.</li>
 <li>Method to convert predicted suitability to presence-absence map.</li>
 <li>Variable contribution analysis for the target observations.</li>
+<li>Method to analyze the spatial impacts of changing environment.</li>
 </ul>
 </div>
 <div class="section level2">
@@ -216,7 +221,7 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># Use a fixed value</span></span>
-<span><span class="va">climate_changes</span> <span class="op">&lt;-</span> <span class="fu">detect_climate_change</span><span class="op">(</span></span>
+<span><span class="va">climate_changes</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/detect_envi_change.html">detect_envi_change</a></span><span class="op">(</span></span>
 <span>  model <span class="op">=</span> <span class="va">mod_rf</span>,</span>
 <span>  var_occ <span class="op">=</span> <span class="va">model_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">occ</span><span class="op">)</span>,</span>
 <span>  variables <span class="op">=</span> <span class="va">env_vars</span>,</span>
