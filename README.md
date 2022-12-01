@@ -13,11 +13,13 @@
 - A few functions to download environmental variables.
 - Outlier tree-based suspicious environmental outliers detection.
 - Isolation forest-based environmental suitability modeling.
-- Response curves of environmental variable.
+- Non-spatial response curves of environmental variables.
+- Spatial response maps of environmental variables.
 - Variable importance analysis.
 - Presence-only model evaluation.
 - Method to convert predicted suitability to presence-absence map.
 - Variable contribution analysis for the target observations.
+- Method to analyze the spatial impacts of changing environment.
 
 ## Installation
 
@@ -122,7 +124,7 @@ pfun <- function(X.model, newdata) {
 }
 
 # Use a fixed value
-climate_changes <- detect_climate_change(
+climate_changes <- detect_envi_change(
   model = mod_rf,
   var_occ = model_data %>% select(-occ),
   variables = env_vars,

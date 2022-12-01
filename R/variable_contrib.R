@@ -112,7 +112,7 @@ variable_contrib <- function(model,
   out <- explain(model, X = var_occ,
                  nsim = shap_nsim,
                  newdata = var_occ_analysis,
-                 pred_wrapper = .pfun_shap)
+                 pred_wrapper = pfun)
   out <- list(shapley_values = out,
               feature_values = var_occ_analysis)
   class(out) <- append("VariableContribution", class(out))

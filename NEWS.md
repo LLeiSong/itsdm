@@ -1,3 +1,11 @@
+# itsdm 0.2.0
+
+- Convert Shapley values-based functions to usable by external models (as described in issue # 3), and add examples in function documentation and vignettes to show users how to use these functions.
+- Add a function `detect_envi_change` to use Shapley values technique to analyze the potential impacts of changing environmental variables in space.
+- Modify function `isotree_po` to take presence-absence dataset as well (as described in issue #7). To make this happen smoothly, another function `format_observation` is created to help the users to convert their data to fit into `itsdm` workflow.
+- Reorganized reference section of the online documentation to make it user-friendly.
+- Fix a few bugs in the functions.
+
 # itsdm 0.1.3
 
 - Fix a bug in function `print.VariableAnalysis` mentioned in issue #2: if any value is negative then it would fail. 
