@@ -35,6 +35,14 @@
 #' `object` and `newdata`.
 #' It is only required when `model` is not \code{isolation_forest}.
 #' The default is the wrapper function designed for iForest model in `itsdm`.
+#' @param method Argument passed on to \code{\link{geom_smooth}} to fit the line.
+#' Note that the same arguments will be used for all target variables.
+#' User could set variable one by one to set the arguments separately.
+#' Default value is "gam".
+#' @param formula Argument passed on to \code{\link{geom_smooth}} to fit the line.
+#' Note that the same arguments will be used for all target variables.
+#' User could set variable one by one to set the arguments separately.
+#' The default is y ~ s(x).
 #'
 #' @return (`EnviChange`) A list of
 #' \itemize{
@@ -202,7 +210,9 @@ detect_envi_change <- function(model,
                                # a number or a stars
                                var_future = NULL,
                                variables_future = NULL,
-                               pfun = .pfun_shap){
+                               pfun = .pfun_shap,
+                               method = 'gam',
+                               formula = y ~ s(x)){
   # Check inputs
   ## required
   checkmate::assert_data_frame(var_occ)
@@ -259,7 +269,7 @@ detect_envi_change <- function(model,
     geom_smooth(color = 'red',
                 alpha = 0,
                 # Use GAM
-                method = 'gam', formula = y ~ s(x),
+                method = method, formula = formula,
                 linewidth = 1)
 
   # Get the intersection with y = 0

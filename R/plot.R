@@ -288,7 +288,10 @@ plot.IndependentResponse <- function(x,
 #' @param seed (`integer`) The seed for sampling.
 #' It will be ignored if the number of points is less than 1000.
 #' The default is 123.
-#' @param ... Not used.
+#' @param ... Other arguments passed on to \code{\link{geom_smooth}}. Mainly
+#' `method` and `formula` to fit the smooth line. Note that the same arguments
+#' will be used for all target variables. User could set variable one by one to
+#' set the arguments separately.
 #' @return `ggplot2` figure of dependent curves
 #' @seealso
 #' \code{\link{shap_dependence}}
@@ -423,7 +426,7 @@ plot.ShapDependence <- function(x,
         theme_linedraw()
       if (smooth_line) {
         g_cont <- g_cont +
-          geom_smooth(color = 'red', alpha = 0)
+          geom_smooth(color = 'red', alpha = 0, ...)
       }
     } else g_cont <- NULL
 
@@ -518,7 +521,7 @@ plot.ShapDependence <- function(x,
       }
       if (smooth_line) {
         g_cont <- g_cont +
-          geom_smooth(color = 'red', alpha = 0)
+          geom_smooth(color = 'red', alpha = 0, ...)
       }
     } else g_cont <- NULL
 

@@ -14,7 +14,9 @@ detect_envi_change(
   seed = 10,
   var_future = NULL,
   variables_future = NULL,
-  pfun = .pfun_shap
+  pfun = .pfun_shap,
+  method = "gam",
+  formula = y ~ s(x)
 )
 }
 \arguments{
@@ -61,6 +63,16 @@ It could be \code{NULL} if \code{var_future} is set.}
 \code{object} and \code{newdata}.
 It is only required when \code{model} is not \code{isolation_forest}.
 The default is the wrapper function designed for iForest model in \code{itsdm}.}
+
+\item{method}{Argument passed on to \code{\link{geom_smooth}} to fit the line.
+Note that the same arguments will be used for all target variables.
+User could set variable one by one to set the arguments separately.
+Default value is "gam".}
+
+\item{formula}{Argument passed on to \code{\link{geom_smooth}} to fit the line.
+Note that the same arguments will be used for all target variables.
+User could set variable one by one to set the arguments separately.
+The default is y ~ s(x).}
 }
 \value{
 (\code{EnviChange}) A list of
