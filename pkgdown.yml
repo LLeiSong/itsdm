@@ -1,11 +1,11 @@
 pandoc: 2.19.2
-pkgdown: 2.0.6
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   introduction_of_itsdm: introduction_of_itsdm.html
   itsdm_example: itsdm_example.html
   shap_application: shap_application.html
-last_built: 2022-12-01T22:26Z
+last_built: 2023-01-14T04:58Z
 urls:
   reference: https://lleisong.github.io/itsdm/reference
   article: https://lleisong.github.io/itsdm/articles
