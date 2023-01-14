@@ -40,6 +40,7 @@ Imports:
     ggplot2,
     isotree,
     methods,
+    mgcv,
     ncdf4,
     outliertree,
     patchwork,
@@ -51,7 +52,6 @@ Imports:
     stats,
     stringr,
     tidyselect,
-    mgcv,
     utils
 Suggests: 
     knitr,
