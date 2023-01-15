@@ -1,3 +1,92 @@
+## Resubmission (version 0.2.0)
+
+Reduce example run time for `detect_envi_change` and `variable_contrib` to pass the check. Because I cannot reproduce this issue on any other machines, I have to resubmit the package to figure it out.
+
+## Update (version 0.2.0)
+
+This is a major update for the pacakge. Overall, Shapley values-based functions were generalized for external models, and new functions were added to diagnose the impacts of a changing environment. Details can be found in `NEWS.md`.
+
+### Test environments
+
+1. Local macOS Ventura 13.1, R version 4.0.4 and macOS Monterey 12.6, R version 4.2.1
+
+2. Github actions
+
+- Windows Server x64 (build 20348), R version 4.2.2 (2022-10-31 ucrt)
+- Ubuntu 22.04.1 LTS, R version 4.2.2 (2022-10-31)
+- Ubuntu 22.04.1 LTS, R Under development (unstable) (2023-01-12 r83603)
+- Ubuntu 22.04.1 LTS, R version 4.1.3 (2022-03-10)
+- macOS Big Sur/Monterey 10.16, R version 4.2.2 (2022-10-31)
+
+3. `devtools` check
+
+- Windows, R Under development (unstable) (2023-01-13 r83612 ucrt), `devtools::check_win_devel()`
+- Windows, R version 4.2.2 (2022-10-31 ucrt), `devtools::check_win_release()`
+- Windows, R version 4.1.3 (2022-03-10), `devtools::check_win_oldrelease()`
+- MacOS 11.5.2, R version 4.2.1 Patched (2022-06-23 r82516), `devtools::check_mac_release()`
+- Linux, `devtools::check_rhub()`
+
+### R CMD check
+
+There is no error or warning. It got one note about "checking CRAN incoming feasibility". Some machines (e.g. Windows) detected some possible invalid URLs/DOIs and miss-spellings (as listed below). I manually checked them and they are fine.
+
+```
+Found the following (possibly) invalid URLs:
+  URL: https://doi.org/10.1002/joc.5086
+    From: man/future_worldclim2.Rd
+          man/worldclim2.Rd
+    Status: 503
+    Message: Service Unavailable
+  URL: https://doi.org/10.1109/ICDM.2008.17
+    From: man/isotree_po.Rd
+    Status: 503
+    Message: Service Unavailable
+  URL: https://doi.org/10.1109/TKDE.2019.2947676
+    From: man/isotree_po.Rd
+    Status: 503
+    Message: Service Unavailable
+  URL: https://doi.org/10.1111/jbi.13402
+    From: man/evaluate_po.Rd
+    Status: 503
+    Message: Service Unavailable
+
+Found the following (possibly) invalid DOIs:
+  DOI: 10.1002/joc.5086
+    From: DESCRIPTION
+    Status: Service Unavailable
+    Message: 503
+  DOI: 10.1109/ICDM.2008.17
+    From: DESCRIPTION
+    Status: Service Unavailable
+    Message: 503
+  DOI: 10.1109/TKDE.2019.2947676
+    From: DESCRIPTION
+    Status: Service Unavailable
+    Message: 503
+    
+Possibly mis-spelled words in DESCRIPTION:
+  Brunner (15:9)
+  Caporaso (30:38)
+  Fick (28:66)
+  Guha (17:5)
+  Hariri (14:51)
+  Hijmans (29:14)
+  Kononenko (23:60)
+  Liu (13:45, 15:63)
+  Lundberg (21:45)
+  Mishra (17:15)
+  Noce (30:28)
+  SCiForest (12:54)
+  Santini (30:55)
+  Schrijvers (17:39)
+  Shapley (19:39, 20:58)
+  Zhou (14:5, 16:20)
+  bioclimatic (28:5)
+  iForest (11:50)
+  itsdm (24:45)
+  trumbelj (23:43)
+```
+
 ## Update (version 0.1.3)
 
 Changes to this version are minor and can be found in `NEWS.md`. Fixed a bug in function `print.VariableAnalysis`, modified a few printout formats in function `plot.POEvaluation`, and improved the usage of function `plot.ShapDependence`.

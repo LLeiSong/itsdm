@@ -78,15 +78,15 @@ obs_train_eval <- format_observation(
 env_vars <- system.file(
   'extdata/bioclim_tanzania_10min.tif',
   package = 'itsdm') \%>\% read_stars() \%>\%
-  slice('band', c(1, 5, 12, 16))
+  slice('band', c(1, 5, 12))
 
 # With imperfect_presence mode,
 mod <- isotree_po(
   obs_mode = "imperfect_presence",
   obs = obs_train_eval$obs,
   obs_ind_eval = obs_train_eval$eval,
-  variables = env_vars, ntrees = 20,
-  sample_size = 0.8, ndim = 2L,
+  variables = env_vars, ntrees = 5,
+  sample_size = 0.8, ndim = 1L,
   seed = 123L, response = FALSE,
   spatial_response = FALSE,
   check_variable = FALSE)
@@ -94,7 +94,7 @@ mod <- isotree_po(
 var_contribution <- variable_contrib(
   model = mod$model,
   var_occ = mod$vars_train,
-  var_occ_analysis = mod$vars_train \%>\% slice(1:10))
+  var_occ_analysis = mod$vars_train \%>\% slice(1:2))
 \dontrun{
 plot(var_contribution,
   num_features = 3,

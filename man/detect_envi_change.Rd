@@ -118,14 +118,14 @@ obs_train_eval <- format_observation(
 env_vars <- system.file(
   'extdata/bioclim_tanzania_10min.tif',
   package = 'itsdm') \%>\% read_stars() \%>\%
-  slice('band', c(1, 5, 12))
+  slice('band', c(1, 12))
 #'
 # With imperfect_presence mode,
 mod <- isotree_po(
   obs_mode = "imperfect_presence",
   obs = obs_train_eval$obs,
   obs_ind_eval = obs_train_eval$eval,
-  variables = env_vars, ntrees = 10,
+  variables = env_vars, ntrees = 2,
   sample_size = 0.8, ndim = 1L,
   seed = 123L, response = FALSE,
   spatial_response = FALSE,
@@ -139,18 +139,16 @@ bio1_changes <- detect_envi_change(
   shap_nsim = 1,
   target_var = "bio1",
   var_future = 5)
-# Check the map
-plot(bio1_changes)
 
-\donttest{
+\dontrun{
 # Use a future layer
 ## Read the future Worldclim variables
 future_vars <- system.file(
   'extdata/future_bioclim_tanzania_10min.tif',
   package = 'itsdm') \%>\% read_stars() \%>\%
-  split()
+  split() \%>\% select(bioc1, bioc12)
 # Rename the bands
-names(future_vars) <- paste0("bio", c(1, 5, 12))
+names(future_vars) <- paste0("bio", c(1, 12))
 
 ## Just use the target future variable
 climate_changes <- detect_envi_change(
@@ -171,9 +169,7 @@ bio12_changes <- detect_envi_change(
   variables_future = future_vars)
 
 print(bio12_changes)
-}
 
-\dontrun{
 ##### Use Random Forest model as an external model ########
 library(randomForest)
 
