@@ -172,15 +172,15 @@ bgreenwell/fastshap</a></p></li>
 <span><span class="va">env_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
 <span>  <span class="st">'extdata/bioclim_tanzania_10min.tif'</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">'itsdm'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">read_stars</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="st">'band'</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">12</span>, <span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="st">'band'</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># With imperfect_presence mode,</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="isotree_po.html">isotree_po</a></span><span class="op">(</span></span>
 <span>  obs_mode <span class="op">=</span> <span class="st">"imperfect_presence"</span>,</span>
 <span>  obs <span class="op">=</span> <span class="va">obs_train_eval</span><span class="op">$</span><span class="va">obs</span>,</span>
 <span>  obs_ind_eval <span class="op">=</span> <span class="va">obs_train_eval</span><span class="op">$</span><span class="va">eval</span>,</span>
-<span>  variables <span class="op">=</span> <span class="va">env_vars</span>, ntrees <span class="op">=</span> <span class="fl">20</span>,</span>
-<span>  sample_size <span class="op">=</span> <span class="fl">0.8</span>, ndim <span class="op">=</span> <span class="fl">2L</span>,</span>
+<span>  variables <span class="op">=</span> <span class="va">env_vars</span>, ntrees <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  sample_size <span class="op">=</span> <span class="fl">0.8</span>, ndim <span class="op">=</span> <span class="fl">1L</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">123L</span>, response <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  spatial_response <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  check_variable <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
@@ -188,7 +188,7 @@ bgreenwell/fastshap</a></p></li>
 <span><span class="va">var_contribution</span> <span class="op">&lt;-</span> <span class="fu">variable_contrib</span><span class="op">(</span></span>
 <span>  model <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">model</span>,</span>
 <span>  var_occ <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">vars_train</span>,</span>
-<span>  var_occ_analysis <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">vars_train</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
+<span>  var_occ_analysis <span class="op">=</span> <span class="va">mod</span><span class="op">$</span><span class="va">vars_train</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">var_contribution</span>,</span>
 <span>  num_features <span class="op">=</span> <span class="fl">3</span>,</span>
