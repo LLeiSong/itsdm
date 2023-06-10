@@ -1,3 +1,53 @@
+## Update (version 0.2.1)
+
+This is a minor update for the package, addressing the recent upgrade of the `fastshap` package and lightening the examples to run in under 5 seconds.
+
+### Test environments
+
+1. Local macOS Ventura 13.4, R version 4.3.0
+
+2. Github actions
+
+- Windows Server 2022 x64 (build 20348), R version 4.3.0 (2023-04-21 ucrt)
+- Ubuntu 22.04.2 LTS, R version 4.3.0 (2023-04-21)
+- Ubuntu 22.04.2 LTS, R Under development (unstable) (2023-06-07 r84523)
+- Ubuntu 22.04.2 LTS, R version 4.2.3 (2023-03-15)
+- macOS Monterey 12.6.5, R version 4.3.0 (2023-04-21)
+
+3. `devtools` check
+
+- Windows, R Under development (unstable) (2023-06-09 r84528 ucrt), `devtools::check_win_devel()`
+- Windows, R version 4.3.0 (2023-04-21 ucrt), `devtools::check_win_release()`
+- Windows, R version 4.2.3 (2023-03-15 ucrt), `devtools::check_win_oldrelease()`
+- macOS 13.3.1 (22E261), R version 4.3.0 Patched (2023-05-18 r84451), `devtools::check_mac_release()`
+- Fedora Linux R-devel clang gfortran, Ubuntu Linux 20.04.1 LTS R-release GCC, Windows Server 2022 R-devel 64 bit, `devtools::check_rhub()`
+
+### R CMD check
+
+There were no ERRORs or WARNINGs.
+
+There were two NOTEs that are only found on Windows (r-hub):
+
+```
+* checking for non-standard things in the check directory ... NOTE
+Found the following files/directories:
+  ''NULL''
+* checking for detritus in the temp directory ... NOTE
+Found the following files/directories:
+  'lastMiKTeXException'
+```
+
+As noted in [R-hub issue #560](https://github.com/r-hub/rhub/issues/560), the first NOTE could be due to something in R-hub and can be ignored.
+And as noted in [R-hub issue #503](https://github.com/r-hub/rhub/issues/503), the second NOTE could be due to a bug/crash in MiKTeX and can likely be ignored.
+
+There was one NOTE only found on r-hub Linux:
+
+````
+* checking HTML version of manual ... NOTE
+Skipping checking HTML validation: no command 'tidy' found
+```
+This NOTE is unrelated to my package and can likely be ignored.
+
 ## Resubmission (version 0.2.0)
 
 Reduce example run time for `detect_envi_change` and `variable_contrib` to pass the check. Because I cannot reproduce this issue on any other machines, I have to resubmit the package to figure it out.

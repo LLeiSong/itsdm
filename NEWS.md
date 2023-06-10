@@ -1,3 +1,8 @@
+# itsdm 0.2.1
+
+- Adapted the package to accommodate the recent update of its dependency `fastshap` (version 0.1.0). The usage of the functions remains unchanged.
+- Optimized the function examples to meet the requirements for passing the CRAN check.
+
 # itsdm 0.2.0
 
 - Convert Shapley values-based functions to usable by external models (as described in issue # 3), and add examples in function documentation and vignettes to show users how to use these functions.

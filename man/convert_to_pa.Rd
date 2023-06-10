@@ -112,6 +112,7 @@ pa_thred <- convert_to_pa(mod$prediction,
 pa_thred
 plot(pa_thred)
 
+\dontrun{
 # Logistic conversion
 pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
                         beta = 0.5, alpha = -.05)
@@ -119,7 +120,8 @@ pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
 # Linear conversion
 pa_lin <- convert_to_pa(mod$prediction, method = 'linear',
                         a = 1, b = 0)
-#'
+}
+
 }
 \references{
 \href{https://github.com/Farewe/virtualspecies/blob/master/R/convertToPA.R}{c

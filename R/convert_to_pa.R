@@ -91,6 +91,7 @@
 #' pa_thred
 #' plot(pa_thred)
 #'
+#' \dontrun{
 #' # Logistic conversion
 #' pa_log <- convert_to_pa(mod$prediction, method = 'logistic',
 #'                         beta = 0.5, alpha = -.05)
@@ -98,7 +99,8 @@
 #' # Linear conversion
 #' pa_lin <- convert_to_pa(mod$prediction, method = 'linear',
 #'                         a = 1, b = 0)
-#' #'
+#' }
+#'
 convert_to_pa <- function(suitability, # prediction from isotree_sdm
                           method = "logistic",
                           beta = 0.5, # could be NA, for threshold or logistic
