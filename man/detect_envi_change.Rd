@@ -125,7 +125,7 @@ mod <- isotree_po(
   obs_mode = "imperfect_presence",
   obs = obs_train_eval$obs,
   obs_ind_eval = obs_train_eval$eval,
-  variables = env_vars, ntrees = 2,
+  variables = env_vars, ntrees = 10,
   sample_size = 0.8, ndim = 1L,
   seed = 123L, response = FALSE,
   spatial_response = FALSE,

@@ -79,7 +79,7 @@
 #' \item{\url{https://github.com/slundberg/shap}}
 #' }
 #'
-#' @importFrom dplyr select tibble filter sample_n
+#' @importFrom dplyr select tibble filter sample_n as_tibble
 #' @importFrom sf st_as_sf st_drop_geometry
 #' @importFrom stars st_as_stars st_xy2sfc st_get_dimension_values
 #' @importFrom fastshap explain
@@ -355,6 +355,8 @@ variable_analysis <- function(model,
   shap_train <- explain(model, X = var_occ, nsim = shap_nsim,
                         newdata = rbind(var_occ, vars_bg),
                         pred_wrapper = .pfun_shap)
+  shap_train <- as.data.frame(shap_train) # For fastshap >= 0.1.0
+
   ## Test
   ### Add background points to balance the average value is around 0.5
   vars_bg <- st_extract(
@@ -365,6 +367,7 @@ variable_analysis <- function(model,
   shap_test <- explain(model, X = var_occ, nsim = shap_nsim,
                        newdata = rbind(var_occ_test, vars_bg),
                        pred_wrapper = .pfun_shap)
+  shap_test <- as.data.frame(shap_test) # For fastshap >= 0.1.0
   rm(vars_bg, variables, samples_bg, var_occ, var_occ_test)
 
   # Output
@@ -380,8 +383,8 @@ variable_analysis <- function(model,
                 var_each %>%
                 filter(.data$metrics == 'AUC_ratio') %>%
                 select(-.data$metrics),
-              SHAP = list(train = shap_train,
-                          test = shap_test))
+              SHAP = list(train = as_tibble(shap_train),
+                          test = as_tibble(shap_test)))
 
   class(out) <- append("VariableAnalysis", class(out))
 

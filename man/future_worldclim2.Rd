@@ -22,12 +22,10 @@ Should be one of tmin, tmax, prec, bioc.
 The default is tmin.}
 
 \item{res}{(\code{numeric}) The option for the resolution of image to
-download. Should be one of 2.5, 5, 10. The default is 10.}
+download. Should be one of 0.5, 2.5, 5, 10. The default is 10.}
 
 \item{gcm}{(\code{character}) The option for global climate models.
-Should be one of "BCC-CSM2-MR", "CNRM-CM6-1","CNRM-ESM2-1", "CanESM5",
-"GFDL-ESM4", "IPSL-CM6A-LR","MIROC-ES2L", "MIROC6", "MRI-ESM2-0".
-The default is 'BCC-CSM2-MR'.}
+Check https://www.worldclim.org for all available GCM.}
 
 \item{ssp}{(\code{character}) The option for Shared Socio-economic Pathways.
 Should be one of "ssp126", "ssp245", "ssp370", "ssp585".

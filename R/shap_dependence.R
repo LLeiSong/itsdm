@@ -185,6 +185,7 @@ shap_dependence <- function(model,
   shap_explain <- explain(model, X = var_occ, nsim = shap_nsim,
                           newdata = obs_bg_vars_mat,
                           pred_wrapper = pfun)
+  shap_explain <- as.data.frame(shap_explain) # For fastshap >= 0.1.0
   dependences <- lapply(names(var_occ), function(var) {
     data.frame(x = obs_bg_vars_mat %>% pull(var),
                y = shap_explain %>% pull(var))

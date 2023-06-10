@@ -184,6 +184,7 @@ shap_spatial_response <- function(model,
     newdata = x_shap %>% filter(val_ids) %>% select(all_of(bands)),
     nsim = shap_nsim,
     pred_wrapper = pfun)
+  shap_explain <- as.data.frame(shap_explain) # For fastshap >= 0.1.0
 
   # Mosaic back the background pixels
   x_shap[] <- sapply(x_shap, as.numeric)

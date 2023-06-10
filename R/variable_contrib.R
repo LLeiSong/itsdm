@@ -113,6 +113,8 @@ variable_contrib <- function(model,
                  nsim = shap_nsim,
                  newdata = var_occ_analysis,
                  pred_wrapper = pfun)
+  out <- as.data.frame(out) # For fastshap >= 0.1.0
+
   out <- list(shapley_values = out,
               feature_values = var_occ_analysis)
   class(out) <- append("VariableContribution", class(out))

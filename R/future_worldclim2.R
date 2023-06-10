@@ -5,11 +5,9 @@
 #' Should be one of tmin, tmax, prec, bioc.
 #' The default is tmin.
 #' @param res (\code{numeric}) The option for the resolution of image to
-#' download. Should be one of 2.5, 5, 10. The default is 10.
+#' download. Should be one of 0.5, 2.5, 5, 10. The default is 10.
 #' @param gcm (\code{character}) The option for global climate models.
-#' Should be one of "BCC-CSM2-MR", "CNRM-CM6-1","CNRM-ESM2-1", "CanESM5",
-#' "GFDL-ESM4", "IPSL-CM6A-LR","MIROC-ES2L", "MIROC6", "MRI-ESM2-0".
-#' The default is 'BCC-CSM2-MR'.
+#' Check https://www.worldclim.org for all available GCM.
 #' @param ssp (\code{character}) The option for Shared Socio-economic Pathways.
 #' Should be one of "ssp126", "ssp245", "ssp370", "ssp585".
 #' The default is "ssp585".
@@ -68,13 +66,15 @@ future_worldclim2 <- function(var = "tmin",
                               nm_mark = "clip",
                               return_stack = TRUE) {
     ## Check the inputs
-    stopifnot(res %in% c(2.5, 5, 10))
+    stopifnot(res %in% c(0.5, 2.5, 5, 10))
     stopifnot(var %in% c('tmin', 'tmax', 'prec', 'bioc'))
-    stopifnot(gcm %in% c("BCC-CSM2-MR", "CNRM-CM6-1",
-                         "CNRM-ESM2-1", "CanESM5",
-                         "GFDL-ESM4", "IPSL-CM6A-LR",
-                         "MIROC-ES2L", "MIROC6",
-                         "MRI-ESM2-0"))
+    gcms <- c("ACCESS-CM2", "ACCESS-ESM1-5", "BCC-CSM2-MR", "CanESM5",
+              "CanESM5-CanOE", "CMCC-ESM2", "CNRM-CM6-1", "CNRM-CM6-1-HR",
+              "CNRM-ESM2-1", "EC-Earth3-Veg", "EC-Earth3-Veg-LR", "FIO-ESM-2-0",
+              "GISS-E2-1-G", "GISS-E2-1-H", "HadGEM3-GC31-LL", "INM-CM4-8",
+              "INM-CM5-0", "IPSL-CM6A-LR", "MIROC-ES2L", "MIROC6",
+              "MPI-ESM1-2-HR", "MPI-ESM1-2-LR", "MRI-ESM2-0", "UKESM1-0-LL")
+    stopifnot(gcm %in% gcms)
     stopifnot(ssp %in% c("ssp126", "ssp245",
                          "ssp370", "ssp585"))
     stopifnot(interval %in% c("2021-2040", "2041-2060",
@@ -84,6 +84,10 @@ future_worldclim2 <- function(var = "tmin",
     if (gcm == "GFDL-ESM4" & ssp == "ssp585" &
         var != "prec"){
         stop("There is no such var to download.")}
+    if(gcm == "FIO-ESM-2-0" & ssp == "ssp370"){
+      stop("There is no any var to download.")}
+    if(gcm == "HadGEM3-GC31-LL" & ssp == "ssp370"){
+      stop("There is no any var to download.")}
 
     if (is.null(bry)) {
       nm_mark <- "global"
@@ -108,80 +112,70 @@ future_worldclim2 <- function(var = "tmin",
     dir.create(path, showWarnings = FALSE)
 
     ## Prepare url and file name
-    url_base <- "https://biogeo.ucdavis.edu/data/worldclim/v2.1/fut"
-    zip_name <- sprintf("%sm/wc2.1_%sm_%s_%s_%s_%s.zip",
-                        res, res, var, gcm, ssp, interval)
+    if (res == 0.5) {
+      res <- "30s"
+    } else {
+      res <- sprintf("%sm", res)
+    }
+    url_base <- "https://geodata.ucdavis.edu/cmip6"
+    zip_name <- sprintf("%s/%s/%s/wc2.1_%s_%s_%s_%s_%s.tif",
+                        res, gcm, ssp, res, var, gcm, ssp, interval)
     url <- file.path(url_base, zip_name)
 
     ## Download to local
-    temp <- tempfile()
-    dl <- try(download.file(url, temp))
-    if (inherits(dl, "try-error")) {
-      Sys.sleep(10)
-      download.file(url, temp)
-    }
-
-    # Define file number
-    n <- ifelse(var == "bioc", 19, 12)
-
     if (is.null(bry)) {
-        ## More stable way to unzip a huge file
-        decompression <- system2(
-            "unzip",
-            args = c("-o", "-j", temp, sprintf("-d %s", path)),
-            stdout = TRUE)
-        if (grepl("Warning message", tail(decompression, 1))) {
-            print(decompression)
-        }; unlink(temp)
+      fname <- sprintf("wc2.1_%s_%s_%s_%s_%s.tif",
+                       res, var, gcm, ssp, interval)
+      fpath <- file.path(path, fname)
 
-        fname <- sprintf("wc2.1_%sm_%s_%s_%s_%s.tif",
-                         res, var, gcm, ssp, interval)
-        fpath <- file.path(path, fname)
-        if (!file.exists(fpath)) stop('Fail to extract file.')
+      dl <- try(download.file(url, fpath))
+      if (inherits(dl, "try-error")) {
+        Sys.sleep(10)
+        download.file(url, fpath)
+      }
 
-        ## Read imgs as stars
-        if (return_stack == TRUE) clip_imgs <- read_stars(fpath)
+      ## Read imgs as stars
+      if (return_stack == TRUE) clip_imgs <- read_stars(fpath)
     } else {
-        temp_path <- file.path(path, "global")
-        dir.create(temp_path, showWarnings = FALSE)
+      # Define file number
+      n <- ifelse(var == "bioc", 19, 12)
 
-        ## More stable way to unzip a huge file
-        decompression <- system2(
-            "unzip",
-            args = c("-o", "-j", temp, sprintf("-d %s", temp_path)),
-            stdout = TRUE)
-        if (grepl("Warning message", tail(decompression, 1))) {
-            print(decompression)
-        }; unlink(temp)
+      temp_path <- file.path(path, "global")
+      dir.create(temp_path, showWarnings = FALSE)
 
-        fname <- sprintf("wc2.1_%sm_%s_%s_%s_%s.tif",
-                         res, var, gcm, ssp, interval)
-        fpath <- file.path(temp_path, fname)
-        if (!file.exists(fpath)) stop('Fail to extract file.')
+      ## Download
+      fname <- sprintf("wc2.1_%s_%s_%s_%s_%s.tif",
+                       res, var, gcm, ssp, interval)
+      fpath <- file.path(temp_path, fname)
+      dl <- try(download.file(url, fpath))
+      if (inherits(dl, "try-error")) {
+        Sys.sleep(10)
+        download.file(url, fpath)
+      }
 
-        ## Read imgs as stars and clip
-        clip_imgs <- read_stars(fpath, RasterIO = list(bands = c(1:n)))
-        bry <- st_as_sf(bry) %>% st_make_valid()
-        clip_imgs <- st_crop(clip_imgs, bry)
-        if (inherits(clip_imgs, "stars_proxy")) {
-          clip_imgs <- st_as_stars(clip_imgs)}
+      ## Read imgs as stars and clip
+      clip_imgs <- read_stars(fpath, RasterIO = list(bands = c(1:n)))
+      bry <- st_as_sf(bry) %>% st_make_valid()
+      clip_imgs <- st_crop(clip_imgs, bry)
+      if (inherits(clip_imgs, "stars_proxy")) {
+        clip_imgs <- st_as_stars(clip_imgs)}
 
-        ## Save out
-        ### No 30s resolution, so stacking them together is fine.
-        rst_name <- paste(nm_mark, names(clip_imgs), sep = "_")
-        rst_path <- file.path(path, rst_name)
-        write_stars(clip_imgs, rst_path)
+      ## Save out
+      ### No 30s resolution, so stacking them together is fine.
+      rst_name <- paste(nm_mark, names(clip_imgs), sep = "_")
+      rst_path <- file.path(path, rst_name)
+      write_stars(clip_imgs, rst_path)
 
-        ## Clean the temp folder
-        unlink(temp_path, recursive = TRUE)
+      ## Clean the temp folder
+      unlink(temp_path, recursive = TRUE)
 
-        if (return_stack != TRUE) rm(clip_imgs)
+      if (return_stack != TRUE) rm(clip_imgs)
     }
 
     if (return_stack == TRUE) {
-        clip_imgs <- st_set_dimensions(
-            clip_imgs, 'band', values = paste0(var, 1:n))
-        clip_imgs
+      clip_imgs <- st_set_dimensions(
+        clip_imgs, 'band', values = paste0(var, 1:n))
+      clip_imgs
     } else {
       message(sprintf("Files are written to %s.", path))
     }
