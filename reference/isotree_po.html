@@ -21,7 +21,7 @@ functions to do model explanation."><!-- mathjax --><script src="https://cdnjs.c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">itsdm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -329,7 +329,7 @@ will be listed under their own functions</p></li>
 <span>  obs_ind_eval <span class="op">=</span> <span class="va">obs_train_eval</span><span class="op">$</span><span class="va">eval</span>,</span>
 <span>  variables <span class="op">=</span> <span class="va">env_vars</span>, ntrees <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  sample_size <span class="op">=</span> <span class="fl">0.6</span>, ndim <span class="op">=</span> <span class="fl">1L</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">123L</span><span class="op">)</span></span>
+<span>  seed <span class="op">=</span> <span class="fl">123L</span>, nthreads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check results</span></span>
 <span><span class="co">## Evaluation based on training dataset</span></span>
@@ -373,7 +373,7 @@ will be listed under their own functions</p></li>
 <span>  obs_ind_eval <span class="op">=</span> <span class="va">obs_train_eval</span><span class="op">$</span><span class="va">eval</span>,</span>
 <span>  variables <span class="op">=</span> <span class="va">env_vars</span>, ntrees <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  sample_size <span class="op">=</span> <span class="fl">0.6</span>, ndim <span class="op">=</span> <span class="fl">1L</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">123L</span><span class="op">)</span></span>
+<span>  seed <span class="op">=</span> <span class="fl">123L</span>, nthreads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Modeling with imperfect_presence mode</span></span>
 <span><span class="va">mod_imperfect_pres</span> <span class="op">&lt;-</span> <span class="fu">isotree_po</span><span class="op">(</span></span>
@@ -382,7 +382,7 @@ will be listed under their own functions</p></li>
 <span>  obs_ind_eval <span class="op">=</span> <span class="va">obs_train_eval</span><span class="op">$</span><span class="va">eval</span>,</span>
 <span>  variables <span class="op">=</span> <span class="va">env_vars</span>, ntrees <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  sample_size <span class="op">=</span> <span class="fl">0.6</span>, ndim <span class="op">=</span> <span class="fl">1L</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">123L</span><span class="op">)</span></span>
+<span>  seed <span class="op">=</span> <span class="fl">123L</span>, nthreads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># }</span></span>
 <span></span></code></pre></div>
     </div>
