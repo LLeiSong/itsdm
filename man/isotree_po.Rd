@@ -198,7 +198,7 @@ mod_virtual_species <- isotree_po(
   obs_ind_eval = obs_train_eval$eval,
   variables = env_vars, ntrees = 10,
   sample_size = 0.6, ndim = 1L,
-  seed = 123L)
+  seed = 123L, nthreads = 1)
 
 # Check results
 ## Evaluation based on training dataset
@@ -242,7 +242,7 @@ mod_perfect_pres <- isotree_po(
   obs_ind_eval = obs_train_eval$eval,
   variables = env_vars, ntrees = 10,
   sample_size = 0.6, ndim = 1L,
-  seed = 123L)
+  seed = 123L, nthreads = 1)
 
 # Modeling with imperfect_presence mode
 mod_imperfect_pres <- isotree_po(
@@ -251,7 +251,7 @@ mod_imperfect_pres <- isotree_po(
   obs_ind_eval = obs_train_eval$eval,
   variables = env_vars, ntrees = 10,
   sample_size = 0.6, ndim = 1L,
-  seed = 123L)
+  seed = 123L, nthreads = 1)
 }
 
 }

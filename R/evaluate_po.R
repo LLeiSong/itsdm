@@ -137,9 +137,10 @@
 #'   obs_mode = "perfect_presence",
 #'   obs = obs_train_eval$obs,
 #'   obs_ind_eval = obs_train_eval$eval,
-#'   variables = env_vars, ntrees = 30,
+#'   variables = env_vars, ntrees = 10,
 #'   sample_size = 0.8, ndim = 2L,
-#'   seed = 123L, response = FALSE,
+#'   seed = 123L, nthreads = 1,
+#'   response = FALSE,
 #'   spatial_response = FALSE,
 #'   check_variable = FALSE)
 #'
