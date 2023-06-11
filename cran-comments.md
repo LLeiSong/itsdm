@@ -1,3 +1,7 @@
+## Resubmission (version 0.2.1)
+
+Reduce the example run time for `suspicious_env_outliers` to pass the check. This time, force the example to use only one core, so the ratio of elapsed time to user time should be smaller.
+
 ## Update (version 0.2.1)
 
 This is a minor update for the package, addressing the recent upgrade of the `fastshap` package and lightening the examples to run in under 5 seconds.

@@ -55,11 +55,11 @@
 #' env_vars <- system.file(
 #'   'extdata/bioclim_tanzania_10min.tif',
 #'   package = 'itsdm') %>% read_stars() %>%
-#'   slice('band', c(1, 5, 12, 16))
+#'   slice('band', c(1, 5, 12))
 #'
 #' occ_outliers <- suspicious_env_outliers(
 #'   occ = occ_virtual_species, variables = env_vars,
-#'   z_outlier = 3.5, outliers_print = 4L)
+#'   z_outlier = 3.5, outliers_print = 4L, nthreads = 1)
 #'
 #' occ_outliers
 #' plot(occ_outliers)
