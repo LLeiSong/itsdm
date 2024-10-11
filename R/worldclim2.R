@@ -99,7 +99,7 @@ worldclim2 <- function(var = "tmin",
     dir.create(path, showWarnings = FALSE)
 
     # Prepare url and file name
-    url_base <- "https://biogeo.ucdavis.edu/data/worldclim/v2.1/base"
+    url_base <- "https://geodata.ucdavis.edu/climate/worldclim/2_1/base"
     zip_name <- sprintf("wc2.1_%s_%s.zip", res, var)
     url <- file.path(url_base, zip_name)
 

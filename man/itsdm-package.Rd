@@ -30,6 +30,15 @@ independent responses and analyze interactions between environmental variables.}
 \references{
 Please check references in R documentation of each specific function.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/LLeiSong/itsdm}
+  \item \url{https://lleisong.github.io/itsdm/}
+  \item Report bugs at \url{https://github.com/LLeiSong/itsdm/issues}
+}
+
+}
 \author{
 Lei Song \email{lsong@clarku.edu}
 
