@@ -1,3 +1,7 @@
+# itsdm 0.2.2
+
+- No package update. Fix a few package anchor issues in Rd documents.
+
 # itsdm 0.2.1
 
 - Adapted the package to accommodate the recent update of its dependency `fastshap` (version 0.1.0). The usage of the functions remains unchanged.

@@ -50,6 +50,7 @@ NOTE that it only works on numeric variables, does not work on
 categorical variables.
 }
 \examples{
+\donttest{
 library(sf)
 library(itsdm)
 library(stars)
@@ -59,5 +60,6 @@ env_vars <- system.file(
   package = 'itsdm') \%>\% read_stars()
 img_reduced <- dim_reduce(env_vars, threshold = 0.7,
   preferred_vars = c('bio1', 'bio12'))
+}
 
 }

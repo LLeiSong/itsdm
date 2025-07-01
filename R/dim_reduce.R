@@ -37,6 +37,7 @@
 #' @importFrom methods is as
 #' @export
 #' @examples
+#' \donttest{
 #' library(sf)
 #' library(itsdm)
 #' library(stars)
@@ -46,6 +47,7 @@
 #'   package = 'itsdm') %>% read_stars()
 #' img_reduced <- dim_reduce(env_vars, threshold = 0.7,
 #'   preferred_vars = c('bio1', 'bio12'))
+#'}
 #'
 dim_reduce <- function(img_stack = NULL,
                        threshold = 0.5,

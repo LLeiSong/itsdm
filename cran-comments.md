@@ -1,3 +1,55 @@
+## Update (version 0.2.2)
+
+This minor update addresses missing package anchors in Rd \link{} references to ensure proper cross-referencing and CRAN compliance.
+
+### Test environments
+
+1. Local macOS Sequoia Version 15.5, R version 4.5.0
+
+2. Github actions
+
+- Windows Server 2022 x64 (build 20348), R version 4.5.1 (2025-06-13 ucrt)
+- Ubuntu 24.04.2 LTS, R version 4.5.1 (2025-06-13)
+- Ubuntu 24.04.2 LTS, R Under development (unstable) (2025-06-30 r88369)
+- Ubuntu 24.04.2 LTS, R version 4.4.3 (2025-02-28)
+- macOS Sonoma 14.7.6, R version 4.5.1 (2025-06-13)
+
+3. `devtools` check
+
+- Windows, R Under development (unstable) (2025-06-30 r88369 ucrt), `devtools::check_win_devel()`
+- Windows, R version 4.5.1 (2025-06-13 ucrt), `devtools::check_win_release()`
+- Windows, R version 4.4.3 (2025-02-28 ucrt), `devtools::check_win_oldrelease()`
+
+### R CMD check
+
+There were no ERRORs or WARNINGs.
+
+There was only one NOTE:
+
+```
+* checking CRAN incoming feasibility ... [10s] NOTE
+Maintainer: 'Lei Song <lei.song@rutgers.edu>'
+
+New maintainer:
+  Lei Song <lei.song@rutgers.edu>
+Old maintainer(s):
+  Lei Song <lsong@clarku.edu>
+
+Found the following (possibly) invalid URLs:
+  URL: https://dl.acm.org/doi/abs/10.5555/3295222.3295230
+    From: DESCRIPTION
+    Status: 403
+    Message: Forbidden
+
+The Description field contains
+  <arXiv:2110.13402>. Additionally, Shapley values are used to explain
+Please refer to arXiv e-prints via their arXiv DOI <doi:10.48550/arXiv.YYMM.NNNNN>.
+The Description field contains
+  (2017) <https://dl.acm.org/doi/abs/10.5555/3295222.3295230>, Molnar, C.
+Please use permanent DOI markup for linking to publications as in <doi:prefix/suffix>.
+```
+This first part of the NOTE is because I changed my current email. The referenced URLs are valid and can be safely ignored.
+
 ## Resubmission (version 0.2.1)
 
 Reduce the example run time for `suspicious_env_outliers` to pass the check. This time, force the example to use only one core, so the ratio of elapsed time to user time should be smaller.
@@ -46,7 +98,7 @@ And as noted in [R-hub issue #503](https://github.com/r-hub/rhub/issues/503), th
 
 There was one NOTE only found on r-hub Linux:
 
-````
+```
 * checking HTML version of manual ... NOTE
 Skipping checking HTML validation: no command 'tidy' found
 ```
