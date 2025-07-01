@@ -1,36 +1,36 @@
 #' @title Function to detect suspicious outliers based on environmental variables.
-#' @description Run \code{\link{outlier.tree}} to detect suspicious outliers in observations.
+#' @description Run \code{\link[outliertree:outlier.tree]{outlier.tree}} to detect suspicious outliers in observations.
 #' @param occ (`data.frame`, `sf`, `SpatialPointsDataFrame`)
 #' The occurrence dataset for training.
 #' There must be column `x` and `y` for coordinates if it is a regular `data.frame`.
-#' @param occ_crs (`numeric` or \code{\link{crs}}) The EPSG number or
-#' \code{\link{crs}} object of occurrence CRS.
+#' @param occ_crs (`numeric` or \code{crs}) The EPSG number or
+#' \code{crs} object of occurrence CRS.
 #' The default value is `4326`, which is the geographic coordinate system.
 #' @param variables (`RasterStack` or `stars`) The stack of environmental variables.
 #' @param rm_outliers (`logical`) The option to remove the suspicious outliers or not.
 #' The default is `FALSE`.
 #' @param seed (`integer`) The random seed used in the modeling. It should be an
 #' integer. The default is `10L`.
-#' @param ... Other arguments passed to function \code{\link{outlier.tree}} in
+#' @param ... Other arguments passed to function \code{\link[outliertree:outlier.tree]{outlier.tree}} in
 #' package `outliertree`.
 #' @param visualize (`logical`) If `TRUE`, plot the result.
 #' The default is `TRUE`.
 #' @return (`EnvironmentalOutlier`) A list that contains
 #' \itemize{
-#' \item{outliers (\code{\link{sf}}) The \code{\link{sf}} points of outliers}
+#' \item{outliers (\code{\link[sf:sf]{sf}}) The \code{\link[sf:sf]{sf}} points of outliers}
 #' \item{outlier_details (`tibble`) A table of outlier details returned from
-#' function \code{\link{outlier.tree}} in package `outliertree`}
-#' \item{pts_occ (\code{\link{sf}}) The \code{\link{sf}} points of occurrence.
+#' function \code{\link[outliertree:outlier.tree]{outlier.tree}} in package `outliertree`}
+#' \item{pts_occ (\code{\link[sf:sf]{sf}}) The \code{\link[sf:sf]{sf}} points of occurrence.
 #' If `rm_outliers` is `TRUE`, outliers are deleted from points of
 #' occurrence. If `FALSE`, the full observations are returned.}}
 #'
 #' @seealso
 #' \code{\link{print.EnvironmentalOutlier}}, \code{\link{plot.EnvironmentalOutlier}}
-#' \code{\link{outlier.tree}} in package `outliertree`
+#' \code{\link[outliertree:outlier.tree]{outlier.tree}} in package `outliertree`
 #'
 #' @details
 #' Please check more details in R documentation of function
-#' \code{\link{outlier.tree}} in package `outliertree` and their GitHub.
+#' \code{\link[outliertree:outlier.tree]{outlier.tree}} in package `outliertree` and their GitHub.
 #'
 #' @references
 #' \itemize{

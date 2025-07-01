@@ -13,7 +13,7 @@ It could be the return of function \code{\link{suspicious_env_outliers}}.}
 \item{overlay_raster}{(\code{RasterLayer} or \code{stars}) The environmental raster to plot
 together with points.}
 
-\item{pts_alpha}{(\code{numeric}) The \code{alpha} used by \code{\link{geom_sf}} to show points.}
+\item{pts_alpha}{(\code{numeric}) The \code{alpha} used by \code{\link[ggplot2:geom_sf]{geom_sf}} to show points.}
 
 \item{...}{Not used.}
 }

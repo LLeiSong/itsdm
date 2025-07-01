@@ -9,8 +9,8 @@
 #' @param variables (`stars`) The `stars` of environmental variables.
 #' It should have multiple `attributes` instead of `dims`.
 #' If you have `raster` object instead, you
-#' could use \code{\link{st_as_stars}} to convert it to `stars` or use
-#' \code{\link{read_stars}} directly read source data as a `stars`.
+#' could use \code{\link[stars:st_as_stars]{st_as_stars}} to convert it to `stars` or use
+#' \code{\link[stars:read_stars]{read_stars}} directly read source data as a `stars`.
 #' You also could use item `variables` of `POIsotree` made by function
 #' \code{\link{isotree_po}}.
 #' @param si (`integer`) The number of samples to generate response curves.
@@ -19,7 +19,7 @@
 #' @param shap_nsim (`integer`) The number of Monte Carlo repetitions in SHAP
 #' method to use for estimating each Shapley value. When the number of variables
 #' is large, a smaller shap_nsim could be used. See details in documentation of
-#' function \code{\link{explain}} in package `fastshap`.
+#' function \code{\link[fastshap:explain]{explain}} in package `fastshap`.
 #' The default is 100.
 #' @param visualize (`logical`) if `TRUE`, plot the variable dependence plots.
 #' The default is `FALSE`.
@@ -38,7 +38,7 @@
 #'
 #' @seealso
 #' \code{\link{plot.ShapDependence}}
-#' \code{\link{explain}} in `fastshap`
+#' \code{\link[fastshap:explain]{explain}} in `fastshap`
 #'
 #' @details
 #' The values show how each environmental variable independently
@@ -55,7 +55,7 @@
 #' rajan, Mukund, and Amir Najmi. "The many Shapley values for model explanation
 #' ." \emph{International Conference on Machine Learning}. PMLR, 2020.}}
 #' \item{\url{https://github.com/bgreenwell/fastshap}}
-#' \item{\url{https://github.com/slundberg/shap}}
+#' \item{\url{https://github.com/shap/shap}}
 #' }
 #'
 #' @importFrom dplyr select

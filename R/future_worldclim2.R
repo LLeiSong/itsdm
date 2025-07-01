@@ -14,10 +14,10 @@
 #' @param interval (\code{character}) The option for time interval.
 #' Should be one of "2021-2040", "2041-2060", "2061-2080", "2081-2100".
 #' The default is "2021-2040".
-#' @param bry (\code{\link{sf}} or \code{sp}) The boundary to mask the
+#' @param bry (\code{\link[sf:sf]{sf}}) The boundary to mask the
 #' downloaded original data. If \code{NULL}, it would get global map.
-#' If not \code{NULL}, it can take \code{\link{sf}},  \code{\link{sfc}},
-#' \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
+#' If not \code{NULL}, it can take \code{\link[sf:sf]{sf}},
+#' \code{\link[sf:sfc]{sfc}}, etc.
 #' The default is \code{NULL}.
 #' @param path (\code{character}) The path to save the downloaded imagery.
 #' If \code{NULL}, it would use the current working directory.
@@ -93,10 +93,8 @@ future_worldclim2 <- function(var = "tmin",
       nm_mark <- "global"
         message("No bry set, download global map...")
     } else{
-        if (!(is(bry, "sf") | is(bry, 'sfc') |
-              is(bry, "SpatialPolygonsDataFrame") |
-              is(bry, 'SpatialPolygons'))) {
-            stop("Only support sf or sp.")
+        if (!(is(bry, "sf") | is(bry, 'sfc'))) {
+            stop("Only support sf.")
         }
     }
     if (is.null(path)) {

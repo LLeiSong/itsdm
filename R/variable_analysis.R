@@ -14,11 +14,11 @@
 #' If `NULL`, it would be set the same as `var_occ`. The default is `NULL`.
 #' @param variables (`stars`) The `stars` of environmental variables. It should have
 #' multiple `attributes` instead of `dims`. If you have `raster` object instead, you
-#' could use \code{\link{st_as_stars}} to convert it to `stars` or use
-#' \code{\link{read_stars}} directly read source data as a `stars`.
+#' could use \code{\link[stars:st_as_stars]{st_as_stars}} to convert it to `stars` or use
+#' \code{\link[stars:read_stars]{read_stars}} directly read source data as a `stars`.
 #' @param shap_nsim (`integer`) The number of Monte Carlo repetitions in SHAP
 #' method to use for estimating each Shapley value. See details in documentation of
-#' function \code{\link{explain}} in package `fastshap`.
+#' function \code{\link[fastshap:explain]{explain}} in package `fastshap`.
 #' @param visualize (`logical`) If `TRUE`, plot the analysis figures.
 #' The default is `FALSE`.
 #' @param seed (`integer`) The seed for any random progress. The default is `10L`.
@@ -34,7 +34,7 @@
 #'
 #' @seealso
 #' \code{\link{plot.VariableAnalysis}}, \code{\link{print.VariableAnalysis}}
-#' \code{\link{explain}} in `fastshap`
+#' \code{\link[fastshap:explain]{explain}} in `fastshap`
 #'
 #' @details
 #' \bold{Jackknife test} of variable importance is reflected as the decrease
@@ -76,7 +76,7 @@
 #' rajan, Mukund, and Amir Najmi. "The many Shapley values for model explanation
 #' ." \emph{International Conference on Machine Learning}. PMLR, 2020.}}
 #' \item{\url{https://github.com/bgreenwell/fastshap}}
-#' \item{\url{https://github.com/slundberg/shap}}
+#' \item{\url{https://github.com/shap/shap}}
 #' }
 #'
 #' @importFrom dplyr select tibble filter sample_n as_tibble

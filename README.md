@@ -138,7 +138,13 @@ climate_changes <- detect_envi_change(
 
 1. [David Cortes](https://github.com/david-cortes), helps to improve the flexibility of calling `isotree`.
 
-We are welcome any helps! Please make a pull request or reach out to lsong@clarku.edu if you want to make any contribution.
+We are welcome any helps! Please make a pull request or reach out to lei.song@rutgers.edu if you want to make any contribution.
 
 ## Funding
 This package is part of project "Combining Spatially-explicit Simulation of Animal Movement and Earth Observation to Reconcile Agriculture and Wildlife Conservation". This project is funded by NASA FINESST program (award number: 80NSSC20K1640).
+
+## Reference
+
+Song, L., & Estes, L. (2023). itsdm: Isolation forest-based presence-only species distribution modelling and explanation in r. *Methods in Ecology and Evolution*, 14(3), 831-840. [https://doi.org/10.1111/2041-210X.14067](https://doi.org/10.1111/2041-210X.14067)
+
+Song, L., Frazier, A. E., Estes, A. B., & Estes, L. D. (2025). A multi-scale approach for integrating species distribution models with landscape connectivity to identify critical linkage zones for African savanna elephants (_Loxodonta africana_). _Ecological Modelling_, 507, 111198. [https://doi.org/10.1016/j.ecolmodel.2025.111198](https://doi.org/10.1016/j.ecolmodel.2025.111198)

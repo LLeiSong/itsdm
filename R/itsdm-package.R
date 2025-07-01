@@ -26,12 +26,13 @@
 #'
 #' @name itsdm-package
 #' @aliases itsdm-package itsdm
-#' @docType package
 #' @author Lei Song \email{lsong@clarku.edu}
 #'
-#' Maintainer: Lei Song \email{lsong@clarku.edu}
+#' Maintainer: Lei Song \email{lei.song@rutgers.edu}
 #'
 NULL
 
 ## Make R CMD check quiet for `.`
 if(getRversion() >= "2.15.1")  utils::globalVariables(c("."))
+
+"_PACKAGE"

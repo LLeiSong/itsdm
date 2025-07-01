@@ -35,10 +35,10 @@ The default is "ssp585".}
 Should be one of "2021-2040", "2041-2060", "2061-2080", "2081-2100".
 The default is "2021-2040".}
 
-\item{bry}{(\code{\link{sf}} or \code{sp}) The boundary to mask the
+\item{bry}{(\code{\link[sf:sf]{sf}}) The boundary to mask the
 downloaded original data. If \code{NULL}, it would get global map.
-If not \code{NULL}, it can take \code{\link{sf}},  \code{\link{sfc}},
-\code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
+If not \code{NULL}, it can take \code{\link[sf:sf]{sf}},
+\code{\link[sf:sfc]{sfc}}, etc.
 The default is \code{NULL}.}
 
 \item{path}{(\code{character}) The path to save the downloaded imagery.

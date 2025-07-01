@@ -42,7 +42,7 @@
 #' is an extended isolation forest. The default is 1.
 #' @param seed (`integer`) The random seed used in the modeling. It should be an
 #' integer. The default is `10L`.
-#' @param ... Other arguments that \code{\link{isolation.forest}} needs.
+#' @param ... Other arguments that \code{\link[isotree:isolation.forest]{isolation.forest}} needs.
 #' @param offset (`numeric`) The offset to adjust fitted suitability. The default
 #' is zero. Highly recommend to leave it as default.
 #' @param response (`logical`) If `TRUE`, generate response curves.
@@ -58,17 +58,17 @@
 #'
 #' @return (`POIsotree`) A list of
 #' \itemize{
-#' \item{model (\code{\link{isolation.forest}}) The threshold set in
+#' \item{model (\code{\link[isotree:isolation.forest]{isolation.forest}}) The threshold set in
 #' function inputs}
 #' \item{variables (`stars`) The formatted image stack of
 #' environmental variables}
-#' \item{observation (\code{\link{sf}}) A \code{\link{sf}} of training occurrence
+#' \item{observation (\code{\link[sf:sf]{sf}}) A \code{\link[sf:sf]{sf}} of training occurrence
 #' dataset}
-#' \item{background_samples (\code{\link{sf}}) A \code{\link{sf}} of background points
+#' \item{background_samples (\code{\link[sf:sf]{sf}}) A \code{\link[sf:sf]{sf}} of background points
 #' for training dataset evaluation or SHAP dependence plot}
-#' \item{independent_test (\code{\link{sf}} or `NULL`) A \code{\link{sf}} of test
+#' \item{independent_test (\code{\link[sf:sf]{sf}} or `NULL`) A \code{\link[sf:sf]{sf}} of test
 #' occurrence dataset}
-#' \item{background_samples_test (\code{\link{sf}} or `NULL`) A \code{\link{sf}} of
+#' \item{background_samples_test (\code{\link[sf:sf]{sf}} or `NULL`) A \code{\link[sf:sf]{sf}} of
 #' background points for test dataset evaluation or SHAP dependence plot}
 #' \item{vars_train (\code{\link{data.frame}}) A \code{\link{data.frame}} with values of each
 #' environmental variables for training occurrence}
@@ -106,7 +106,7 @@
 #' \code{\link{evaluate_po}}, \code{\link{marginal_response}},
 #' \code{\link{independent_response}}, \code{\link{shap_dependence}},
 #' \code{\link{spatial_response}}, \code{\link{variable_analysis}},
-#' \code{\link{isolation.forest}}
+#' \code{\link[isotree:isolation.forest]{isolation.forest}}
 #'
 #' @references
 #' \itemize{
@@ -145,9 +145,9 @@
 #' NOTE: \bold{obs_mode} and \bold{mode} only works for `obs`. `obs_ind_eval`
 #' will follow its own structure.
 #'
-#' Please read details of algorithm \code{\link{isolation.forest}} on
+#' Please read details of algorithm \code{\link[isotree:isolation.forest]{isolation.forest}} on
 #' \url{https://github.com/david-cortes/isotree}, and
-#' the R documentation of function \code{\link{isolation.forest}}.
+#' the R documentation of function \code{\link[isotree:isolation.forest]{isolation.forest}}.
 #'
 #' @import checkmate
 #' @importFrom raster nlayers

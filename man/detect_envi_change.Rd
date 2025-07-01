@@ -30,8 +30,8 @@ include values of environmental variables at occurrence locations.}
 \item{variables}{(\code{stars}) The \code{stars} of environmental variables.
 It should have multiple \code{attributes} instead of \code{dims}.
 If you have \code{raster} object instead, you
-could use \code{\link{st_as_stars}} to convert it to \code{stars} or use
-\code{\link{read_stars}} directly read source data as a \code{stars}.
+could use \code{\link[stars:st_as_stars]{st_as_stars}} to convert it to \code{stars} or use
+\code{\link[stars:read_stars]{read_stars}} directly read source data as a \code{stars}.
 You also could use item \code{variables} of \code{POIsotree} made by function
 \code{\link{isotree_po}}.}
 
@@ -42,12 +42,12 @@ If it is \code{NULL}, no cut to apply. The default is \code{NULL}.}
 
 \item{shap_nsim}{(\code{integer}) The number of Monte Carlo repetitions in SHAP
 method to use for estimating each Shapley value. See details in documentation
-of function \code{\link{explain}} in package \code{fastshap}.
+of function \code{\link[fastshap:explain]{explain}} in package \code{fastshap}.
 When the number of variables is large, a smaller shap_nsim could be used.
 Be cautious that making SHAP-based spatial dependence will be slow
 because of Monte-Carlo computation for all pixels.
 But it is worth the time because it is much more
-informative. See details in documentation of function \code{\link{explain}}
+informative. See details in documentation of function \code{\link[fastshap:explain]{explain}}.
 in package \code{fastshap}. The default is 10. Usually a value 10 - 20 is enough.}
 
 \item{seed}{(\code{integer}) The seed for any random progress. The default is \code{10L}.}
@@ -64,12 +64,14 @@ It could be \code{NULL} if \code{var_future} is set.}
 It is only required when \code{model} is not \code{isolation_forest}.
 The default is the wrapper function designed for iForest model in \code{itsdm}.}
 
-\item{method}{Argument passed on to \code{\link{geom_smooth}} to fit the line.
+\item{method}{Argument passed on to \code{\link[ggplot2:geom_smooth]{geom_smooth}}
+to fit the line.
 Note that the same arguments will be used for all target variables.
 User could set variable one by one to set the arguments separately.
 Default value is "gam".}
 
-\item{formula}{Argument passed on to \code{\link{geom_smooth}} to fit the line.
+\item{formula}{Argument passed on to \code{\link[ggplot2:geom_smooth]{geom_smooth}}
+to fit the line.
 Note that the same arguments will be used for all target variables.
 User could set variable one by one to set the arguments separately.
 The default is y ~ s(x).}

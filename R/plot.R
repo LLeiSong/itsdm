@@ -288,7 +288,7 @@ plot.IndependentResponse <- function(x,
 #' @param seed (`integer`) The seed for sampling.
 #' It will be ignored if the number of points is less than 1000.
 #' The default is 123.
-#' @param ... Other arguments passed on to \code{\link{geom_smooth}}. Mainly
+#' @param ... Other arguments passed on to \code{\link[ggplot2:geom_smooth]{geom_smooth}}. Mainly
 #' `method` and `formula` to fit the smooth line. Note that the same arguments
 #' will be used for all target variables. User could set variable one by one to
 #' set the arguments separately.
@@ -1515,7 +1515,7 @@ plot.PAConversion <- function(x, ...) {
 #' It could be the return of function \code{\link{suspicious_env_outliers}}.
 #' @param overlay_raster (`RasterLayer` or `stars`) The environmental raster to plot
 #' together with points.
-#' @param pts_alpha (`numeric`) The `alpha` used by \code{\link{geom_sf}} to show points.
+#' @param pts_alpha (`numeric`) The `alpha` used by \code{\link[ggplot2:geom_sf]{geom_sf}} to show points.
 #' @param ... Not used.
 #' @return A `ggplot2` figure of outliers distribution among all observations.
 #' @seealso

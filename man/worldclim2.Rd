@@ -22,9 +22,9 @@ The default is 'tmin'.}
 Should be one of 0.5, 2.5, 5, 10 in minute degree.
 The default is 10.}
 
-\item{bry}{(\code{\link{sf}} or \code{sp}) The boundary to mask the downloaded original data.
-If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link{sf}},
-\code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
+\item{bry}{(\code{\link[sf:sf]{sf}}) The boundary to mask the downloaded original data.
+If \code{NULL}, it would get global map. If not \code{NULL}, it can take \code{\link[sf:sf]{sf}},
+\code{\link[sf:sfc]{sfc}}, etc.
 The default is \code{NULL}.}
 
 \item{path}{(\code{character}) The path to save the downloaded imagery.

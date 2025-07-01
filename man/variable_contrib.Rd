@@ -28,7 +28,7 @@ could be either \code{var_occ} or its subset, or any new dataset.}
 
 \item{shap_nsim}{(\code{integer}) The number of Monte Carlo repetitions in SHAP
 method to use for estimating each Shapley value. See details in documentation of
-function \code{\link{explain}} in package \code{fastshap}.}
+function \code{\link[fastshap:explain]{explain}} in package \code{fastshap}.}
 
 \item{visualize}{(\code{logical}) if \code{TRUE}, plot the response curves.
 The default is \code{FALSE}.}
@@ -110,10 +110,10 @@ plot(var_contribution)
 \itemize{
 \item{\href{https://github.com/bgreenwell/fastshap}{https://github.com/
 bgreenwell/fastshap}}
-\item{\href{https://github.com/slundberg/shap}{https://github.com/slundberg/shap}}
+\item{\href{https://github.com/shap/shap}{https://github.com/shap/shap}}
 }
 }
 \seealso{
 \code{\link{plot.VariableContribution}}
-\code{\link{explain}} in \code{fastshap}
+\code{\link[fastshap:explain]{explain}} in \code{fastshap}
 }

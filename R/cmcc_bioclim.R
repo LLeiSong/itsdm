@@ -1,11 +1,10 @@
 #' @title Download historic Bioclimatic indicators (BIOs) named CMCC-BioClimInd.
 #' @description Parse historic CMCC-BioClimInd bioclimatic indicators
 #' optionally with a setting of boundary and a few other options.
-#' @param bry (\code{\link{sf}} or \code{sp}) The boundary to mask the
+#' @param bry (\code{\link[sf:sf]{sf}}) The boundary to mask the
 #' downloaded original data. If \code{NULL}, it would get global map.
-#' If not \code{NULL}, it can take \code{\link{sf}},
-#' \code{\link{sfc}}, \code{SpatialPolygonsDataFrame}, \code{SpatialPolygons},
-#'  etc.
+#' If not \code{NULL}, it can take \code{\link[sf:sf]{sf}},
+#' \code{\link[sf:sfc]{sfc}}, etc.
 #' The default is \code{NULL}.
 #' @param path (\code{character}) The path to save the downloaded imagery.
 #' If \code{NULL}, it would use the current working directory.
@@ -65,10 +64,8 @@ cmcc_bioclim <- function(bry = NULL,
         nm_mark <- 'global'
         message("No bry set, download global map.")
     } else {
-        if (!(is(bry, "sf") | is(bry, 'sfc') |
-              is(bry, "SpatialPolygonsDataFrame") |
-              is(bry, 'SpatialPolygons'))) {
-            stop("Only support sf or sp.")
+        if (!(is(bry, "sf") | is(bry, 'sfc'))) {
+            stop("Only support sf.")
         }
     }
     ## path

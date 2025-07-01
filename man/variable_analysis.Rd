@@ -27,12 +27,12 @@ If \code{NULL}, it would be set the same as \code{var_occ}. The default is \code
 
 \item{variables}{(\code{stars}) The \code{stars} of environmental variables. It should have
 multiple \code{attributes} instead of \code{dims}. If you have \code{raster} object instead, you
-could use \code{\link{st_as_stars}} to convert it to \code{stars} or use
-\code{\link{read_stars}} directly read source data as a \code{stars}.}
+could use \code{\link[stars:st_as_stars]{st_as_stars}} to convert it to \code{stars} or use
+\code{\link[stars:read_stars]{read_stars}} directly read source data as a \code{stars}.}
 
 \item{shap_nsim}{(\code{integer}) The number of Monte Carlo repetitions in SHAP
 method to use for estimating each Shapley value. See details in documentation of
-function \code{\link{explain}} in package \code{fastshap}.}
+function \code{\link[fastshap:explain]{explain}} in package \code{fastshap}.}
 
 \item{visualize}{(\code{logical}) If \code{TRUE}, plot the analysis figures.
 The default is \code{FALSE}.}
@@ -146,10 +146,10 @@ with feature contributions." \emph{Knowledge and information systems}
 rajan, Mukund, and Amir Najmi. "The many Shapley values for model explanation
 ." \emph{International Conference on Machine Learning}. PMLR, 2020.}}
 \item{\url{https://github.com/bgreenwell/fastshap}}
-\item{\url{https://github.com/slundberg/shap}}
+\item{\url{https://github.com/shap/shap}}
 }
 }
 \seealso{
 \code{\link{plot.VariableAnalysis}}, \code{\link{print.VariableAnalysis}}
-\code{\link{explain}} in \code{fastshap}
+\code{\link[fastshap:explain]{explain}} in \code{fastshap}
 }

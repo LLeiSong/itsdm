@@ -10,20 +10,20 @@
 #' @param variables (`stars`) The `stars` of environmental variables.
 #' It should have multiple `attributes` instead of `dims`.
 #' If you have `raster` object instead, you
-#' could use \code{\link{st_as_stars}} to convert it to `stars` or use
-#' \code{\link{read_stars}} directly read source data as a `stars`.
+#' could use \code{\link[stars:st_as_stars]{st_as_stars}} to convert it to `stars` or use
+#' \code{\link[stars:read_stars]{read_stars}} directly read source data as a `stars`.
 #' You also could use item `variables` of `POIsotree` made by function
 #' \code{\link{isotree_po}}.
 #' @param target_vars (a `vector` of `character`) The selected variables to
 #' process. If it is `NULL`, all variables will be used.
 #' @param shap_nsim (`integer`) The number of Monte Carlo repetitions in SHAP
 #' method to use for estimating each Shapley value. See details in documentation
-#' of function \code{\link{explain}} in package `fastshap`.
+#' of function \code{\link[fastshap:explain]{explain}} in package `fastshap`.
 #' When the number of variables is large, a smaller shap_nsim could be used.
 #' Be cautious that making SHAP-based spatial dependence will be slow
 #' because of Monte-Carlo computation for all pixels.
 #' But it is worth the time because it is much more
-#' informative. See details in documentation of function \code{\link{explain}}
+#' informative. See details in documentation of function \code{\link[fastshap:explain]{explain}}
 #' in package `fastshap`. The default is 10. Usually a value 10 - 20 is enough.
 #' @param seed (`integer`) The seed for any random progress. The default is `10L`.
 #' @param pfun (`function`) The predict function that requires two arguments,

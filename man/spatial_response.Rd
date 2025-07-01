@@ -23,19 +23,19 @@ include values of environmental variables at occurrence locations.}
 \item{variables}{(\code{stars}) The \code{stars} of environmental variables.
 It should have multiple \code{attributes} instead of \code{dims}.
 If you have \code{raster} object instead, you
-could use \code{\link{st_as_stars}} to convert it to \code{stars} or use
-\code{\link{read_stars}} directly read source data as a \code{stars}.
+could use \code{\link[stars:st_as_stars]{st_as_stars}} to convert it to \code{stars} or use
+\code{\link[stars:read_stars]{read_stars}} directly read source data as a \code{stars}.
 You also could use item \code{variables} of \code{POIsotree} made by function
 \code{\link{isotree_po}}.}
 
 \item{shap_nsim}{(\code{integer}) The number of Monte Carlo repetitions in SHAP
 method to use for estimating each Shapley value. See details in documentation
-of function \code{\link{explain}} in package \code{fastshap}. Set it to 0 if you
+of function \code{\link[fastshap:explain]{explain}} in package \code{fastshap}. Set it to 0 if you
 don't want to make SHAP-based spatial dependence. When the number of variables
 is large, a smaller shap_nsim could be used. Be cautious that making
 SHAP-based spatial dependence will be slow because of Monte-Carlo
 computation for all pixels. But it is worth the time because it is much more
-informative. See details in documentation of function \code{\link{explain}}
+informative. See details in documentation of function \code{\link[fastshap:explain]{explain}}
 in package \code{fastshap}. The default is 0. Usually a value 10 - 20 is enough.}
 
 \item{seed}{(\code{integer}) The seed for any random progress. The default is \code{10L}.}

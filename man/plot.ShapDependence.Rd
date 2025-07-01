@@ -41,7 +41,7 @@ The default is 100.}
 It will be ignored if the number of points is less than 1000.
 The default is 123.}
 
-\item{...}{Other arguments passed on to \code{\link{geom_smooth}}. Mainly
+\item{...}{Other arguments passed on to \code{\link[ggplot2:geom_smooth]{geom_smooth}}. Mainly
 \code{method} and \code{formula} to fit the smooth line. Note that the same arguments
 will be used for all target variables. User could set variable one by one to
 set the arguments separately.}

@@ -26,9 +26,9 @@ placed in order. Furthermore, setting preferred_vars does not guarantee
 they can survive. For example, one preferred variable that is placed later
 has strong correlation with former preferred variable.}
 
-\item{samples}{(\code{\link{sf}} or \code{sp}) The samples to reduce
+\item{samples}{(\code{\link[sf:sf]{sf}} or \code{sp}) The samples to reduce
 dimension.
-If not \code{NULL}, it can take \code{\link{sf}}, \code{\link{sfc}},
+If not \code{NULL}, it can take \code{\link[sf:sf]{sf}}, \code{\link[sf:sf]{sfc}},
 \code{SpatialPointsDataFrame}, \code{SpatialPoints}, etc.
 If \code{NULL}, the whole raster stack would be used.
 The default is \code{NULL}.}

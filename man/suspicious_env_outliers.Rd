@@ -19,8 +19,8 @@ suspicious_env_outliers(
 The occurrence dataset for training.
 There must be column \code{x} and \code{y} for coordinates if it is a regular \code{data.frame}.}
 
-\item{occ_crs}{(\code{numeric} or \code{\link{crs}}) The EPSG number or
-\code{\link{crs}} object of occurrence CRS.
+\item{occ_crs}{(\code{numeric} or \code{crs}) The EPSG number or
+\code{crs} object of occurrence CRS.
 The default value is \code{4326}, which is the geographic coordinate system.}
 
 \item{variables}{(\code{RasterStack} or \code{stars}) The stack of environmental variables.}
@@ -31,7 +31,7 @@ The default is \code{FALSE}.}
 \item{seed}{(\code{integer}) The random seed used in the modeling. It should be an
 integer. The default is \code{10L}.}
 
-\item{...}{Other arguments passed to function \code{\link{outlier.tree}} in
+\item{...}{Other arguments passed to function \code{\link[outliertree:outlier.tree]{outlier.tree}} in
 package \code{outliertree}.}
 
 \item{visualize}{(\code{logical}) If \code{TRUE}, plot the result.
@@ -40,19 +40,19 @@ The default is \code{TRUE}.}
 \value{
 (\code{EnvironmentalOutlier}) A list that contains
 \itemize{
-\item{outliers (\code{\link{sf}}) The \code{\link{sf}} points of outliers}
+\item{outliers (\code{\link[sf:sf]{sf}}) The \code{\link[sf:sf]{sf}} points of outliers}
 \item{outlier_details (\code{tibble}) A table of outlier details returned from
-function \code{\link{outlier.tree}} in package \code{outliertree}}
-\item{pts_occ (\code{\link{sf}}) The \code{\link{sf}} points of occurrence.
+function \code{\link[outliertree:outlier.tree]{outlier.tree}} in package \code{outliertree}}
+\item{pts_occ (\code{\link[sf:sf]{sf}}) The \code{\link[sf:sf]{sf}} points of occurrence.
 If \code{rm_outliers} is \code{TRUE}, outliers are deleted from points of
 occurrence. If \code{FALSE}, the full observations are returned.}}
 }
 \description{
-Run \code{\link{outlier.tree}} to detect suspicious outliers in observations.
+Run \code{\link[outliertree:outlier.tree]{outlier.tree}} to detect suspicious outliers in observations.
 }
 \details{
 Please check more details in R documentation of function
-\code{\link{outlier.tree}} in package \code{outliertree} and their GitHub.
+\code{\link[outliertree:outlier.tree]{outlier.tree}} in package \code{outliertree} and their GitHub.
 }
 \examples{
 library(dplyr)
@@ -83,5 +83,5 @@ outlier detection through decision tree conditioning."
 }
 \seealso{
 \code{\link{print.EnvironmentalOutlier}}, \code{\link{plot.EnvironmentalOutlier}}
-\code{\link{outlier.tree}} in package \code{outliertree}
+\code{\link[outliertree:outlier.tree]{outlier.tree}} in package \code{outliertree}
 }

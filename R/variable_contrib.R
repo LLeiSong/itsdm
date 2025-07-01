@@ -11,7 +11,7 @@
 #' could be either `var_occ` or its subset, or any new dataset.
 #' @param shap_nsim (`integer`) The number of Monte Carlo repetitions in SHAP
 #' method to use for estimating each Shapley value. See details in documentation of
-#' function \code{\link{explain}} in package `fastshap`.
+#' function \code{\link[fastshap:explain]{explain}} in package `fastshap`.
 #' @param visualize (`logical`) if `TRUE`, plot the response curves.
 #' The default is `FALSE`.
 #' @param seed (`integer`) The seed for any random progress. The default is `10L`.
@@ -28,13 +28,13 @@
 #'
 #' @seealso
 #' \code{\link{plot.VariableContribution}}
-#' \code{\link{explain}} in `fastshap`
+#' \code{\link[fastshap:explain]{explain}} in `fastshap`
 #'
 #' @references
 #' \itemize{
 #' \item{\href{https://github.com/bgreenwell/fastshap}{https://github.com/
 #' bgreenwell/fastshap}}
-#' \item{\href{https://github.com/slundberg/shap}{https://github.com/slundberg/shap}}
+#' \item{\href{https://github.com/shap/shap}{https://github.com/shap/shap}}
 #' }
 #'
 #' @importFrom fastshap explain

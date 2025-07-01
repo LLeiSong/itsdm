@@ -15,10 +15,10 @@ future_cmcc_bioclim(
 )
 }
 \arguments{
-\item{bry}{(\code{\link{sf}} or \code{sp}) The boundary to mask the
+\item{bry}{(\code{\link[sf:sf]{sf}}) The boundary to mask the
 downloaded original data. If \code{NULL}, it would get global map.
-If not \code{NULL}, it can take \code{\link{sf}}, \code{\link{sfc}},
-\code{SpatialPolygonsDataFrame}, \code{SpatialPolygons}, etc.
+If not \code{NULL}, it can take \code{\link[sf:sf]{sf}},
+\code{\link[sf:sfc]{sfc}}, etc.
 The default is \code{NULL}.}
 
 \item{path}{(\code{character}) The path to save the downloaded imagery.

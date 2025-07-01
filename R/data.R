@@ -3,13 +3,13 @@
 #' The overall continental boundary of mainland Africa queried from
 #' `rnaturalearth` and get processed.
 #'
-#' @format A \code{\link{sf}} with one rows and 2 fields
+#' @format A \code{\link[sf:sf]{sf}} with one rows and 2 fields
 #' \describe{
 #' \item{name}{(`character`) The name of the polygon: Africa}
 #' \item{area}{(\code{\link{units}}) The united number of the overall area in
 #' km2. This is not a consensus area, but just a calculated area under this
 #' resolution.}
-#' \item{geometry}{(\code{\link{sfc}}) The simple polygon feature of the
+#' \item{geometry}{(\code{\link[sf:sfc]{sfc}}) The simple polygon feature of the
 #' boundary}}
 #'
 #' @source \code{rnaturalearth}

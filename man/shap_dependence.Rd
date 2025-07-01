@@ -26,8 +26,8 @@ include values of environmental variables at occurrence locations.}
 \item{variables}{(\code{stars}) The \code{stars} of environmental variables.
 It should have multiple \code{attributes} instead of \code{dims}.
 If you have \code{raster} object instead, you
-could use \code{\link{st_as_stars}} to convert it to \code{stars} or use
-\code{\link{read_stars}} directly read source data as a \code{stars}.
+could use \code{\link[stars:st_as_stars]{st_as_stars}} to convert it to \code{stars} or use
+\code{\link[stars:read_stars]{read_stars}} directly read source data as a \code{stars}.
 You also could use item \code{variables} of \code{POIsotree} made by function
 \code{\link{isotree_po}}.}
 
@@ -38,7 +38,7 @@ The default value is \code{1000}.}
 \item{shap_nsim}{(\code{integer}) The number of Monte Carlo repetitions in SHAP
 method to use for estimating each Shapley value. When the number of variables
 is large, a smaller shap_nsim could be used. See details in documentation of
-function \code{\link{explain}} in package \code{fastshap}.
+function \code{\link[fastshap:explain]{explain}} in package \code{fastshap}.
 The default is 100.}
 
 \item{visualize}{(\code{logical}) if \code{TRUE}, plot the variable dependence plots.
@@ -166,10 +166,10 @@ with feature contributions." \emph{Knowledge and information systems}
 rajan, Mukund, and Amir Najmi. "The many Shapley values for model explanation
 ." \emph{International Conference on Machine Learning}. PMLR, 2020.}}
 \item{\url{https://github.com/bgreenwell/fastshap}}
-\item{\url{https://github.com/slundberg/shap}}
+\item{\url{https://github.com/shap/shap}}
 }
 }
 \seealso{
 \code{\link{plot.ShapDependence}}
-\code{\link{explain}} in \code{fastshap}
+\code{\link[fastshap:explain]{explain}} in \code{fastshap}
 }

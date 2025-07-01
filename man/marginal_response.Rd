@@ -15,8 +15,8 @@ include values of environmental variables at occurrence locations.}
 
 \item{variables}{(\code{stars}) The \code{stars} of environmental variables. It should have
 multiple \code{attributes} instead of \code{dims}. If you have \code{raster} object instead, you
-could use \code{\link{st_as_stars}} to convert it to \code{stars} or use
-\code{\link{read_stars}} directly read source data as a \code{stars}. You also could
+could use \code{\link[stars:st_as_stars]{st_as_stars}} to convert it to \code{stars} or use
+\code{\link[stars:read_stars]{read_stars}} directly read source data as a \code{stars}. You also could
 use item \code{variables} of \code{POIsotree} made by function \code{\link{isotree_po}}.}
 
 \item{si}{(\code{integer}) The number of samples to generate response curves.

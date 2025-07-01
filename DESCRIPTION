@@ -1,8 +1,9 @@
+Type: Package
 Package: itsdm
 Title: Isolation Forest-Based Presence-Only Species Distribution Modeling
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: c(
-    person("Lei", "Song", , "lsong@clarku.edu", role = c("aut", "cre"),
+    person("Lei", "Song", , "lei.song@rutgers.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-4371-1473")),
     person("Lyndon", "Estes", , "lestes@clarku.edu", role = "ths")
   )
@@ -62,4 +63,4 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2

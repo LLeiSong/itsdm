@@ -8,8 +8,8 @@
 #' @param variables (`stars`) The `stars` of environmental variables.
 #' It should have multiple `attributes` instead of `dims`.
 #' If you have `raster` object instead, you
-#' could use \code{\link{st_as_stars}} to convert it to `stars` or use
-#' \code{\link{read_stars}} directly read source data as a `stars`.
+#' could use \code{\link[stars:st_as_stars]{st_as_stars}} to convert it to `stars` or use
+#' \code{\link[stars:read_stars]{read_stars}} directly read source data as a `stars`.
 #' You also could use item `variables` of `POIsotree` made by function
 #' \code{\link{isotree_po}}.
 #' @param si (`integer`) The number of samples to generate response curves.
