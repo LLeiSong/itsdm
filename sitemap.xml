@@ -1,159 +1,55 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://lleisong.github.io/itsdm/404.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/articles/introduction_of_itsdm.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/articles/itsdm_example.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/articles/shap_application.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/index.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/cmcc_bioclim.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/convert_to_pa.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/detect_envi_change.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/dim_reduce.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/evaluate_po.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/format_observation.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/future_cmcc_bioclim.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/future_worldclim2.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/independent_response.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/isotree_po.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/itsdm-package.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/mainland_africa.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/marginal_response.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/occ_virtual_species.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/plot.EnviChange.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/plot.EnvironmentalOutlier.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/plot.IndependentResponse.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/plot.MarginalResponse.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/plot.PAConversion.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/plot.POEvaluation.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/plot.SHAPSpatial.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/plot.ShapDependence.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/plot.SpatialResponse.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/plot.VariableAnalysis.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/plot.VariableContribution.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/print.EnviChange.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/print.EnvironmentalOutlier.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/print.FormatOccurrence.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/print.PAConversion.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/print.POEvaluation.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/print.POIsotree.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/print.ReducedImageStack.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/print.VariableAnalysis.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/probability.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/shap_dependence.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/shap_spatial_response.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/spatial_response.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/suspicious_env_outliers.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/variable_analysis.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/variable_contrib.html</loc>
-  </url>
-  <url>
-    <loc>https://lleisong.github.io/itsdm/reference/worldclim2.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/introduction_of_itsdm.html</loc></url>
+<url><loc>/articles/itsdm_example.html</loc></url>
+<url><loc>/articles/shap_application.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/cmcc_bioclim.html</loc></url>
+<url><loc>/reference/convert_to_pa.html</loc></url>
+<url><loc>/reference/detect_envi_change.html</loc></url>
+<url><loc>/reference/dim_reduce.html</loc></url>
+<url><loc>/reference/evaluate_po.html</loc></url>
+<url><loc>/reference/format_observation.html</loc></url>
+<url><loc>/reference/future_cmcc_bioclim.html</loc></url>
+<url><loc>/reference/future_worldclim2.html</loc></url>
+<url><loc>/reference/independent_response.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/isotree_po.html</loc></url>
+<url><loc>/reference/itsdm-package.html</loc></url>
+<url><loc>/reference/mainland_africa.html</loc></url>
+<url><loc>/reference/marginal_response.html</loc></url>
+<url><loc>/reference/occ_virtual_species.html</loc></url>
+<url><loc>/reference/plot.EnviChange.html</loc></url>
+<url><loc>/reference/plot.EnvironmentalOutlier.html</loc></url>
+<url><loc>/reference/plot.IndependentResponse.html</loc></url>
+<url><loc>/reference/plot.MarginalResponse.html</loc></url>
+<url><loc>/reference/plot.PAConversion.html</loc></url>
+<url><loc>/reference/plot.POEvaluation.html</loc></url>
+<url><loc>/reference/plot.SHAPSpatial.html</loc></url>
+<url><loc>/reference/plot.ShapDependence.html</loc></url>
+<url><loc>/reference/plot.SpatialResponse.html</loc></url>
+<url><loc>/reference/plot.VariableAnalysis.html</loc></url>
+<url><loc>/reference/plot.VariableContribution.html</loc></url>
+<url><loc>/reference/print.EnviChange.html</loc></url>
+<url><loc>/reference/print.EnvironmentalOutlier.html</loc></url>
+<url><loc>/reference/print.FormatOccurrence.html</loc></url>
+<url><loc>/reference/print.PAConversion.html</loc></url>
+<url><loc>/reference/print.POEvaluation.html</loc></url>
+<url><loc>/reference/print.POIsotree.html</loc></url>
+<url><loc>/reference/print.ReducedImageStack.html</loc></url>
+<url><loc>/reference/print.VariableAnalysis.html</loc></url>
+<url><loc>/reference/probability.html</loc></url>
+<url><loc>/reference/shap_dependence.html</loc></url>
+<url><loc>/reference/shap_spatial_response.html</loc></url>
+<url><loc>/reference/spatial_response.html</loc></url>
+<url><loc>/reference/suspicious_env_outliers.html</loc></url>
+<url><loc>/reference/variable_analysis.html</loc></url>
+<url><loc>/reference/variable_contrib.html</loc></url>
+<url><loc>/reference/worldclim2.html</loc></url>
 </urlset>
+
