@@ -1,6 +1,6 @@
 ## Update (version 0.2.2)
 
-This minor update addresses missing package anchors in Rd \link{} references to ensure proper cross-referencing and CRAN compliance.
+This minor update addresses missing package anchors in Rd \link{} references and invalid DOIs to ensure proper cross-referencing and CRAN compliance.
 
 ### Test environments
 
@@ -22,33 +22,7 @@ This minor update addresses missing package anchors in Rd \link{} references to 
 
 ### R CMD check
 
-There were no ERRORs or WARNINGs.
-
-There was only one NOTE:
-
-```
-* checking CRAN incoming feasibility ... [10s] NOTE
-Maintainer: 'Lei Song <lei.song@rutgers.edu>'
-
-New maintainer:
-  Lei Song <lei.song@rutgers.edu>
-Old maintainer(s):
-  Lei Song <lsong@clarku.edu>
-
-Found the following (possibly) invalid URLs:
-  URL: https://dl.acm.org/doi/abs/10.5555/3295222.3295230
-    From: DESCRIPTION
-    Status: 403
-    Message: Forbidden
-
-The Description field contains
-  <arXiv:2110.13402>. Additionally, Shapley values are used to explain
-Please refer to arXiv e-prints via their arXiv DOI <doi:10.48550/arXiv.YYMM.NNNNN>.
-The Description field contains
-  (2017) <https://dl.acm.org/doi/abs/10.5555/3295222.3295230>, Molnar, C.
-Please use permanent DOI markup for linking to publications as in <doi:prefix/suffix>.
-```
-This first part of the NOTE is because I changed my current email. The referenced URLs are valid and can be safely ignored.
+There were no ERRORs, WARNINGs or NOTEs.
 
 ## Resubmission (version 0.2.1)
 

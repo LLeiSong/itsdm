@@ -1,6 +1,6 @@
 # itsdm 0.2.2
 
-- No package update. Fix a few package anchor issues in Rd documents.
+- No package update. Fix a few package anchor issues in Rd documents and DOI issues in DESCRIPTION.
 
 # itsdm 0.2.1
 

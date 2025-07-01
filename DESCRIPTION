@@ -20,7 +20,7 @@ Description: Collection of R functions to do purely presence-only species
     Additionally, Shapley values are used to explain
     model inputs and outputs. See details in references: Shapley, L.S.
     (1953) <doi:10.1515/9781400881970-018>, Lundberg, S.M. and Lee, S.I.
-    (2017) <doi:10.5555/3295222.3295230>>, Molnar,
+    (2017) <https://dm-gatech.github.io/CS8803-Fall2018-DML-Papers/shapley.pdf>, Molnar,
     C.  (2020) <ISBN:978-0-244-76852-2>, Štrumbelj, E. and Kononenko, I.
     (2014) <doi:10.1007/s10115-013-0679-x>. itsdm also provides functions
     to diagnose variable response, analyze variable importance, draw
